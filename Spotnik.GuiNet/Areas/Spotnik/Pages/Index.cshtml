@@ -1,0 +1,12 @@
+﻿@page
+@model Spotnik.GuiNet.Areas.Spotnik.Models.IndexModel
+
+@{ 
+  Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>@Model.Essai</h1>
+
+<select asp-for="Salon" asp-items="@Model.Salons">
+  <option value="">Pick one</option>
+</select>

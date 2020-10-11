@@ -1,0 +1,18 @@
+﻿@page "/spotnik"
+
+@inherits Spotnik.Gui.ViewModels.HomeBase
+
+<h3>Spotnik</h3>
+
+<div class="row">
+  <div class="col-3">
+    <select class="form-control" @bind="@Salon">
+      @foreach (var salon in Salons)
+      {
+        <option value="@salon.Key"> @salon.Value </option>
+      }
+    </select>
+  </div>
+</div>
+
+
