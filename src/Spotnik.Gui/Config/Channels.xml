@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Channels>
+  <Channel>
+    <Name></Name>
+    <SvxLinkFile></SvxLinkFile>
+    <RestartFile></RestartFile>
+  </Channel>
+  <Channel>
+    <Name></Name>
+    <SvxLinkFile></SvxLinkFile>
+    <RestartFile></RestartFile>
+  </Channel>
+</Channels>

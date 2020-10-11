@@ -9,7 +9,7 @@
     <select class="form-control" @bind="@Salon">
       @foreach (var salon in Salons)
       {
-        <option value="@salon.Key"> @salon.Value </option>
+        <option value="@salon.Id"> @salon.Name </option>
       }
     </select>
   </div>
