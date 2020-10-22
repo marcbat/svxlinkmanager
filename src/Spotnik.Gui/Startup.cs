@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Spotnik.Gui.Areas.Identity;
 using Spotnik.Gui.Data;
-using Spotnik.Gui.Services;
 using Spotnik.Gui.Repositories;
 
 namespace Spotnik.Gui
@@ -43,10 +42,9 @@ namespace Spotnik.Gui
       services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
       services.AddSingleton<WeatherForecastService>();
 
-      services.AddSingleton<IConfigService, ConfigService>();
+      
       services.AddSingleton<IDbContextFactory<ApplicationDbContext>, DbContextFactory<ApplicationDbContext>>();
-      services.AddSingleton<DashBoardService>();
-      services.AddSingleton<ChannelRepository>();
+      services.AddSingleton<IRepositories, Repositories.Repositories>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

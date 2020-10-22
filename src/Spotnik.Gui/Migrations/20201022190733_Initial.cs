@@ -50,7 +50,8 @@ namespace Spotnik.Gui.Migrations
                 name: "Channels",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
                     SvxLinkFile = table.Column<string>(nullable: true),
                     RestartFile = table.Column<string>(nullable: true)
@@ -165,6 +166,46 @@ namespace Spotnik.Gui.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Channels",
+                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
+                values: new object[] { 1, "Réseau des Répéteurs Francophones", null, null });
+
+            migrationBuilder.InsertData(
+                table: "Channels",
+                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
+                values: new object[] { 2, "French Open Network", null, null });
+
+            migrationBuilder.InsertData(
+                table: "Channels",
+                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
+                values: new object[] { 3, "Salon Technique", null, null });
+
+            migrationBuilder.InsertData(
+                table: "Channels",
+                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
+                values: new object[] { 4, "Salon International", null, null });
+
+            migrationBuilder.InsertData(
+                table: "Channels",
+                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
+                values: new object[] { 5, "Salon Bavardage", null, null });
+
+            migrationBuilder.InsertData(
+                table: "Channels",
+                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
+                values: new object[] { 6, "Salon Local", null, null });
+
+            migrationBuilder.InsertData(
+                table: "Channels",
+                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
+                values: new object[] { 7, "Salon Expérimental", null, null });
+
+            migrationBuilder.InsertData(
+                table: "Channels",
+                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
+                values: new object[] { 8, "Réseau EchoLink", null, null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

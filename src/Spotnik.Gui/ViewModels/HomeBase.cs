@@ -2,7 +2,7 @@
 
 using Spotnik.Gui.Data;
 using Spotnik.Gui.Models;
-using Spotnik.Gui.Services;
+using Spotnik.Gui.Repositories;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,14 +38,10 @@ namespace Spotnik.Gui.ViewModels
         } 
       };
     }
+    
+    
     [Inject]
-    public IConfigService ConfigService { get; set; }
-
-    [Inject]
-    public IDbContextFactory<ApplicationDbContext> DbFactory { get; set; }
-
-    [Inject]
-    public DashBoardService DashBoardService { get; set; }
+    public IRepositories Repositories { get; set; }
 
     public string Channel
     {
@@ -60,13 +56,12 @@ namespace Spotnik.Gui.ViewModels
 
     private void LoadChannels()
     {
-      using (var dbcontext = DbFactory.CreateDbContext())
-        Channels = dbcontext.Channels.ToList();
+      Channels = Repositories.Channels.GetChannels().ToList();
     }
 
     private void RunRestart()
     {
-      var channel = ConfigService.Get(this.channel);
+      var channel = new Channel();
 
       Process p = new Process();
       p.StartInfo.UseShellExecute = false;

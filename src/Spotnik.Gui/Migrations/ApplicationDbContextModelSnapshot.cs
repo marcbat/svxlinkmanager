@@ -214,8 +214,9 @@ namespace Spotnik.Gui.Migrations
 
             modelBuilder.Entity("Spotnik.Gui.Models.Channel", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
@@ -229,6 +230,48 @@ namespace Spotnik.Gui.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Channels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Réseau des Répéteurs Francophones"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "French Open Network"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Salon Technique"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Salon International"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Salon Bavardage"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Salon Local"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Salon Expérimental"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Réseau EchoLink"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

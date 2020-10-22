@@ -12,13 +12,16 @@ namespace Spotnik.Gui.Repositories
 {
   public class ChannelRepository
   {
+    private readonly IDbContextFactory<ApplicationDbContext> contextFactory;
 
-    [Inject]
-    public IDbContextFactory<ApplicationDbContext> DbFactory { get; set; }
+    public ChannelRepository(IDbContextFactory<ApplicationDbContext> contextFactory)
+    {
+      this.contextFactory = contextFactory;
+    }
 
     public IEnumerable<Channel> GetChannels()
     {
-      using var dbcontext = DbFactory.CreateDbContext();
+      using var dbcontext = contextFactory.CreateDbContext();
       return dbcontext.Channels.ToList();
 
     }
