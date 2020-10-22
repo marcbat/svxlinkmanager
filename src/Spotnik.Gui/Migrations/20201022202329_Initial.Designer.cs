@@ -9,7 +9,7 @@ using Spotnik.Gui.Data;
 namespace Spotnik.Gui.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201022190733_Initial")]
+    [Migration("20201022202329_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -220,14 +220,20 @@ namespace Spotnik.Gui.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("AuthKey")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CallSign")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Host")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("RestartFile")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("SvxLinkFile")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Port")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -237,42 +243,74 @@ namespace Spotnik.Gui.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Réseau des Répéteurs Francophones"
+                            AuthKey = "Magnifique123456789!",
+                            CallSign = "(CH) HB9GXP2 H",
+                            Host = "rrf2.f5nlg.ovh",
+                            Name = "Réseau des Répéteurs Francophones",
+                            Port = 5300
                         },
                         new
                         {
                             Id = 2,
-                            Name = "French Open Network"
+                            AuthKey = "xD9wW5gO7yD9hN5o",
+                            CallSign = "(CH) HB9GXP2 H",
+                            Host = "salonsuisseromand.northeurope.cloudapp.azure.com",
+                            Name = "Salon Suisse Romand",
+                            Port = 5300
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Salon Technique"
+                            Name = "French Open Network",
+                            Port = 0
                         },
                         new
                         {
                             Id = 4,
-                            Name = "Salon International"
+                            AuthKey = "Magnifique123456789!",
+                            CallSign = "(CH) HB9GXP2 H",
+                            Host = "rrf2.f5nlg.ovh",
+                            Name = "Salon Technique",
+                            Port = 5300
                         },
                         new
                         {
                             Id = 5,
-                            Name = "Salon Bavardage"
+                            AuthKey = "Magnifique123456789!",
+                            CallSign = "(CH) HB9GXP2 H",
+                            Host = "rrf2.f5nlg.ovh",
+                            Name = "Salon International",
+                            Port = 5300
                         },
                         new
                         {
                             Id = 6,
-                            Name = "Salon Local"
+                            AuthKey = "Magnifique123456789!",
+                            CallSign = "(CH) HB9GXP2 H",
+                            Host = "rrf2.f5nlg.ovh",
+                            Name = "Salon Bavardage",
+                            Port = 5300
                         },
                         new
                         {
                             Id = 7,
-                            Name = "Salon Expérimental"
+                            Name = "Salon Local",
+                            Port = 0
                         },
                         new
                         {
                             Id = 8,
-                            Name = "Réseau EchoLink"
+                            AuthKey = "Magnifique123456789!",
+                            CallSign = "(CH) HB9GXP2 H",
+                            Host = "rrf2.f5nlg.ovh",
+                            Name = "Salon Expérimental",
+                            Port = 5300
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Réseau EchoLink",
+                            Port = 0
                         });
                 });
 

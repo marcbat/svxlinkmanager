@@ -1,4 +1,5 @@
 ﻿using Spotnik.Gui.Data;
+using Spotnik.Gui.Models;
 
 using System;
 using System.Collections.Generic;
@@ -9,17 +10,17 @@ namespace Spotnik.Gui.Repositories
 {
   public interface IRepositories
   {
-    ChannelRepository Channels { get; }
+    IRepository<Channel> Channels { get; }
   }
 
   public class Repositories : IRepositories
   {
     public Repositories(IDbContextFactory<ApplicationDbContext> contextFactory)
     {
-      Channels = new ChannelRepository(contextFactory);
+      Channels = new Repository<Channel>(contextFactory);
     }
 
-    public ChannelRepository Channels { get; private set; }
+    public IRepository<Channel> Channels { get; private set; }
 
   }
 }

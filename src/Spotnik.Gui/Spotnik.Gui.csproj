@@ -5,7 +5,7 @@
     <UserSecretsId>aspnet-Spotnik.Gui-CD0BE138-429A-4FB1-865E-E55DA92114CE</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
-    <DockerfileRunArguments>-v "D:\GoogleDrive\Documents\Radio Amateur\RRF Spotnik\Spotnik_Docker\etc\spotnik":/etc/spotnik/ -v "D:\GoogleDrive\Documents\Radio Amateur\RRF Spotnik\Spotnik_Docker\usr\share\svxlink":/usr/share/svxlink/</DockerfileRunArguments>
+    <DockerfileRunArguments>-v "D:\GoogleDrive\Documents\Radio Amateur\RRF Spotnik\Spotnik_Docker\etc\spotnik":/etc/spotnik/ -v "D:\GoogleDrive\Documents\Radio Amateur\RRF Spotnik\Spotnik_Docker\usr\share\svxlink":/usr/share/svxlink/ -v "D:\GoogleDrive\Documents\Radio Amateur\RRF Spotnik\Spotnik_Docker\tmp":"/tmp"</DockerfileRunArguments>
   </PropertyGroup>
 
   <ItemGroup>

@@ -53,8 +53,10 @@ namespace Spotnik.Gui.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
-                    SvxLinkFile = table.Column<string>(nullable: true),
-                    RestartFile = table.Column<string>(nullable: true)
+                    Host = table.Column<string>(nullable: true),
+                    AuthKey = table.Column<string>(nullable: true),
+                    Port = table.Column<int>(nullable: false),
+                    CallSign = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -169,43 +171,48 @@ namespace Spotnik.Gui.Migrations
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
-                values: new object[] { 1, "Réseau des Répéteurs Francophones", null, null });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Host", "Name", "Port" },
+                values: new object[] { 1, "Magnifique123456789!", "(CH) HB9GXP2 H", "rrf2.f5nlg.ovh", "Réseau des Répéteurs Francophones", 5300 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
-                values: new object[] { 2, "French Open Network", null, null });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Host", "Name", "Port" },
+                values: new object[] { 2, "xD9wW5gO7yD9hN5o", "(CH) HB9GXP2 H", "salonsuisseromand.northeurope.cloudapp.azure.com", "Salon Suisse Romand", 5300 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
-                values: new object[] { 3, "Salon Technique", null, null });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Host", "Name", "Port" },
+                values: new object[] { 3, null, null, null, "French Open Network", 0 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
-                values: new object[] { 4, "Salon International", null, null });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Host", "Name", "Port" },
+                values: new object[] { 4, "Magnifique123456789!", "(CH) HB9GXP2 H", "rrf2.f5nlg.ovh", "Salon Technique", 5300 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
-                values: new object[] { 5, "Salon Bavardage", null, null });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Host", "Name", "Port" },
+                values: new object[] { 5, "Magnifique123456789!", "(CH) HB9GXP2 H", "rrf2.f5nlg.ovh", "Salon International", 5300 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
-                values: new object[] { 6, "Salon Local", null, null });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Host", "Name", "Port" },
+                values: new object[] { 6, "Magnifique123456789!", "(CH) HB9GXP2 H", "rrf2.f5nlg.ovh", "Salon Bavardage", 5300 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
-                values: new object[] { 7, "Salon Expérimental", null, null });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Host", "Name", "Port" },
+                values: new object[] { 7, null, null, null, "Salon Local", 0 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "Name", "RestartFile", "SvxLinkFile" },
-                values: new object[] { 8, "Réseau EchoLink", null, null });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Host", "Name", "Port" },
+                values: new object[] { 8, "Magnifique123456789!", "(CH) HB9GXP2 H", "rrf2.f5nlg.ovh", "Salon Expérimental", 5300 });
+
+            migrationBuilder.InsertData(
+                table: "Channels",
+                columns: new[] { "Id", "AuthKey", "CallSign", "Host", "Name", "Port" },
+                values: new object[] { 9, null, null, null, "Réseau EchoLink", 0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

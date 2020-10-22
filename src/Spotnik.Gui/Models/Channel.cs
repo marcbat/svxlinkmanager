@@ -7,14 +7,18 @@ using System.Xml.Serialization;
 namespace Spotnik.Gui.Models
 {
 
-  public class Channel
+  public class Channel : IModelEntity
   {
     public int Id { get; set; }
 
     public string Name { get; set; }
 
-    public string SvxLinkFile { get; set; }
+    public string Host { get; set; }
 
-    public string RestartFile { get; set; }
+    public string AuthKey { get; set; }
+
+    public int Port { get; set; }
+
+    public string CallSign { get; set; }
   }
 }

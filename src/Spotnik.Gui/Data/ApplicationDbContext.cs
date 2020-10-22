@@ -33,14 +33,15 @@ namespace Spotnik.Gui.Data
     {
       base.OnModelCreating(builder);
 
-      builder.Entity<Channel>().HasData(new Channel { Id = 1, Name = "Réseau des Répéteurs Francophones" });
-      builder.Entity<Channel>().HasData(new Channel { Id = 2, Name = "French Open Network" });
-      builder.Entity<Channel>().HasData(new Channel { Id = 3, Name = "Salon Technique" });
-      builder.Entity<Channel>().HasData(new Channel { Id = 4, Name = "Salon International" });
-      builder.Entity<Channel>().HasData(new Channel { Id = 5, Name = "Salon Bavardage" });
-      builder.Entity<Channel>().HasData(new Channel { Id = 6, Name = "Salon Local" });
-      builder.Entity<Channel>().HasData(new Channel { Id = 7, Name = "Salon Expérimental" });
-      builder.Entity<Channel>().HasData(new Channel { Id = 8, Name = "Réseau EchoLink" });
+      builder.Entity<Channel>().HasData(new Channel { Id = 1, Name = "Réseau des Répéteurs Francophones", CallSign= "(CH) HB9GXP2 H", Host= "rrf2.f5nlg.ovh", Port = 5300,  AuthKey= "Magnifique123456789!" });
+      builder.Entity<Channel>().HasData(new Channel { Id = 2, Name = "Salon Suisse Romand", CallSign = "(CH) HB9GXP2 H", Host = "salonsuisseromand.northeurope.cloudapp.azure.com", Port = 5300, AuthKey = "xD9wW5gO7yD9hN5o" });
+      builder.Entity<Channel>().HasData(new Channel { Id = 3, Name = "French Open Network" });
+      builder.Entity<Channel>().HasData(new Channel { Id = 4, Name = "Salon Technique", CallSign = "(CH) HB9GXP2 H", Host = "rrf2.f5nlg.ovh", Port = 5300, AuthKey = "Magnifique123456789!" });
+      builder.Entity<Channel>().HasData(new Channel { Id = 5, Name = "Salon International", CallSign = "(CH) HB9GXP2 H", Host = "rrf2.f5nlg.ovh", Port = 5300, AuthKey = "Magnifique123456789!" });
+      builder.Entity<Channel>().HasData(new Channel { Id = 6, Name = "Salon Bavardage", CallSign = "(CH) HB9GXP2 H", Host = "rrf2.f5nlg.ovh", Port = 5300, AuthKey = "Magnifique123456789!" });
+      builder.Entity<Channel>().HasData(new Channel { Id = 7, Name = "Salon Local" });
+      builder.Entity<Channel>().HasData(new Channel { Id = 8, Name = "Salon Expérimental", CallSign = "(CH) HB9GXP2 H", Host = "rrf2.f5nlg.ovh", Port = 5300, AuthKey = "Magnifique123456789!" });
+      builder.Entity<Channel>().HasData(new Channel { Id = 9, Name = "Réseau EchoLink" });
     }
   }
 }

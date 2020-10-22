@@ -17,7 +17,7 @@ namespace Spotnik.Gui.ViewModels
 {
   public class HomeBase : ComponentBase, INotifyPropertyChanged
   {
-    private string channel;
+    private int channel;
     private bool readlog;
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -34,16 +34,15 @@ namespace Spotnik.Gui.ViewModels
 
           RunRestart();
 
-          ReadLog();
+          //ReadLog();
         } 
       };
     }
     
-    
     [Inject]
     public IRepositories Repositories { get; set; }
 
-    public string Channel
+    public int Channel
     {
       get => channel;
       set {
@@ -54,50 +53,63 @@ namespace Spotnik.Gui.ViewModels
 
     public List<Channel> Channels { get; private set; }
 
-    private void LoadChannels()
-    {
-      Channels = Repositories.Channels.GetChannels().ToList();
-    }
+    private void LoadChannels() => Channels = Repositories.Channels.GetAll().ToList();
 
     private void RunRestart()
     {
-      var channel = new Channel();
+      var channel = Repositories.Channels.Get(Channel);
+      ReplaceConfig(channel);
 
-      Process p = new Process();
-      p.StartInfo.UseShellExecute = false;
-      p.StartInfo.RedirectStandardOutput = true;
-      p.StartInfo.FileName = $"/etc/spotnik/{channel.RestartFile}";
-      p.Start();
-      string output = p.StandardOutput.ReadToEnd();
-      p.WaitForExit();
+      // Vider les logs
+      File.WriteAllText("/tmp/svxlink.log", string.Empty);
+
+      //Process p = new Process();
+      //p.StartInfo.UseShellExecute = false;
+      //p.StartInfo.RedirectStandardOutput = true;
+      //p.StartInfo.FileName = "/etc/spotnik/svxlink.current";
+      //p.Start();
+      //string output = p.StandardOutput.ReadToEnd();
+      //p.WaitForExit();
     }
 
-    private void ReadLog()
+    private static void ReplaceConfig(Channel channel)
     {
-      readlog = true;
+      File.Copy("/etc/spotnik/svxlink.conf", "/etc/spotnik/svxlink.current", true);
 
-      var wh = new AutoResetEvent(false);
-      var fsw = new FileSystemWatcher(".");
-      fsw.Filter = "file-to-read";
-      fsw.EnableRaisingEvents = true;
-      fsw.Changed += (s, e) => wh.Set();
-
-      var fs = new FileStream("/tmp/svxlink.log", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-      using (var sr = new StreamReader(fs))
-      {
-        var s = "";
-        while (readlog)
-        {
-          s = sr.ReadLine();
-          if (s != null)
-            Console.WriteLine($"toto:{s}");
-          else
-            wh.WaitOne(1000);
-        }
-      }
-
-      wh.Close();
+      string text = File.ReadAllText("/etc/spotnik/svxlink.current");
+      text = text.Replace("HOST=HOST", $"HOST={channel.Host}");
+      text = text.Replace("AUTH_KEY=AUTH_KEY", $"AUTH_KEY={channel.AuthKey}");
+      text = text.Replace("PORT=PORT", $"PORT={channel.Port}");
+      text = text.Replace("CALLSIGN=CALLSIGN", $"CALLSIGN={channel.CallSign}");
+      File.WriteAllText("/etc/spotnik/svxlink.current", text);
     }
+
+    //private void ReadLog()
+    //{
+    //  readlog = true;
+
+    //  var wh = new AutoResetEvent(false);
+    //  var fsw = new FileSystemWatcher(".");
+    //  fsw.Filter = "file-to-read";
+    //  fsw.EnableRaisingEvents = true;
+    //  fsw.Changed += (s, e) => wh.Set();
+
+    //  var fs = new FileStream("/tmp/svxlink.log", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+    //  using (var sr = new StreamReader(fs))
+    //  {
+    //    var s = "";
+    //    while (readlog)
+    //    {
+    //      s = sr.ReadLine();
+    //      if (s != null)
+    //        Console.WriteLine($"toto:{s}");
+    //      else
+    //        wh.WaitOne(1000);
+    //    }
+    //  }
+
+    //  wh.Close();
+    //}
 
   }
 
