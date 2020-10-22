@@ -6,10 +6,10 @@
 
 <div class="row">
   <div class="col-3">
-    <select class="form-control" @bind="@Salon">
-      @foreach (var salon in Salons)
+    <select class="form-control" @bind="@Channel">
+      @foreach (var channel in Channels)
       {
-        <option value="@salon.Id"> @salon.Name </option>
+        <option value="@channel.Id"> @channel.Name </option>
       }
     </select>
   </div>

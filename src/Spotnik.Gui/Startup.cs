@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Spotnik.Gui.Areas.Identity;
 using Spotnik.Gui.Data;
 using Spotnik.Gui.Services;
+using Spotnik.Gui.Repositories;
 
 namespace Spotnik.Gui
 {
@@ -33,7 +34,7 @@ namespace Spotnik.Gui
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddDbContext<ApplicationDbContext>(options =>
-          options.UseSqlServer(
+          options.UseSqlite(
               Configuration.GetConnectionString("DefaultConnection")));
       services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
           .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -43,6 +44,9 @@ namespace Spotnik.Gui
       services.AddSingleton<WeatherForecastService>();
 
       services.AddSingleton<IConfigService, ConfigService>();
+      services.AddSingleton<IDbContextFactory<ApplicationDbContext>, DbContextFactory<ApplicationDbContext>>();
+      services.AddSingleton<DashBoardService>();
+      services.AddSingleton<ChannelRepository>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
