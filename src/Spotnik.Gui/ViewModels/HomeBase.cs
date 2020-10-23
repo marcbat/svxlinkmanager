@@ -58,18 +58,23 @@ namespace Spotnik.Gui.ViewModels
     private void RunRestart()
     {
       var channel = Repositories.Channels.Get(Channel);
+
+      ExecuteCommand("/etc/spotnik/stopsvxlink.sh");
+
       ReplaceConfig(channel);
 
-      // Vider les logs
-      File.WriteAllText("/tmp/svxlink.log", string.Empty);
+      ExecuteCommand("/etc/spotnik/runsvxlink.sh");
+    }
 
-      //Process p = new Process();
-      //p.StartInfo.UseShellExecute = false;
-      //p.StartInfo.RedirectStandardOutput = true;
-      //p.StartInfo.FileName = "/etc/spotnik/svxlink.current";
-      //p.Start();
-      //string output = p.StandardOutput.ReadToEnd();
-      //p.WaitForExit();
+    private static void ExecuteCommand(string script)
+    {
+      Process p = new Process();
+      p.StartInfo.UseShellExecute = false;
+      p.StartInfo.RedirectStandardOutput = true;
+      p.StartInfo.FileName = script;
+      p.Start();
+      string output = p.StandardOutput.ReadToEnd();
+      p.WaitForExit();
     }
 
     private static void ReplaceConfig(Channel channel)

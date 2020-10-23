@@ -5,7 +5,7 @@
     <UserSecretsId>aspnet-Spotnik.Gui-CD0BE138-429A-4FB1-865E-E55DA92114CE</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
-    <DockerfileRunArguments>-v "D:\GoogleDrive\Documents\Radio Amateur\RRF Spotnik\Spotnik_Docker\etc\spotnik":/etc/spotnik/ -v "D:\GoogleDrive\Documents\Radio Amateur\RRF Spotnik\Spotnik_Docker\usr\share\svxlink":/usr/share/svxlink/ -v "D:\GoogleDrive\Documents\Radio Amateur\RRF Spotnik\Spotnik_Docker\tmp":"/tmp"</DockerfileRunArguments>
+    <DockerfileRunArguments>-v "D:\GoogleDrive\Documents\Radio Amateur\RRF Spotnik\Spotnik_Docker\usr\share\svxlink":/usr/share/svxlink/ -v "D:\GoogleDrive\Documents\Radio Amateur\RRF Spotnik\Spotnik_Docker\tmp":"/tmp"</DockerfileRunArguments>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +16,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Spotnik\" />
   </ItemGroup>
 
 </Project>

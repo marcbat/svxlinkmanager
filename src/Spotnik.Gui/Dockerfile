@@ -6,7 +6,9 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 ENV TZ=Europe/Kiev
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update && apt-get install -qq -y svxlink-server && apt-get clean 
+RUN apt-get update && apt-get install -qq -y svxlink-server procps && apt-get clean 
+
+COPY ./src/Spotnik.Gui/Spotnik /etc/spotnik/
 
 WORKDIR /app
 EXPOSE 80
