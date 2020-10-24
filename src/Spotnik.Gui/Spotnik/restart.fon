@@ -1,0 +1,53 @@
+#!/bin/bash
+# DTMF 97 FON #
+# stop numeric modes 
+/etc/spotnik/num.sh stop
+pkill -f svxbridge.py
+
+
+# Stop svxlink
+if pgrep -x svxlink >/dev/null
+then
+    pkill -TERM svxlink
+    pkill -f timersalon
+fi
+
+# stop vncserver
+if pgrep -x Xtightvnc >/dev/null
+then
+    pkill -TERM vncserver:1
+fi
+
+# Save network
+echo "fon" > /etc/spotnik/network
+
+#change the audio network name
+rm /usr/share/svxlink/sounds/fr_FR/PropagationMonitor/name.wav
+ln -s /usr/share/svxlink/sounds/fr_FR/RRF/Sfon.wav /usr/share/svxlink/sounds/fr_FR/PropagationMonitor/name.wav
+
+# create svxlink.fon
+rm -f /etc/spotnik/svxlink.fon
+sleep 1
+
+cat /etc/spotnik/svxlink.cfg >/etc/spotnik/svxlink.fon
+
+echo "HOST=serveur.f1tzo.com" >>/etc/spotnik/svxlink.fon
+echo "AUTH_KEY=FON-F1TZO" >>/etc/spotnik/svxlink.fon
+echo "PORT=5300" >>/etc/spotnik/svxlink.fon
+sleep 1
+
+
+# Clear logs
+> /tmp/svxlink.log
+
+# Launch svxlink
+svxlink --daemon --logfile=/tmp/svxlink.log --pidfile=/var/run/svxlink.pid --runasuser=root --config=/etc/spotnik/svxlink.fon
+sleep 2
+
+# Enable propagation monitor module
+echo "10#" > /tmp/dtmf_uhf
+echo "10#" > /tmp/dtmf_vhf
+
+# debut gestion timer salon:
+pkill -f timersalon
+sh /etc/spotnik/timersalon.sh &

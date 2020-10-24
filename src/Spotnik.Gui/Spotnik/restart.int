@@ -1,0 +1,54 @@
+#!/bin/bash
+# DTMF 99# INTERNATIONAL
+# stop numeric modes 
+/etc/spotnik/num.sh stop
+pkill -f svxbridge.py
+
+
+# Stop svxlink
+if pgrep -x svxlink >/dev/null
+then
+    pkill -TERM svxlink
+    pkill -f timersalon
+fi
+
+# stop vncserver
+if pgrep -x Xtightvnc >/dev/null
+then
+    pkill -TERM vncserver:1
+fi
+
+
+# Save network
+echo "int" > /etc/spotnik/network
+
+rm /usr/share/svxlink/sounds/fr_FR/PropagationMonitor/name.wav
+ln -s /usr/share/svxlink/sounds/fr_FR/RRF/Sint.wav /usr/share/svxlink/sounds/fr_FR/PropagationMonitor/name.wav
+
+# Clear logs
+> /tmp/svxlink.log
+
+rm -f /etc/spotnik/svxlink.int
+
+sleep 1
+
+cat /etc/spotnik/svxlink.cfg >/etc/spotnik/svxlink.int
+
+echo "HOST=rrf3.f5nlg.ovh" >>/etc/spotnik/svxlink.int
+echo "AUTH_KEY=Magnifique123456789!" >>/etc/spotnik/svxlink.int
+echo "PORT=5302" >>/etc/spotnik/svxlink.int
+
+
+sleep 1
+
+# Launch svxlink
+svxlink --daemon --logfile=/tmp/svxlink.log --pidfile=/var/run/svxlink.pid --runasuser=root --config=/etc/spotnik/svxlink.int
+sleep 2
+
+# Enable Metar Info module
+echo "10#" > /tmp/dtmf_uhf
+echo "10#" > /tmp/dtmf_vhf
+
+# debut gestion timer salon:
+pkill -f timersalon
+sh /etc/spotnik/timersalon.sh &

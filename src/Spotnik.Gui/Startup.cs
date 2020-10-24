@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Spotnik.Gui.Areas.Identity;
 using Spotnik.Gui.Data;
 using Spotnik.Gui.Repositories;
+using Spotnik.Gui.Service;
 
 namespace Spotnik.Gui
 {
@@ -45,6 +46,7 @@ namespace Spotnik.Gui
       
       services.AddSingleton<IDbContextFactory<ApplicationDbContext>, DbContextFactory<ApplicationDbContext>>();
       services.AddSingleton<IRepositories, Repositories.Repositories>();
+      services.AddSingleton<SwxLinkLogService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +62,12 @@ namespace Spotnik.Gui
         app.UseExceptionHandler("/Error");
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
+      }
+
+      using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+      {
+        var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        context.Database.Migrate();
       }
 
       app.UseHttpsRedirection();

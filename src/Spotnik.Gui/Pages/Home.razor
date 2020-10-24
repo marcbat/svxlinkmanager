@@ -1,18 +1,30 @@
 ﻿@page "/spotnik"
 
+
 @inherits Spotnik.Gui.ViewModels.HomeBase
 
-<h3>Spotnik</h3>
+<h3>Spotnik <small>(@Status)</small></h3>
 
 <div class="row">
   <div class="col-3">
     <select class="form-control" @bind="@Channel">
+      <option value="0">Déconnecter</option>
       @foreach (var channel in Channels)
       {
-        <option value="@channel.Id"> @channel.Name </option>
+        <option value="@channel.Id">@channel.Name</option>
       }
     </select>
   </div>
 </div>
+
+<div class="row">
+  @foreach (var node in Nodes)
+  {
+    <div class="col">
+      @node
+    </div>
+  }
+</div>
+
 
 
