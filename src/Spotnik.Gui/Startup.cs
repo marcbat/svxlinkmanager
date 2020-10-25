@@ -46,7 +46,6 @@ namespace Spotnik.Gui
       
       services.AddSingleton<IDbContextFactory<ApplicationDbContext>, DbContextFactory<ApplicationDbContext>>();
       services.AddSingleton<IRepositories, Repositories.Repositories>();
-      services.AddSingleton<SwxLinkLogService>();
       services.AddSingleton<SvxLinkService>();
     }
 
