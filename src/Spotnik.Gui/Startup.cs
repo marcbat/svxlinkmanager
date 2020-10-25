@@ -47,6 +47,7 @@ namespace Spotnik.Gui
       services.AddSingleton<IDbContextFactory<ApplicationDbContext>, DbContextFactory<ApplicationDbContext>>();
       services.AddSingleton<IRepositories, Repositories.Repositories>();
       services.AddSingleton<SwxLinkLogService>();
+      services.AddSingleton<SvxLinkService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

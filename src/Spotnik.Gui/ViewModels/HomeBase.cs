@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -24,7 +25,6 @@ namespace Spotnik.Gui.ViewModels
   {
     private int channel;
     private string status = "Déconnecté";
-    private List<string> nodes = new List<string>();
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -42,22 +42,22 @@ namespace Spotnik.Gui.ViewModels
           RunRestart();
       };
 
-      SwxLinkLogService.Connected += ns =>
+      SvxLinkService.Connected += async ns =>
       {
         Nodes = ns;
-        StateHasChanged();
+        await InvokeAsync(() => StateHasChanged());
       };
 
-      SwxLinkLogService.NodeConnected += n =>
+      SvxLinkService.NodeConnected += async n =>
       {
         Nodes.Add(n);
-        StateHasChanged();
+        await InvokeAsync(() => StateHasChanged());
       };
 
-      SwxLinkLogService.NodeDisconnected += n =>
+      SvxLinkService.NodeDisconnected += async n =>
       {
         Nodes.Remove(n);
-        StateHasChanged();
+        await InvokeAsync(() => StateHasChanged());
       };
     }
 
@@ -66,10 +66,10 @@ namespace Spotnik.Gui.ViewModels
     public IRepositories Repositories { get; set; }
 
     [Inject]
-    public SwxLinkLogService SwxLinkLogService { get; set; }
+    public ILogger<HomeBase> Logger { get; set; }
 
     [Inject]
-    public ILogger<HomeBase> Logger { get; set; }
+    public SvxLinkService SvxLinkService { get; set; }
 
     public string Status
     {
@@ -101,15 +101,8 @@ namespace Spotnik.Gui.ViewModels
     {
       Logger.LogInformation("Restart salon.");
 
-      // Arrete de lire les log
-      SwxLinkLogService.StopRead();
-      Logger.LogInformation("Arret de la lecture des logs");
-
       // Stop svxlink
-      var pid = ExecuteCommand("pgrep -x svxlink");
-      if(pid!=null)
-        ExecuteCommand("pkill -TERM svxlink");
-
+      SvxLinkService.StopSvxlink();
       Status = "Déconnecté";
       Logger.LogInformation("Salon déconnecté");
 
@@ -125,41 +118,10 @@ namespace Spotnik.Gui.ViewModels
       ReplaceConfig(channel);
       Logger.LogInformation("Remplacement du contenu svxlink.current");
 
-      // Vide les logs
-      File.WriteAllText("/tmp/svxlink.log", string.Empty);
-      Logger.LogInformation("Les logs sont vidés");
-
-      // Commence à lire les logs
-      SwxLinkLogService.StartReadAsync();
-      Logger.LogInformation("Commencer à lire les logs");
-
       // Lance svxlink
-      //ExecuteCommand("svxlink --daemon --logfile=/tmp/svxlink.log --pidfile=/var/run/svxlink.pid --runasuser=root --config=/etc/spotnik/svxlink.current");
-      ExecuteCommand("svxlink --daemon --pidfile=/var/run/svxlink.pid --runasuser=root --config=/etc/spotnik/svxlink.current");
+      SvxLinkService.RunsvxLink();
       Status = "Connecté";
       Logger.LogInformation($"Le channel {channel.Name} est connecté.");
-    }
-
-    private string ExecuteCommand(string cmd)
-    {
-      var escapedArgs = cmd.Replace("\"", "\\\"");
-
-      var process = new Process()
-      {
-        StartInfo = new ProcessStartInfo
-        {
-          FileName = "/bin/bash",
-          Arguments = $"-c \"{escapedArgs}\"",
-          RedirectStandardOutput = true,
-          UseShellExecute = false,
-          CreateNoWindow = true,
-        }
-      };
-      process.Start();
-      string result = process.StandardOutput.ReadToEnd();
-      process.WaitForExit();
-
-      return result.Trim();
     }
 
     private void ReplaceConfig(Channel channel)
