@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -105,7 +106,10 @@ namespace Spotnik.Gui.ViewModels
       Logger.LogInformation("Arret de la lecture des logs");
 
       // Stop svxlink
-      ExecuteCommand("/etc/spotnik/stopsvxlink.sh");
+      var pid = ExecuteCommand("pgrep -x svxlink");
+      if(pid!=null)
+        ExecuteCommand("pkill -TERM svxlink");
+
       Status = "Déconnecté";
       Logger.LogInformation("Salon déconnecté");
 
@@ -130,25 +134,32 @@ namespace Spotnik.Gui.ViewModels
       Logger.LogInformation("Commencer à lire les logs");
 
       // Lance svxlink
-      ExecuteCommand("/etc/spotnik/runsvxlink.sh");
+      //ExecuteCommand("svxlink --daemon --logfile=/tmp/svxlink.log --pidfile=/var/run/svxlink.pid --runasuser=root --config=/etc/spotnik/svxlink.current");
+      ExecuteCommand("svxlink --daemon --pidfile=/var/run/svxlink.pid --runasuser=root --config=/etc/spotnik/svxlink.current");
       Status = "Connecté";
       Logger.LogInformation($"Le channel {channel.Name} est connecté.");
     }
 
-    private void ExecuteCommand(string script)
+    private string ExecuteCommand(string cmd)
     {
-      Logger.LogInformation($"Execution du script {script}");
+      var escapedArgs = cmd.Replace("\"", "\\\"");
 
-      Process p = new Process();
-      p.StartInfo.UseShellExecute = false;
-      p.StartInfo.RedirectStandardOutput = true;
-      p.StartInfo.FileName = script;
-      p.Start();
-      string output = p.StandardOutput.ReadToEnd();
-      Logger.LogInformation($"Output du script: {output}");
-      p.WaitForExit();
+      var process = new Process()
+      {
+        StartInfo = new ProcessStartInfo
+        {
+          FileName = "/bin/bash",
+          Arguments = $"-c \"{escapedArgs}\"",
+          RedirectStandardOutput = true,
+          UseShellExecute = false,
+          CreateNoWindow = true,
+        }
+      };
+      process.Start();
+      string result = process.StandardOutput.ReadToEnd();
+      process.WaitForExit();
 
-      Logger.LogInformation($"Fin d'execution du script {script}");
+      return result.Trim();
     }
 
     private void ReplaceConfig(Channel channel)
