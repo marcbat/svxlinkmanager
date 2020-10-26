@@ -1,4 +1,5 @@
-﻿using Spotnik.Gui.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Spotnik.Gui.Data;
 using Spotnik.Gui.Models;
 
 using System;
@@ -15,6 +16,8 @@ namespace Spotnik.Gui.Repositories
     IEnumerable<TEntity> GetAll();
 
     TEntity Add(TEntity entity);
+
+    void Update(TEntity entity);
   }
 
   public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IModelEntity
@@ -51,6 +54,16 @@ namespace Spotnik.Gui.Repositories
       dbcontext.SaveChanges();
 
       return entity;
+    }
+
+    public void Update(TEntity entity)
+    {
+      using var dbcontext = contextFactory.CreateDbContext();
+      dbcontext.Set<TEntity>().Attach(entity);
+
+      dbcontext.Entry(entity).State = EntityState.Modified;
+
+      dbcontext.SaveChanges();
     }
   }
 }
