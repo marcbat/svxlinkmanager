@@ -18,6 +18,8 @@ namespace Spotnik.Gui.Repositories
     TEntity Add(TEntity entity);
 
     void Update(TEntity entity);
+
+    void Delete(int id);
   }
 
   public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IModelEntity
@@ -64,6 +66,18 @@ namespace Spotnik.Gui.Repositories
       dbcontext.Entry(entity).State = EntityState.Modified;
 
       dbcontext.SaveChanges();
+    }
+
+    public void Delete(int id)
+    {
+      using var dbcontext = contextFactory.CreateDbContext();
+
+      var entity = Get(id);
+      dbcontext.Attach(entity);
+      dbcontext.Set<TEntity>().Remove(entity);
+
+      dbcontext.SaveChanges();
+
     }
   }
 }

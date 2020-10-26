@@ -9,7 +9,19 @@ namespace Spotnik.Gui.Pages
 {
   public class ChannelListBase : ChannelBase
   {
-    
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    public void Delete(int id)
+    {
+      Repositories.Channels.Delete(id);
+
+      Channels.Remove(Channels.Single(c=>c.Id == id));
+
+      StateHasChanged();
+
+      NavigationManager.NavigateTo("channelList");
+    }
 
   }
 }
