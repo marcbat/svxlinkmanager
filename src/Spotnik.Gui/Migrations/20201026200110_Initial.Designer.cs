@@ -9,7 +9,7 @@ using Spotnik.Gui.Data;
 namespace Spotnik.Gui.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201024071534_Initial")]
+    [Migration("20201026200110_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -224,12 +224,15 @@ namespace Spotnik.Gui.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CallSign")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Host")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Port")
@@ -311,12 +314,6 @@ namespace Spotnik.Gui.Migrations
                             Host = "rrf3.f5nlg.ovh",
                             Name = "Salon Expérimental",
                             Port = 5303
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Réseau EchoLink",
-                            Port = 0
                         });
                 });
 

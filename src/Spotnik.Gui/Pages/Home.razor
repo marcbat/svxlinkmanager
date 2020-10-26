@@ -1,7 +1,5 @@
-﻿@page "/spotnik"
-
-
-@inherits Spotnik.Gui.ViewModels.HomeBase
+﻿@page "/"
+@inherits Spotnik.Gui.Pages.HomeBase
 
 <h3>Spotnik <small>(@Status)</small></h3>
 
@@ -20,9 +18,8 @@
 <div class="row">
   @foreach (var node in Nodes)
   {
-    <div class="col">
-      @node
-    </div>
+  <button type="button" class="btn btn-outline-secondary"> @node</button>
+    
   }
 </div>
 

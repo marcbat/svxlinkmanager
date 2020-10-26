@@ -1,0 +1,39 @@
+﻿@page "/channelList"
+@inherits Spotnik.Gui.Pages.ChannelListBase
+
+<h3>Salons</h3>
+
+<div class="row justify-content-end">
+  <div class="col-2">
+    <a class="btn btn-outline-success" href="AddChannel" role="button">Créer</a>
+  </div>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      
+      <th scope="col">Nom</th>
+      <th scope="col">Call</th>
+      <th scope="col">Host</th>
+      <th scope="col">Port</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var channel in Channels)
+    {
+    <tr>
+
+      <td>@channel.Name</td>
+      <td>@channel.CallSign</td>
+      <td>@channel.Host</td>
+      <td>@channel.Port</td>
+      <td><a class="btn btn-outline-primary" href="#" role="button">Editer</a> <a class="btn btn-outline-danger" href="#" role="button">Supprimer</a></td>
+    </tr>
+    }
+  </tbody>
+</table>
+
+
+

@@ -41,7 +41,6 @@ namespace Spotnik.Gui.Data
       builder.Entity<Channel>().HasData(new Channel { Id = 6, Name = "Salon Bavardage", CallSign = "(CH) HB9GXP2 H", Host = "serveur.f1tzo.com", Port = 5301, AuthKey = "FON-F1TZO" });
       builder.Entity<Channel>().HasData(new Channel { Id = 7, Name = "Salon Local", CallSign = "(CH) HB9GXP2 H", Host = "serveur.f1tzo.com", Port= 5302, AuthKey= "FON-F1TZO" });
       builder.Entity<Channel>().HasData(new Channel { Id = 8, Name = "Salon Expérimental", CallSign = "(CH) HB9GXP2 H", Host = "rrf3.f5nlg.ovh", Port = 5303, AuthKey = "Magnifique123456789!" });
-      builder.Entity<Channel>().HasData(new Channel { Id = 9, Name = "Réseau EchoLink" });
     }
   }
 }

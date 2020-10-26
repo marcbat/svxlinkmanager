@@ -13,6 +13,8 @@ namespace Spotnik.Gui.Repositories
     TEntity Find(int id);
     TEntity Get(int id);
     IEnumerable<TEntity> GetAll();
+
+    TEntity Add(TEntity entity);
   }
 
   public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IModelEntity
@@ -40,6 +42,15 @@ namespace Spotnik.Gui.Repositories
     {
       using var dbcontext = contextFactory.CreateDbContext();
       return dbcontext.Set<TEntity>().SingleOrDefault(e => e.Id == id);
+    }
+
+    public TEntity Add(TEntity entity)
+    {
+      using var dbcontext = contextFactory.CreateDbContext();
+      dbcontext.Set<TEntity>().Add(entity);
+      dbcontext.SaveChanges();
+
+      return entity;
     }
   }
 }

@@ -52,11 +52,11 @@ namespace Spotnik.Gui.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true),
-                    Host = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Host = table.Column<string>(nullable: false),
                     AuthKey = table.Column<string>(nullable: true),
                     Port = table.Column<int>(nullable: false),
-                    CallSign = table.Column<string>(nullable: true)
+                    CallSign = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -208,11 +208,6 @@ namespace Spotnik.Gui.Migrations
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Host", "Name", "Port" },
                 values: new object[] { 8, "Magnifique123456789!", "(CH) HB9GXP2 H", "rrf3.f5nlg.ovh", "Salon Expérimental", 5303 });
-
-            migrationBuilder.InsertData(
-                table: "Channels",
-                columns: new[] { "Id", "AuthKey", "CallSign", "Host", "Name", "Port" },
-                values: new object[] { 9, null, null, null, "Réseau EchoLink", 0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

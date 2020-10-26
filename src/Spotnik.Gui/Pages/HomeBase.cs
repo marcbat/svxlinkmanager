@@ -19,9 +19,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Spotnik.Gui.ViewModels
+namespace Spotnik.Gui.Pages
 {
-  public class HomeBase : ComponentBase, INotifyPropertyChanged
+  public class HomeBase : ChannelBase, INotifyPropertyChanged
   {
     private int channel;
     private string status = "Déconnecté";
@@ -33,8 +33,6 @@ namespace Spotnik.Gui.ViewModels
       base.OnInitialized();
 
       Nodes = new List<string>();
-
-      LoadChannels();
 
       PropertyChanged += (s, e) =>
       {
@@ -61,13 +59,6 @@ namespace Spotnik.Gui.ViewModels
       };
     }
 
-    
-    [Inject]
-    public IRepositories Repositories { get; set; }
-
-    [Inject]
-    public ILogger<HomeBase> Logger { get; set; }
-
     [Inject]
     public SvxLinkService SvxLinkService { get; set; }
 
@@ -91,11 +82,7 @@ namespace Spotnik.Gui.ViewModels
       }
     }
 
-    public List<Channel> Channels { get; private set; }
-
     public List<string> Nodes { get; set; }
-
-    private void LoadChannels() => Channels = Repositories.Channels.GetAll().ToList();
 
     private void RunRestart()
     {
