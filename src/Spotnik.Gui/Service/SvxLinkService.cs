@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 
+using Spotnik.Gui.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,13 +13,13 @@ namespace Spotnik.Gui.Service
 {
   public class SvxLinkService
   {
-    public event Action<List<string>> Connected;
+    public event Action<List<Node>> Connected;
 
-    public event Action<string> NodeConnected;
-    public event Action<string> NodeDisconnected;
+    public event Action<Node> NodeConnected;
+    public event Action<Node> NodeDisconnected;
 
-    public event Action<string> NodeTx;
-    public event Action<string> NodeRx;
+    public event Action<Node> NodeTx;
+    public event Action<Node> NodeRx;
 
     private readonly ILogger<SvxLinkService> logger;
 
@@ -75,19 +77,23 @@ namespace Spotnik.Gui.Service
         return;
 
       if (s.Contains("Connected nodes"))
-        Connected?.Invoke(s.Split(':')[2].Split(',').ToList());
-
+      {
+        var nodes = new List<Node>();
+        s.Split(':')[2].Split(',').ToList().ForEach(n=>nodes.Add(new Node {Name = n }));
+        Connected?.Invoke(nodes);
+      }
+        
       if (s.Contains("Node left"))
-        NodeDisconnected?.Invoke(s.Split(":")[2]);
+        NodeDisconnected?.Invoke(new Node { Name = s.Split(":")[2] });
 
       if (s.Contains("Node joined"))
-        NodeConnected?.Invoke(s.Split(":")[2]);
+        NodeConnected?.Invoke(new Node { Name = s.Split(":")[2] });
 
       if (s.Contains("Talker start"))
-        NodeTx?.Invoke(s.Split(":")[2]);
+        NodeTx?.Invoke(new Node { Name = s.Split(":")[2] });
 
       if (s.Contains("Talker stop"))
-        NodeRx?.Invoke(s.Split(":")[2]);
+        NodeRx?.Invoke(new Node { Name = s.Split(":")[2] });
     }
 
     public void StopSvxlink()

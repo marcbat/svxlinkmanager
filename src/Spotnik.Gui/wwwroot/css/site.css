@@ -181,3 +181,25 @@ app {
         display: block;
     }
 }
+
+/* Custom */
+
+.node {
+  display: inline-block;
+  width: 150px;
+  text-align: left;
+  padding: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-image: initial;
+  border-radius: 5px;
+  margin: 3px 5px;
+}
+
+
+.node-tx {
+  border-color: red;
+}
+.node-list {
+  margin-top: 10px;
+}

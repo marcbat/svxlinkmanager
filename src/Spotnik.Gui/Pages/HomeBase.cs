@@ -28,34 +28,44 @@ namespace Spotnik.Gui.Pages
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-      base.OnInitialized();
 
-      Nodes = new List<string>();
+      await base.OnInitializedAsync().ConfigureAwait(false);
 
-      PropertyChanged += (s, e) =>
-      {
-        if (e.PropertyName == nameof(Channel))
-          RunRestart();
-      };
+      Nodes = new List<Models.Node>();
 
-      SvxLinkService.Connected += async ns =>
+      SvxLinkService.Connected += ns =>
       {
         Nodes = ns;
-        await InvokeAsync(() => StateHasChanged());
+        InvokeAsync(() => StateHasChanged());
       };
 
-      SvxLinkService.NodeConnected += async n =>
+      SvxLinkService.NodeConnected += n =>
       {
         Nodes.Add(n);
-        await InvokeAsync(() => StateHasChanged());
+        InvokeAsync(() => StateHasChanged());
+
       };
 
-      SvxLinkService.NodeDisconnected += async n =>
+      SvxLinkService.NodeDisconnected += n =>
       {
         Nodes.Remove(n);
-        await InvokeAsync(() => StateHasChanged());
+        InvokeAsync(() => StateHasChanged());
+      };
+
+      SvxLinkService.NodeTx += n =>
+      {
+        var node = Nodes.Single(nx => nx.Equals(n));
+        node.ClassName = "node node-tx";
+        InvokeAsync(() => StateHasChanged());
+      };
+
+      SvxLinkService.NodeRx += n =>
+      {
+        var node = Nodes.Single(nx => nx.Equals(n));
+        node.ClassName = "node";
+        InvokeAsync(() => StateHasChanged());
       };
     }
 
@@ -78,11 +88,11 @@ namespace Spotnik.Gui.Pages
       set
       {
         channel = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Channel)));
+        RunRestart();
       }
     }
 
-    public List<string> Nodes { get; set; }
+    public List<Models.Node> Nodes { get; set; }
 
     private void RunRestart()
     {

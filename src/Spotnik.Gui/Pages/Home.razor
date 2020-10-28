@@ -15,12 +15,13 @@
   </div>
 </div>
 
-<div class="row">
-  @foreach (var node in Nodes)
-  {
-  <button type="button" class="btn btn-outline-secondary"> @node</button>
-    
-  }
+<div class="row node-list">
+  <div class="col">
+    @foreach (var node in Nodes)
+    {
+      <Node CurrentNode="@node"/>
+    }
+  </div>
 </div>
 
 
