@@ -16,6 +16,8 @@ namespace Spotnik.Gui.Pages
 
     protected override async Task OnInitializedAsync()
     {
+      await base.OnInitializedAsync().ConfigureAwait(false);
+
       LoadChannels();
     }
 

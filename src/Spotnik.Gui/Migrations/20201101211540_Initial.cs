@@ -169,6 +169,28 @@ namespace Spotnik.Gui.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Rules",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Enable = table.Column<bool>(nullable: false),
+                    Day = table.Column<int>(nullable: false),
+                    Duration = table.Column<int>(nullable: false),
+                    ChannelId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rules", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Rules_Channels_ChannelId",
+                        column: x => x.ChannelId,
+                        principalTable: "Channels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Host", "Name", "Port" },
@@ -245,6 +267,11 @@ namespace Spotnik.Gui.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rules_ChannelId",
+                table: "Rules",
+                column: "ChannelId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -265,13 +292,16 @@ namespace Spotnik.Gui.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Channels");
+                name: "Rules");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Channels");
         }
     }
 }

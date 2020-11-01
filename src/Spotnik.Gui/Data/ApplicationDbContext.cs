@@ -24,6 +24,8 @@ namespace Spotnik.Gui.Data
 
     public DbSet<Channel> Channels { get; set; }
 
+    public DbSet<Rule> Rules { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
       optionsBuilder.UseSqlite("Data Source=Spotnik.db");
