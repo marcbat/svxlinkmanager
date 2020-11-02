@@ -225,9 +225,18 @@ namespace Spotnik.Gui.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Dtmf")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Host")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsTemporized")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -246,7 +255,10 @@ namespace Spotnik.Gui.Migrations
                             Id = 1,
                             AuthKey = "Magnifique123456789!",
                             CallSign = "(CH) HB9GXP2 H",
+                            Dtmf = 0,
                             Host = "rrf2.f5nlg.ovh",
+                            IsDefault = false,
+                            IsTemporized = false,
                             Name = "Réseau des Répéteurs Francophones",
                             Port = 5300
                         },
@@ -255,7 +267,10 @@ namespace Spotnik.Gui.Migrations
                             Id = 2,
                             AuthKey = "xD9wW5gO7yD9hN5o",
                             CallSign = "(CH) HB9GXP2 H",
+                            Dtmf = 0,
                             Host = "salonsuisseromand.northeurope.cloudapp.azure.com",
+                            IsDefault = false,
+                            IsTemporized = false,
                             Name = "Salon Suisse Romand",
                             Port = 5300
                         },
@@ -264,7 +279,10 @@ namespace Spotnik.Gui.Migrations
                             Id = 3,
                             AuthKey = "FON-F1TZO",
                             CallSign = "(CH) HB9GXP2 H",
+                            Dtmf = 0,
                             Host = "serveur.f1tzo.com",
+                            IsDefault = false,
+                            IsTemporized = false,
                             Name = "French Open Network",
                             Port = 5300
                         },
@@ -273,7 +291,10 @@ namespace Spotnik.Gui.Migrations
                             Id = 4,
                             AuthKey = "Magnifique123456789!",
                             CallSign = "(CH) HB9GXP2 H",
+                            Dtmf = 0,
                             Host = "rrf3.f5nlg.ovh",
+                            IsDefault = false,
+                            IsTemporized = false,
                             Name = "Salon Technique",
                             Port = 5301
                         },
@@ -282,7 +303,10 @@ namespace Spotnik.Gui.Migrations
                             Id = 5,
                             AuthKey = "Magnifique123456789!",
                             CallSign = "(CH) HB9GXP2 H",
+                            Dtmf = 0,
                             Host = "rrf3.f5nlg.ovh",
+                            IsDefault = false,
+                            IsTemporized = false,
                             Name = "Salon International",
                             Port = 5302
                         },
@@ -291,7 +315,10 @@ namespace Spotnik.Gui.Migrations
                             Id = 6,
                             AuthKey = "FON-F1TZO",
                             CallSign = "(CH) HB9GXP2 H",
+                            Dtmf = 0,
                             Host = "serveur.f1tzo.com",
+                            IsDefault = false,
+                            IsTemporized = false,
                             Name = "Salon Bavardage",
                             Port = 5301
                         },
@@ -300,7 +327,10 @@ namespace Spotnik.Gui.Migrations
                             Id = 7,
                             AuthKey = "FON-F1TZO",
                             CallSign = "(CH) HB9GXP2 H",
+                            Dtmf = 0,
                             Host = "serveur.f1tzo.com",
+                            IsDefault = false,
+                            IsTemporized = false,
                             Name = "Salon Local",
                             Port = 5302
                         },
@@ -309,7 +339,10 @@ namespace Spotnik.Gui.Migrations
                             Id = 8,
                             AuthKey = "Magnifique123456789!",
                             CallSign = "(CH) HB9GXP2 H",
+                            Dtmf = 0,
                             Host = "rrf3.f5nlg.ovh",
+                            IsDefault = false,
+                            IsTemporized = false,
                             Name = "Salon Expérimental",
                             Port = 5303
                         });
