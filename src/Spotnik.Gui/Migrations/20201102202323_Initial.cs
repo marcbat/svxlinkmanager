@@ -197,42 +197,42 @@ namespace Spotnik.Gui.Migrations
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 1, "Magnifique123456789!", "(CH) HB9GXP2 H", 0, "rrf2.f5nlg.ovh", false, false, "Réseau des Répéteurs Francophones", 5300 });
+                values: new object[] { 1, "Magnifique123456789!", "(CH) HB9GXP2 H", 0, "rrf2.f5nlg.ovh", true, false, "Réseau des Répéteurs Francophones", 5300 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 2, "xD9wW5gO7yD9hN5o", "(CH) HB9GXP2 H", 0, "salonsuisseromand.northeurope.cloudapp.azure.com", false, false, "Salon Suisse Romand", 5300 });
+                values: new object[] { 2, "xD9wW5gO7yD9hN5o", "(CH) HB9GXP2 H", 0, "salonsuisseromand.northeurope.cloudapp.azure.com", false, true, "Salon Suisse Romand", 5300 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 3, "FON-F1TZO", "(CH) HB9GXP2 H", 0, "serveur.f1tzo.com", false, false, "French Open Network", 5300 });
+                values: new object[] { 3, "FON-F1TZO", "(CH) HB9GXP2 H", 0, "serveur.f1tzo.com", false, true, "French Open Network", 5300 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 4, "Magnifique123456789!", "(CH) HB9GXP2 H", 0, "rrf3.f5nlg.ovh", false, false, "Salon Technique", 5301 });
+                values: new object[] { 4, "Magnifique123456789!", "(CH) HB9GXP2 H", 0, "rrf3.f5nlg.ovh", false, true, "Salon Technique", 5301 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 5, "Magnifique123456789!", "(CH) HB9GXP2 H", 0, "rrf3.f5nlg.ovh", false, false, "Salon International", 5302 });
+                values: new object[] { 5, "Magnifique123456789!", "(CH) HB9GXP2 H", 0, "rrf3.f5nlg.ovh", false, true, "Salon International", 5302 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 6, "FON-F1TZO", "(CH) HB9GXP2 H", 0, "serveur.f1tzo.com", false, false, "Salon Bavardage", 5301 });
+                values: new object[] { 6, "FON-F1TZO", "(CH) HB9GXP2 H", 0, "serveur.f1tzo.com", false, true, "Salon Bavardage", 5301 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 7, "FON-F1TZO", "(CH) HB9GXP2 H", 0, "serveur.f1tzo.com", false, false, "Salon Local", 5302 });
+                values: new object[] { 7, "FON-F1TZO", "(CH) HB9GXP2 H", 0, "serveur.f1tzo.com", false, true, "Salon Local", 5302 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 8, "Magnifique123456789!", "(CH) HB9GXP2 H", 0, "rrf3.f5nlg.ovh", false, false, "Salon Expérimental", 5303 });
+                values: new object[] { 8, "Magnifique123456789!", "(CH) HB9GXP2 H", 0, "rrf3.f5nlg.ovh", false, true, "Salon Expérimental", 5303 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

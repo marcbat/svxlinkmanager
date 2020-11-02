@@ -16,11 +16,13 @@ namespace Spotnik.Gui.Pages.Channels
     [Parameter]
     public string Id { get; set; }
 
-    protected void HandleValidSubmit()
+    override protected void HandleValidSubmit()
     {
       Repositories.Channels.Update(Channel);
 
-      NavigationManager.NavigateTo("channelList");
+      NavigationManager.NavigateTo("Channel/Manage");
     }
+
+    protected override string SubmitTitle => "Modifier";
   }
 }

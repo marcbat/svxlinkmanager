@@ -12,7 +12,7 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      
+      <th scope="col"></th>
       <th scope="col">Nom</th>
       <th scope="col">Call</th>
       <th scope="col">Host</th>
@@ -24,7 +24,7 @@
     @foreach (var channel in Channels)
     {
     <tr>
-
+      <td>@if (channel.IsDefault) {<span class="oi oi-home" aria-hidden="true"></span>}</td>
       <td>@channel.Name</td>
       <td>@channel.CallSign</td>
       <td>@channel.Host</td>

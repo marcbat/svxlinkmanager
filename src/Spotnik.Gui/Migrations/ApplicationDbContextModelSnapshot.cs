@@ -257,7 +257,7 @@ namespace Spotnik.Gui.Migrations
                             CallSign = "(CH) HB9GXP2 H",
                             Dtmf = 0,
                             Host = "rrf2.f5nlg.ovh",
-                            IsDefault = false,
+                            IsDefault = true,
                             IsTemporized = false,
                             Name = "Réseau des Répéteurs Francophones",
                             Port = 5300
@@ -270,7 +270,7 @@ namespace Spotnik.Gui.Migrations
                             Dtmf = 0,
                             Host = "salonsuisseromand.northeurope.cloudapp.azure.com",
                             IsDefault = false,
-                            IsTemporized = false,
+                            IsTemporized = true,
                             Name = "Salon Suisse Romand",
                             Port = 5300
                         },
@@ -282,7 +282,7 @@ namespace Spotnik.Gui.Migrations
                             Dtmf = 0,
                             Host = "serveur.f1tzo.com",
                             IsDefault = false,
-                            IsTemporized = false,
+                            IsTemporized = true,
                             Name = "French Open Network",
                             Port = 5300
                         },
@@ -294,7 +294,7 @@ namespace Spotnik.Gui.Migrations
                             Dtmf = 0,
                             Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
-                            IsTemporized = false,
+                            IsTemporized = true,
                             Name = "Salon Technique",
                             Port = 5301
                         },
@@ -306,7 +306,7 @@ namespace Spotnik.Gui.Migrations
                             Dtmf = 0,
                             Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
-                            IsTemporized = false,
+                            IsTemporized = true,
                             Name = "Salon International",
                             Port = 5302
                         },
@@ -318,7 +318,7 @@ namespace Spotnik.Gui.Migrations
                             Dtmf = 0,
                             Host = "serveur.f1tzo.com",
                             IsDefault = false,
-                            IsTemporized = false,
+                            IsTemporized = true,
                             Name = "Salon Bavardage",
                             Port = 5301
                         },
@@ -330,7 +330,7 @@ namespace Spotnik.Gui.Migrations
                             Dtmf = 0,
                             Host = "serveur.f1tzo.com",
                             IsDefault = false,
-                            IsTemporized = false,
+                            IsTemporized = true,
                             Name = "Salon Local",
                             Port = 5302
                         },
@@ -342,7 +342,7 @@ namespace Spotnik.Gui.Migrations
                             Dtmf = 0,
                             Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
-                            IsTemporized = false,
+                            IsTemporized = true,
                             Name = "Salon Expérimental",
                             Port = 5303
                         });

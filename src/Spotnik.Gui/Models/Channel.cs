@@ -26,8 +26,10 @@ namespace Spotnik.Gui.Models
     [Required]
     public string CallSign { get; set; }
 
+    [Required]
     public bool IsDefault { get; set; }
 
+    [Required]
     public bool IsTemporized { get; set; }
 
     public int Dtmf { get; set; }

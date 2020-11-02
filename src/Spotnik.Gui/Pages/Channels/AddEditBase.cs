@@ -7,11 +7,15 @@ using System.Threading.Tasks;
 
 namespace Spotnik.Gui.Pages.Channels
 {
-  public class AddEditBase : RepositoryComponentBase
+  public abstract class AddEditBase : RepositoryComponentBase
   {
     [Inject]
     public NavigationManager NavigationManager { get; set; }
 
     protected Channel Channel { get; set; }
+
+    protected abstract void HandleValidSubmit();
+
+    protected abstract string SubmitTitle { get; }
   }
 }

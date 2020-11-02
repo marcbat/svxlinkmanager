@@ -3,34 +3,4 @@
 
 <h3>Ajouter un salon</h3>
 
-<EditForm Model="@Channel" OnValidSubmit="@HandleValidSubmit">
-  <DataAnnotationsValidator />
-  <ValidationSummary />
-
-  <div class="form-group">
-    <label for="inputName">Name</label>
-    <InputText @bind-Value="Channel.Name" type="text" class="form-control" id="inputName" placeholder="Nom du salon" />
-  </div>
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="inputHost">Host</label>
-      <InputText @bind-Value="Channel.Host" type="text" class="form-control" id="inputHost" placeholder="url du serveur svxreflector" />
-    </div>
-    <div class="form-group col-md-6">
-      <label for="inputPort">Port</label>
-      <InputNumber @bind-Value="Channel.Port" type="number" class="form-control" id="inputPort" placeholder=5300 />
-    </div>
-  </div>
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="inputCallSign">Indicatif</label>
-      <InputText @bind-Value="Channel.CallSign" type="text" class="form-control" id="inputCallSign" placeholder="Votre indicatif" />
-    </div>
-    <div class="form-group col-md-6">
-      <label for="inputAuthKey">Mot de passe</label>
-      <InputText @bind-Value="Channel.AuthKey" type="password" class="form-control" id="inputAuthKey" />
-    </div>
-  </div>
-
-  <button type="submit" class="btn btn-success">Créer</button> <a class="btn btn-primary" href="Channel/Manage" role="button">Annuler</a>
-</EditForm>
+<AddEditForm Channel="@Channel" HandleValidSubmit="@HandleValidSubmit" SubmitTitle="@SubmitTitle" />

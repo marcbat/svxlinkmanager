@@ -17,7 +17,7 @@ namespace Spotnik.Gui.Repositories
   {
     public Repositories(IDbContextFactory<ApplicationDbContext> contextFactory)
     {
-      Channels = new Repository<Channel>(contextFactory);
+      Channels = new ChannelRepository(contextFactory);
     }
 
     public IRepository<Channel> Channels { get; private set; }

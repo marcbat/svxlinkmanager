@@ -31,25 +31,25 @@ namespace Spotnik.Gui.Repositories
       this.contextFactory = contextFactory;
     }
 
-    public IEnumerable<TEntity> GetAll()
+    public virtual IEnumerable<TEntity> GetAll()
     {
       using var dbcontext = contextFactory.CreateDbContext();
       return dbcontext.Set<TEntity>().ToList();
     }
 
-    public TEntity Get(int id)
+    public virtual TEntity Get(int id)
     {
       using var dbcontext = contextFactory.CreateDbContext();
       return dbcontext.Set<TEntity>().Single(e => e.Id == id);
     }
 
-    public TEntity Find(int id)
+    public virtual TEntity Find(int id)
     {
       using var dbcontext = contextFactory.CreateDbContext();
       return dbcontext.Set<TEntity>().SingleOrDefault(e => e.Id == id);
     }
 
-    public TEntity Add(TEntity entity)
+    public virtual TEntity Add(TEntity entity)
     {
       using var dbcontext = contextFactory.CreateDbContext();
       dbcontext.Set<TEntity>().Add(entity);
@@ -58,7 +58,7 @@ namespace Spotnik.Gui.Repositories
       return entity;
     }
 
-    public void Update(TEntity entity)
+    public virtual void Update(TEntity entity)
     {
       using var dbcontext = contextFactory.CreateDbContext();
       dbcontext.Set<TEntity>().Attach(entity);
@@ -68,7 +68,7 @@ namespace Spotnik.Gui.Repositories
       dbcontext.SaveChanges();
     }
 
-    public void Delete(int id)
+    public virtual void Delete(int id)
     {
       using var dbcontext = contextFactory.CreateDbContext();
 
