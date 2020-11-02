@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Spotnik.Gui.Pages
+namespace Spotnik.Gui.Pages.Channels
 {
-  public class AddEditChannelBase : RepositoryComponentBase
+  public class AddEditBase : RepositoryComponentBase
   {
     [Inject]
     public NavigationManager NavigationManager { get; set; }

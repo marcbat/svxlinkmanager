@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 
 using Spotnik.Gui.Data;
 using Spotnik.Gui.Models;
+using Spotnik.Gui.Pages.Shared;
 using Spotnik.Gui.Repositories;
 using Spotnik.Gui.Service;
 

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Spotnik.Gui.Pages
+namespace Spotnik.Gui.Pages.Channels
 {
-  public class EditChannelBase : AddEditChannelBase
+  public class EditBase : AddEditBase
   {
     protected override void OnInitialized()
     {

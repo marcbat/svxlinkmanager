@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
-
+using Spotnik.Gui.Pages.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Spotnik.Gui.Pages
+namespace Spotnik.Gui.Pages.Channels
 {
-  public class ChannelListBase : ChannelBase
+  public class ManageBase : ChannelBase
   {
     [Inject]
     public NavigationManager NavigationManager { get; set; }

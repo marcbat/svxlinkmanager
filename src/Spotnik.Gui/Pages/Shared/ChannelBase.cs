@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Spotnik.Gui.Pages
+namespace Spotnik.Gui.Pages.Shared
 {
   public class ChannelBase : RepositoryComponentBase
   {

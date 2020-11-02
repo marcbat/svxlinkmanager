@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Spotnik.Gui.Models;
 
-namespace Spotnik.Gui.Pages
+namespace Spotnik.Gui.Pages.Channels
 {
-  public class AddChannelBase : AddEditChannelBase
+  public class CreateBase : AddEditBase
   {
 
     protected override void OnInitialized()
