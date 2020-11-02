@@ -1,11 +1,11 @@
-﻿@page "/channelList"
+﻿@page "/Channel/Manage"
 @inherits Spotnik.Gui.Pages.Channels.ManageBase
 
 <h3>Salons</h3>
 
 <div class="row justify-content-end">
   <div class="col-2">
-    <a class="btn btn-outline-success" href="AddChannel" role="button">Créer</a>
+    <a class="btn btn-outline-success" href="Channel/Create" role="button">Créer</a>
   </div>
 </div>
 
@@ -29,7 +29,7 @@
       <td>@channel.CallSign</td>
       <td>@channel.Host</td>
       <td>@channel.Port</td>
-      <td><a class="btn btn-outline-primary" href="EditChannel/@channel.Id" role="button">Editer</a> <button type="button" class="btn btn-danger" @onclick="@(()=>Delete(channel.Id))">Supprimer</button></td>
+      <td><a class="btn btn-outline-primary" href="Channel/Edit/@channel.Id" role="button">Editer</a> <button type="button" class="btn btn-danger" @onclick="@(()=>Delete(channel.Id))">Supprimer</button></td>
     </tr>
     }
   </tbody>
