@@ -7,7 +7,12 @@ using System.Threading.Tasks;
 
 namespace Spotnik.Gui.Repositories
 {
-  public class ChannelRepository : Repository<Channel>
+  public interface IChannelRepository : IRepository<Channel>
+  {
+    Channel GetDefault();
+  }
+
+  public class ChannelRepository : Repository<Channel>, IChannelRepository
   {
     public ChannelRepository(IDbContextFactory<ApplicationDbContext> contextFactory) : base(contextFactory)
     {
@@ -18,14 +23,20 @@ namespace Spotnik.Gui.Repositories
       base.Update(channel);
 
       // Set other channel to none default
-      if(channel.IsDefault)
+      if (channel.IsDefault)
       {
-        foreach (var c in GetAll().Where(c=>!c.Id.Equals(channel.Id)))
+        foreach (var c in GetAll().Where(c => !c.Id.Equals(channel.Id)))
         {
           c.IsDefault = false;
           Update(c);
         }
       }
+    }
+
+    public Channel GetDefault()
+    {
+      using var dbcontext = contextFactory.CreateDbContext();
+      return dbcontext.Channels.Single(c => c.IsDefault);
     }
   }
 }

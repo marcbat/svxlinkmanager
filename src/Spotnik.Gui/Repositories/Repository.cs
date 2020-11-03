@@ -24,7 +24,7 @@ namespace Spotnik.Gui.Repositories
 
   public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IModelEntity
   {
-    private readonly IDbContextFactory<ApplicationDbContext> contextFactory;
+    protected readonly IDbContextFactory<ApplicationDbContext> contextFactory;
 
     public Repository(IDbContextFactory<ApplicationDbContext> contextFactory)
     {

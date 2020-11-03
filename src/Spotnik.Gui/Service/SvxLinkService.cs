@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Spotnik.Gui.Service
 {
@@ -26,12 +27,34 @@ namespace Spotnik.Gui.Service
 
     private readonly ILogger<SvxLinkService> logger;
     private readonly IRepositories repositories;
+    private readonly Timer timer;
     private int channel;
+    private DateTime lastTx;
 
     public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories)
     {
       this.logger = logger;
       this.repositories = repositories;
+
+      timer = new Timer(1000);
+      timer.Elapsed += (s, e) => CheckTimer();
+
+      NodeTx += n => lastTx = DateTime.Now;
+      Connected += () => lastTx = DateTime.Now;
+    }
+
+    private void CheckTimer()
+    {
+      var diff = (DateTime.Now - lastTx).TotalSeconds;
+
+      logger.LogInformation($"Durée depuis le dernier passage en émission {diff} secondes.");
+
+      if ( diff > 180)
+      {
+        logger.LogInformation("Delai d'inactivité dépassé. Retour au salon par défaut.");
+        Channel = repositories.Channels.GetDefault().Id;
+      }
+        
     }
 
     public int Channel
@@ -47,7 +70,7 @@ namespace Spotnik.Gui.Service
 
     public List<Node> Nodes { get; set; } = new List<Node>();
 
-    public void RunsvxLink()
+    private void RunsvxLink()
     {
       var cmd = "svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config=/etc/spotnik/svxlink.current";
 
@@ -74,15 +97,19 @@ namespace Spotnik.Gui.Service
       shell.Start();
       shell.BeginErrorReadLine();
       shell.BeginOutputReadLine();
-      //shell.WaitForExit();
 
+      var channel = repositories.Channels.Get(Channel);
+      if (channel.IsTemporized)
+        timer.Start();
     }
 
-    public void StopSvxlink()
+    private void StopSvxlink()
     {
       var pid = ExecuteCommand("pgrep -x svxlink");
       if (pid != null)
         ExecuteCommand("pkill -TERM svxlink");
+
+      timer.Stop();
     }
 
     private void ShellOutputDataReceived(object sender, DataReceivedEventArgs e)
@@ -202,5 +229,6 @@ namespace Spotnik.Gui.Service
 
       return result.Trim();
     }
+
   }
 }

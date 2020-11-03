@@ -10,7 +10,7 @@ namespace Spotnik.Gui.Repositories
 {
   public interface IRepositories
   {
-    IRepository<Channel> Channels { get; }
+    IChannelRepository Channels { get; }
   }
 
   public class Repositories : IRepositories
@@ -20,7 +20,7 @@ namespace Spotnik.Gui.Repositories
       Channels = new ChannelRepository(contextFactory);
     }
 
-    public IRepository<Channel> Channels { get; private set; }
+    public IChannelRepository Channels { get; private set; }
 
   }
 }
