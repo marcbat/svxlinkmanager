@@ -8,7 +8,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update && apt-get install -qq -y svxlink-server procps && apt-get clean 
 
-COPY ./src/Spotnik.Gui/Spotnik /etc/spotnik/
+COPY ./src/SvxlinkManager/Spotnik /etc/spotnik/
 
 WORKDIR /app
 EXPOSE 80
@@ -16,16 +16,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["src/Spotnik.Gui/Spotnik.Gui.csproj", "src/Spotnik.Gui/"]
-RUN dotnet restore "src/Spotnik.Gui/Spotnik.Gui.csproj"
+COPY ["src/SvxlinkManager/SvxlinkManager.csproj", "src/SvxlinkManager/"]
+RUN dotnet restore "src/SvxlinkManager/SvxlinkManager.csproj"
 COPY . .
-WORKDIR "/src/src/Spotnik.Gui"
-RUN dotnet build "Spotnik.Gui.csproj" -c Release -o /app/build
+WORKDIR "/src/src/SvxlinkManager"
+RUN dotnet build "SvxlinkManager.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Spotnik.Gui.csproj" -c Release -o /app/publish
+RUN dotnet publish "SvxlinkManager.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Spotnik.Gui.dll"]
+ENTRYPOINT ["dotnet", "SvxlinkManager.dll"]
