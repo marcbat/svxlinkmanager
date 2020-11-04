@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
-using Spotnik.Gui.Data;
-using Spotnik.Gui.Models;
-using Spotnik.Gui.Pages.Shared;
-using Spotnik.Gui.Repositories;
-using Spotnik.Gui.Service;
+using SvxlinkManager.Data;
+using SvxlinkManager.Models;
+using SvxlinkManager.Pages.Shared;
+using SvxlinkManager.Repositories;
+using SvxlinkManager.Service;
 
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Spotnik.Gui.Pages
+namespace SvxlinkManager.Pages
 {
   public class HomeBase : ChannelBase, INotifyPropertyChanged
   {

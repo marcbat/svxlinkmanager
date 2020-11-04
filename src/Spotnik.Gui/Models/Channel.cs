@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Spotnik.Gui.Models
+namespace SvxlinkManager.Models
 {
 
   public class Channel : IModelEntity

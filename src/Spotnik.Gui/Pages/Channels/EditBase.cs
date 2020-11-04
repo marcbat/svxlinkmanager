@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Spotnik.Gui.Pages.Channels
+namespace SvxlinkManager.Pages.Channels
 {
   public class EditBase : AddEditBase
   {

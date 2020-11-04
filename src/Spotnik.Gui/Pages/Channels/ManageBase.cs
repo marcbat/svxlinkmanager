@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Spotnik.Gui.Pages.Shared;
+using SvxlinkManager.Pages.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Spotnik.Gui.Pages.Channels
+namespace SvxlinkManager.Pages.Channels
 {
   public class ManageBase : ChannelBase
   {

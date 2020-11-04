@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Spotnik.Gui.Data
+namespace SvxlinkManager.Data
 {
 
   public interface IDbContextFactory<TContext> where TContext : DbContext

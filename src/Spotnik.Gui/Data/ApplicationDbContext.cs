@@ -5,9 +5,9 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-using Spotnik.Gui.Models;
+using SvxlinkManager.Models;
 
-namespace Spotnik.Gui.Data
+namespace SvxlinkManager.Data
 {
 
   public class ApplicationDbContext : IdentityDbContext

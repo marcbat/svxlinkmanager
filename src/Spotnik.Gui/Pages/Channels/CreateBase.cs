@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Spotnik.Gui.Models;
+using SvxlinkManager.Models;
 
-namespace Spotnik.Gui.Pages.Channels
+namespace SvxlinkManager.Pages.Channels
 {
   public class CreateBase : AddEditBase
   {

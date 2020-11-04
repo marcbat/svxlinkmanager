@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Spotnik.Gui.Models
+namespace SvxlinkManager.Models
 {
   public class Rule : IModelEntity
   {

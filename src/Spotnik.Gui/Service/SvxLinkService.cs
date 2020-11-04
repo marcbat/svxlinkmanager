@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 
-using Spotnik.Gui.Models;
-using Spotnik.Gui.Repositories;
+using SvxlinkManager.Models;
+using SvxlinkManager.Repositories;
 
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace Spotnik.Gui.Service
+namespace SvxlinkManager.Service
 {
   public class SvxLinkService
   {

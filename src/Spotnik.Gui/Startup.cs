@@ -14,11 +14,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Spotnik.Gui.Areas.Identity;
-using Spotnik.Gui.Data;
-using Spotnik.Gui.Repositories;
-using Spotnik.Gui.Service;
+using SvxlinkManager.Data;
+using SvxlinkManager.Repositories;
+using SvxlinkManager.Service;
 
-namespace Spotnik.Gui
+namespace SvxlinkManager
 {
   public class Startup
   {

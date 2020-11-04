@@ -1,11 +1,11 @@
-﻿using Spotnik.Gui.Data;
-using Spotnik.Gui.Models;
+﻿using SvxlinkManager.Data;
+using SvxlinkManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Spotnik.Gui.Repositories
+namespace SvxlinkManager.Repositories
 {
   public interface IChannelRepository : IRepository<Channel>
   {
