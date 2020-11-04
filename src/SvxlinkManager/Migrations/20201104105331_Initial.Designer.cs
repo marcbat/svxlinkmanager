@@ -9,7 +9,7 @@ using SvxlinkManager.Data;
 namespace SvxlinkManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201104095422_Initial")]
+    [Migration("20201104105331_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,15 @@ namespace SvxlinkManager.Migrations
                         .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "68bf774f-7769-4813-a283-40a9e0b4e3f3",
+                            ConcurrencyStamp = "82465f4a-50b1-465c-9a22-7c3cfd8de8ab",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

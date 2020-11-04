@@ -195,6 +195,11 @@ namespace SvxlinkManager.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "68bf774f-7769-4813-a283-40a9e0b4e3f3", "82465f4a-50b1-465c-9a22-7c3cfd8de8ab", "Admin", "ADMIN" });
+
+            migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
                 values: new object[] { 1, "Magnifique123456789!", "(CH) HB9GXP2 H", 0, "rrf2.f5nlg.ovh", true, false, "Réseau des Répéteurs Francophones", 5300 });

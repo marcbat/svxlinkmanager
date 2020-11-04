@@ -29,11 +29,14 @@ namespace SvxlinkManager.Data
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
       optionsBuilder.UseSqlite("Data Source=Spotnik.db");
+
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
       base.OnModelCreating(builder);
+
+      builder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Admin", NormalizedName = "Admin".ToUpper() });
 
       builder.Entity<Channel>().HasData(new Channel { Id = 1, Name = "Réseau des Répéteurs Francophones", CallSign= "(CH) HB9GXP2 H", Host= "rrf2.f5nlg.ovh", Port = 5300,  AuthKey= "Magnifique123456789!", IsDefault=true, IsTemporized = false });
       builder.Entity<Channel>().HasData(new Channel { Id = 2, Name = "Salon Suisse Romand", CallSign = "(CH) HB9GXP2 H", Host = "salonsuisseromand.northeurope.cloudapp.azure.com", Port = 5300, AuthKey = "xD9wW5gO7yD9hN5o", IsDefault = false, IsTemporized = true });
