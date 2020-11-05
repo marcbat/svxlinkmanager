@@ -44,8 +44,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "68bf774f-7769-4813-a283-40a9e0b4e3f3",
-                            ConcurrencyStamp = "82465f4a-50b1-465c-9a22-7c3cfd8de8ab",
+                            Id = "5ffcd248-bb43-4909-bf38-e3fb19e2c69c",
+                            ConcurrencyStamp = "14351e19-ba03-4713-9fb6-39a4184596d2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -354,6 +354,60 @@ namespace SvxlinkManager.Migrations
                             IsTemporized = true,
                             Name = "Salon Expérimental",
                             Port = 5303
+                        });
+                });
+
+            modelBuilder.Entity("SvxlinkManager.Models.RadioProfile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Enable")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RxCtcss")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RxFequ")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Squelch")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TxCtcss")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TxFrequ")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RadioProfiles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Enable = false,
+                            Name = "VHF défaut",
+                            RxCtcss = "71.9",
+                            RxFequ = "144.700",
+                            Squelch = 2,
+                            TxFrequ = "144.700"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Enable = false,
+                            Name = "VHF défaut",
+                            RxCtcss = "88.5",
+                            RxFequ = "436.375",
+                            Squelch = 2,
+                            TxFrequ = "436.375"
                         });
                 });
 

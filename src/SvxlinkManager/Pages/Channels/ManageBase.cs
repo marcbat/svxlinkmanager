@@ -20,7 +20,7 @@ namespace SvxlinkManager.Pages.Channels
 
       StateHasChanged();
 
-      NavigationManager.NavigateTo("channelList");
+      NavigationManager.NavigateTo("/Channel/Manage");
     }
 
   }

@@ -1,0 +1,91 @@
+﻿@page "/RadioProfile/Create"
+@inherits SvxlinkManager.Pages.RadioProfile.CreateBase
+
+@attribute [Authorize]
+
+<h3>Ajouter un profil radio</h3>
+
+<EditForm Model="@RadioProfile" OnValidSubmit="@HandleValidSubmit">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <div class="form-group">
+    <label for="inputName">Name</label>
+    <InputText @bind-Value="RadioProfile.Name" type="text" class="form-control" id="inputName" placeholder="Nom du profil" />
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputHost">TX</label>
+      <InputText @bind-Value="RadioProfile.TxFrequ" type="text" class="form-control" id="inputHost" placeholder="145.450" />
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPort">RX</label>
+      <InputText @bind-Value="RadioProfile.RxFequ" type="number" class="form-control" id="inputPort" placeholder="145.450" />
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label for="inputHost">TX CTCSS</label>
+      <InputText @bind-Value="RadioProfile.TxCtcss" type="text" class="form-control" id="inputHost" placeholder="145.450" />
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputPort">RX CTCSS</label>
+      <InputSelect @bind-Value="RadioProfile.RxCtcss" class="form-control">
+        <option value="67" >67</option>
+        <option value="71.9" >71.9</option>
+        <option value="74.4" >74.4</option>
+        <option value="77" >77</option>
+        <option value="79.7" >79.7</option>
+        <option value="82.5" >82.5</option>
+        <option value="85.4" >85.4</option>
+        <option value="88.5" >88.5</option>
+        <option value="91.5" >91.5</option>
+        <option value="94.8" >94.8</option>
+        <option value="97.4" >97.4</option>
+        <option value="100" >100</option>
+        <option value="103.5" >103.5</option>
+        <option value="107.2" >107.2</option>
+        <option value="110.9" >110.9</option>
+        <option value="114.8" >114.8</option>
+        <option value="118.8" >118.8</option>
+        <option value="123" >123</option>
+        <option value="127.3" >127.3</option>
+        <option value="131.8" >131.8</option>
+        <option value="136.5" >136.5</option>
+        <option value="141.3" >141.3</option>
+        <option value="146.2" >146.2</option>
+        <option value="151.4" >151.4</option>
+        <option value="156.7" >156.7</option>
+        <option value="162.2" >162.2</option>
+        <option value="167.9" >167.9</option>
+        <option value="173.8" >173.8</option>
+        <option value="179.9" >179.9</option>
+        <option value="186.2" >186.2</option>
+        <option value="192.8" >192.8</option>
+        <option value="203.5" >203.5</option>
+        <option value="210.7" >210.7</option>
+        <option value="218.1" >218.1</option>
+        <option value="225.7" >225.7</option>
+        <option value="233.6" >233.6</option>
+        <option value="241.8" >241.8</option>
+        <option value="250.3" >250.3</option>
+      </InputSelect>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputPort">Squelch</label>
+      <InputSelect @bind-Value="RadioProfile.Squelch" class="form-control">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+      </InputSelect>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-success">Sauver</button> <a class="btn btn-primary" href="RadioProfile/Manage" role="button">Annuler</a>
+</EditForm>

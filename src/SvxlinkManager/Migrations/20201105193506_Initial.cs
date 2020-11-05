@@ -67,6 +67,25 @@ namespace SvxlinkManager.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RadioProfiles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    Enable = table.Column<bool>(nullable: false),
+                    RxFequ = table.Column<string>(nullable: true),
+                    TxFrequ = table.Column<string>(nullable: true),
+                    Squelch = table.Column<int>(nullable: false),
+                    TxCtcss = table.Column<string>(nullable: true),
+                    RxCtcss = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RadioProfiles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -197,7 +216,7 @@ namespace SvxlinkManager.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "68bf774f-7769-4813-a283-40a9e0b4e3f3", "82465f4a-50b1-465c-9a22-7c3cfd8de8ab", "Admin", "ADMIN" });
+                values: new object[] { "5ffcd248-bb43-4909-bf38-e3fb19e2c69c", "14351e19-ba03-4713-9fb6-39a4184596d2", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
@@ -238,6 +257,16 @@ namespace SvxlinkManager.Migrations
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
                 values: new object[] { 8, "Magnifique123456789!", "(CH) HB9GXP2 H", 0, "rrf3.f5nlg.ovh", false, true, "Salon Expérimental", 5303 });
+
+            migrationBuilder.InsertData(
+                table: "RadioProfiles",
+                columns: new[] { "Id", "Enable", "Name", "RxCtcss", "RxFequ", "Squelch", "TxCtcss", "TxFrequ" },
+                values: new object[] { 1, false, "VHF défaut", "71.9", "144.700", 2, null, "144.700" });
+
+            migrationBuilder.InsertData(
+                table: "RadioProfiles",
+                columns: new[] { "Id", "Enable", "Name", "RxCtcss", "RxFequ", "Squelch", "TxCtcss", "TxFrequ" },
+                values: new object[] { 2, false, "VHF défaut", "88.5", "436.375", 2, null, "436.375" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -298,6 +327,9 @@ namespace SvxlinkManager.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "RadioProfiles");
 
             migrationBuilder.DropTable(
                 name: "Rules");

@@ -26,10 +26,11 @@ namespace SvxlinkManager.Data
 
     public DbSet<Rule> Rules { get; set; }
 
+    public DbSet<RadioProfile> RadioProfiles { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
       optionsBuilder.UseSqlite("Data Source=Spotnik.db");
-
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -46,6 +47,9 @@ namespace SvxlinkManager.Data
       builder.Entity<Channel>().HasData(new Channel { Id = 6, Name = "Salon Bavardage", CallSign = "(CH) HB9GXP2 H", Host = "serveur.f1tzo.com", Port = 5301, AuthKey = "FON-F1TZO" , IsDefault = false, IsTemporized = true });
       builder.Entity<Channel>().HasData(new Channel { Id = 7, Name = "Salon Local", CallSign = "(CH) HB9GXP2 H", Host = "serveur.f1tzo.com", Port= 5302, AuthKey= "FON-F1TZO" , IsDefault = false, IsTemporized = true });
       builder.Entity<Channel>().HasData(new Channel { Id = 8, Name = "Salon Expérimental", CallSign = "(CH) HB9GXP2 H", Host = "rrf3.f5nlg.ovh", Port = 5303, AuthKey = "Magnifique123456789!" , IsDefault = false, IsTemporized = true });
+
+      builder.Entity<RadioProfile>().HasData(new RadioProfile { Id = 1, Name = "VHF défaut", TxFrequ = "144.700", RxFequ = "144.700", Squelch = 2, RxCtcss = "71.9" });
+      builder.Entity<RadioProfile>().HasData(new RadioProfile { Id = 2, Name = "VHF défaut", TxFrequ = "436.375", RxFequ = "436.375", Squelch = 2, RxCtcss = "88.5" });
     }
   }
 }

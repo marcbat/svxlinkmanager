@@ -1,0 +1,30 @@
+﻿@page "/RadioProfile/Manage"
+@inherits SvxlinkManager.Pages.RadioProfile.ManageBase
+
+@attribute [Authorize]
+
+<div class="row">
+  <div class="col-md-2"><h3>Profils Radio</h3></div>
+  <div class="col-md-1 offset-md-9">
+    <a class="btn btn-outline-success" href="RadioProfile/Create" role="button">Créer</a>
+  </div>
+</div>
+
+<ul id="channel-manage-list" class="list-group-horizontal">
+  @foreach (var rp in RadioProfiles)
+  {
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-md-2 text-nowrap">
+          @if (rp.Enable)
+          {<span class="oi oi-home" aria-hidden="true"></span>}
+          @rp.Name
+        </div>
+        <div class="col-md-1 text-nowrap">Tx: @rp.TxFrequ</div>
+        <div class="col-md-1 text-nowrap">Rx: @rp.RxFequ</div>
+        <div class="col-md-1">Ctcss: @rp.TxCtcss</div>
+        <div class="col-md-3 offset-md-4"><a class="btn btn-outline-success" href="RadioProfile/Edit/@rp.Id" role="button">Appliquer</a> <a class="btn btn-outline-primary" href="RadioProfile/Edit/@rp.Id" role="button">Editer</a> <button type="button" class="btn btn-danger" @onclick="@(() => Delete(rp.Id))">Supprimer</button></div>
+      </div>
+    </li>
+  }
+</ul>
