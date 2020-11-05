@@ -1,6 +1,8 @@
 ﻿@page "/Channel/Manage"
 @inherits SvxlinkManager.Pages.Channels.ManageBase
 
+@attribute [Authorize]
+
 <h3>Salons</h3>
 
 <div class="row justify-content-end">
@@ -9,31 +11,25 @@
   </div>
 </div>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col"></th>
-      <th scope="col">Nom</th>
-      <th scope="col">Call</th>
-      <th scope="col">Host</th>
-      <th scope="col">Port</th>
-      <th scope="col"></th>
-    </tr>
-  </thead>
-  <tbody>
-    @foreach (var channel in Channels)
-    {
-    <tr>
-      <td>@if (channel.IsDefault) {<span class="oi oi-home" aria-hidden="true"></span>}</td>
-      <td>@channel.Name</td>
-      <td>@channel.CallSign</td>
-      <td>@channel.Host</td>
-      <td>@channel.Port</td>
-      <td><a class="btn btn-outline-primary" href="Channel/Edit/@channel.Id" role="button">Editer</a> <button type="button" class="btn btn-danger" @onclick="@(()=>Delete(channel.Id))">Supprimer</button></td>
-    </tr>
-    }
-  </tbody>
-</table>
 
-
+<ul id="channel-manage-list" class="list-group-horizontal">
+  @foreach (var channel in Channels)
+  {
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-md-3 text-nowrap">
+          @if (channel.IsDefault)
+          {<span class="oi oi-home" aria-hidden="true"></span>}
+          @if (channel.IsTemporized)
+          {<span class="oi oi-clock" aria-hidden="true"></span>}
+          @channel.Name
+        </div>
+        <div class="col-md-2 text-nowrap">@channel.CallSign</div>
+        <div class="col-md-4 text-truncate">@channel.Host</div>
+        <div class="col-md-1">@channel.Port</div>
+        <div class="col-md-2"><a class="btn btn-outline-primary" href="Channel/Edit/@channel.Id" role="button">Editer</a> <button type="button" class="btn btn-danger" @onclick="@(() => Delete(channel.Id))">Supprimer</button></div>
+      </div>
+    </li>
+  }
+</ul>
 

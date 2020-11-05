@@ -203,3 +203,11 @@ app {
 .node-list {
   margin-top: 10px;
 }
+
+#channel-manage-list .list-group-item {
+  margin-bottom: 3px;
+}
+
+#channel-manage-list {
+  padding-inline-start: 0px;
+}
