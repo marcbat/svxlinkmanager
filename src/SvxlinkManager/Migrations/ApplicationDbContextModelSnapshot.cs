@@ -44,8 +44,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5ffcd248-bb43-4909-bf38-e3fb19e2c69c",
-                            ConcurrencyStamp = "14351e19-ba03-4713-9fb6-39a4184596d2",
+                            Id = "d5ea0520-c7be-41aa-adaf-aa9484f01ff5",
+                            ConcurrencyStamp = "340daa2b-427b-4558-967a-1711cfc556c0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -375,8 +375,8 @@ namespace SvxlinkManager.Migrations
                     b.Property<string>("RxFequ")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Squelch")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Squelch")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("TxCtcss")
                         .HasColumnType("TEXT");
@@ -394,9 +394,10 @@ namespace SvxlinkManager.Migrations
                             Id = 1,
                             Enable = false,
                             Name = "VHF défaut",
-                            RxCtcss = "71.9",
+                            RxCtcss = "0002",
                             RxFequ = "144.700",
-                            Squelch = 2,
+                            Squelch = "2",
+                            TxCtcss = "0000",
                             TxFrequ = "144.700"
                         },
                         new
@@ -404,9 +405,10 @@ namespace SvxlinkManager.Migrations
                             Id = 2,
                             Enable = false,
                             Name = "VHF défaut",
-                            RxCtcss = "88.5",
+                            RxCtcss = "0005",
                             RxFequ = "436.375",
-                            Squelch = 2,
+                            Squelch = "2",
+                            TxCtcss = "0000",
                             TxFrequ = "436.375"
                         });
                 });

@@ -1,8 +1,8 @@
-﻿@page "/RadioProfile/Create"
-@inherits SvxlinkManager.Pages.RadioProfile.CreateBase
+﻿@page "/RadioProfile/Edit/{Id}"
+@inherits SvxlinkManager.Pages.RadioProfile.EditBase
 
 @attribute [Authorize]
 
-<h3>Ajouter un profil radio</h3>
+<h3>Editer @RadioProfile.Name</h3>
 
 <AddEditForm RadioProfile="@RadioProfile" HandleValidSubmit="@HandleValidSubmit" SubmitTitle="@SubmitTitle" />

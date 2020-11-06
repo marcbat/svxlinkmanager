@@ -1,0 +1,66 @@
+﻿<EditForm Model="@RadioProfile" OnValidSubmit="@HandleValidSubmit">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <div class="form-group">
+    <label for="inputName">Name</label>
+    <InputText @bind-Value="RadioProfile.Name" type="text" class="form-control" id="inputName" placeholder="Nom du profil" />
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputHost">TX</label>
+      <InputText @bind-Value="RadioProfile.TxFrequ" type="text" class="form-control" id="inputHost" placeholder="145.450" />
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPort">RX</label>
+      <InputText @bind-Value="RadioProfile.RxFequ" type="text" class="form-control" id="inputPort" placeholder="145.450" />
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label for="inputHost">TX CTCSS</label>
+      <InputSelect @bind-Value="RadioProfile.TxCtcss" class="form-control">
+        @foreach (var ct in RadioProfile.Ctcss)
+{
+<option value="@ct.Key">@ct.Value</option>
+}
+      </InputSelect>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputPort">RX CTCSS</label>
+      <InputSelect @bind-Value="RadioProfile.RxCtcss" class="form-control">
+        @foreach (var ct in RadioProfile.Ctcss)
+{
+<option value="@ct.Key">@ct.Value</option>
+}
+      </InputSelect>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputPort">Squelch</label>
+      <InputSelect @bind-Value="RadioProfile.Squelch" class="form-control">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+      </InputSelect>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-success">Sauver</button> <a class="btn btn-primary" href="RadioProfile/Manage" role="button">Annuler</a>
+</EditForm>
+
+@code{
+  [Parameter]
+  public Models.RadioProfile RadioProfile { get; set; }
+
+  [Parameter]
+  public string SubmitTitle { get; set; }
+
+  [Parameter]
+  public EventCallback<EditContext> HandleValidSubmit { get; set; }
+}

@@ -6,21 +6,24 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.RadioProfile
 {
-  public class CreateBase : AddEditBase
+  public class EditBase : AddEditBase
   {
 
     protected override void OnInitialized()
     {
-      RadioProfile = new Models.RadioProfile();
+      RadioProfile = Repositories.RadioProfiles.Get(int.Parse(Id));
     }
 
-    protected override string SubmitTitle => "Créer";
+    [Parameter]
+    public string Id { get; set; }
 
-    protected override void HandleValidSubmit()
+    override protected void HandleValidSubmit()
     {
-      Repositories.RadioProfiles.Add(RadioProfile);
+      Repositories.RadioProfiles.Update(RadioProfile);
 
       NavigationManager.NavigateTo("RadioProfile/Manage");
     }
+
+    protected override string SubmitTitle => "Modifier";
   }
 }

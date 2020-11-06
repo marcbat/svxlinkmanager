@@ -76,7 +76,7 @@ namespace SvxlinkManager.Migrations
                     Enable = table.Column<bool>(nullable: false),
                     RxFequ = table.Column<string>(nullable: true),
                     TxFrequ = table.Column<string>(nullable: true),
-                    Squelch = table.Column<int>(nullable: false),
+                    Squelch = table.Column<string>(nullable: true),
                     TxCtcss = table.Column<string>(nullable: true),
                     RxCtcss = table.Column<string>(nullable: true)
                 },
@@ -216,7 +216,7 @@ namespace SvxlinkManager.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "5ffcd248-bb43-4909-bf38-e3fb19e2c69c", "14351e19-ba03-4713-9fb6-39a4184596d2", "Admin", "ADMIN" });
+                values: new object[] { "d5ea0520-c7be-41aa-adaf-aa9484f01ff5", "340daa2b-427b-4558-967a-1711cfc556c0", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
@@ -261,12 +261,12 @@ namespace SvxlinkManager.Migrations
             migrationBuilder.InsertData(
                 table: "RadioProfiles",
                 columns: new[] { "Id", "Enable", "Name", "RxCtcss", "RxFequ", "Squelch", "TxCtcss", "TxFrequ" },
-                values: new object[] { 1, false, "VHF défaut", "71.9", "144.700", 2, null, "144.700" });
+                values: new object[] { 1, false, "VHF défaut", "0002", "144.700", "2", "0000", "144.700" });
 
             migrationBuilder.InsertData(
                 table: "RadioProfiles",
                 columns: new[] { "Id", "Enable", "Name", "RxCtcss", "RxFequ", "Squelch", "TxCtcss", "TxFrequ" },
-                values: new object[] { 2, false, "VHF défaut", "88.5", "436.375", 2, null, "436.375" });
+                values: new object[] { 2, false, "VHF défaut", "0005", "436.375", "2", "0000", "436.375" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
