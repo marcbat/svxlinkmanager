@@ -11,10 +11,7 @@ namespace SvxlinkManager.Repositories
   {
     IChannelRepository Channels { get; }
 
-    IRepository<RadioProfile> RadioProfiles
-    {
-      get;
-    }
+    IRepository<RadioProfile> RadioProfiles{ get; }
   }
 
   public class Repositories : IRepositories
@@ -22,7 +19,7 @@ namespace SvxlinkManager.Repositories
     public Repositories(IDbContextFactory<ApplicationDbContext> contextFactory)
     {
       Channels = new ChannelRepository(contextFactory);
-      RadioProfiles = new Repository<RadioProfile>(contextFactory);
+      RadioProfiles = new RadioProfileRepository(contextFactory);
     }
 
     public IChannelRepository Channels { get; private set; }

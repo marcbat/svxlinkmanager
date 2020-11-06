@@ -123,6 +123,7 @@ namespace SvxlinkManager.Service
       logger.LogInformation(e.Data);
       ParseLog(e.Data);
     }
+
     private void RunRestart()
     {
       logger.LogInformation("Restart salon.");

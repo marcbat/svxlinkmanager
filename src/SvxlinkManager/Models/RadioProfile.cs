@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -7,13 +8,21 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Models
 {
-  public class RadioProfile : IModelEntity
+  public class RadioProfile : IModelEntity, INotifyPropertyChanged
   {
+    private bool enable;
+
     public int Id { get; set; }
 
     public string Name { get; set; }
 
-    public bool Enable { get; set; }
+    public bool Enable { 
+      get => enable;
+      set {
+        enable = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Enable)));
+      } 
+    }
 
     [RegularExpression("^[0-9]{3}.[0-9]{3}")]
     public string RxFequ { get; set; }
@@ -76,5 +85,7 @@ namespace SvxlinkManager.Models
       {"0037","241.8"},
       {"0038","250.3"}
     };
+
+    public event PropertyChangedEventHandler PropertyChanged;
   }
 }
