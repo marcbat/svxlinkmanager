@@ -6,6 +6,8 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
     <DockerfileRunArguments>-v "D:\GoogleDrive\Documents\Radio Amateur\RRF Spotnik\Spotnik_Docker\usr\share\svxlink":/usr/share/svxlink/ -v "D:\GoogleDrive\Documents\Radio Amateur\RRF Spotnik\Spotnik_Docker\tmp":"/tmp"</DockerfileRunArguments>
+    <Company />
+    <Authors>HB9GXP</Authors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +22,48 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\" />
+    <None Update="SvxlinkConfig\gpio.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SvxlinkConfig\perroquet.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SvxlinkConfig\svxlink.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SvxlinkConfig\svxlink.current">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SvxlinkConfig\svxlink.d\ModuleDtmfRepeater.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SvxlinkConfig\svxlink.d\ModuleEchoLink.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SvxlinkConfig\svxlink.d\ModuleFrn.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SvxlinkConfig\svxlink.d\ModuleHelp.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SvxlinkConfig\svxlink.d\ModuleMetarInfo.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SvxlinkConfig\svxlink.d\ModuleParrot.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SvxlinkConfig\svxlink.d\ModulePropagationMonitor.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SvxlinkConfig\svxlink.d\ModuleSelCallEnc.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SvxlinkConfig\svxlink.d\ModuleTclVoiceMail.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SvxlinkConfig\svxreflector.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

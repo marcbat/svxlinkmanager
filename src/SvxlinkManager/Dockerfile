@@ -8,8 +8,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update && apt-get install -qq -y svxlink-server procps && apt-get clean 
 
-COPY ./src/SvxlinkManager/Spotnik /etc/spotnik/
-
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443

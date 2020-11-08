@@ -27,9 +27,11 @@ namespace SvxlinkManager.Service
 
     private readonly ILogger<SvxLinkService> logger;
     private readonly IRepositories repositories;
+    private readonly string applicationPath = Directory.GetCurrentDirectory();
     private readonly Timer timer;
     private int channel;
     private DateTime lastTx;
+    
 
     public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories)
     {
@@ -72,7 +74,9 @@ namespace SvxlinkManager.Service
 
     private void RunsvxLink()
     {
-      var cmd = "svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config=/etc/spotnik/svxlink.current";
+      
+
+      var cmd = $"svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config={applicationPath}/SvxlinkConfig/svxlink.current";
 
       var escapedArgs = cmd.Replace("\"", "\\\"");
 
@@ -199,14 +203,14 @@ namespace SvxlinkManager.Service
 
     private void ReplaceConfig(Channel channel)
     {
-      File.Copy("/etc/spotnik/svxlink.conf", "/etc/spotnik/svxlink.current", true);
+      File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
 
-      string text = File.ReadAllText("/etc/spotnik/svxlink.current");
+      string text = File.ReadAllText($"{applicationPath}/SvxlinkConfig/svxlink.current");
       text = text.Replace("HOST=HOST", $"HOST={channel.Host}");
       text = text.Replace("AUTH_KEY=AUTH_KEY", $"AUTH_KEY={channel.AuthKey}");
       text = text.Replace("PORT=PORT", $"PORT={channel.Port}");
       text = text.Replace("CALLSIGN=CALLSIGN", $"CALLSIGN={channel.CallSign}");
-      File.WriteAllText("/etc/spotnik/svxlink.current", text);
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.current", text);
     }
 
     private string ExecuteCommand(string cmd)

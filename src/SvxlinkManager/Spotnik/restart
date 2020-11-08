@@ -1,6 +1,0 @@
-#!/bin/bash
-
-network=`cat /etc/spotnik/network`
-
-/etc/spotnik/restart.$network
-
