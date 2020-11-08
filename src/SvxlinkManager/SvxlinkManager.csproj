@@ -28,6 +28,9 @@
     <None Update="SvxlinkConfig\perroquet.sh">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SvxlinkConfig\svxlink-prod.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SvxlinkConfig\svxlink.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
