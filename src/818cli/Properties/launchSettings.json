@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "818cli": {
-      "commandName": "Project",
-      "commandLineArgs": "-g 144.5000,144.5000,0002,2,0002"
-    }
-  }
-}
