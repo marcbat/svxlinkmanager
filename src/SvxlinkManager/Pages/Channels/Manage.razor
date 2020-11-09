@@ -1,0 +1,34 @@
+﻿@page "/Channel/Manage"
+@inherits SvxlinkManager.Pages.Channels.ManageBase
+
+@attribute [Authorize]
+
+<div class="row">
+  <div class="col-md-2"><h3>Salons</h3></div>
+  <div class="col-md-1 offset-md-9">
+    <a class="btn btn-outline-success" href="Channel/Create" role="button">Créer</a>
+  </div>
+</div>
+
+
+<ul id="channel-manage-list" class="list-group-horizontal">
+  @foreach (var channel in Channels)
+  {
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-md-3 text-nowrap">
+          @if (channel.IsDefault)
+          {<span class="oi oi-home" aria-hidden="true"></span>}
+          @if (channel.IsTemporized)
+          {<span class="oi oi-clock" aria-hidden="true"></span>}
+          @channel.Name
+        </div>
+        <div class="col-md-2 text-nowrap">@channel.CallSign</div>
+        <div class="col-md-4 text-truncate">@channel.Host</div>
+        <div class="col-md-1">@channel.Port</div>
+        <div class="col-md-2"><a class="btn btn-outline-primary" href="Channel/Edit/@channel.Id" role="button">Editer</a> <button type="button" class="btn btn-danger" @onclick="@(() => Delete(channel.Id))">Supprimer</button></div>
+      </div>
+    </li>
+  }
+</ul>
+

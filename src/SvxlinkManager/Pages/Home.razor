@@ -1,0 +1,31 @@
+﻿@page "/"
+@attribute [Authorize]
+
+@inherits SvxlinkManager.Pages.HomeBase
+
+<h3>Spotnik <small>(@if (Nodes.Any())
+{@Nodes.Count} @Status)</small></h3>
+
+<div class="row">
+  <div class="col-3">
+    <select class="form-control" @bind="@Channel" style="width:auto;">
+      <option value="0">Déconnecter</option>
+      @foreach (var channel in Channels)
+      {
+        <option value="@channel.Id">@channel.Name</option>
+      }
+    </select>
+  </div>
+</div>
+
+<div class="row node-list">
+  <div class="col">
+    @foreach (var node in Nodes)
+    {
+      <Node CurrentNode="@node" />
+    }
+  </div>
+</div>
+
+
+
