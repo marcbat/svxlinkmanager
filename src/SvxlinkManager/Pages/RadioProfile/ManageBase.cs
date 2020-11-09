@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
+
+using SvxlinkManager.Service;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,6 +27,9 @@ namespace SvxlinkManager.Pages.RadioProfile
     [Inject]
     public NavigationManager NavigationManager { get; set; }
 
+    [Inject]
+    public Sa818Service Sa818Service { get; set; }
+
     public List<Models.RadioProfile> RadioProfiles { get; set; }
 
     public void Delete(int id)
@@ -33,46 +39,13 @@ namespace SvxlinkManager.Pages.RadioProfile
       RadioProfiles.Remove(RadioProfiles.Single(c => c.Id == id));
 
       StateHasChanged();
-
-      //NavigationManager.NavigateTo("/RadioProfile/Manage");
     }
 
     public void Apply(int id)
     {
       var profile = Repositories.RadioProfiles.Get(id);
 
-      var cmd = $"818cli-prog -g {profile.RxFequ}0,{profile.TxFrequ}0,{profile.RxCtcss},{profile.Squelch},{profile.TxCtcss}";
-
-      Logger.LogInformation($"Application du profil {profile.Name}.");
-      Logger.LogDebug($"Commande: {cmd}");
-
-      //var escapedArgs = cmd.Replace("\"", "\\\"");
-
-      //using var shell = new Process
-      //{
-      //  StartInfo = new ProcessStartInfo
-      //  {
-      //    FileName = "/bin/bash",
-      //    Arguments = $"-c \"{escapedArgs}\"",
-      //    RedirectStandardOutput = true,
-      //    StandardOutputEncoding = Encoding.UTF8,
-      //    RedirectStandardError = true,
-      //    StandardErrorEncoding = Encoding.UTF8,
-      //    UseShellExecute = false,
-      //    CreateNoWindow = true,
-      //  },
-
-      //  EnableRaisingEvents = true
-      //};
-
-      //shell.ErrorDataReceived += new DataReceivedEventHandler(ShellErrorDataReceived);
-      //shell.OutputDataReceived += new DataReceivedEventHandler(ShellOutputDataReceived);
-
-      //shell.Start();
-      //shell.BeginErrorReadLine();
-      //shell.BeginOutputReadLine();
-
-      //shell.WaitForExit(3000);
+      Sa818Service.WriteRadioProfile(profile);
 
       profile.Enable = true;
       Repositories.RadioProfiles.Update(profile);

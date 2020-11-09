@@ -47,6 +47,7 @@ namespace SvxlinkManager
       services.AddSingleton<IDbContextFactory<ApplicationDbContext>, DbContextFactory<ApplicationDbContext>>();
       services.AddSingleton<IRepositories, Repositories.Repositories>();
       services.AddSingleton<SvxLinkService>();
+      services.AddSingleton<Sa818Service>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
