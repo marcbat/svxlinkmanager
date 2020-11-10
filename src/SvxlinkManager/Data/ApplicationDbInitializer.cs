@@ -18,7 +18,7 @@ namespace SvxlinkManager.Data
           Email = "admin@svxlinkmanager.com"
         };
 
-        IdentityResult result = userManager.CreateAsync(user, "M162175m162175$").Result;
+        IdentityResult result = userManager.CreateAsync(user, "Pa$$w0rd").Result;
 
         if (result.Succeeded)
         {

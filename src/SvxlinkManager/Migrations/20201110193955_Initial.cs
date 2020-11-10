@@ -216,7 +216,7 @@ namespace SvxlinkManager.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "d5ea0520-c7be-41aa-adaf-aa9484f01ff5", "340daa2b-427b-4558-967a-1711cfc556c0", "Admin", "ADMIN" });
+                values: new object[] { "a7697daf-2b3b-4d8d-9b0d-b3b8af10b212", "17c3dc33-7820-4f6a-9c6a-20e79fa011a9", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
@@ -266,7 +266,7 @@ namespace SvxlinkManager.Migrations
             migrationBuilder.InsertData(
                 table: "RadioProfiles",
                 columns: new[] { "Id", "Enable", "Name", "RxCtcss", "RxFequ", "Squelch", "TxCtcss", "TxFrequ" },
-                values: new object[] { 2, false, "VHF défaut", "0005", "436.375", "2", "0000", "436.375" });
+                values: new object[] { 2, false, "UHF défaut", "0005", "436.375", "2", "0000", "436.375" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
