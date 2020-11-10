@@ -17,6 +17,10 @@ chmod 755 SvxlinkManager
 cd /etc/swxlinkmanager/ .SvxlinkManager --urls=http://0.0.0.0:8080
 ```
 
+Un fois l'application lancée, vous pouvez vous y connecter à l'adresse http://{server-adresse}:8080
+* user: admin@svxlinkmanager.com
+* password: Pa$$w0rd
+
 ## Fonctionnalités
 * Gestion de configurations svxlink multiples.
 * Gestion de la connection via une configuration et affichage en temps réel des nodes connectés.
