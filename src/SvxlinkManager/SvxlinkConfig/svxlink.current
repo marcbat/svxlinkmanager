@@ -102,11 +102,6 @@ TYPE=Reflector
 AUDIO_CODEC=OPUS
 JITTER_BUFFER_DELAY=2
 CALLSIGN=(CH) HB9GXP2 H
-HOST=salonsuisseromand.northeurope.cloudapp.azure.com
-AUTH_KEY=xD9wW5gO7yD9hN5o
+HOST=serveur.f1tzo.com
+AUTH_KEY=FON-F1TZO
 PORT=5300
-
-#CALLSIGN=(CH) HB9GXP2 H
-#HOST=rrf2.f5nlg.ovh
-#AUTH_KEY=Magnifique123456789!
-#PORT=5300

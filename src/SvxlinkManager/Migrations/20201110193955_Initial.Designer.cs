@@ -9,7 +9,7 @@ using SvxlinkManager.Data;
 namespace SvxlinkManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201106203418_Initial")]
+    [Migration("20201110193955_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,8 +46,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d5ea0520-c7be-41aa-adaf-aa9484f01ff5",
-                            ConcurrencyStamp = "340daa2b-427b-4558-967a-1711cfc556c0",
+                            Id = "a7697daf-2b3b-4d8d-9b0d-b3b8af10b212",
+                            ConcurrencyStamp = "17c3dc33-7820-4f6a-9c6a-20e79fa011a9",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -406,7 +406,7 @@ namespace SvxlinkManager.Migrations
                         {
                             Id = 2,
                             Enable = false,
-                            Name = "VHF défaut",
+                            Name = "UHF défaut",
                             RxCtcss = "0005",
                             RxFequ = "436.375",
                             Squelch = "2",
