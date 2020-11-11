@@ -78,7 +78,11 @@ namespace SvxlinkManager.Migrations
                     TxFrequ = table.Column<string>(nullable: true),
                     Squelch = table.Column<string>(nullable: true),
                     TxCtcss = table.Column<string>(nullable: true),
-                    RxCtcss = table.Column<string>(nullable: true)
+                    RxCtcss = table.Column<string>(nullable: true),
+                    Volume = table.Column<string>(nullable: true),
+                    PreEmph = table.Column<string>(nullable: true),
+                    HightPass = table.Column<string>(nullable: true),
+                    LowPass = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -216,7 +220,7 @@ namespace SvxlinkManager.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "a7697daf-2b3b-4d8d-9b0d-b3b8af10b212", "17c3dc33-7820-4f6a-9c6a-20e79fa011a9", "Admin", "ADMIN" });
+                values: new object[] { "fde26f3f-85da-4fb2-8268-c5519b49832c", "8fc3aace-ea2a-4ebb-95f8-2d3058209049", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
@@ -260,13 +264,13 @@ namespace SvxlinkManager.Migrations
 
             migrationBuilder.InsertData(
                 table: "RadioProfiles",
-                columns: new[] { "Id", "Enable", "Name", "RxCtcss", "RxFequ", "Squelch", "TxCtcss", "TxFrequ" },
-                values: new object[] { 1, false, "VHF défaut", "0002", "144.700", "2", "0000", "144.700" });
+                columns: new[] { "Id", "Enable", "HightPass", "LowPass", "Name", "PreEmph", "RxCtcss", "RxFequ", "Squelch", "TxCtcss", "TxFrequ", "Volume" },
+                values: new object[] { 1, false, "0", "0", "VHF défaut", "0", "0002", "144.700", "2", "0000", "144.700", "4" });
 
             migrationBuilder.InsertData(
                 table: "RadioProfiles",
-                columns: new[] { "Id", "Enable", "Name", "RxCtcss", "RxFequ", "Squelch", "TxCtcss", "TxFrequ" },
-                values: new object[] { 2, false, "UHF défaut", "0005", "436.375", "2", "0000", "436.375" });
+                columns: new[] { "Id", "Enable", "HightPass", "LowPass", "Name", "PreEmph", "RxCtcss", "RxFequ", "Squelch", "TxCtcss", "TxFrequ", "Volume" },
+                values: new object[] { 2, false, "0", "0", "UHF défaut", "0", "0005", "436.375", "2", "0000", "436.375", "4" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

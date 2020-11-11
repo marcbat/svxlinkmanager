@@ -9,7 +9,7 @@ using SvxlinkManager.Data;
 namespace SvxlinkManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201110193955_Initial")]
+    [Migration("20201111205323_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,8 +46,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a7697daf-2b3b-4d8d-9b0d-b3b8af10b212",
-                            ConcurrencyStamp = "17c3dc33-7820-4f6a-9c6a-20e79fa011a9",
+                            Id = "fde26f3f-85da-4fb2-8268-c5519b49832c",
+                            ConcurrencyStamp = "8fc3aace-ea2a-4ebb-95f8-2d3058209049",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -368,7 +368,16 @@ namespace SvxlinkManager.Migrations
                     b.Property<bool>("Enable")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("HightPass")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LowPass")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PreEmph")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RxCtcss")
@@ -386,6 +395,9 @@ namespace SvxlinkManager.Migrations
                     b.Property<string>("TxFrequ")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Volume")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("RadioProfiles");
@@ -395,23 +407,31 @@ namespace SvxlinkManager.Migrations
                         {
                             Id = 1,
                             Enable = false,
+                            HightPass = "0",
+                            LowPass = "0",
                             Name = "VHF défaut",
+                            PreEmph = "0",
                             RxCtcss = "0002",
                             RxFequ = "144.700",
                             Squelch = "2",
                             TxCtcss = "0000",
-                            TxFrequ = "144.700"
+                            TxFrequ = "144.700",
+                            Volume = "4"
                         },
                         new
                         {
                             Id = 2,
                             Enable = false,
+                            HightPass = "0",
+                            LowPass = "0",
                             Name = "UHF défaut",
+                            PreEmph = "0",
                             RxCtcss = "0005",
                             RxFequ = "436.375",
                             Squelch = "2",
                             TxCtcss = "0000",
-                            TxFrequ = "436.375"
+                            TxFrequ = "436.375",
+                            Volume = "4"
                         });
                 });
 
