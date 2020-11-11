@@ -26,5 +26,14 @@ namespace SvxlinkManager.Repositories
         }
       }
     }
+
+    public override void Delete(int id)
+    {
+      var radioProfile = Get(id);
+      if (radioProfile.Enable)
+        return;
+
+      base.Delete(id);
+    }
   }
 }
