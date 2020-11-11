@@ -26,7 +26,7 @@
         <div class="col-md-2 text-nowrap">@channel.CallSign</div>
         <div class="col-md-4 text-truncate">@channel.Host</div>
         <div class="col-md-1">@channel.Port</div>
-        <div class="col-md-2"><a class="btn btn-outline-primary" href="Channel/Edit/@channel.Id" role="button">Editer</a> <button type="button" class="btn btn-danger" @onclick="@(() => Delete(channel.Id))">Supprimer</button></div>
+        <div class="col-md-2"><a class="btn btn-outline-primary" href="Channel/Edit/@channel.Id" role="button">Editer</a> @if (!channel.IsDefault){<button type="button" class="btn btn-danger" @onclick="@(() => Delete(channel.Id))">Supprimer</button>}</div>
       </div>
     </li>
   }

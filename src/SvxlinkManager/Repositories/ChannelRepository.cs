@@ -33,6 +33,15 @@ namespace SvxlinkManager.Repositories
       }
     }
 
+    public override void Delete(int id)
+    {
+      var channel = Get(id);
+      if (channel.IsDefault)
+        return;
+
+      base.Delete(id);
+    }
+
     public Channel GetDefault()
     {
       using var dbcontext = contextFactory.CreateDbContext();
