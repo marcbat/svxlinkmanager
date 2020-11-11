@@ -31,11 +31,11 @@
 
     <div class="form-row">
       <div class="form-check form-check-inline">
-        <InputCheckbox @bind-Value="Channel.IsDefault" type="checkbox" class="form-check-input" id="inputIsDefault" />
+        <InputCheckbox @bind-Value="IsDefault" type="checkbox" class="form-check-input" id="inputIsDefault" />
         <label class="form-check-label" for="inputIsDefault">Salon par défaut</label>
       </div>
       <div class="form-check form-check-inline">
-        <InputCheckbox @bind-Value="Channel.IsTemporized" type="checkbox" class="form-check-input" id="inputIsTemporized" />
+        <InputCheckbox @bind-Value="IsTemporized" type="checkbox" class="form-check-input" id="inputIsTemporized" />
         <label class="form-check-label" for="inputIsTemporized">Temporisé</label>
       </div>
     </div>
@@ -52,4 +52,22 @@
 
   [Parameter]
   public EventCallback<EditContext> HandleValidSubmit { get; set; }
+
+  protected bool IsDefault
+  {
+    get => Channel.IsDefault;
+    set
+    {
+      Channel.IsDefault = value;
+      if (value)
+        IsTemporized = false;
+    }
+  }
+
+  protected bool IsTemporized
+  {
+    get => Channel.IsTemporized;
+    set => Channel.IsTemporized = value;
+  }
+
 }
