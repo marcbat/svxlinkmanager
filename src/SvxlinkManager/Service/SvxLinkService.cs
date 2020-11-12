@@ -29,7 +29,7 @@ namespace SvxlinkManager.Service
     private readonly IRepositories repositories;
     private readonly string applicationPath = Directory.GetCurrentDirectory();
     private readonly Timer timer;
-    private int channel;
+    private int channelId;
     private DateTime lastTx;
     
 
@@ -39,13 +39,34 @@ namespace SvxlinkManager.Service
       this.repositories = repositories;
 
       timer = new Timer(1000);
-      timer.Elapsed += (s, e) => CheckTimer();
-
+      timer.Elapsed += CheckDtmf;
+      
       NodeTx += n => lastTx = DateTime.Now;
       Connected += () => lastTx = DateTime.Now;
     }
 
-    private void CheckTimer()
+    private void CheckDtmf(object s, ElapsedEventArgs e)
+    {
+      var dtmf = int.Parse(File.ReadAllText($"{applicationPath}/SvxlinkConfig/dtmf.conf"));
+
+      var channel = repositories.Channels.Get(channelId);
+
+      if (channel.Dtmf != dtmf)
+      {
+        logger.LogInformation($"Nouveau dtmf détécté: {dtmf}");
+        channel = repositories.Channels.FindBy(c => c.Dtmf == dtmf);
+        if(channel == null)
+        {
+          logger.LogInformation($"Le dtmf {dtmf} ne correspond à aucun channel.");
+          return;
+        }
+
+        Channel = channel.Id;
+      }
+        
+    }
+
+    private void CheckTemporized(object s, ElapsedEventArgs e)
     {
       var diff = (DateTime.Now - lastTx).TotalSeconds;
 
@@ -61,10 +82,10 @@ namespace SvxlinkManager.Service
 
     public int Channel
     {
-      get => channel;
+      get => channelId;
       set
       {
-        channel = value;
+        channelId = value;
         RunRestart();
       }
         
@@ -74,8 +95,6 @@ namespace SvxlinkManager.Service
 
     private void RunsvxLink()
     {
-      
-
       var cmd = $"svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config={applicationPath}/SvxlinkConfig/svxlink.current";
 
       var escapedArgs = cmd.Replace("\"", "\\\"");
@@ -102,9 +121,10 @@ namespace SvxlinkManager.Service
       shell.BeginErrorReadLine();
       shell.BeginOutputReadLine();
 
-      var channel = repositories.Channels.Get(Channel);
-      if (channel.IsTemporized)
-        timer.Start();
+      var channel = repositories.Channels.Get(channelId);
+      timer.Start();
+      if(channel.IsTemporized)
+        timer.Elapsed += CheckTemporized;
     }
 
     private void StopSvxlink()
@@ -113,6 +133,7 @@ namespace SvxlinkManager.Service
       if (pid != null)
         ExecuteCommand("pkill -TERM svxlink");
 
+      timer.Elapsed -= CheckTemporized;
       timer.Stop();
     }
 
@@ -137,11 +158,11 @@ namespace SvxlinkManager.Service
       logger.LogInformation("Salon déconnecté");
 
       // Si le choix est Déconnecter, fin de la méthode
-      if (Channel == 0)
+      if (channelId == 0)
         return;
 
       // Récupère le channel
-      var channel = repositories.Channels.Get(Channel);
+      var channel = repositories.Channels.Get(channelId);
       logger.LogInformation($"Recupération du salon {channel.Name}");
 
       // Remplace le contenu de svxlink.conf avec le informations du channel

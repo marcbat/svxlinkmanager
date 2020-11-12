@@ -9,7 +9,7 @@ using SvxlinkManager.Data;
 namespace SvxlinkManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201111205323_Initial")]
+    [Migration("20201112195434_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,8 +46,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fde26f3f-85da-4fb2-8268-c5519b49832c",
-                            ConcurrencyStamp = "8fc3aace-ea2a-4ebb-95f8-2d3058209049",
+                            Id = "5f07ed27-34ad-4c4b-ac9e-1d9cd2dc2cb7",
+                            ConcurrencyStamp = "88119dba-4c52-4b7f-abe7-35c0276c294c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -266,7 +266,7 @@ namespace SvxlinkManager.Migrations
                             Id = 1,
                             AuthKey = "Magnifique123456789!",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 96,
                             Host = "rrf2.f5nlg.ovh",
                             IsDefault = true,
                             IsTemporized = false,
@@ -278,7 +278,7 @@ namespace SvxlinkManager.Migrations
                             Id = 2,
                             AuthKey = "xD9wW5gO7yD9hN5o",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 104,
                             Host = "salonsuisseromand.northeurope.cloudapp.azure.com",
                             IsDefault = false,
                             IsTemporized = true,
@@ -290,7 +290,7 @@ namespace SvxlinkManager.Migrations
                             Id = 3,
                             AuthKey = "FON-F1TZO",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 97,
                             Host = "serveur.f1tzo.com",
                             IsDefault = false,
                             IsTemporized = true,
@@ -302,7 +302,7 @@ namespace SvxlinkManager.Migrations
                             Id = 4,
                             AuthKey = "Magnifique123456789!",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 98,
                             Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
                             IsTemporized = true,
@@ -314,7 +314,7 @@ namespace SvxlinkManager.Migrations
                             Id = 5,
                             AuthKey = "Magnifique123456789!",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 99,
                             Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
                             IsTemporized = true,
@@ -326,7 +326,7 @@ namespace SvxlinkManager.Migrations
                             Id = 6,
                             AuthKey = "FON-F1TZO",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 100,
                             Host = "serveur.f1tzo.com",
                             IsDefault = false,
                             IsTemporized = true,
@@ -338,7 +338,7 @@ namespace SvxlinkManager.Migrations
                             Id = 7,
                             AuthKey = "FON-F1TZO",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 101,
                             Host = "serveur.f1tzo.com",
                             IsDefault = false,
                             IsTemporized = true,
@@ -350,7 +350,7 @@ namespace SvxlinkManager.Migrations
                             Id = 8,
                             AuthKey = "Magnifique123456789!",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 102,
                             Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
                             IsTemporized = true,
