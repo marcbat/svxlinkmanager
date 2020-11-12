@@ -11,6 +11,24 @@ cd /etc/swxlinkmanager/
 chmod 755 SvxlinkManager
 ```
 
+## Activer la détection DTMF
+Pour activer la détection DTMF, vous devez ajouter quelques lignes de script dans /usr/share/svxlink/event.d/local/logic.tcl
+Repérez la méthode
+```tcl
+proc dtmf_cmd_received {cmd}
+```
+et ajoutez directement dessous
+```tcl
+if {$cmd != "10"} {
+  # Write DTMF in monitored file
+  puts "Write DTMF monitored file"
+  set dtmf_file "/etc/svxlinkmanager/SvxlinkConfig/dtmf.conf"
+  set dtmf_file_id [open $dtmf_file "w"]
+  puts $dtmf_file_id $cmd 
+  close $dtmf_file_id
+}
+```
+
 ## Lancement de l'application
 
 ```bash
