@@ -7,14 +7,14 @@ Le but de cette application est de pouvoir piloter via une interface web les fon
 Téléchargez la dernière release de l'application, puis décompressez la dans le dossier de votre choix. (ex: /etc/svxlinkmanager)
 Modifiez les droits du fichier SvxlinkManager pour le rendre executable.
 ```bash
-cd /etc/swxlinkmanager/
+cd /etc/svxlinkmanager/
 chmod 755 SvxlinkManager
 ```
 
 ## Lancement de l'application
 
 ```bash
-cd /etc/swxlinkmanager/ .SvxlinkManager --urls=http://0.0.0.0:8080
+cd /etc/svxlinkmanager/ ./SvxlinkManager --urls=http://0.0.0.0:8080
 ```
 
 Un fois l'application lancée, vous pouvez vous y connecter à l'adresse http://{server-adresse}:8080
