@@ -36,6 +36,15 @@ namespace SvxlinkManager.Models
 
     public string RxCtcss { get; set; } = "0000";
 
+    public string Volume { get; set; } = "4";
+
+    public string PreEmph { get; set; } = "0";
+
+    public string HightPass { get; set; } = "0";
+
+    public string LowPass { get; set; } = "0";
+
+
     [NotMapped]
     public string TxTone { get => Ctcss.Single(c => c.Key == TxCtcss).Value; }
 

@@ -12,7 +12,13 @@ namespace SvxlinkManager.Repositories
   public interface IRepository<TEntity> where TEntity : class, IModelEntity
   {
     TEntity Find(int id);
+
+    TEntity FindBy(Func<TEntity, bool> predicate);
+
     TEntity Get(int id);
+
+    TEntity GetBy(Func<TEntity, bool> predicate);
+
     IEnumerable<TEntity> GetAll();
 
     TEntity Add(TEntity entity);
@@ -43,10 +49,22 @@ namespace SvxlinkManager.Repositories
       return dbcontext.Set<TEntity>().Single(e => e.Id == id);
     }
 
+    public TEntity GetBy(Func<TEntity, bool> predicate)
+    {
+      using var dbcontext = contextFactory.CreateDbContext();
+      return dbcontext.Set<TEntity>().Single(predicate);
+    }
+
     public virtual TEntity Find(int id)
     {
       using var dbcontext = contextFactory.CreateDbContext();
       return dbcontext.Set<TEntity>().SingleOrDefault(e => e.Id == id);
+    }
+
+    public TEntity FindBy(Func<TEntity, bool> predicate)
+    {
+      using var dbcontext = contextFactory.CreateDbContext();
+      return dbcontext.Set<TEntity>().SingleOrDefault(predicate);
     }
 
     public virtual TEntity Add(TEntity entity)
@@ -79,5 +97,7 @@ namespace SvxlinkManager.Repositories
       dbcontext.SaveChanges();
 
     }
+
+   
   }
 }

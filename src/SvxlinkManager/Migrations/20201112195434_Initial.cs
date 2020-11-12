@@ -78,7 +78,11 @@ namespace SvxlinkManager.Migrations
                     TxFrequ = table.Column<string>(nullable: true),
                     Squelch = table.Column<string>(nullable: true),
                     TxCtcss = table.Column<string>(nullable: true),
-                    RxCtcss = table.Column<string>(nullable: true)
+                    RxCtcss = table.Column<string>(nullable: true),
+                    Volume = table.Column<string>(nullable: true),
+                    PreEmph = table.Column<string>(nullable: true),
+                    HightPass = table.Column<string>(nullable: true),
+                    LowPass = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -216,57 +220,57 @@ namespace SvxlinkManager.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "a7697daf-2b3b-4d8d-9b0d-b3b8af10b212", "17c3dc33-7820-4f6a-9c6a-20e79fa011a9", "Admin", "ADMIN" });
+                values: new object[] { "5f07ed27-34ad-4c4b-ac9e-1d9cd2dc2cb7", "88119dba-4c52-4b7f-abe7-35c0276c294c", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 1, "Magnifique123456789!", "(CH) HB9GXP2 H", 0, "rrf2.f5nlg.ovh", true, false, "Réseau des Répéteurs Francophones", 5300 });
+                values: new object[] { 1, "Magnifique123456789!", "(CH) HB9GXP2 H", 96, "rrf2.f5nlg.ovh", true, false, "Réseau des Répéteurs Francophones", 5300 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 2, "xD9wW5gO7yD9hN5o", "(CH) HB9GXP2 H", 0, "salonsuisseromand.northeurope.cloudapp.azure.com", false, true, "Salon Suisse Romand", 5300 });
+                values: new object[] { 2, "xD9wW5gO7yD9hN5o", "(CH) HB9GXP2 H", 104, "salonsuisseromand.northeurope.cloudapp.azure.com", false, true, "Salon Suisse Romand", 5300 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 3, "FON-F1TZO", "(CH) HB9GXP2 H", 0, "serveur.f1tzo.com", false, true, "French Open Network", 5300 });
+                values: new object[] { 3, "FON-F1TZO", "(CH) HB9GXP2 H", 97, "serveur.f1tzo.com", false, true, "French Open Network", 5300 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 4, "Magnifique123456789!", "(CH) HB9GXP2 H", 0, "rrf3.f5nlg.ovh", false, true, "Salon Technique", 5301 });
+                values: new object[] { 4, "Magnifique123456789!", "(CH) HB9GXP2 H", 98, "rrf3.f5nlg.ovh", false, true, "Salon Technique", 5301 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 5, "Magnifique123456789!", "(CH) HB9GXP2 H", 0, "rrf3.f5nlg.ovh", false, true, "Salon International", 5302 });
+                values: new object[] { 5, "Magnifique123456789!", "(CH) HB9GXP2 H", 99, "rrf3.f5nlg.ovh", false, true, "Salon International", 5302 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 6, "FON-F1TZO", "(CH) HB9GXP2 H", 0, "serveur.f1tzo.com", false, true, "Salon Bavardage", 5301 });
+                values: new object[] { 6, "FON-F1TZO", "(CH) HB9GXP2 H", 100, "serveur.f1tzo.com", false, true, "Salon Bavardage", 5301 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 7, "FON-F1TZO", "(CH) HB9GXP2 H", 0, "serveur.f1tzo.com", false, true, "Salon Local", 5302 });
+                values: new object[] { 7, "FON-F1TZO", "(CH) HB9GXP2 H", 101, "serveur.f1tzo.com", false, true, "Salon Local", 5302 });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port" },
-                values: new object[] { 8, "Magnifique123456789!", "(CH) HB9GXP2 H", 0, "rrf3.f5nlg.ovh", false, true, "Salon Expérimental", 5303 });
+                values: new object[] { 8, "Magnifique123456789!", "(CH) HB9GXP2 H", 102, "rrf3.f5nlg.ovh", false, true, "Salon Expérimental", 5303 });
 
             migrationBuilder.InsertData(
                 table: "RadioProfiles",
-                columns: new[] { "Id", "Enable", "Name", "RxCtcss", "RxFequ", "Squelch", "TxCtcss", "TxFrequ" },
-                values: new object[] { 1, false, "VHF défaut", "0002", "144.700", "2", "0000", "144.700" });
+                columns: new[] { "Id", "Enable", "HightPass", "LowPass", "Name", "PreEmph", "RxCtcss", "RxFequ", "Squelch", "TxCtcss", "TxFrequ", "Volume" },
+                values: new object[] { 1, false, "0", "0", "VHF défaut", "0", "0002", "144.700", "2", "0000", "144.700", "4" });
 
             migrationBuilder.InsertData(
                 table: "RadioProfiles",
-                columns: new[] { "Id", "Enable", "Name", "RxCtcss", "RxFequ", "Squelch", "TxCtcss", "TxFrequ" },
-                values: new object[] { 2, false, "UHF défaut", "0005", "436.375", "2", "0000", "436.375" });
+                columns: new[] { "Id", "Enable", "HightPass", "LowPass", "Name", "PreEmph", "RxCtcss", "RxFequ", "Squelch", "TxCtcss", "TxFrequ", "Volume" },
+                values: new object[] { 2, false, "0", "0", "UHF défaut", "0", "0005", "436.375", "2", "0000", "436.375", "4" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

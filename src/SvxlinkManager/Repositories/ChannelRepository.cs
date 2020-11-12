@@ -10,7 +10,7 @@ namespace SvxlinkManager.Repositories
   public interface IChannelRepository : IRepository<Channel>
   {
     Channel GetDefault();
-  }
+   }
 
   public class ChannelRepository : Repository<Channel>, IChannelRepository
   {
@@ -47,5 +47,7 @@ namespace SvxlinkManager.Repositories
       using var dbcontext = contextFactory.CreateDbContext();
       return dbcontext.Channels.Single(c => c.IsDefault);
     }
+
+    
   }
 }

@@ -28,12 +28,39 @@ namespace SvxlinkManager.Service
     {
       logger.LogInformation($"Application du profil {radioProfile.Name}.");
 
-      WriteModuleGroup(radioProfile);
+      WriteModule($"AT+DMOSETGROUP={mode},{radioProfile.RxFequ}0,{radioProfile.TxFrequ}0,{radioProfile.RxCtcss},{radioProfile.Squelch},{radioProfile.TxCtcss}\r\n");
+      WriteModule($"AT+DMOSETVOLUME={radioProfile.Volume}\r\n");
+      WriteModule($"AT+SETFILTER={radioProfile.PreEmph},{radioProfile.HightPass},{radioProfile.LowPass}\r\n");
     }
 
-    private void WriteModuleGroup(RadioProfile radioProfile)
+    private void WriteModule(string message)
     {
-      var serial = new SerialPort
+      using (var serial = GetSerialPort())
+      {
+        serial.DataReceived += Serial_DataReceived;
+
+        serial.Open();
+
+        logger.LogInformation($"Envoi du message : {message}");
+
+        serial.WriteLine(message);
+
+        Thread.Sleep(1000);
+
+        serial.Close();
+      }
+    }
+
+    private void Serial_DataReceived(object sender, SerialDataReceivedEventArgs e)
+    {
+      string data = ((SerialPort)sender).ReadLine();
+
+      logger.LogInformation($"Eéponse de SA818: {data}.");
+    }
+
+    public SerialPort GetSerialPort()
+    {
+      return new SerialPort
       {
         PortName = device,
         BaudRate = 9600,
@@ -43,26 +70,8 @@ namespace SvxlinkManager.Service
 
         WriteTimeout = 2000,
         ReadTimeout = 2000
+
       };
-
-      serial.DataReceived += Serial_DataReceived;
-
-      serial.Open();
-
-      var message = $"AT+DMOSETGROUP={mode},{radioProfile.RxFequ}0,{radioProfile.TxFrequ}0,{radioProfile.RxCtcss},{radioProfile.Squelch},{radioProfile.TxCtcss}\r\n";
-
-      serial.WriteLine(message);
-
-      Thread.Sleep(1000);
-
-      serial.Close();
-    }
-
-    private void Serial_DataReceived(object sender, SerialDataReceivedEventArgs e)
-    {
-      string data = ((SerialPort)sender).ReadLine();
-
-      logger.LogInformation($"Eéponse de SA818: {data}.");
     }
   }
 }

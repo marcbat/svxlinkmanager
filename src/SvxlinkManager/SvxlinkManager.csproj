@@ -23,6 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="SvxlinkConfig\dtmf.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SvxlinkConfig\gpio.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

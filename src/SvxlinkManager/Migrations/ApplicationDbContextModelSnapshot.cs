@@ -44,8 +44,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a7697daf-2b3b-4d8d-9b0d-b3b8af10b212",
-                            ConcurrencyStamp = "17c3dc33-7820-4f6a-9c6a-20e79fa011a9",
+                            Id = "5f07ed27-34ad-4c4b-ac9e-1d9cd2dc2cb7",
+                            ConcurrencyStamp = "88119dba-4c52-4b7f-abe7-35c0276c294c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -264,7 +264,7 @@ namespace SvxlinkManager.Migrations
                             Id = 1,
                             AuthKey = "Magnifique123456789!",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 96,
                             Host = "rrf2.f5nlg.ovh",
                             IsDefault = true,
                             IsTemporized = false,
@@ -276,7 +276,7 @@ namespace SvxlinkManager.Migrations
                             Id = 2,
                             AuthKey = "xD9wW5gO7yD9hN5o",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 104,
                             Host = "salonsuisseromand.northeurope.cloudapp.azure.com",
                             IsDefault = false,
                             IsTemporized = true,
@@ -288,7 +288,7 @@ namespace SvxlinkManager.Migrations
                             Id = 3,
                             AuthKey = "FON-F1TZO",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 97,
                             Host = "serveur.f1tzo.com",
                             IsDefault = false,
                             IsTemporized = true,
@@ -300,7 +300,7 @@ namespace SvxlinkManager.Migrations
                             Id = 4,
                             AuthKey = "Magnifique123456789!",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 98,
                             Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
                             IsTemporized = true,
@@ -312,7 +312,7 @@ namespace SvxlinkManager.Migrations
                             Id = 5,
                             AuthKey = "Magnifique123456789!",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 99,
                             Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
                             IsTemporized = true,
@@ -324,7 +324,7 @@ namespace SvxlinkManager.Migrations
                             Id = 6,
                             AuthKey = "FON-F1TZO",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 100,
                             Host = "serveur.f1tzo.com",
                             IsDefault = false,
                             IsTemporized = true,
@@ -336,7 +336,7 @@ namespace SvxlinkManager.Migrations
                             Id = 7,
                             AuthKey = "FON-F1TZO",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 101,
                             Host = "serveur.f1tzo.com",
                             IsDefault = false,
                             IsTemporized = true,
@@ -348,7 +348,7 @@ namespace SvxlinkManager.Migrations
                             Id = 8,
                             AuthKey = "Magnifique123456789!",
                             CallSign = "(CH) HB9GXP2 H",
-                            Dtmf = 0,
+                            Dtmf = 102,
                             Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
                             IsTemporized = true,
@@ -366,7 +366,16 @@ namespace SvxlinkManager.Migrations
                     b.Property<bool>("Enable")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("HightPass")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LowPass")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PreEmph")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RxCtcss")
@@ -384,6 +393,9 @@ namespace SvxlinkManager.Migrations
                     b.Property<string>("TxFrequ")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Volume")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("RadioProfiles");
@@ -393,23 +405,31 @@ namespace SvxlinkManager.Migrations
                         {
                             Id = 1,
                             Enable = false,
+                            HightPass = "0",
+                            LowPass = "0",
                             Name = "VHF défaut",
+                            PreEmph = "0",
                             RxCtcss = "0002",
                             RxFequ = "144.700",
                             Squelch = "2",
                             TxCtcss = "0000",
-                            TxFrequ = "144.700"
+                            TxFrequ = "144.700",
+                            Volume = "4"
                         },
                         new
                         {
                             Id = 2,
                             Enable = false,
+                            HightPass = "0",
+                            LowPass = "0",
                             Name = "UHF défaut",
+                            PreEmph = "0",
                             RxCtcss = "0005",
                             RxFequ = "436.375",
                             Squelch = "2",
                             TxCtcss = "0000",
-                            TxFrequ = "436.375"
+                            TxFrequ = "436.375",
+                            Volume = "4"
                         });
                 });
 
