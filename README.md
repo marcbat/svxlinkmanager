@@ -4,14 +4,20 @@
 Le but de cette application est de pouvoir piloter via une interface web les fonctionnalités du logiciel [SvxLink](https://github.com/sm0svx/svxlink).
 
 ## Installation
-Téléchargez la dernière release de l'application, puis décompressez la dans le dossier de votre choix. (ex: /etc/svxlinkmanager)
+Téléchargez la dernière release de l'application, puis décompressez la dans le dossier de votre choix. (ex: /etc)
+```bash
+wget https://github.com/marcbat/svxlinkmanager/releases/download/0.9.0/svxlinkmanager-x.x.x.zip
+
+unzip svxlinkmanager-x.x.x.zip
+rm svxlinkmanager-x.x.x.zip
+```
 Modifiez les droits du fichier SvxlinkManager pour le rendre executable.
 ```bash
-cd /etc/svxlinkmanager/
+cd SvxlinkManager
 chmod 755 SvxlinkManager
 ```
 
-## Activer la détection DTMF
+## Activer la détection DTMF (facultatif)
 Pour activer la détection DTMF, vous devez ajouter quelques lignes de script dans /usr/share/svxlink/event.d/local/logic.tcl
 Repérez la méthode
 ```tcl
