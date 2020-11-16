@@ -47,4 +47,6 @@ Un fois l'application lancée, vous pouvez vous y connecter à l'adresse http://
 
 ## Fonctionnalités
 * Gestion de configurations svxlink multiples.
-* Gestion de la connection via une configuration et affichage en temps réel des nodes connectés.
+* Gestion de la connection svxlink via une configuration et affichage en temps réel des nodes connectés.
+* Gestion des profils radios multiples, si le module SA818 est présent.
+* Pilotage du changement de salon par DTMF (si activé)
