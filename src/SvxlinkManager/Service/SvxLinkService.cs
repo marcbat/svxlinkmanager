@@ -127,6 +127,7 @@ namespace SvxlinkManager.Service
         timer.Elapsed += CheckTemporized;
     }
 
+    /// <summary>Recherche le processus svxlink et le stop.<br />Le timer est stoppé en même temps.</summary>
     private void StopSvxlink()
     {
       var pid = ExecuteCommand("pgrep -x svxlink");
@@ -224,6 +225,8 @@ namespace SvxlinkManager.Service
 
     private void ReplaceConfig(Channel channel)
     {
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/dtmf.conf", channel.Dtmf.ToString());
+
       File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
 
       string text = File.ReadAllText($"{applicationPath}/SvxlinkConfig/svxlink.current");
