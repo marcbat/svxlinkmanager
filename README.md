@@ -8,7 +8,7 @@ Téléchargez la dernière release de l'application, puis décompressez la dans 
 ```bash
 wget https://github.com/marcbat/svxlinkmanager/releases/download/0.9.0/svxlinkmanager-x.x.x.zip
 
-unzip svxlinkmanager-x.x.x.zip
+unzip -o svxlinkmanager-x.x.x.zip
 rm svxlinkmanager-x.x.x.zip
 ```
 Modifiez les droits du fichier SvxlinkManager pour le rendre executable.
