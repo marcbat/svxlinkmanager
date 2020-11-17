@@ -28,7 +28,7 @@ et ajoutez directement dessous
 if {$cmd != "10"} {
   # Write DTMF in monitored file
   puts "Write DTMF monitored file"
-  set dtmf_file "/etc/svxlinkmanager/SvxlinkConfig/dtmf.conf"
+  set dtmf_file "/etc/SvxlinkConfig/SvxlinkConfig/dtmf.conf"
   set dtmf_file_id [open $dtmf_file "w"]
   puts $dtmf_file_id $cmd 
   close $dtmf_file_id
