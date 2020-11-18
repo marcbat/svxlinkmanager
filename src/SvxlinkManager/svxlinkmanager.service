@@ -1,0 +1,20 @@
+﻿[Unit]
+Description=svxlinkmanager service
+
+[Service]
+Type=notify
+WorkingDirectory=/etc/SvxlinkManager
+ExecStart=/etc/SvxlinkManager/SvxlinkManager
+SyslogIdentifier=svxlinkmanager
+
+Restart=always
+RestartSec=5
+
+Environment=ASPNETCORE_URLS=http://*:5000
+
+KillSignal=SIGINT
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
