@@ -6,7 +6,7 @@ Le but de cette application est de pouvoir piloter via une interface web les fon
 ## Installation
 Téléchargez la dernière release de l'application, puis décompressez la dans le dossier de votre choix. (ex: /etc)
 ```bash
-wget https://github.com/marcbat/svxlinkmanager/releases/download/0.9.0/svxlinkmanager-x.x.x.zip
+wget https://github.com/marcbat/svxlinkmanager/releases/download/x.x.x/svxlinkmanager-x.x.x.zip
 
 unzip -o svxlinkmanager-x.x.x.zip
 rm svxlinkmanager-x.x.x.zip
