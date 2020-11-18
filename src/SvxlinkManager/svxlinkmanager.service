@@ -10,7 +10,7 @@ SyslogIdentifier=svxlinkmanager
 Restart=always
 RestartSec=5
 
-Environment=ASPNETCORE_URLS=http://*:5000
+Environment=ASPNETCORE_URLS=http://*:80
 
 KillSignal=SIGINT
 Environment=ASPNETCORE_ENVIRONMENT=Production
