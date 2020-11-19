@@ -11,7 +11,7 @@ namespace SvxlinkManager.Repositories
   {
     IChannelRepository Channels { get; }
 
-    IRepository<RadioProfile> RadioProfiles{ get; }
+    IRadioProfileRepository RadioProfiles { get; }
   }
 
   public class Repositories : IRepositories
@@ -24,7 +24,7 @@ namespace SvxlinkManager.Repositories
 
     public IChannelRepository Channels { get; private set; }
 
-    public IRepository<RadioProfile> RadioProfiles { get; private set; }
+    public IRadioProfileRepository RadioProfiles { get; private set; }
 
   }
 }

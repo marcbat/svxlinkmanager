@@ -7,7 +7,12 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Repositories
 {
-  public class RadioProfileRepository : Repository<RadioProfile>
+  public interface IRadioProfileRepository : IRepository<RadioProfile>
+  {
+    RadioProfile GetCurrent();
+  }
+
+  public class RadioProfileRepository : Repository<RadioProfile>, IRadioProfileRepository
   {
     public RadioProfileRepository(IDbContextFactory<ApplicationDbContext> contextFactory) : base(contextFactory)
     {
@@ -34,6 +39,12 @@ namespace SvxlinkManager.Repositories
         return;
 
       base.Delete(id);
+    }
+
+    public RadioProfile GetCurrent()
+    {
+       using var dbcontext = contextFactory.CreateDbContext();
+       return dbcontext.RadioProfiles.Single(p => p.Enable);
     }
   }
 }
