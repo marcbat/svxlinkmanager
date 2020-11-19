@@ -27,6 +27,9 @@ namespace SvxlinkManager.Models
     public string CallSign { get; set; }
 
     [Required]
+    public string ReportCallSign { get; set; }
+
+    [Required]
     public bool IsDefault { get; set; }
 
     [Required]

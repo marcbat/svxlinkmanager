@@ -44,8 +44,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5f07ed27-34ad-4c4b-ac9e-1d9cd2dc2cb7",
-                            ConcurrencyStamp = "88119dba-4c52-4b7f-abe7-35c0276c294c",
+                            Id = "7a989617-fed4-4c80-8151-f590f4246552",
+                            ConcurrencyStamp = "fbd2043d-75ad-4bca-8d88-3ace76d445e0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -254,6 +254,10 @@ namespace SvxlinkManager.Migrations
                     b.Property<int>("Port")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ReportCallSign")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Channels");
@@ -269,7 +273,8 @@ namespace SvxlinkManager.Migrations
                             IsDefault = true,
                             IsTemporized = false,
                             Name = "Réseau des Répéteurs Francophones",
-                            Port = 5300
+                            Port = 5300,
+                            ReportCallSign = "HB9GXP"
                         },
                         new
                         {
@@ -281,7 +286,8 @@ namespace SvxlinkManager.Migrations
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Suisse Romand",
-                            Port = 5300
+                            Port = 5300,
+                            ReportCallSign = "HB9GXP"
                         },
                         new
                         {
@@ -293,7 +299,8 @@ namespace SvxlinkManager.Migrations
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "French Open Network",
-                            Port = 5300
+                            Port = 5300,
+                            ReportCallSign = "HB9GXP"
                         },
                         new
                         {
@@ -305,7 +312,8 @@ namespace SvxlinkManager.Migrations
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Technique",
-                            Port = 5301
+                            Port = 5301,
+                            ReportCallSign = "HB9GXP"
                         },
                         new
                         {
@@ -317,7 +325,8 @@ namespace SvxlinkManager.Migrations
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon International",
-                            Port = 5302
+                            Port = 5302,
+                            ReportCallSign = "HB9GXP"
                         },
                         new
                         {
@@ -329,7 +338,8 @@ namespace SvxlinkManager.Migrations
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Bavardage",
-                            Port = 5301
+                            Port = 5301,
+                            ReportCallSign = "HB9GXP"
                         },
                         new
                         {
@@ -341,7 +351,8 @@ namespace SvxlinkManager.Migrations
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Local",
-                            Port = 5302
+                            Port = 5302,
+                            ReportCallSign = "HB9GXP"
                         },
                         new
                         {
@@ -353,7 +364,8 @@ namespace SvxlinkManager.Migrations
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Expérimental",
-                            Port = 5303
+                            Port = 5303,
+                            ReportCallSign = "HB9GXP"
                         });
                 });
 
@@ -404,7 +416,7 @@ namespace SvxlinkManager.Migrations
                         new
                         {
                             Id = 1,
-                            Enable = false,
+                            Enable = true,
                             HightPass = "0",
                             LowPass = "0",
                             Name = "VHF défaut",

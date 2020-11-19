@@ -166,8 +166,10 @@ namespace SvxlinkManager.Service
       var channel = repositories.Channels.Get(channelId);
       logger.LogInformation($"Recupération du salon {channel.Name}");
 
+      var radioProfile = repositories.RadioProfiles.GetCurrent();
+
       // Remplace le contenu de svxlink.conf avec le informations du channel
-      ReplaceConfig(channel);
+      ReplaceConfig(channel, radioProfile);
       logger.LogInformation("Remplacement du contenu svxlink.current");
 
       // Lance svxlink
@@ -223,17 +225,21 @@ namespace SvxlinkManager.Service
         
     }
 
-    private void ReplaceConfig(Channel channel)
+    private void ReplaceConfig(Channel channel, RadioProfile radioProfile)
     {
       File.WriteAllText($"{applicationPath}/SvxlinkConfig/dtmf.conf", channel.Dtmf.ToString());
 
       File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
 
       string text = File.ReadAllText($"{applicationPath}/SvxlinkConfig/svxlink.current");
+
       text = text.Replace("HOST=HOST", $"HOST={channel.Host}");
       text = text.Replace("AUTH_KEY=AUTH_KEY", $"AUTH_KEY={channel.AuthKey}");
       text = text.Replace("PORT=PORT", $"PORT={channel.Port}");
       text = text.Replace("CALLSIGN=CALLSIGN", $"CALLSIGN={channel.CallSign}");
+      text = text.Replace("CALLSIGN=REPORTCALLSIGN", $"CALLSIGN={channel.ReportCallSign}");
+      text = text.Replace("REPORT_CTCSS=REPORT_CTCSS", $"REPORT_CTCSS={radioProfile.RxTone}");
+
       File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.current", text);
     }
 
