@@ -48,6 +48,8 @@ namespace SvxlinkManager
       services.AddSingleton<IRepositories, Repositories.Repositories>();
       services.AddSingleton<SvxLinkService>();
       services.AddSingleton<Sa818Service>();
+
+      services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

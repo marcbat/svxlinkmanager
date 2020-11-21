@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ini-parser" Version="2.5.2" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.5" />
@@ -33,13 +34,13 @@
     <None Update="SvxlinkConfig\perroquet.sh">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SvxlinkConfig\svxlink-parrot.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SvxlinkConfig\svxlink-prod.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SvxlinkConfig\svxlink.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SvxlinkConfig\svxlink.current">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SvxlinkConfig\svxlink.d\ModuleDtmfRepeater.conf">

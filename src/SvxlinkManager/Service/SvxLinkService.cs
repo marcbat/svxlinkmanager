@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using IniParser;
+
+using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Models;
 using SvxlinkManager.Repositories;
@@ -28,7 +30,7 @@ namespace SvxlinkManager.Service
     private readonly ILogger<SvxLinkService> logger;
     private readonly IRepositories repositories;
     private readonly string applicationPath = Directory.GetCurrentDirectory();
-    private readonly Timer timer;
+    private Timer timer;
     private int channelId;
     private DateTime lastTx;
     
@@ -38,32 +40,8 @@ namespace SvxlinkManager.Service
       this.logger = logger;
       this.repositories = repositories;
 
-      timer = new Timer(1000);
-      timer.Elapsed += CheckDtmf;
-      
       NodeTx += n => lastTx = DateTime.Now;
       Connected += () => lastTx = DateTime.Now;
-    }
-
-    private void CheckDtmf(object s, ElapsedEventArgs e)
-    {
-      var dtmf = int.Parse(File.ReadAllText($"{applicationPath}/SvxlinkConfig/dtmf.conf"));
-
-      var channel = repositories.Channels.Get(channelId);
-
-      if (channel.Dtmf != dtmf)
-      {
-        logger.LogInformation($"Nouveau dtmf détécté: {dtmf}");
-        channel = repositories.Channels.FindBy(c => c.Dtmf == dtmf);
-        if(channel == null)
-        {
-          logger.LogInformation($"Le dtmf {dtmf} ne correspond à aucun channel.");
-          return;
-        }
-
-        Channel = channel.Id;
-      }
-        
     }
 
     private void CheckTemporized(object s, ElapsedEventArgs e)
@@ -86,9 +64,52 @@ namespace SvxlinkManager.Service
       set
       {
         channelId = value;
-        RunRestart();
+
+        switch (value)
+        {
+          case 0:
+            StopSvxlink();
+            break;
+
+          case 1000:
+            Parrot();
+            break;
+
+          default:
+            Restart();
+            break;
+        }
       }
         
+    }
+
+    private void Parrot()
+    {
+      // Stop svxlink
+      StopSvxlink();
+      logger.LogInformation("Salon déconnecté");
+
+      // Remplace le contenu de svxlink.conf avec le informations du channel
+      var global = new Dictionary<string, string>
+      {
+        { "LOGICS", "SimplexLogic" }
+      };
+      var simplexlogic = new Dictionary<string, string> {
+        { "MODULES", "ModuleParrot"}
+      };
+      var parameters = new Dictionary<string, Dictionary<string, string>>
+      {
+        {"GLOBAL", global },
+        {"SimplexLogic", simplexlogic }
+      };
+      ReplaceConfig(parameters);
+      logger.LogInformation("Remplacement du contenu svxlink.current");
+
+      // Lance svxlink
+      RunsvxLink();
+
+      logger.LogInformation("Séléction du salon perroquet.");
+      ExecuteCommand("echo '1#'> /tmp/dtmf_uhf");
     }
 
     public List<Node> Nodes { get; set; } = new List<Node>();
@@ -121,21 +142,30 @@ namespace SvxlinkManager.Service
       shell.BeginErrorReadLine();
       shell.BeginOutputReadLine();
 
-      var channel = repositories.Channels.Get(channelId);
+      var channel = repositories.Channels.Find(channelId);
+      if (channel != null)
+        SetTimer(channel);
+    }
+
+    private void SetTimer(Channel channel)
+    {
+      timer = new Timer(1000);
       timer.Start();
-      if(channel.IsTemporized)
+
+      if (channel.IsTemporized)
         timer.Elapsed += CheckTemporized;
     }
 
     /// <summary>Recherche le processus svxlink et le stop.<br />Le timer est stoppé en même temps.</summary>
     private void StopSvxlink()
     {
+      logger.LogInformation("Kill de svxlink.");
+
+      timer?.Stop();
+
       var pid = ExecuteCommand("pgrep -x svxlink");
       if (pid != null)
         ExecuteCommand("pkill -TERM svxlink");
-
-      timer.Elapsed -= CheckTemporized;
-      timer.Stop();
     }
 
     private void ShellOutputDataReceived(object sender, DataReceivedEventArgs e)
@@ -150,17 +180,13 @@ namespace SvxlinkManager.Service
       ParseLog(e.Data);
     }
 
-    private void RunRestart()
+    private void Restart()
     {
       logger.LogInformation("Restart salon.");
 
       // Stop svxlink
       StopSvxlink();
       logger.LogInformation("Salon déconnecté");
-
-      // Si le choix est Déconnecter, fin de la méthode
-      if (channelId == 0)
-        return;
 
       // Récupère le channel
       var channel = repositories.Channels.Get(channelId);
@@ -169,7 +195,30 @@ namespace SvxlinkManager.Service
       var radioProfile = repositories.RadioProfiles.GetCurrent();
 
       // Remplace le contenu de svxlink.conf avec le informations du channel
-      ReplaceConfig(channel, radioProfile);
+      var global = new Dictionary<string, string>
+      {
+        { "LOGICS", "SimplexLogic,ReflectorLogic" }
+      };
+      var simplexlogic = new Dictionary<string, string> {
+        { "MODULES", "ModuleHelp,ModuleMetarInfo,ModulePropagationMonitor"},
+        { "CALLSIGN", channel.ReportCallSign},
+        { "REPORT_CTCSS", radioProfile.RxTone}
+      };
+      var ReflectorLogic = new Dictionary<string, string>
+      {
+        {"CALLSIGN", channel.CallSign },
+        {"HOST", channel.Host },
+        {"AUTH_KEY",channel.AuthKey },
+        {"PORT" ,channel.Port.ToString()}
+
+      };
+      var parameters = new Dictionary<string, Dictionary<string, string>> 
+      {
+        {"GLOBAL", global },
+        {"SimplexLogic", simplexlogic },
+        {"ReflectorLogic" , ReflectorLogic}
+      };
+      ReplaceConfig(parameters);
       logger.LogInformation("Remplacement du contenu svxlink.current");
 
       // Lance svxlink
@@ -225,22 +274,24 @@ namespace SvxlinkManager.Service
         
     }
 
-    private void ReplaceConfig(Channel channel, RadioProfile radioProfile)
+    private void ReplaceConfig(Dictionary<string, Dictionary<string,string>> parameters)
     {
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/dtmf.conf", channel.Dtmf.ToString());
+      //File.WriteAllText($"{applicationPath}/SvxlinkConfig/dtmf.conf", channel.Dtmf.ToString());
 
-      File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
+      var parser = new FileIniDataParser();
+      parser.Parser.Configuration.NewLineStr = "\r\n";
+      parser.Parser.Configuration.AssigmentSpacer = string.Empty;
 
-      string text = File.ReadAllText($"{applicationPath}/SvxlinkConfig/svxlink.current");
+      var utf8WithoutBom = new UTF8Encoding(false);
 
-      text = text.Replace("HOST=HOST", $"HOST={channel.Host}");
-      text = text.Replace("AUTH_KEY=AUTH_KEY", $"AUTH_KEY={channel.AuthKey}");
-      text = text.Replace("PORT=PORT", $"PORT={channel.Port}");
-      text = text.Replace("CALLSIGN=CALLSIGN", $"CALLSIGN={channel.CallSign}");
-      text = text.Replace("CALLSIGN=REPORTCALLSIGN", $"CALLSIGN={channel.ReportCallSign}");
-      text = text.Replace("REPORT_CTCSS=REPORT_CTCSS", $"REPORT_CTCSS={radioProfile.RxTone}");
+      var data = parser.ReadFile($"{applicationPath}/SvxlinkConfig/svxlink.conf", utf8WithoutBom);
 
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.current", text);
+      foreach (var section in parameters)
+        foreach (var parameter in section.Value)
+          data[section.Key][parameter.Key] = parameter.Value;
+        
+      parser.WriteFile($"{applicationPath}/SvxlinkConfig/svxlink.current", data, utf8WithoutBom);
+
     }
 
     private string ExecuteCommand(string cmd)
