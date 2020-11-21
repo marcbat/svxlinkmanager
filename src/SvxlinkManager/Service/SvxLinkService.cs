@@ -76,7 +76,7 @@ namespace SvxlinkManager.Service
             break;
 
           default:
-            Restart();
+            ChangeChannel();
             break;
         }
       }
@@ -180,7 +180,7 @@ namespace SvxlinkManager.Service
       ParseLog(e.Data);
     }
 
-    private void Restart()
+    private void ChangeChannel()
     {
       logger.LogInformation("Restart salon.");
 
@@ -220,6 +220,9 @@ namespace SvxlinkManager.Service
       };
       ReplaceConfig(parameters);
       logger.LogInformation("Remplacement du contenu svxlink.current");
+
+      // cahngement du son de l'annonce
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/dtmf.conf", channel.Dtmf.ToString());
 
       // Lance svxlink
       RunsvxLink();
@@ -276,8 +279,6 @@ namespace SvxlinkManager.Service
 
     private void ReplaceConfig(Dictionary<string, Dictionary<string,string>> parameters)
     {
-      //File.WriteAllText($"{applicationPath}/SvxlinkConfig/dtmf.conf", channel.Dtmf.ToString());
-
       var parser = new FileIniDataParser();
       parser.Parser.Configuration.NewLineStr = "\r\n";
       parser.Parser.Configuration.AssigmentSpacer = string.Empty;

@@ -221,47 +221,47 @@ namespace SvxlinkManager.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "7a989617-fed4-4c80-8151-f590f4246552", "fbd2043d-75ad-4bca-8d88-3ace76d445e0", "Admin", "ADMIN" });
+                values: new object[] { "8aab440c-2ee9-4816-a75f-9381231a1d97", "59720660-c309-4752-af7c-7a77013aff0c", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 1, "Magnifique123456789!", "(CH) HB9GXP2 H", 96, "rrf2.f5nlg.ovh", true, false, "Réseau des Répéteurs Francophones", 5300, "HB9GXP" });
+                values: new object[] { 1, "Magnifique123456789!", "(CH) SVX4LINK H", 96, "rrf2.f5nlg.ovh", true, false, "Réseau des Répéteurs Francophones", 5300, "SVX4LINK" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 2, "xD9wW5gO7yD9hN5o", "(CH) HB9GXP2 H", 104, "salonsuisseromand.northeurope.cloudapp.azure.com", false, true, "Salon Suisse Romand", 5300, "HB9GXP" });
+                values: new object[] { 2, "xD9wW5gO7yD9hN5o", "(CH) SVX4LINK H", 104, "salonsuisseromand.northeurope.cloudapp.azure.com", false, true, "Salon Suisse Romand", 5300, "SVX4LINK" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 3, "FON-F1TZO", "(CH) HB9GXP2 H", 97, "serveur.f1tzo.com", false, true, "French Open Network", 5300, "HB9GXP" });
+                values: new object[] { 3, "FON-F1TZO", "(CH) SVX4LINK H", 97, "serveur.f1tzo.com", false, true, "French Open Network", 5300, "SVX4LINK" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 4, "Magnifique123456789!", "(CH) HB9GXP2 H", 98, "rrf3.f5nlg.ovh", false, true, "Salon Technique", 5301, "HB9GXP" });
+                values: new object[] { 4, "Magnifique123456789!", "(CH) SVX4LINK H", 98, "rrf3.f5nlg.ovh", false, true, "Salon Technique", 5301, "SVX4LINK" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 5, "Magnifique123456789!", "(CH) HB9GXP2 H", 99, "rrf3.f5nlg.ovh", false, true, "Salon International", 5302, "HB9GXP" });
+                values: new object[] { 5, "Magnifique123456789!", "(CH) SVX4LINK H", 99, "rrf3.f5nlg.ovh", false, true, "Salon International", 5302, "SVX4LINK" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 6, "FON-F1TZO", "(CH) HB9GXP2 H", 100, "serveur.f1tzo.com", false, true, "Salon Bavardage", 5301, "HB9GXP" });
+                values: new object[] { 6, "FON-F1TZO", "(CH) SVX4LINK H", 100, "serveur.f1tzo.com", false, true, "Salon Bavardage", 5301, "SVX4LINK" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 7, "FON-F1TZO", "(CH) HB9GXP2 H", 101, "serveur.f1tzo.com", false, true, "Salon Local", 5302, "HB9GXP" });
+                values: new object[] { 7, "FON-F1TZO", "(CH) SVX4LINK H", 101, "serveur.f1tzo.com", false, true, "Salon Local", 5302, "SVX4LINK" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
                 columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 8, "Magnifique123456789!", "(CH) HB9GXP2 H", 102, "rrf3.f5nlg.ovh", false, true, "Salon Expérimental", 5303, "HB9GXP" });
+                values: new object[] { 8, "Magnifique123456789!", "(CH) SVX4LINK H", 102, "rrf3.f5nlg.ovh", false, true, "Salon Expérimental", 5303, "SVX4LINK" });
 
             migrationBuilder.InsertData(
                 table: "RadioProfiles",
