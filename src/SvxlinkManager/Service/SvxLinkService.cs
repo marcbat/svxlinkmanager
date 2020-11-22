@@ -104,6 +104,9 @@ namespace SvxlinkManager.Service
       ReplaceConfig(parameters);
       logger.LogInformation("Remplacement du contenu svxlink.current");
 
+      // suppression du fichier d'annonce
+      File.Delete("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav");
+
       // Lance svxlink
       RunsvxLink();
 
@@ -223,7 +226,11 @@ namespace SvxlinkManager.Service
       logger.LogInformation("Remplacement du contenu svxlink.current");
 
       // cahngement du son de l'annonce
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/dtmf.conf", channel.Dtmf.ToString());
+      if (!Directory.Exists("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager"))
+        Directory.CreateDirectory("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager");
+
+      File.Copy($"{applicationPath}/Sounds/{channel.SoundName}", "/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav", true);
+      logger.LogInformation("Remplacement du fichier wav d'annonce.");
 
       // Lance svxlink
       RunsvxLink();
