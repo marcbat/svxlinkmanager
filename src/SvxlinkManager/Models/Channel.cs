@@ -58,9 +58,12 @@ namespace SvxlinkManager.Models
 
       protected override ValidationResult IsValid(object value, ValidationContext validationContext)
       {
+        if(value == null)
+          return ValidationResult.Success;
+
         var file = (IBrowserFile)value;
 
-        var extension = System.IO.Path.GetExtension(file.Name);
+        var extension = Path.GetExtension(file.Name);
 
         if (!AllowedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
         {

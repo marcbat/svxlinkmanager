@@ -17,6 +17,7 @@ using Spotnik.Gui.Areas.Identity;
 using SvxlinkManager.Data;
 using SvxlinkManager.Repositories;
 using SvxlinkManager.Service;
+using System.IO;
 
 namespace SvxlinkManager
 {
@@ -88,7 +89,14 @@ namespace SvxlinkManager
         endpoints.MapFallbackToPage("/_Host");
       });
 
+      // ajout de l'utilisateur admin
       ApplicationDbInitializer.SeedUsers(userManager);
+
+      // Copy du fichier logic.tcl
+      if (!Directory.Exists("/usr/share/svxlink/events.d/local"))
+        Directory.CreateDirectory("/usr/share/svxlink/events.d/local");
+
+      File.Copy($"{Directory.GetCurrentDirectory()}/SvxlinkConfig/Logic.tcl", "/usr/share/svxlink/events.d/local/Logic.tcl", true);
     }
   }
 }

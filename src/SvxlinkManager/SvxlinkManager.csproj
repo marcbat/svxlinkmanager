@@ -62,10 +62,7 @@
     <None Update="SvxlinkConfig\gpio.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SvxlinkConfig\perroquet.sh">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SvxlinkConfig\svxlink-parrot.conf">
+    <None Update="SvxlinkConfig\Logic.tcl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SvxlinkConfig\svxlink-prod.conf">
