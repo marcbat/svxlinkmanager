@@ -9,14 +9,14 @@ using SvxlinkManager.Data;
 namespace SvxlinkManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201121223846_Initial")]
+    [Migration("20201122170936_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9");
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -28,26 +28,26 @@ namespace SvxlinkManager.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
                         new
                         {
-                            Id = "8aab440c-2ee9-4816-a75f-9381231a1d97",
-                            ConcurrencyStamp = "59720660-c309-4752-af7c-7a77013aff0c",
+                            Id = "e43cc21f-5786-4227-92ef-bf098ed95921",
+                            ConcurrencyStamp = "5d2fafe9-62f2-4066-9762-e86ae8721bc4",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -89,8 +89,8 @@ namespace SvxlinkManager.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
@@ -102,12 +102,12 @@ namespace SvxlinkManager.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("TEXT");
@@ -125,17 +125,17 @@ namespace SvxlinkManager.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -166,12 +166,12 @@ namespace SvxlinkManager.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("TEXT");
@@ -208,12 +208,12 @@ namespace SvxlinkManager.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .HasColumnType("TEXT");
@@ -260,6 +260,9 @@ namespace SvxlinkManager.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("SoundName")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Channels");
@@ -276,7 +279,8 @@ namespace SvxlinkManager.Migrations
                             IsTemporized = false,
                             Name = "Réseau des Répéteurs Francophones",
                             Port = 5300,
-                            ReportCallSign = "SVX4LINK"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Srrf.wav"
                         },
                         new
                         {
@@ -289,7 +293,8 @@ namespace SvxlinkManager.Migrations
                             IsTemporized = true,
                             Name = "Salon Suisse Romand",
                             Port = 5300,
-                            ReportCallSign = "SVX4LINK"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Sreg.wav"
                         },
                         new
                         {
@@ -302,7 +307,8 @@ namespace SvxlinkManager.Migrations
                             IsTemporized = true,
                             Name = "French Open Network",
                             Port = 5300,
-                            ReportCallSign = "SVX4LINK"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Sfon.wav"
                         },
                         new
                         {
@@ -315,7 +321,8 @@ namespace SvxlinkManager.Migrations
                             IsTemporized = true,
                             Name = "Salon Technique",
                             Port = 5301,
-                            ReportCallSign = "SVX4LINK"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Stec.wav"
                         },
                         new
                         {
@@ -328,7 +335,8 @@ namespace SvxlinkManager.Migrations
                             IsTemporized = true,
                             Name = "Salon International",
                             Port = 5302,
-                            ReportCallSign = "SVX4LINK"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Sint.wav"
                         },
                         new
                         {
@@ -341,7 +349,8 @@ namespace SvxlinkManager.Migrations
                             IsTemporized = true,
                             Name = "Salon Bavardage",
                             Port = 5301,
-                            ReportCallSign = "SVX4LINK"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Sbav.wav"
                         },
                         new
                         {
@@ -354,7 +363,8 @@ namespace SvxlinkManager.Migrations
                             IsTemporized = true,
                             Name = "Salon Local",
                             Port = 5302,
-                            ReportCallSign = "SVX4LINK"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Sloc.wav"
                         },
                         new
                         {
@@ -367,7 +377,8 @@ namespace SvxlinkManager.Migrations
                             IsTemporized = true,
                             Name = "Salon Expérimental",
                             Port = 5303,
-                            ReportCallSign = "SVX4LINK"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Sexp.wav"
                         });
                 });
 
@@ -453,7 +464,7 @@ namespace SvxlinkManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ChannelId")
+                    b.Property<int?>("ChannelId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Day")
@@ -527,9 +538,9 @@ namespace SvxlinkManager.Migrations
                 {
                     b.HasOne("SvxlinkManager.Models.Channel", "Channel")
                         .WithMany()
-                        .HasForeignKey("ChannelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ChannelId");
+
+                    b.Navigation("Channel");
                 });
 #pragma warning restore 612, 618
         }
