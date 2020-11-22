@@ -11,7 +11,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 
 namespace SvxlinkManager.Service
@@ -107,6 +106,8 @@ namespace SvxlinkManager.Service
 
       // Lance svxlink
       RunsvxLink();
+
+      System.Threading.Thread.Sleep(1000);
 
       logger.LogInformation("Séléction du salon perroquet.");
       ExecuteCommand("echo '1#'> /tmp/dtmf_uhf");
