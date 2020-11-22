@@ -30,9 +30,9 @@ namespace SvxlinkManager.Repositories
 
   public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IModelEntity
   {
-    protected readonly IDbContextFactory<ApplicationDbContext> contextFactory;
+    protected readonly Data.IDbContextFactory<ApplicationDbContext> contextFactory;
 
-    public Repository(IDbContextFactory<ApplicationDbContext> contextFactory)
+    public Repository(Data.IDbContextFactory<ApplicationDbContext> contextFactory)
     {
       this.contextFactory = contextFactory;
     }
