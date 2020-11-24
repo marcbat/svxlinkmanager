@@ -64,10 +64,13 @@ variable sql_rx_id "?";
 #
 proc startup {} {
 
-  playMsg "Default" "activating";
-  playMsg "svxlinkmanager" "Name";
-  
- }
+	if {[file exists "/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav"] == 1} {
+		puts "Name.wav file exists!";
+		playMsg "Default" "activating";
+		playMsg "svxlinkmanager" "Name";
+	}
+
+}
 
 
 #
