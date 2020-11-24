@@ -14,7 +14,7 @@ namespace SvxlinkManager.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9");
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -26,26 +26,26 @@ namespace SvxlinkManager.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
                         new
                         {
-                            Id = "7a989617-fed4-4c80-8151-f590f4246552",
-                            ConcurrencyStamp = "fbd2043d-75ad-4bca-8d88-3ace76d445e0",
+                            Id = "e43cc21f-5786-4227-92ef-bf098ed95921",
+                            ConcurrencyStamp = "5d2fafe9-62f2-4066-9762-e86ae8721bc4",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -87,8 +87,8 @@ namespace SvxlinkManager.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
@@ -100,12 +100,12 @@ namespace SvxlinkManager.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("TEXT");
@@ -123,17 +123,17 @@ namespace SvxlinkManager.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -164,12 +164,12 @@ namespace SvxlinkManager.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("TEXT");
@@ -206,12 +206,12 @@ namespace SvxlinkManager.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .HasColumnType("TEXT");
@@ -258,6 +258,9 @@ namespace SvxlinkManager.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("SoundName")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Channels");
@@ -267,105 +270,113 @@ namespace SvxlinkManager.Migrations
                         {
                             Id = 1,
                             AuthKey = "Magnifique123456789!",
-                            CallSign = "(CH) HB9GXP2 H",
+                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 96,
                             Host = "rrf2.f5nlg.ovh",
                             IsDefault = true,
                             IsTemporized = false,
                             Name = "Réseau des Répéteurs Francophones",
                             Port = 5300,
-                            ReportCallSign = "HB9GXP"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Srrf.wav"
                         },
                         new
                         {
                             Id = 2,
                             AuthKey = "xD9wW5gO7yD9hN5o",
-                            CallSign = "(CH) HB9GXP2 H",
+                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 104,
                             Host = "salonsuisseromand.northeurope.cloudapp.azure.com",
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Suisse Romand",
                             Port = 5300,
-                            ReportCallSign = "HB9GXP"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Sreg.wav"
                         },
                         new
                         {
                             Id = 3,
                             AuthKey = "FON-F1TZO",
-                            CallSign = "(CH) HB9GXP2 H",
+                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 97,
                             Host = "serveur.f1tzo.com",
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "French Open Network",
                             Port = 5300,
-                            ReportCallSign = "HB9GXP"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Sfon.wav"
                         },
                         new
                         {
                             Id = 4,
                             AuthKey = "Magnifique123456789!",
-                            CallSign = "(CH) HB9GXP2 H",
+                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 98,
                             Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Technique",
                             Port = 5301,
-                            ReportCallSign = "HB9GXP"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Stec.wav"
                         },
                         new
                         {
                             Id = 5,
                             AuthKey = "Magnifique123456789!",
-                            CallSign = "(CH) HB9GXP2 H",
+                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 99,
                             Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon International",
                             Port = 5302,
-                            ReportCallSign = "HB9GXP"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Sint.wav"
                         },
                         new
                         {
                             Id = 6,
                             AuthKey = "FON-F1TZO",
-                            CallSign = "(CH) HB9GXP2 H",
+                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 100,
                             Host = "serveur.f1tzo.com",
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Bavardage",
                             Port = 5301,
-                            ReportCallSign = "HB9GXP"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Sbav.wav"
                         },
                         new
                         {
                             Id = 7,
                             AuthKey = "FON-F1TZO",
-                            CallSign = "(CH) HB9GXP2 H",
+                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 101,
                             Host = "serveur.f1tzo.com",
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Local",
                             Port = 5302,
-                            ReportCallSign = "HB9GXP"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Sloc.wav"
                         },
                         new
                         {
                             Id = 8,
                             AuthKey = "Magnifique123456789!",
-                            CallSign = "(CH) HB9GXP2 H",
+                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 102,
                             Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Expérimental",
                             Port = 5303,
-                            ReportCallSign = "HB9GXP"
+                            ReportCallSign = "SVX4LINK",
+                            SoundName = "Sexp.wav"
                         });
                 });
 
@@ -451,7 +462,7 @@ namespace SvxlinkManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ChannelId")
+                    b.Property<int?>("ChannelId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Day")
@@ -525,9 +536,9 @@ namespace SvxlinkManager.Migrations
                 {
                     b.HasOne("SvxlinkManager.Models.Channel", "Channel")
                         .WithMany()
-                        .HasForeignKey("ChannelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ChannelId");
+
+                    b.Navigation("Channel");
                 });
 #pragma warning restore 612, 618
         }

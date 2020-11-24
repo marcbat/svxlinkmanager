@@ -10,6 +10,7 @@
   <div class="col-3">
     <select class="form-control" @bind="@Channel" style="width:auto;">
       <option value="0">Déconnecter</option>
+      <option value="1000">Perroquet</option>
       @foreach (var channel in Channels)
       {
         <option value="@channel.Id">@channel.Name</option>

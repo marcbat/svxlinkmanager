@@ -17,6 +17,7 @@ using Spotnik.Gui.Areas.Identity;
 using SvxlinkManager.Data;
 using SvxlinkManager.Repositories;
 using SvxlinkManager.Service;
+using System.IO;
 
 namespace SvxlinkManager
 {
@@ -44,10 +45,12 @@ namespace SvxlinkManager
       services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 
       
-      services.AddSingleton<IDbContextFactory<ApplicationDbContext>, DbContextFactory<ApplicationDbContext>>();
+      services.AddSingleton<Data.IDbContextFactory<ApplicationDbContext>, DbContextFactory<ApplicationDbContext>>();
       services.AddSingleton<IRepositories, Repositories.Repositories>();
       services.AddSingleton<SvxLinkService>();
       services.AddSingleton<Sa818Service>();
+
+      services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,7 +89,14 @@ namespace SvxlinkManager
         endpoints.MapFallbackToPage("/_Host");
       });
 
+      // ajout de l'utilisateur admin
       ApplicationDbInitializer.SeedUsers(userManager);
+
+      // Copy du fichier logic.tcl
+      if (!Directory.Exists("/usr/share/svxlink/events.d/local"))
+        Directory.CreateDirectory("/usr/share/svxlink/events.d/local");
+
+      File.Copy($"{Directory.GetCurrentDirectory()}/SvxlinkConfig/Logic.tcl", "/usr/share/svxlink/events.d/local/Logic.tcl", true);
     }
   }
 }

@@ -1,51 +1,57 @@
-﻿
+﻿@using System.IO;
 
   <EditForm Model="@Channel" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <div class="form-group">
-      <label for="inputName">Name</label>
-      <InputText @bind-Value="Channel.Name" type="text" class="form-control" id="inputName" placeholder="Nom du salon" />
-    </div>
     <div class="form-row">
       <div class="form-group col-md-6">
-        <label for="inputHost">Host</label>
-        <InputText @bind-Value="Channel.Host" type="text" class="form-control" id="inputHost" placeholder="url du serveur svxreflector" />
+        <label for="inputName">Name</label>
+        <InputText @bind-Value="Channel.Name" type="text" class="form-control" id="inputName" placeholder="Nom du salon" />
       </div>
       <div class="form-group col-md-6">
-        <label for="inputPort">Port</label>
-        <InputNumber @bind-Value="Channel.Port" type="number" class="form-control" id="inputPort" placeholder=5300 />
+        <label for="inputName">Annonce vocal</label>
+        <InputFile OnChange="@OnInputFileChange" class="form-control" id="inputName" />
       </div>
     </div>
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <label for="inputCallSign">Indicatif annoncé</label>
-        <InputText @bind-Value="Channel.ReportCallSign" type="text" class="form-control" id="inputCallSign" placeholder="L'indicatif audio annoncé" />
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputHost">Host</label>
+          <InputText @bind-Value="Channel.Host" type="text" class="form-control" id="inputHost" placeholder="url du serveur svxreflector" />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputPort">Port</label>
+          <InputNumber @bind-Value="Channel.Port" type="number" class="form-control" id="inputPort" placeholder=5300 />
+        </div>
       </div>
-      <div class="form-group col-md-4">
-        <label for="inputCallSign">Indicatif</label>
-        <InputText @bind-Value="Channel.CallSign" type="text" class="form-control" id="inputCallSign" placeholder="Votre identitfiant svxlink" />
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="inputCallSign">Indicatif annoncé</label>
+          <InputText @bind-Value="Channel.ReportCallSign" type="text" class="form-control" id="inputCallSign" placeholder="L'indicatif audio annoncé" />
+        </div>
+        <div class="form-group col-md-4">
+          <label for="inputCallSign">Indicatif</label>
+          <InputText @bind-Value="Channel.CallSign" type="text" class="form-control" id="inputCallSign" placeholder="Votre identitfiant svxlink" />
+        </div>
+        <div class="form-group col-md-4">
+          <label for="inputAuthKey">Mot de passe</label>
+          <InputText @bind-Value="Channel.AuthKey" type="password" class="form-control" id="inputAuthKey" />
+        </div>
       </div>
-      <div class="form-group col-md-4">
-        <label for="inputAuthKey">Mot de passe</label>
-        <InputText @bind-Value="Channel.AuthKey" type="password" class="form-control" id="inputAuthKey" />
-      </div>
-    </div>
 
-    <div class="form-row">
-      <div class="form-check form-check-inline">
-        <InputCheckbox @bind-Value="IsDefault" type="checkbox" class="form-check-input" id="inputIsDefault" />
-        <label class="form-check-label" for="inputIsDefault">Salon par défaut</label>
+      <div class="form-row">
+        <div class="form-check form-check-inline">
+          <InputCheckbox @bind-Value="IsDefault" type="checkbox" class="form-check-input" id="inputIsDefault" />
+          <label class="form-check-label" for="inputIsDefault">Salon par défaut</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <InputCheckbox @bind-Value="IsTemporized" type="checkbox" class="form-check-input" id="inputIsTemporized" />
+          <label class="form-check-label" for="inputIsTemporized">Temporisé</label>
+        </div>
       </div>
-      <div class="form-check form-check-inline">
-        <InputCheckbox @bind-Value="IsTemporized" type="checkbox" class="form-check-input" id="inputIsTemporized" />
-        <label class="form-check-label" for="inputIsTemporized">Temporisé</label>
-      </div>
-    </div>
 
-    <button type="submit" class="btn btn-success">@SubmitTitle</button> <a class="btn btn-primary" href="Channel/Manage" role="button">Annuler</a>
-  </EditForm>
+      <button type="submit" class="btn btn-success">@SubmitTitle</button> <a class="btn btn-primary" href="Channel/Manage" role="button">Annuler</a>
+</EditForm>
 
 @code{
   [Parameter]
@@ -72,6 +78,11 @@
   {
     get => Channel.IsTemporized;
     set => Channel.IsTemporized = value;
+  }
+
+  private void OnInputFileChange(InputFileChangeEventArgs eventArgs)
+  {
+    Channel.Sound = eventArgs.File;
   }
 
 }

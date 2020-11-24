@@ -11,10 +11,10 @@ namespace SvxlinkManager.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true)
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -25,21 +25,21 @@ namespace SvxlinkManager.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PasswordHash = table.Column<string>(type: "TEXT", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,17 +50,18 @@ namespace SvxlinkManager.Migrations
                 name: "Channels",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: false),
-                    Host = table.Column<string>(nullable: false),
-                    AuthKey = table.Column<string>(nullable: true),
-                    Port = table.Column<int>(nullable: false),
-                    CallSign = table.Column<string>(nullable: false),
-                    ReportCallSign = table.Column<string>(nullable: false),
-                    IsDefault = table.Column<bool>(nullable: false),
-                    IsTemporized = table.Column<bool>(nullable: false),
-                    Dtmf = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Host = table.Column<string>(type: "TEXT", nullable: false),
+                    AuthKey = table.Column<string>(type: "TEXT", nullable: true),
+                    Port = table.Column<int>(type: "INTEGER", nullable: false),
+                    CallSign = table.Column<string>(type: "TEXT", nullable: false),
+                    ReportCallSign = table.Column<string>(type: "TEXT", nullable: false),
+                    IsDefault = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsTemporized = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Dtmf = table.Column<int>(type: "INTEGER", nullable: false),
+                    SoundName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -71,19 +72,19 @@ namespace SvxlinkManager.Migrations
                 name: "RadioProfiles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true),
-                    Enable = table.Column<bool>(nullable: false),
-                    RxFequ = table.Column<string>(nullable: true),
-                    TxFrequ = table.Column<string>(nullable: true),
-                    Squelch = table.Column<string>(nullable: true),
-                    TxCtcss = table.Column<string>(nullable: true),
-                    RxCtcss = table.Column<string>(nullable: true),
-                    Volume = table.Column<string>(nullable: true),
-                    PreEmph = table.Column<string>(nullable: true),
-                    HightPass = table.Column<string>(nullable: true),
-                    LowPass = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Enable = table.Column<bool>(type: "INTEGER", nullable: false),
+                    RxFequ = table.Column<string>(type: "TEXT", nullable: true),
+                    TxFrequ = table.Column<string>(type: "TEXT", nullable: true),
+                    Squelch = table.Column<string>(type: "TEXT", nullable: true),
+                    TxCtcss = table.Column<string>(type: "TEXT", nullable: true),
+                    RxCtcss = table.Column<string>(type: "TEXT", nullable: true),
+                    Volume = table.Column<string>(type: "TEXT", nullable: true),
+                    PreEmph = table.Column<string>(type: "TEXT", nullable: true),
+                    HightPass = table.Column<string>(type: "TEXT", nullable: true),
+                    LowPass = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -94,11 +95,11 @@ namespace SvxlinkManager.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    RoleId = table.Column<string>(nullable: false),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    RoleId = table.Column<string>(type: "TEXT", nullable: false),
+                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
+                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -115,11 +116,11 @@ namespace SvxlinkManager.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<string>(nullable: false),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
+                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -136,10 +137,10 @@ namespace SvxlinkManager.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    LoginProvider = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "TEXT", nullable: true),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -156,8 +157,8 @@ namespace SvxlinkManager.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    RoleId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -180,10 +181,10 @@ namespace SvxlinkManager.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
-                    Value = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    LoginProvider = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    Value = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -200,12 +201,12 @@ namespace SvxlinkManager.Migrations
                 name: "Rules",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Enable = table.Column<bool>(nullable: false),
-                    Day = table.Column<int>(nullable: false),
-                    Duration = table.Column<int>(nullable: false),
-                    ChannelId = table.Column<int>(nullable: false)
+                    Enable = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Day = table.Column<int>(type: "INTEGER", nullable: false),
+                    Duration = table.Column<int>(type: "INTEGER", nullable: false),
+                    ChannelId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -215,53 +216,53 @@ namespace SvxlinkManager.Migrations
                         column: x => x.ChannelId,
                         principalTable: "Channels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "7a989617-fed4-4c80-8151-f590f4246552", "fbd2043d-75ad-4bca-8d88-3ace76d445e0", "Admin", "ADMIN" });
+                values: new object[] { "e43cc21f-5786-4227-92ef-bf098ed95921", "5d2fafe9-62f2-4066-9762-e86ae8721bc4", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 1, "Magnifique123456789!", "(CH) HB9GXP2 H", 96, "rrf2.f5nlg.ovh", true, false, "Réseau des Répéteurs Francophones", 5300, "HB9GXP" });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign", "SoundName" },
+                values: new object[] { 1, "Magnifique123456789!", "(CH) SVX4LINK H", 96, "rrf2.f5nlg.ovh", true, false, "Réseau des Répéteurs Francophones", 5300, "SVX4LINK", "Srrf.wav" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 2, "xD9wW5gO7yD9hN5o", "(CH) HB9GXP2 H", 104, "salonsuisseromand.northeurope.cloudapp.azure.com", false, true, "Salon Suisse Romand", 5300, "HB9GXP" });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign", "SoundName" },
+                values: new object[] { 2, "xD9wW5gO7yD9hN5o", "(CH) SVX4LINK H", 104, "salonsuisseromand.northeurope.cloudapp.azure.com", false, true, "Salon Suisse Romand", 5300, "SVX4LINK", "Sreg.wav" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 3, "FON-F1TZO", "(CH) HB9GXP2 H", 97, "serveur.f1tzo.com", false, true, "French Open Network", 5300, "HB9GXP" });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign", "SoundName" },
+                values: new object[] { 3, "FON-F1TZO", "(CH) SVX4LINK H", 97, "serveur.f1tzo.com", false, true, "French Open Network", 5300, "SVX4LINK", "Sfon.wav" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 4, "Magnifique123456789!", "(CH) HB9GXP2 H", 98, "rrf3.f5nlg.ovh", false, true, "Salon Technique", 5301, "HB9GXP" });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign", "SoundName" },
+                values: new object[] { 4, "Magnifique123456789!", "(CH) SVX4LINK H", 98, "rrf3.f5nlg.ovh", false, true, "Salon Technique", 5301, "SVX4LINK", "Stec.wav" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 5, "Magnifique123456789!", "(CH) HB9GXP2 H", 99, "rrf3.f5nlg.ovh", false, true, "Salon International", 5302, "HB9GXP" });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign", "SoundName" },
+                values: new object[] { 5, "Magnifique123456789!", "(CH) SVX4LINK H", 99, "rrf3.f5nlg.ovh", false, true, "Salon International", 5302, "SVX4LINK", "Sint.wav" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 6, "FON-F1TZO", "(CH) HB9GXP2 H", 100, "serveur.f1tzo.com", false, true, "Salon Bavardage", 5301, "HB9GXP" });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign", "SoundName" },
+                values: new object[] { 6, "FON-F1TZO", "(CH) SVX4LINK H", 100, "serveur.f1tzo.com", false, true, "Salon Bavardage", 5301, "SVX4LINK", "Sbav.wav" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 7, "FON-F1TZO", "(CH) HB9GXP2 H", 101, "serveur.f1tzo.com", false, true, "Salon Local", 5302, "HB9GXP" });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign", "SoundName" },
+                values: new object[] { 7, "FON-F1TZO", "(CH) SVX4LINK H", 101, "serveur.f1tzo.com", false, true, "Salon Local", 5302, "SVX4LINK", "Sloc.wav" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
-                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign" },
-                values: new object[] { 8, "Magnifique123456789!", "(CH) HB9GXP2 H", 102, "rrf3.f5nlg.ovh", false, true, "Salon Expérimental", 5303, "HB9GXP" });
+                columns: new[] { "Id", "AuthKey", "CallSign", "Dtmf", "Host", "IsDefault", "IsTemporized", "Name", "Port", "ReportCallSign", "SoundName" },
+                values: new object[] { 8, "Magnifique123456789!", "(CH) SVX4LINK H", 102, "rrf3.f5nlg.ovh", false, true, "Salon Expérimental", 5303, "SVX4LINK", "Sexp.wav" });
 
             migrationBuilder.InsertData(
                 table: "RadioProfiles",

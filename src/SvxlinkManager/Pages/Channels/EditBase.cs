@@ -16,7 +16,7 @@ namespace SvxlinkManager.Pages.Channels
     [Parameter]
     public string Id { get; set; }
 
-    override protected void HandleValidSubmit()
+    public void HandleValidSubmit()
     {
       Repositories.Channels.Update(Channel);
 
