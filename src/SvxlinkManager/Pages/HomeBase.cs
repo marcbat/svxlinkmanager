@@ -24,8 +24,6 @@ namespace SvxlinkManager.Pages
 {
   public class HomeBase : ChannelBase, INotifyPropertyChanged
   {
-    private string status = "Déconnecté";
-
     public event PropertyChangedEventHandler PropertyChanged;
 
     protected override async Task OnInitializedAsync()
@@ -34,17 +32,11 @@ namespace SvxlinkManager.Pages
       await base.OnInitializedAsync().ConfigureAwait(false);
 
       SvxLinkService.Connected += () =>
-      {
-        Status = "Connectés";
         InvokeAsync(() => StateHasChanged());
-      };
 
       SvxLinkService.Disconnected += () =>
-      {
-        Status = "Déconnecté";
         InvokeAsync(() => StateHasChanged());
-      };
-        
+
       SvxLinkService.NodeConnected += n =>
         InvokeAsync(() => StateHasChanged());
 
@@ -64,12 +56,7 @@ namespace SvxlinkManager.Pages
 
     public string Status
     {
-      get => status;
-      set
-      {
-        status = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Status)));
-      }
+      get => SvxLinkService.Status;
     }
 
     public int Channel

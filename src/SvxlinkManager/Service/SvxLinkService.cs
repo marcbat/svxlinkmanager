@@ -80,8 +80,12 @@ namespace SvxlinkManager.Service
             break;
         }
       }
-        
+
     }
+
+    public List<Node> Nodes { get; set; } = new List<Node>();
+
+    public string Status { get; set; } = "Déconnecté";
 
     private void Parrot()
     {
@@ -116,9 +120,6 @@ namespace SvxlinkManager.Service
       logger.LogInformation("Séléction du salon perroquet.");
       ExecuteCommand("echo '1#'> /tmp/dtmf_uhf");
     }
-
-    public List<Node> Nodes { get; set; } = new List<Node>();
-
     private void RunsvxLink()
     {
       var cmd = $"svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config={applicationPath}/SvxlinkConfig/svxlink.current";
@@ -152,6 +153,8 @@ namespace SvxlinkManager.Service
         SetTimer(channel);
 
       SetWatcher();
+
+      Status = "Connecté";
     }
 
     private void SetWatcher()
@@ -203,6 +206,8 @@ namespace SvxlinkManager.Service
       var pid = ExecuteCommand("pgrep -x svxlink");
       if (pid != null)
         ExecuteCommand("pkill -TERM svxlink");
+
+      Status = "Déconnecté";
     }
 
     private void ShellOutputDataReceived(object sender, DataReceivedEventArgs e)
