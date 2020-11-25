@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,21 +9,32 @@ namespace SvxlinkManager.Pages.Channels
 {
   public class EditBase : AddEditBase
   {
-    protected override void OnInitialized()
-    {
-      Channel = Repositories.Channels.Get(int.Parse(Id));
-    }
+    #region Properties
 
     [Parameter]
     public string Id { get; set; }
 
-    public void HandleValidSubmit()
+    protected override string SubmitTitle => "Modifier";
+
+    #endregion Properties
+
+    #region Methods
+
+    /// <summary>
+    /// Handles the form submit.
+    /// </summary>
+    public override async Task HandleValidSubmit()
     {
       Repositories.Channels.Update(Channel);
 
       NavigationManager.NavigateTo("Channel/Manage");
     }
 
-    protected override string SubmitTitle => "Modifier";
+    protected override void OnInitialized()
+    {
+      Channel = Repositories.Channels.Get(int.Parse(Id));
+    }
+
+    #endregion Methods
   }
 }
