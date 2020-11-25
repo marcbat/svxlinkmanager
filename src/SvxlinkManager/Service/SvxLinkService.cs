@@ -32,7 +32,8 @@ namespace SvxlinkManager.Service
     private Timer timer;
     private int channelId;
     private DateTime lastTx;
-    
+
+    private FileSystemWatcher watcher;
 
     public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories)
     {
@@ -149,6 +150,37 @@ namespace SvxlinkManager.Service
       var channel = repositories.Channels.Find(channelId);
       if (channel != null)
         SetTimer(channel);
+
+      SetWatcher();
+    }
+
+    private void SetWatcher()
+    {
+      var dtmfFilePath = $"{applicationPath}/SvxlinkConfig/dtmf.conf";
+
+      watcher = new FileSystemWatcher
+      {
+        Path = Path.GetDirectoryName(dtmfFilePath),
+        Filter = Path.GetFileName(dtmfFilePath)
+      };
+
+      watcher.Changed += (s, e) =>
+      {
+        logger.LogInformation("Changement de dtmf détécté.");
+        var dtmf = File.ReadAllText(dtmfFilePath);
+        logger.LogInformation($"Nouveau dtmf {dtmf}");
+
+        var channel = repositories.Channels.FindBy(c => c.Dtmf == Int32.Parse(dtmf));
+        if(channel == null)
+        {
+          logger.LogInformation($"Le dtmf {dtmf} ne correspond à aucun channel.");
+          return;
+        }
+
+        Channel = channel.Id;
+      };
+
+      watcher.EnableRaisingEvents = true;
     }
 
     private void SetTimer(Channel channel)
@@ -166,6 +198,7 @@ namespace SvxlinkManager.Service
       logger.LogInformation("Kill de svxlink.");
 
       timer?.Stop();
+      watcher?.Dispose();
 
       var pid = ExecuteCommand("pgrep -x svxlink");
       if (pid != null)
