@@ -120,6 +120,7 @@ namespace SvxlinkManager.Service
       logger.LogInformation("Séléction du salon perroquet.");
       ExecuteCommand("echo '1#'> /tmp/dtmf_uhf");
     }
+
     private void RunsvxLink()
     {
       var cmd = $"svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config={applicationPath}/SvxlinkConfig/svxlink.current";

@@ -42,17 +42,26 @@ namespace SvxlinkManager.Pages
 
       SvxLinkService.NodeDisconnected += n =>
         InvokeAsync(() => StateHasChanged());
-      
+
       SvxLinkService.NodeTx += n =>
+      {
+        CurrentTxNode = n;
         InvokeAsync(() => StateHasChanged());
-      
+      };
+
       SvxLinkService.NodeRx += n =>
+      {
+        CurrentTxNode = null;
         InvokeAsync(() => StateHasChanged());
+      };
+        
       
     }
 
     [Inject]
     public SvxLinkService SvxLinkService { get; set; }
+
+    public Models.Node CurrentTxNode { get; set; }
 
     public string Status
     {
