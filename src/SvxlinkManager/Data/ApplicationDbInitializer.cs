@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SvxlinkManager.Data
 {
   public static class ApplicationDbInitializer
   {
+    #region Methods
+
+    /// <summary>
+    /// If not exist, seed the admin user and add to Admin role.
+    /// </summary>
+    /// <param name="userManager">The user manager.</param>
     public static void SeedUsers(UserManager<IdentityUser> userManager)
     {
       if (userManager.FindByEmailAsync("admin@svxlinkmanager.com").Result == null)
@@ -26,5 +28,7 @@ namespace SvxlinkManager.Data
         }
       }
     }
+
+    #endregion Methods
   }
 }
