@@ -3,20 +3,26 @@
 
 @inherits SvxlinkManager.Pages.HomeBase
 
-<h3>Salons <small>(@if (Nodes.Any())
-{@Nodes.Count} @Status)</small></h3>
+<h3>Salons <small>(@Subtitle)</small></h3> 
 
 <div class="row">
-  <div class="col-3">
-    <select class="form-control" @bind="@Channel" style="width:auto;">
-      <option value="0">Déconnecter</option>
-      <option value="1000">Perroquet</option>
-      @foreach (var channel in Channels)
-      {
-        <option value="@channel.Id">@channel.Name</option>
-      }
-    </select>
+  <div class="col-5">
+    <div class="d-inline-block">
+      <select class="form-control" @bind="@Channel" style="width:auto;">
+        <option value="0">Déconnecter</option>
+        <option value="1000">Perroquet</option>
+        @foreach (var channel in Channels)
+        {
+          <option value="@channel.Id">@channel.Name</option>
+        }
+      </select>
+    </div>
+    <div class="d-inline-block">
+      @if (CurrentTxNode != null)
+      {<Node CurrentNode="@CurrentTxNode" />}
+    </div>
   </div>
+
 </div>
 
 <div class="row node-list">
@@ -28,5 +34,17 @@
   </div>
 </div>
 
+@code {
+  public string Subtitle
+  {
+    get
+    {
+      if (Nodes.Any())
+        return $"{Nodes.Count} {Status}";
+      else
+        return $"{Status}";
+    }
+  }
 
+}
 
