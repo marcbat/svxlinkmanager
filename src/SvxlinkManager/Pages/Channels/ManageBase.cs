@@ -35,6 +35,11 @@ namespace SvxlinkManager.Pages.Channels
       NavigationManager.NavigateTo("/Channel/Manage");
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+      await base.OnInitializedAsync().ConfigureAwait(false);
+    }
+
     #endregion Methods
   }
 }

@@ -30,6 +30,9 @@ namespace SvxlinkManager.Data
     public DbSet<Channel> Channels { get; set; }
 
     public DbSet<RadioProfile> RadioProfiles { get; set; }
+
+    public DbSet<WifiConnection> WifiConnections { get; set; }
+
     public DbSet<Rule> Rules { get; set; }
 
     #endregion Properties

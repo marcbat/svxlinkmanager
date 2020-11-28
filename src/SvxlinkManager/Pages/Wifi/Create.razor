@@ -1,0 +1,38 @@
+﻿@page "/Wifi/Create"
+@inherits SvxlinkManager.Pages.Wifi.CreateBase
+
+@attribute [Authorize]
+
+<h3>Ajouter une connexion</h3>
+
+<EditForm Model="@Connection" OnValidSubmit="@HandleValidSubmit">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label>SSID</label>
+      <InputSelect @bind-Value="Connection.Ssid" class="form-control">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+      </InputSelect>
+    </div>
+    <div class="form-group col-md-6">
+      <label>RX</label>
+      <InputText @bind-Value="Connection.Password" type="password" class="form-control" />
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-success">Sauver</button> <a class="btn btn-primary" href="RadioProfile/Manage" role="button">Annuler</a>
+</EditForm>
+
+@code {
+
+}

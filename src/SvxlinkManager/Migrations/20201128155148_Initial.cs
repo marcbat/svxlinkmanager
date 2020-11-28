@@ -92,6 +92,23 @@ namespace SvxlinkManager.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WifiConnections",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Ssid = table.Column<string>(type: "TEXT", nullable: true),
+                    Uuid = table.Column<string>(type: "TEXT", nullable: true),
+                    Password = table.Column<string>(type: "TEXT", nullable: true),
+                    Bars = table.Column<int>(type: "INTEGER", nullable: false),
+                    InUse = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WifiConnections", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -222,7 +239,7 @@ namespace SvxlinkManager.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "e43cc21f-5786-4227-92ef-bf098ed95921", "5d2fafe9-62f2-4066-9762-e86ae8721bc4", "Admin", "ADMIN" });
+                values: new object[] { "7e324750-0ca6-4ccb-b8a9-ed970e1b8f03", "a6a3b147-2500-486f-ae8b-b79ce3ec90c0", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "Channels",
@@ -339,6 +356,9 @@ namespace SvxlinkManager.Migrations
 
             migrationBuilder.DropTable(
                 name: "Rules");
+
+            migrationBuilder.DropTable(
+                name: "WifiConnections");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

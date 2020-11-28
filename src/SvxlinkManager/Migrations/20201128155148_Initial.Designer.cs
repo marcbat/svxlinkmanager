@@ -9,7 +9,7 @@ using SvxlinkManager.Data;
 namespace SvxlinkManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201122170936_Initial")]
+    [Migration("20201128155148_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,8 +46,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e43cc21f-5786-4227-92ef-bf098ed95921",
-                            ConcurrencyStamp = "5d2fafe9-62f2-4066-9762-e86ae8721bc4",
+                            Id = "7e324750-0ca6-4ccb-b8a9-ed970e1b8f03",
+                            ConcurrencyStamp = "a6a3b147-2500-486f-ae8b-b79ce3ec90c0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -481,6 +481,32 @@ namespace SvxlinkManager.Migrations
                     b.HasIndex("ChannelId");
 
                     b.ToTable("Rules");
+                });
+
+            modelBuilder.Entity("SvxlinkManager.Models.WifiConnection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Bars")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("InUse")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Ssid")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Uuid")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WifiConnections");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

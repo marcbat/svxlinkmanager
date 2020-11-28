@@ -17,8 +17,6 @@ namespace SvxlinkManager.Service
 {
   public class SvxLinkService
   {
-    #region Fields
-
     private readonly string applicationPath = Directory.GetCurrentDirectory();
 
     private readonly ILogger<SvxLinkService> logger;
@@ -27,16 +25,14 @@ namespace SvxlinkManager.Service
 
     private int channelId;
 
-    /// <summary>Datetime of the last TX on the current channel.</summary>
+    /// <summary>
+    /// Datetime of the last TX on the current channel.
+    /// </summary>
     private DateTime lastTx;
 
     private Timer timer;
 
     private FileSystemWatcher watcher;
-
-    #endregion Fields
-
-    #region Constructors
 
     public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories)
     {
@@ -47,31 +43,39 @@ namespace SvxlinkManager.Service
       Connected += () => lastTx = DateTime.Now;
     }
 
-    #endregion Constructors
-
-    #region Events
-
-    /// <summary>Occurs when svxlink is connected</summary>
+    /// <summary>
+    /// Occurs when svxlink is connected
+    /// </summary>
     public event Action Connected;
-    /// <summary>Occurs when svxlink is disconnected</summary>
+
+    /// <summary>
+    /// Occurs when svxlink is disconnected
+    /// </summary>
     public event Action Disconnected;
 
-    /// <summary>Occurs when a new node join the channel</summary>
+    /// <summary>
+    /// Occurs when a new node join the channel
+    /// </summary>
     public event Action<Node> NodeConnected;
-    /// <summary>Occurs when a node quit the channel</summary>
+
+    /// <summary>
+    /// Occurs when a node quit the channel
+    /// </summary>
     public event Action<Node> NodeDisconnected;
 
-    /// <summary>Occurs when a node stop a transmission.</summary>
+    /// <summary>
+    /// Occurs when a node stop a transmission.
+    /// </summary>
     public event Action<Node> NodeRx;
 
-    /// <summary>Occurs when a node start a transmission.</summary>
+    /// <summary>
+    /// Occurs when a node start a transmission.
+    /// </summary>
     public event Action<Node> NodeTx;
 
-    #endregion Events
-
-    #region Properties
-
-    /// <summary>Gets or sets the current channel Id</summary>
+    /// <summary>
+    /// Gets or sets the current channel Id
+    /// </summary>
     /// <value>Current channel Id</value>
     public int Channel
     {
@@ -95,22 +99,23 @@ namespace SvxlinkManager.Service
             break;
         }
       }
-
     }
 
-    /// <summary>List of connected nodes</summary>
+    /// <summary>
+    /// List of connected nodes
+    /// </summary>
     /// <value>connected nodes</value>
     public List<Node> Nodes { get; set; } = new List<Node>();
 
-    /// <summary>Current channel status</summary>
+    /// <summary>
+    /// Current channel status
+    /// </summary>
     /// <value>Current status</value>
     public string Status { get; set; } = "Déconnecté";
 
-    #endregion Properties
-
-    #region Methods
-
-    /// <summary>Execute a cli command</summary>
+    /// <summary>
+    /// Execute a cli command
+    /// </summary>
     /// <param name="cmd">The command.</param>
     /// <returns>Console output</returns>
     private static string ExecuteCommand(string cmd)
@@ -136,9 +141,8 @@ namespace SvxlinkManager.Service
     }
 
     /// <summary>
-    ///   <para>
-    /// Changes the Current channel.</para>
-    ///   <para>Group Stop, replace config and start svxlink.</para>
+    /// <para>Changes the Current channel.</para>
+    /// <para>Group Stop, replace config and start svxlink.</para>
     /// </summary>
     private void ChangeChannel()
     {
@@ -170,7 +174,6 @@ namespace SvxlinkManager.Service
         {"HOST", channel.Host },
         {"AUTH_KEY",channel.AuthKey },
         {"PORT" ,channel.Port.ToString()}
-
       };
       var parameters = new Dictionary<string, Dictionary<string, string>>
       {
@@ -193,23 +196,27 @@ namespace SvxlinkManager.Service
       logger.LogInformation($"Le channel {channel.Name} est connecté.");
     }
 
-    /// <summary>Checks if the channel temporisation is exceeded</summary>
+    /// <summary>
+    /// Checks if the channel temporisation is exceeded
+    /// </summary>
     /// <param name="s">Timer</param>
-    /// <param name="e">The <see cref="ElapsedEventArgs" /> instance containing the event data.</param>
+    /// <param name="e">The <see cref="ElapsedEventArgs"/> instance containing the event data.</param>
     private void CheckTemporized(object s, ElapsedEventArgs e)
     {
       var diff = (DateTime.Now - lastTx).TotalSeconds;
 
       logger.LogInformation($"Durée depuis le dernier passage en émission {diff} secondes.");
 
-      if ( diff > 180)
+      if (diff > 180)
       {
         logger.LogInformation("Delai d'inactivité dépassé. Retour au salon par défaut.");
         Channel = repositories.Channels.GetDefault().Id;
       }
-        
     }
-    /// <summary>Activate the Parrot module</summary>
+
+    /// <summary>
+    /// Activate the Parrot module
+    /// </summary>
     private void Parrot()
     {
       // Stop svxlink
@@ -244,7 +251,9 @@ namespace SvxlinkManager.Service
       ExecuteCommand("echo '1#'> /tmp/dtmf_uhf");
     }
 
-    /// <summary>Parse the Svxlink logs</summary>
+    /// <summary>
+    /// Parse the Svxlink logs
+    /// </summary>
     /// <param name="s">one Log line</param>
     private void ParseLog(string s)
     {
@@ -291,15 +300,28 @@ namespace SvxlinkManager.Service
         node.ClassName = "node";
         NodeRx?.Invoke(node);
       }
-
     }
 
-    /// <summary>Replace parameters int svxlink.current ini file</summary>
+    /// <summary>
+    /// Replace parameters int svxlink.current ini file
+    /// </summary>
     /// <param name="parameters">Dictionnary of parameters</param>
     /// <example>
-    ///   <para> var global = new Dictionary&lt;string, string&gt;<br />      {<br />        { "LOGICS", "SimplexLogic,ReflectorLogic" }<br />      };<br />      var simplexlogic = new Dictionary&lt;string, string&gt; {<br />        { "MODULES", "ModuleHelp,ModuleMetarInfo,ModulePropagationMonitor"},<br />        { "CALLSIGN", channel.ReportCallSign},<br />        { "REPORT_CTCSS", radioProfile.RxTone}<br />      };<br />      var ReflectorLogic = new Dictionary&lt;string, string&gt;<br />      {<br />        {"CALLSIGN", channel.CallSign },<br />        {"HOST", channel.Host },<br />        {"AUTH_KEY",channel.AuthKey },<br />        {"PORT" ,channel.Port.ToString()}</para>
-    ///   <para>      };<br />      var parameters = new Dictionary&lt;string, Dictionary&lt;string, string&gt;&gt; <br />      {<br />        {"GLOBAL", global },<br />        {"SimplexLogic", simplexlogic },<br />        {"ReflectorLogic" , ReflectorLogic}<br />      };<br /></para>
-    ///   <code></code>
+    /// <para>
+    /// var global = new Dictionary&lt;string, string&gt; <br/> { <br/> { "LOGICS",
+    /// "SimplexLogic,ReflectorLogic" } <br/> }; <br/> var simplexlogic = new Dictionary&lt;string,
+    /// string&gt; { <br/> { "MODULES", "ModuleHelp,ModuleMetarInfo,ModulePropagationMonitor"},
+    /// <br/> { "CALLSIGN", channel.ReportCallSign}, <br/> { "REPORT_CTCSS", radioProfile.RxTone}
+    /// <br/> }; <br/> var ReflectorLogic = new Dictionary&lt;string, string&gt; <br/> { <br/>
+    /// {"CALLSIGN", channel.CallSign }, <br/> {"HOST", channel.Host }, <br/>
+    /// {"AUTH_KEY",channel.AuthKey }, <br/> {"PORT" ,channel.Port.ToString()}
+    /// </para>
+    /// <para>
+    /// }; <br/> var parameters = new Dictionary&lt;string, Dictionary&lt;string, string&gt;&gt;
+    /// <br/> { <br/> {"GLOBAL", global }, <br/> {"SimplexLogic", simplexlogic }, <br/>
+    /// {"ReflectorLogic" , ReflectorLogic} <br/> }; <br/>
+    /// </para>
+    /// <code></code>
     /// </example>
     private void ReplaceConfig(Dictionary<string, Dictionary<string, string>> parameters)
     {
@@ -316,10 +338,11 @@ namespace SvxlinkManager.Service
           data[section.Key][parameter.Key] = parameter.Value;
 
       parser.WriteFile($"{applicationPath}/SvxlinkConfig/svxlink.current", data, utf8WithoutBom);
-
     }
 
-    /// <summary>Sets the file watcher. This watcher monitor dtmf.conf file.</summary>
+    /// <summary>
+    /// Sets the file watcher. This watcher monitor dtmf.conf file.
+    /// </summary>
     private void SetDtmfWatcher()
     {
       var dtmfFilePath = $"{applicationPath}/SvxlinkConfig/dtmf.conf";
@@ -349,7 +372,9 @@ namespace SvxlinkManager.Service
       watcher.EnableRaisingEvents = true;
     }
 
-    /// <summary>Set the temporized timer for current channel</summary>
+    /// <summary>
+    /// Set the temporized timer for current channel
+    /// </summary>
     private void SetTimer()
     {
       timer = new Timer(1000);
@@ -358,25 +383,31 @@ namespace SvxlinkManager.Service
       timer.Elapsed += CheckTemporized;
     }
 
-    /// <summary>Log Svxlink error output data</summary>
+    /// <summary>
+    /// Log Svxlink error output data
+    /// </summary>
     /// <param name="sender">shell</param>
-    /// <param name="e">The <see cref="DataReceivedEventArgs" /> instance containing the event data.</param>
+    /// <param name="e">The <see cref="DataReceivedEventArgs"/> instance containing the event data.</param>
     private void ShellErrorDataReceived(object sender, DataReceivedEventArgs e)
     {
       logger.LogInformation(e.Data);
       ParseLog(e.Data);
     }
 
-    /// <summary>Log Svxlink output data</summary>
+    /// <summary>
+    /// Log Svxlink output data
+    /// </summary>
     /// <param name="sender">shell</param>
-    /// <param name="e">The <see cref="DataReceivedEventArgs" /> instance containing the event data.</param>
+    /// <param name="e">The <see cref="DataReceivedEventArgs"/> instance containing the event data.</param>
     private void ShellOutputDataReceived(object sender, DataReceivedEventArgs e)
     {
       logger.LogInformation(e.Data);
       ParseLog(e.Data);
     }
 
-    /// <summary>Starts the SVXlink application with svxlink.current configuration</summary>
+    /// <summary>
+    /// Starts the SVXlink application with svxlink.current configuration
+    /// </summary>
     private void StartSvxLink()
     {
       var cmd = $"svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config={applicationPath}/SvxlinkConfig/svxlink.current";
@@ -413,7 +444,10 @@ namespace SvxlinkManager.Service
 
       Status = "Connecté";
     }
-    /// <summary>Stops the svxlink application. <br />Kill the temporised timer and the dtmf file watcher</summary>
+
+    /// <summary>
+    /// Stops the svxlink application. <br/> Kill the temporised timer and the dtmf file watcher
+    /// </summary>
     private void StopSvxlink()
     {
       logger.LogInformation("Kill de svxlink.");
@@ -427,7 +461,5 @@ namespace SvxlinkManager.Service
 
       Status = "Déconnecté";
     }
-
-    #endregion Methods
   }
 }
