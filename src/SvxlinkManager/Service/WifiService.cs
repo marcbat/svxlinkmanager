@@ -13,7 +13,20 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Service
 {
-  public class WifiService
+  public interface IWifiService
+  {
+    void Connect(Device device);
+
+    void Disconnect(Connection connection);
+
+    void Down(Connection connection);
+
+    List<Device> GetDevices();
+
+    void Up(Connection connection);
+  }
+
+  public class WifiService : IWifiService
   {
     private readonly ILogger<WifiService> logger;
 
@@ -82,13 +95,8 @@ namespace SvxlinkManager.Service
       logger.LogInformation(result);
     }
 
-    public bool IsConnectionExist(string name)
-    {
-      var connections = GetConnections();
-
-      return connections.Any(c => c.Name == name);
-    }
-
+    /// <summary>Get detected wifi devices</summary>
+    /// <returns>List of detected devices</returns>
     public List<Device> GetDevices()
     {
       var devices = new List<Device>();
@@ -117,7 +125,7 @@ namespace SvxlinkManager.Service
       return devices;
     }
 
-    public List<Connection> GetConnections()
+    private List<Connection> GetConnections()
     {
       var connections = new List<Connection>();
 

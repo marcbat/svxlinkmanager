@@ -27,7 +27,7 @@ namespace SvxlinkManager.Pages.Wifi
     }
 
     [Inject]
-    public WifiService WifiService { get; set; }
+    public IWifiService WifiService { get; set; }
 
     [Inject]
     public NavigationManager NavigationManager { get; set; }

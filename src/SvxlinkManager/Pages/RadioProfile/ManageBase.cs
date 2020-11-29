@@ -14,7 +14,6 @@ namespace SvxlinkManager.Pages.RadioProfile
 {
   public class ManageBase : RepositoryComponentBase
   {
-
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync().ConfigureAwait(false);
@@ -28,7 +27,7 @@ namespace SvxlinkManager.Pages.RadioProfile
     public NavigationManager NavigationManager { get; set; }
 
     [Inject]
-    public Sa818Service Sa818Service { get; set; }
+    public ISa818Service Sa818Service { get; set; }
 
     public List<Models.RadioProfile> RadioProfiles { get; set; }
 

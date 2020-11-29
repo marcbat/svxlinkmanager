@@ -11,44 +11,20 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Service
 {
-  public class Sa818Service
+  public interface ISa818Service
   {
-    #region Fields
+    void WriteRadioProfile(RadioProfile radioProfile);
+  }
 
+  public class Sa818Service : ISa818Service
+  {
     private readonly string device = "/dev/ttyS2";
     private readonly ILogger<Sa818Service> logger;
     private readonly int mode = 1;
 
-    #endregion Fields
-
-    #region Constructors
-
     public Sa818Service(ILogger<Sa818Service> logger)
     {
       this.logger = logger;
-    }
-
-    #endregion Constructors
-
-    #region Methods
-
-    /// <summary>
-    /// Create serial port configuration
-    /// </summary>
-    /// <returns>The SerialPort</returns>
-    public SerialPort GetSerialPort()
-    {
-      return new SerialPort
-      {
-        PortName = device,
-        BaudRate = 9600,
-        Parity = Parity.None,
-        StopBits = StopBits.One,
-        DataBits = 8,
-
-        WriteTimeout = 2000,
-        ReadTimeout = 2000
-      };
     }
 
     /// <summary>
@@ -62,6 +38,25 @@ namespace SvxlinkManager.Service
       WriteModule($"AT+DMOSETGROUP={mode},{radioProfile.RxFequ}0,{radioProfile.TxFrequ}0,{radioProfile.RxCtcss},{radioProfile.Squelch},{radioProfile.TxCtcss}\r\n");
       WriteModule($"AT+DMOSETVOLUME={radioProfile.Volume}\r\n");
       WriteModule($"AT+SETFILTER={radioProfile.PreEmph},{radioProfile.HightPass},{radioProfile.LowPass}\r\n");
+    }
+
+    /// <summary>
+    /// Create serial port configuration
+    /// </summary>
+    /// <returns>The SerialPort</returns>
+    private SerialPort GetSerialPort()
+    {
+      return new SerialPort
+      {
+        PortName = device,
+        BaudRate = 9600,
+        Parity = Parity.None,
+        StopBits = StopBits.One,
+        DataBits = 8,
+
+        WriteTimeout = 2000,
+        ReadTimeout = 2000
+      };
     }
 
     /// <summary>
@@ -99,7 +94,5 @@ namespace SvxlinkManager.Service
         serial.Close();
       }
     }
-
-    #endregion Methods
   }
 }
