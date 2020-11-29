@@ -222,7 +222,7 @@ namespace SvxlinkManager.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "e43cc21f-5786-4227-92ef-bf098ed95921", "5d2fafe9-62f2-4066-9762-e86ae8721bc4", "Admin", "ADMIN" });
+                values: new object[] { "32682d52-b892-4877-aed2-a8cd42077960", "9cae3b52-c005-4422-90ed-157b5837ebfb", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "Channels",

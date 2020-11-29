@@ -6,7 +6,7 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS base
 ENV TZ=Europe/Kiev
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update && apt-get install -qq -y svxlink-server procps && apt-get clean 
+RUN apt-get update && apt-get install -qq -y svxlink-server procps network-manager && apt-get clean 
 
 WORKDIR /app
 EXPOSE 80

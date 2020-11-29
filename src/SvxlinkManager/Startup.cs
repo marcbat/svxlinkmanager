@@ -44,11 +44,11 @@ namespace SvxlinkManager
       services.AddServerSideBlazor();
       services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 
-      
       services.AddSingleton<Data.IDbContextFactory<ApplicationDbContext>, DbContextFactory<ApplicationDbContext>>();
       services.AddSingleton<IRepositories, Repositories.Repositories>();
       services.AddSingleton<SvxLinkService>();
       services.AddSingleton<Sa818Service>();
+      services.AddSingleton<WifiService>();
 
       services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
     }
