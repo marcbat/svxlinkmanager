@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Wifi
 {
-  [FixedLengthRecord(FixedMode.AllowLessChars)]
+  [FixedLengthRecord(FixedMode.AllowVariableLength)]
   [IgnoreFirst]
   public class Device
   {
