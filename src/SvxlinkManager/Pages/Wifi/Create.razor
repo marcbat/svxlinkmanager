@@ -12,7 +12,7 @@
   <div class="form-row">
     <div class="form-group col-md-6">
       <label>SSID</label>
-      <InputSelect @bind-Value="Connection.Ssid" class="form-control">
+      <InputSelect @bind-Value="Connection.Name" class="form-control">
         <option value="0">0</option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -25,12 +25,12 @@
       </InputSelect>
     </div>
     <div class="form-group col-md-6">
-      <label>RX</label>
+      <label>Password</label>
       <InputText @bind-Value="Connection.Password" type="password" class="form-control" />
     </div>
   </div>
 
-  <button type="submit" class="btn btn-success">Sauver</button> <a class="btn btn-primary" href="RadioProfile/Manage" role="button">Annuler</a>
+  <button type="submit" class="btn btn-success">Sauver</button> <a class="btn btn-primary" href="Wifi/Manage" role="button">Annuler</a>
 </EditForm>
 
 @code {

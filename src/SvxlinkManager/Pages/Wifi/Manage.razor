@@ -1,5 +1,7 @@
 ﻿@page "/Wifi/Manage"
 
+@inherits SvxlinkManager.Pages.Wifi.ManageBase
+
 @attribute [Authorize]
 
 <div class="row">
@@ -9,6 +11,43 @@
   </div>
 </div>
 
+<ul id="channel-manage-list" class="list-group-horizontal">
+  @foreach (var device in Devices)
+  {
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-md-2 text-nowrap">
+          @if (IsInUse(device.InUse))
+          {<span class="oi oi-home" aria-hidden="true"></span>}
+          @device.Ssid
+        </div>
+        <div class="col-md-2 text-nowrap">
+          @device.Channel
+        </div>
+        <div class="col-md-2 text-nowrap">
+          @device.Rate
+        </div>
+        <div class="col-md-2 text-nowrap">
+          @device.Bars
+        </div>
+        <div class="col-md-2 text-nowrap">
+          @device.Security
+        </div>
+        <div class="col-md-2">
+          @if (!IsInUse(device.InUse))
+          {<button type="button" class="btn btn-outline-primary" ()=> Connect(device.Ssis)>Connecter</button>}
+          else
+          {<button type="button" class="btn btn-danger" @onclick="@(() => Disconnect(device.Ssid))">Déconnecter</button>}
+        </div>
+      </div>
+    </li>
+  }
+</ul>
+
 @code {
+
+  public int CalculateBars(string bars) => 4 - bars.Count(f => f == '_');
+
+  public bool IsInUse(string inUse) => inUse.Any(f => f == '*');
 
 }
