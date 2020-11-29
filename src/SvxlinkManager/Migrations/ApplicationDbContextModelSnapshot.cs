@@ -44,8 +44,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7e324750-0ca6-4ccb-b8a9-ed970e1b8f03",
-                            ConcurrencyStamp = "a6a3b147-2500-486f-ae8b-b79ce3ec90c0",
+                            Id = "32682d52-b892-4877-aed2-a8cd42077960",
+                            ConcurrencyStamp = "9cae3b52-c005-4422-90ed-157b5837ebfb",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -479,32 +479,6 @@ namespace SvxlinkManager.Migrations
                     b.HasIndex("ChannelId");
 
                     b.ToTable("Rules");
-                });
-
-            modelBuilder.Entity("SvxlinkManager.Models.WifiConnection", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Bars")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("InUse")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Ssid")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Uuid")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("WifiConnections");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
