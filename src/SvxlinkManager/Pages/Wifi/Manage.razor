@@ -1,0 +1,36 @@
+﻿@page "/Wifi/Manage"
+
+@inherits SvxlinkManager.Pages.Wifi.ManageBase
+
+@attribute [Authorize]
+
+<div class="row">
+  <div class="col-md-2"><h3>Connexions Wifi</h3></div>
+</div>
+
+<ul id="channel-manage-list" class="list-group-horizontal">
+  @foreach (var device in Devices)
+  {
+    if (IsInUse(device.InUse))
+    {
+      <InUseDevice Device="device" />
+    }
+    else
+    {
+      if (device.HasConnection)
+      {
+        <ConfiguredDevice Device="device" />
+      }
+      else
+      {
+        <NotConfiguredDevice Device="device" />
+      }
+    }
+  }
+</ul>
+
+@code {
+
+  public bool IsInUse(string inUse) => inUse.Any(f => f == '*');
+
+}

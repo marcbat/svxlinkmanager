@@ -1,5 +1,6 @@
 ﻿using SvxlinkManager.Data;
 using SvxlinkManager.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,5 @@ namespace SvxlinkManager.Repositories
     public IChannelRepository Channels { get; private set; }
 
     public IRadioProfileRepository RadioProfiles { get; private set; }
-
   }
 }

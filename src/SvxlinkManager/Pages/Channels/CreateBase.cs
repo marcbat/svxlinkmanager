@@ -11,14 +11,17 @@ namespace SvxlinkManager.Pages.Channels
 {
   public class CreateBase : AddEditBase
   {
+    #region Properties
 
-    protected override void OnInitialized()
-    {
-      base.OnInitialized();
+    protected override string SubmitTitle => "Créer";
 
-      Channel = new Channel();
-    }
+    #endregion Properties
 
+    #region Methods
+
+    /// <summary>
+    /// Handles the form submit.
+    /// </summary>
     public override async Task HandleValidSubmit()
     {
       await base.HandleValidSubmit();
@@ -28,8 +31,13 @@ namespace SvxlinkManager.Pages.Channels
       NavigationManager.NavigateTo("Channel/Manage");
     }
 
-    protected override string SubmitTitle => "Créer";
+    protected override void OnInitialized()
+    {
+      base.OnInitialized();
 
-    
+      Channel = new Channel();
+    }
+
+    #endregion Methods
   }
 }

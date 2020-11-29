@@ -9,7 +9,7 @@ using SvxlinkManager.Data;
 namespace SvxlinkManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201122170936_Initial")]
+    [Migration("20201129175401_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,8 +46,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e43cc21f-5786-4227-92ef-bf098ed95921",
-                            ConcurrencyStamp = "5d2fafe9-62f2-4066-9762-e86ae8721bc4",
+                            Id = "32682d52-b892-4877-aed2-a8cd42077960",
+                            ConcurrencyStamp = "9cae3b52-c005-4422-90ed-157b5837ebfb",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
