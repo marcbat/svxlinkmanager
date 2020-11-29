@@ -22,33 +22,64 @@ namespace SvxlinkManager.Service
       this.logger = logger;
     }
 
-    public List<Connection> GetConnections()
+    /// <summary>Create a new connection for the device</summary>
+    /// <param name="device">The device.</param>
+    public void Connect(Device device)
     {
-      var connections = new List<Connection>();
-
-      var (result, error) = ExecuteCommand("nmcli c");
+      var (result, error) = ExecuteCommand($"nmcli d wifi connect \"{device.Ssid}\" password {device.Password}");
 
       if (!string.IsNullOrEmpty(error))
       {
         logger.LogError(error);
-        return connections;
+        return;
       }
 
-      var engine = new FixedFileEngine<Connection>();
-      connections = engine.ReadStringAsList(result);
-
-      logger.LogInformation($"{connections.Count} connection trouvées.");
-
-      return connections.Where(c => c.Type == "wifi")?.ToList();
+      logger.LogInformation(result);
     }
 
-    public void Disconnect(string ssid)
+    /// <summary>Remove the connection</summary>
+    /// <param name="connection">The connection.</param>
+    public void Disconnect(Connection connection)
     {
+      var (result, error) = ExecuteCommand($"nmcli connection delete {connection.Uuid}");
+
+      if (!string.IsNullOrEmpty(error))
+      {
+        logger.LogError(error);
+        return;
+      }
+
+      logger.LogInformation(result);
     }
 
-    public void Connect(string ssid, string password)
+    /// <summary>Activate the connection</summary>
+    /// <param name="connection">The connection.</param>
+    public void Up(Connection connection)
     {
-      ExecuteCommand($"nmcli d wifi connect {ssid} password {password}");
+      var (result, error) = ExecuteCommand($"nmcli connection up {connection.Uuid}");
+
+      if (!string.IsNullOrEmpty(error))
+      {
+        logger.LogError(error);
+        return;
+      }
+
+      logger.LogInformation(result);
+    }
+
+    /// <summary>Deactivate the connection</summary>
+    /// <param name="connection">The connection.</param>
+    public void Down(Connection connection)
+    {
+      var (result, error) = ExecuteCommand($"nmcli connection down {connection.Uuid}");
+
+      if (!string.IsNullOrEmpty(error))
+      {
+        logger.LogError(error);
+        return;
+      }
+
+      logger.LogInformation(result);
     }
 
     public bool IsConnectionExist(string name)
@@ -56,13 +87,6 @@ namespace SvxlinkManager.Service
       var connections = GetConnections();
 
       return connections.Any(c => c.Name == name);
-    }
-
-    public void AddConnection(Connection connection)
-    {
-      ExecuteCommand($"nmcli c add type wifi ssid {connection.Name} ifname wlan0 con-name {connection.Name}");
-
-      ExecuteCommand($"nmcli c modify {connection.Name} wifi-sec.key-mgmt wpa-psk wifi-sec.psk {connection.Password}");
     }
 
     public List<Device> GetDevices()
@@ -88,14 +112,36 @@ namespace SvxlinkManager.Service
       var connections = GetConnections();
 
       foreach (var device in devices)
-        device.HasConnection = connections.Any(c => c.Name == device.Ssid);
+        device.Connection = connections.FirstOrDefault(c => c.Name == device.Ssid);
 
       return devices;
     }
 
-    private static (string, string) ExecuteCommand(string cmd)
+    public List<Connection> GetConnections()
+    {
+      var connections = new List<Connection>();
+
+      var (result, error) = ExecuteCommand("nmcli c");
+
+      if (!string.IsNullOrEmpty(error))
+      {
+        logger.LogError(error);
+        return connections;
+      }
+
+      var engine = new FixedFileEngine<Connection>();
+      connections = engine.ReadStringAsList(result);
+
+      logger.LogInformation($"{connections.Count} connection trouvées.");
+
+      return connections.Where(c => c.Type == "wifi")?.ToList();
+    }
+
+    private (string, string) ExecuteCommand(string cmd)
     {
       var escapedArgs = cmd.Replace("\"", "\\\"");
+
+      logger.LogInformation($"Execution de la commande {cmd}.");
 
       var process = new Process()
       {

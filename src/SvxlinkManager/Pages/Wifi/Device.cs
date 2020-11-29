@@ -47,6 +47,9 @@ namespace SvxlinkManager.Pages.Wifi
     public string Password { get; set; }
 
     [FieldHidden]
-    public bool HasConnection { get; set; }
+    public bool HasConnection => Connection != null;
+
+    [FieldHidden]
+    public Connection Connection { get; set; }
   }
 }

@@ -1,0 +1,29 @@
+﻿@inherits SvxlinkManager.Pages.Wifi.ManageBase
+
+<li class="list-group-item">
+  <div class="row">
+    <div class="col-md-2 text-nowrap">
+      @Device.Ssid
+    </div>
+    <div class="col-md-2 text-nowrap">
+      @Device.Rate
+    </div>
+    <div class="col-md-2 text-nowrap">
+      @Device.Bars
+    </div>
+    <div class="col-md-2 text-nowrap">
+      @Device.Security
+    </div>
+    <div class="col-md-2 text-nowrap">
+      Configuré
+    </div>
+    <div class="col-md-2">
+      <button type="button" class="btn btn-outline-primary" @onclick="(()=> Up(Device))">Connecter</button>
+    </div>
+  </div>
+</li>
+
+@code {
+  [Parameter]
+  public Device Device { get; set; }
+}

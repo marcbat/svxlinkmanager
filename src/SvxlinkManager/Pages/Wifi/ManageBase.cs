@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Models;
 using SvxlinkManager.Service;
@@ -28,22 +29,45 @@ namespace SvxlinkManager.Pages.Wifi
     [Inject]
     public WifiService WifiService { get; set; }
 
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
     public List<Device> Devices { get; set; }
 
-    public void Connect(string ssid)
+    public void Connect(Device device)
     {
-      InvokeAsync(() => StateHasChanged());
+      Logger.LogInformation($"Creation de la connection {device.Ssid}");
+
+      WifiService.Connect(device);
+
+      NavigationManager.NavigateTo("Wifi/Manage", true);
     }
 
-    public void Up(string ssid)
+    public void Up(Device device)
     {
-      InvokeAsync(() => StateHasChanged());
+      Logger.LogInformation($"Activation de la connection {device.Connection.Name} {device.Connection.Uuid}");
+
+      WifiService.Up(device.Connection);
+
+      NavigationManager.NavigateTo("Wifi/Manage", true);
     }
 
-    public void Disconnect(string ssid)
+    public void Down(Device device)
     {
-      WifiService.Disconnect(ssid);
-      InvokeAsync(() => StateHasChanged());
+      Logger.LogInformation($"Desactivation de la connection {device.Connection.Name} {device.Connection.Uuid}");
+
+      WifiService.Down(device.Connection);
+
+      NavigationManager.NavigateTo("Wifi/Manage", true);
+    }
+
+    public void Disconnect(Device device)
+    {
+      Logger.LogInformation($"Suppression de la connection {device.Connection.Name} {device.Connection.Uuid}");
+
+      WifiService.Disconnect(device.Connection);
+
+      NavigationManager.NavigateTo("Wifi/Manage", true);
     }
   }
 }

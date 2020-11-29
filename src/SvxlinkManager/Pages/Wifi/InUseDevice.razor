@@ -1,0 +1,30 @@
+﻿@inherits SvxlinkManager.Pages.Wifi.ManageBase
+
+<li class="list-group-item">
+  <div class="row">
+    <div class="col-md-2 text-nowrap">
+      <span class="oi oi-home" aria-hidden="true"></span>
+      @Device.Ssid
+    </div>
+    <div class="col-md-2 text-nowrap">
+      @Device.Rate
+    </div>
+    <div class="col-md-2 text-nowrap">
+      @Device.Bars
+    </div>
+    <div class="col-md-2 text-nowrap">
+      @Device.Security
+    </div>
+    <div class="col-md-2 text-nowrap">
+      Configuré
+    </div>
+    <div class="col-md-2">
+      <button type="button" class="btn btn-danger" @onclick="@(() => Down(Device))">Déconnecter</button>
+    </div>
+  </div>
+</li>
+
+@code {
+  [Parameter]
+  public Device Device { get; set; }
+}
