@@ -10,7 +10,6 @@
   </div>
 </div>
 
-
 <ul id="channel-manage-list" class="list-group-horizontal">
   @foreach (var channel in Channels)
   {
@@ -26,9 +25,11 @@
         <div class="col-md-2 text-nowrap">@channel.CallSign</div>
         <div class="col-md-4 text-truncate">@channel.Host</div>
         <div class="col-md-1">@channel.Port</div>
-        <div class="col-md-2"><a class="btn btn-outline-primary" href="Channel/Edit/@channel.Id" role="button">Editer</a> @if (!channel.IsDefault){<button type="button" class="btn btn-danger" @onclick="@(() => Delete(channel.Id))">Supprimer</button>}</div>
+        <div class="col-md-2">
+          <a class="btn btn-outline-primary" href="Channel/Edit/@channel.Id" role="button">Editer</a> &nbsp; @if (!channel.IsDefault)
+          {<button type="button" class="btn btn-danger" @onclick="@(() => Delete(channel.Id))" data-toggle="tooltip" data-placement="top" title="Tooltip on top">Supprimer</button>}
+        </div>
       </div>
     </li>
   }
 </ul>
-

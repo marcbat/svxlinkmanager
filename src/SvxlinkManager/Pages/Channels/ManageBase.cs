@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 using SvxlinkManager.Pages.Shared;
 
@@ -11,14 +12,8 @@ namespace SvxlinkManager.Pages.Channels
 {
   public class ManageBase : ChannelBase
   {
-    #region Properties
-
     [Inject]
     public NavigationManager NavigationManager { get; set; }
-
-    #endregion Properties
-
-    #region Methods
 
     /// <summary>
     /// Deletes the specified identifier.
@@ -34,12 +29,5 @@ namespace SvxlinkManager.Pages.Channels
 
       NavigationManager.NavigateTo("/Channel/Manage");
     }
-
-    protected override async Task OnInitializedAsync()
-    {
-      await base.OnInitializedAsync().ConfigureAwait(false);
-    }
-
-    #endregion Methods
   }
 }
