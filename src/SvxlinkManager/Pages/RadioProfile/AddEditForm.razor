@@ -3,22 +3,22 @@
   <ValidationSummary />
 
   <div class="form-group">
-    <label for="inputName">Name</label>
-    <InputText @bind-Value="RadioProfile.Name" type="text" class="form-control" id="inputName" placeholder="Nom du profil" />
+    <label data-toggle="tooltip" title="Le nom du profil radio. <br/> Choisissez un nom unique.">Nom du profil</label>
+    <InputText @bind-Value="RadioProfile.Name" type="text" class="form-control" id="inputName" placeholder="Mon profil au QRA" />
   </div>
   <div class="form-row">
     <div class="form-group col-md-6">
-      <label for="inputHost">TX</label>
-      <InputText @bind-Value="RadioProfile.TxFrequ" type="text" class="form-control" id="inputHost" placeholder="145.450" />
+      <label data-toggle="tooltip" title="La fréquence d'émission du module SA818.">Fréquence d'émission</label>
+      <InputText @bind-Value="RadioProfile.TxFrequ" type="text" class="form-control" id="inputHost" placeholder="145.450 ou 434.400" />
     </div>
     <div class="form-group col-md-6">
-      <label for="inputPort">RX</label>
-      <InputText @bind-Value="RadioProfile.RxFequ" type="text" class="form-control" id="inputPort" placeholder="145.450" />
+      <label data-toggle="tooltip" title="La fréquence de récéption du module SA818.">Fréquence de récéption</label>
+      <InputText @bind-Value="RadioProfile.RxFequ" type="text" class="form-control" id="inputPort" placeholder="145.450 ou 434.400" />
     </div>
   </div>
   <div class="form-row">
     <div class="form-group col-md-4">
-      <label for="inputHost">TX CTCSS</label>
+      <label >Tone CTCSS en émission</label>
       <InputSelect @bind-Value="RadioProfile.TxCtcss" class="form-control">
         @foreach (var ct in RadioProfile.Ctcss)
 {
@@ -27,7 +27,7 @@
       </InputSelect>
     </div>
     <div class="form-group col-md-4">
-      <label for="inputPort">RX CTCSS</label>
+      <label>Tone CTCSS en récéption</label>
       <InputSelect @bind-Value="RadioProfile.RxCtcss" class="form-control">
         @foreach (var ct in RadioProfile.Ctcss)
 {
@@ -36,7 +36,7 @@
       </InputSelect>
     </div>
     <div class="form-group col-md-4">
-      <label for="inputPort">Squelch</label>
+      <label>Squelch</label>
       <InputSelect @bind-Value="RadioProfile.Squelch" class="form-control">
         <option value="0">0</option>
         <option value="1">1</option>
@@ -52,7 +52,7 @@
   </div>
   <div class="form-row">
     <div class="form-group col-md-3">
-      <label for="inputPort">Volume</label>
+      <label >Volume</label>
       <InputSelect @bind-Value="RadioProfile.Volume" class="form-control">
         <option value="0">0</option>
         <option value="1">1</option>
@@ -66,21 +66,21 @@
       </InputSelect>
     </div>
     <div class="form-group col-md-3">
-      <label for="inputPort">Pre Emphasis</label>
+      <label >Pre Emphasis</label>
       <InputSelect @bind-Value="RadioProfile.PreEmph" class="form-control">
         <option value="0">Désactivé</option>
         <option value="1">Activé</option>
       </InputSelect>
     </div>
     <div class="form-group col-md-3">
-      <label for="inputPort">Passe haut</label>
+      <label >Passe haut</label>
       <InputSelect @bind-Value="RadioProfile.HightPass" class="form-control">
         <option value="0">Désactivé</option>
         <option value="1">Activé</option>
       </InputSelect>
     </div>
     <div class="form-group col-md-3">
-      <label for="inputPort">Passe bas</label>
+      <label >Passe bas</label>
       <InputSelect @bind-Value="RadioProfile.LowPass" class="form-control">
         <option value="0">Désactivé</option>
         <option value="1">Activé</option>

@@ -27,6 +27,8 @@ namespace SvxlinkManager.Pages
       await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
 
       await Js.InvokeVoidAsync("SetToolTips");
+
+      await Js.InvokeVoidAsync("SetPopOver");
     }
   }
 }

@@ -1,12 +1,11 @@
-﻿using FileHelpers;
-
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Pages.Wifi;
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -109,11 +108,7 @@ namespace SvxlinkManager.Service
         return devices;
       }
 
-      logger.LogInformation($"Parsing du resultat.");
-      logger.LogInformation(result);
-
-      var engine = new FixedFileEngine<Device>();
-      devices = engine.ReadStringAsList(result);
+      devices = ParseDeviceConsoleOutput(result);
 
       logger.LogInformation($"{devices.Count} devices trouvées.");
 
@@ -121,6 +116,51 @@ namespace SvxlinkManager.Service
 
       foreach (var device in devices)
         device.Connection = connections.FirstOrDefault(c => c.Name == device.Ssid);
+
+      return devices;
+    }
+
+    /// <summary>Extract list of wifi devices from console output</summary>
+    /// <param name="output">Consoel output</param>
+    /// <returns>List of wifi devices</returns>
+    public List<Device> ParseDeviceConsoleOutput(string output)
+    {
+      var devices = new List<Device>();
+
+      using var reader = new StringReader(output);
+      string first = reader.ReadLine();
+
+      List<(int, int)> indexes = new List<(int, int)>
+      {
+        (0, output.IndexOf("SSID") - 1),
+        (output.IndexOf("SSID"), output.IndexOf("MODE") - output.IndexOf("SSID")),
+        (output.IndexOf("MODE"), output.IndexOf("CHAN") - output.IndexOf("MODE")),
+        (output.IndexOf("CHAN"), output.IndexOf("RATE") - output.IndexOf("CHAN")),
+        (output.IndexOf("RATE"), output.IndexOf("SIGNAL") - output.IndexOf("RATE")),
+        (output.IndexOf("SIGNAL"), output.IndexOf("BARS") - output.IndexOf("SIGNAL")),
+        (output.IndexOf("BARS"), output.IndexOf("SECURITY") - output.IndexOf("BARS")),
+        (output.IndexOf("SECURITY"), 0)
+      };
+
+      string line;
+      while ((line = reader.ReadLine()) != null)
+      {
+        logger.LogInformation($"Parsing de la ligne device {line}");
+
+        var device = new Device
+        {
+          InUse = line.Substring(indexes[0].Item1, indexes[0].Item2)?.Trim(),
+          Ssid = line.Substring(indexes[1].Item1, indexes[1].Item2)?.Trim(),
+          Mode = line.Substring(indexes[2].Item1, indexes[2].Item2)?.Trim(),
+          Channel = line.Substring(indexes[3].Item1, indexes[3].Item2)?.Trim(),
+          Rate = line.Substring(indexes[4].Item1, indexes[4].Item2)?.Trim(),
+          Signal = line.Substring(indexes[5].Item1, indexes[5].Item2)?.Trim(),
+          Bars = line.Substring(indexes[6].Item1, indexes[6].Item2)?.Trim(),
+          Security = line.Substring(indexes[7].Item1)?.Trim()
+        };
+
+        devices.Add(device);
+      }
 
       return devices;
     }
@@ -137,12 +177,45 @@ namespace SvxlinkManager.Service
         return connections;
       }
 
-      var engine = new FixedFileEngine<Connection>();
-      connections = engine.ReadStringAsList(result);
+      connections = ParseConnectionConsoleOutput(result);
 
       logger.LogInformation($"{connections.Count} connection trouvées.");
 
       return connections.Where(c => c.Type == "wifi")?.ToList();
+    }
+
+    public List<Connection> ParseConnectionConsoleOutput(string output)
+    {
+      var connections = new List<Connection>();
+
+      using var reader = new StringReader(output);
+      string first = reader.ReadLine();
+
+      List<(int, int)> indexes = new List<(int, int)>
+      {
+        (0, output.IndexOf("UUID") - 1),
+        (output.IndexOf("UUID"), output.IndexOf("TYPE") - output.IndexOf("UUID")),
+        (output.IndexOf("TYPE"), output.IndexOf("DEVICE") - output.IndexOf("TYPE")),
+        (output.IndexOf("DEVICE"), 0)
+      };
+
+      string line;
+      while ((line = reader.ReadLine()) != null)
+      {
+        logger.LogInformation($"Parsing de la ligne connection {line}");
+
+        var connection = new Connection
+        {
+          Name = line.Substring(indexes[0].Item1, indexes[0].Item2)?.Trim(),
+          Uuid = line.Substring(indexes[1].Item1, indexes[1].Item2)?.Trim(),
+          Type = line.Substring(indexes[2].Item1, indexes[2].Item2)?.Trim(),
+          Device = line.Substring(indexes[3].Item1, indexes[3].Item2)?.Trim()
+        };
+
+        connections.Add(connection);
+      }
+
+      return connections;
     }
 
     private (string, string) ExecuteCommand(string cmd)

@@ -55,8 +55,8 @@ namespace SvxlinkManager
 #endif
 
 #if RELEASE
-      services.AddSingleton<Sa818Service>();
-      services.AddSingleton<WifiService>();
+      services.AddSingleton<ISa818Service, Sa818Service>();
+      services.AddSingleton<IWifiService, WifiService>();
 #endif
 
       services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });

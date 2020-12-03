@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 
 using SvxlinkManager.Data;
 using SvxlinkManager.Models;
@@ -22,13 +23,10 @@ using System.Xml.Linq;
 
 namespace SvxlinkManager.Pages
 {
-  public class HomeBase : ChannelBase, INotifyPropertyChanged
+  public class HomeBase : ChannelBase
   {
-    public event PropertyChangedEventHandler PropertyChanged;
-
     protected override async Task OnInitializedAsync()
     {
-
       await base.OnInitializedAsync().ConfigureAwait(false);
 
       SvxLinkService.Connected += () =>
@@ -54,8 +52,13 @@ namespace SvxlinkManager.Pages
         CurrentTxNode = null;
         InvokeAsync(() => StateHasChanged());
       };
-        
-      
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+      await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
+
+      await Js.InvokeVoidAsync("ShowError");
     }
 
     [Inject]
@@ -79,7 +82,5 @@ namespace SvxlinkManager.Pages
       get => SvxLinkService.Nodes;
       set => SvxLinkService.Nodes = value;
     }
-
   }
-
 }
