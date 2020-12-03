@@ -18,6 +18,7 @@ using SvxlinkManager.Data;
 using SvxlinkManager.Repositories;
 using SvxlinkManager.Service;
 using System.IO;
+using SvxlinkManager.ServiceMockup;
 
 namespace SvxlinkManager
 {
@@ -47,8 +48,16 @@ namespace SvxlinkManager
       services.AddSingleton<Data.IDbContextFactory<ApplicationDbContext>, DbContextFactory<ApplicationDbContext>>();
       services.AddSingleton<IRepositories, Repositories.Repositories>();
       services.AddSingleton<SvxLinkService>();
-      services.AddSingleton<Sa818Service>();
-      services.AddSingleton<WifiService>();
+
+#if DEBUG
+      services.AddSingleton<ISa818Service, Sa818ServiceMockup>();
+      services.AddSingleton<IWifiService, WifiServiceMockup>();
+#endif
+
+#if RELEASE
+      services.AddSingleton<ISa818Service, Sa818Service>();
+      services.AddSingleton<IWifiService, WifiService>();
+#endif
 
       services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
     }

@@ -5,8 +5,8 @@
 
 <div class="row">
   <div class="col-md-2"><h3>Profils Radio</h3></div>
-  <div class="col-md-1 offset-md-9">
-    <a class="btn btn-outline-success" href="RadioProfile/Create" role="button">Créer</a>
+  <div class="col-md-2 offset-md-8">
+    <a class="btn btn-outline-success" href="RadioProfile/Create" role="button">Créer un nouveau profil radio</a>
   </div>
 </div>
 
@@ -18,15 +18,16 @@
         <div class="col-md-2 text-nowrap">
           @if (rp.Enable)
           {<span class="oi oi-home" aria-hidden="true"></span>}
-          @rp.Name
+          &nbsp;@rp.Name
         </div>
         <div class="col-md-1 text-nowrap">Tx: @rp.TxFrequ</div>
         <div class="col-md-1 text-nowrap">Rx: @rp.RxFequ</div>
         <div class="col-md-2">TX Ctcss: @rp.TxTone</div>
         <div class="col-md-2">RX Ctcss: @rp.RxTone</div>
         <div class="col-md-3 offset-md-1">
-          <button type="button" class="btn btn-outline-success" @onclick="@(() => Apply(rp.Id))">Appliquer</button> <a class="btn btn-outline-primary" href="RadioProfile/Edit/@rp.Id" role="button">Editer</a>  @if (!rp.Enable)
-          {<button type="button" class="btn btn-danger" @onclick="@(() => Delete(rp.Id))">Supprimer</button>}
+          <button type="button" class="btn btn-outline-success" @onclick="@(() => Apply(rp.Id))">Appliquer</button> <a class="btn btn-outline-primary" href="RadioProfile/Edit/@rp.Id" role="button">Editer</a> &nbsp; @if (!rp.Enable)
+          {
+            <button type="button" class="btn btn-danger" @onclick="@(() => Delete(rp.Id))">Supprimer</button>}
         </div>
       </div>
     </li>

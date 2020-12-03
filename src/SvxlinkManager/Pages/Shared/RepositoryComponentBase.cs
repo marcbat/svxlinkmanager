@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
+
 using SvxlinkManager.Repositories;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +18,17 @@ namespace SvxlinkManager.Pages
 
     [Inject]
     public IRepositories Repositories { get; set; }
+
+    [Inject]
+    public IJSRuntime Js { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+      await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
+
+      await Js.InvokeVoidAsync("SetToolTips");
+
+      await Js.InvokeVoidAsync("SetPopOver");
+    }
   }
 }
