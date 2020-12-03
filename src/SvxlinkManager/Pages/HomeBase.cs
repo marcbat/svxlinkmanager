@@ -33,7 +33,10 @@ namespace SvxlinkManager.Pages
         InvokeAsync(() => StateHasChanged());
 
       SvxLinkService.Disconnected += () =>
+      {
+        CurrentTxNode = null;
         InvokeAsync(() => StateHasChanged());
+      };
 
       SvxLinkService.NodeConnected += n =>
         InvokeAsync(() => StateHasChanged());
