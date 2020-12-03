@@ -52,6 +52,9 @@ namespace SvxlinkManager.Pages.Channels
     /// </summary>
     public virtual async Task HandleValidSubmit()
     {
+      if (Channel.Sound == null)
+        return;
+
       using var file = File.OpenWrite(Path.Combine(Directory.GetCurrentDirectory(), "Sounds", Channel.Sound.Name));
       using var stream = Channel.Sound.OpenReadStream();
 
