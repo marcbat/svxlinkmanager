@@ -27,7 +27,7 @@ namespace SvxlinkManager.Pages.Channels
     {
       Repositories.Channels.Update(Channel);
 
-      await ShowToastAsync("Modifié", $"Le salon {Channel.Name} a bien été modifié.", ToastType.Success);
+      await ShowSuccessToastAsync("Modifié", $"Le salon {Channel.Name} a bien été modifié.");
 
       NavigationManager.NavigateTo("Channel/Manage");
     }

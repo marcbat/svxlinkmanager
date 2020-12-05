@@ -75,6 +75,8 @@ namespace SvxlinkManager.Service
     /// </summary>
     public event Action<Node> NodeTx;
 
+    public event Action<string, string> Error;
+
     /// <summary>
     /// Gets or sets the current channel Id
     /// </summary>
@@ -85,20 +87,26 @@ namespace SvxlinkManager.Service
       set
       {
         channelId = value;
-
-        switch (value)
+        try
         {
-          case 0:
-            StopSvxlink();
-            break;
+          switch (value)
+          {
+            case 0:
+              StopSvxlink();
+              break;
 
-          case 1000:
-            Parrot();
-            break;
+            case 1000:
+              Parrot();
+              break;
 
-          default:
-            ChangeChannel();
-            break;
+            default:
+              ChangeChannel();
+              break;
+          }
+        }
+        catch (Exception e)
+        {
+          Error?.Invoke("Impossible de changer de salon.", e.Message);
         }
       }
     }
@@ -306,6 +314,12 @@ namespace SvxlinkManager.Service
         node.ClassName = "node";
         NodeRx?.Invoke(node);
       }
+
+      if (s.Contains("Access denied"))
+        Error?.Invoke("Echec de la connexion.", "Impossible de se connecter au salon. <br/> Accès refusé.");
+
+      if (s.Contains("Host not found"))
+        Error?.Invoke("Echec de la connexion.", "Impossible de se connecter au salon. <br/> Impossible de joindre l'adresse distante.");
     }
 
     /// <summary>

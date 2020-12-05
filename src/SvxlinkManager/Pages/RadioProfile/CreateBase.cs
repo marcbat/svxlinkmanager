@@ -20,7 +20,7 @@ namespace SvxlinkManager.Pages.RadioProfile
     {
       Repositories.RadioProfiles.Add(RadioProfile);
 
-      await ShowToastAsync("Crée", $"Le profil radio {RadioProfile.Name} a bien été crée.", ToastType.Success);
+      await ShowSuccessToastAsync("Crée", $"Le profil radio {RadioProfile.Name} a bien été crée.");
 
       NavigationManager.NavigateTo("RadioProfile/Manage");
     }

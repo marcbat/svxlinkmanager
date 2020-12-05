@@ -31,7 +31,7 @@ namespace SvxlinkManager.Pages
 
       SvxLinkService.Connected += async () =>
       {
-        await ShowToastAsync("Connecté", "Vous êtes maintenant connecté.", ToastType.Success);
+        await ShowSuccessToastAsync("Connecté", "Vous êtes maintenant connecté.");
         await InvokeAsync(() => StateHasChanged());
       };
 
@@ -57,6 +57,11 @@ namespace SvxlinkManager.Pages
       {
         CurrentTxNode = null;
         InvokeAsync(() => StateHasChanged());
+      };
+
+      SvxLinkService.Error += async (t, b) =>
+      {
+        await ShowErrorToastAsync(t, b);
       };
     }
 
