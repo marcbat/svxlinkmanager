@@ -30,5 +30,13 @@ namespace SvxlinkManager.Pages
 
       await Js.InvokeVoidAsync("SetPopOver");
     }
+
+    protected virtual async Task ShowToastAsync(string id, string title, string body, string type, bool autohide = true, int delay = 5000)
+    {
+      if (type == "danger")
+        autohide = false;
+
+      await Js.InvokeVoidAsync("addToast", id, title, body, type, DateTime.Now.ToString("HH:mm"), autohide, delay);
+    }
   }
 }
