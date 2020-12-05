@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,6 @@ namespace SvxlinkManager.Pages.RadioProfile
 {
   public class EditBase : AddEditBase
   {
-
     protected override void OnInitialized()
     {
       RadioProfile = Repositories.RadioProfiles.Get(int.Parse(Id));
@@ -17,9 +17,11 @@ namespace SvxlinkManager.Pages.RadioProfile
     [Parameter]
     public string Id { get; set; }
 
-    override protected void HandleValidSubmit()
+    override protected async Task HandleValidSubmitAsync()
     {
       Repositories.RadioProfiles.Update(RadioProfile);
+
+      await ShowToastAsync("Modifié", $"le profil radio {RadioProfile.Name} a bien été modifié.", ToastType.Success);
 
       NavigationManager.NavigateTo("RadioProfile/Manage");
     }

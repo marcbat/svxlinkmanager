@@ -25,9 +25,9 @@
         <div class="col-md-2">TX Ctcss: @rp.TxTone</div>
         <div class="col-md-2">RX Ctcss: @rp.RxTone</div>
         <div class="col-md-3 offset-md-1">
-          <button type="button" class="btn btn-outline-success" @onclick="@(() => Apply(rp.Id))">Appliquer</button> <a class="btn btn-outline-primary" href="RadioProfile/Edit/@rp.Id" role="button">Editer</a> &nbsp; @if (!rp.Enable)
+          <button type="button" class="btn btn-outline-success" @onclick="@(() => ApplyAsync(rp.Id))">Appliquer</button> <a class="btn btn-outline-primary" href="RadioProfile/Edit/@rp.Id" role="button">Editer</a> &nbsp; @if (!rp.Enable)
           {
-            <button type="button" class="btn btn-danger" @onclick="@(() => Delete(rp.Id))">Supprimer</button>}
+            <button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(rp.Id))">Supprimer</button>}
         </div>
       </div>
     </li>

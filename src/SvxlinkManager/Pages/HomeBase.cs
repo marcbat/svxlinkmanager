@@ -29,8 +29,11 @@ namespace SvxlinkManager.Pages
     {
       await base.OnInitializedAsync().ConfigureAwait(false);
 
-      SvxLinkService.Connected += () =>
-        InvokeAsync(() => StateHasChanged());
+      SvxLinkService.Connected += async () =>
+      {
+        await ShowToastAsync("Connecté", "Vous êtes maintenant connecté.", ToastType.Success);
+        await InvokeAsync(() => StateHasChanged());
+      };
 
       SvxLinkService.Disconnected += () =>
       {
@@ -60,8 +63,6 @@ namespace SvxlinkManager.Pages
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
       await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
-
-      await Js.InvokeVoidAsync("ShowError");
     }
 
     [Inject]

@@ -19,13 +19,15 @@ namespace SvxlinkManager.Pages.Channels
     /// Deletes the specified identifier.
     /// </summary>
     /// <param name="id">The identifier.</param>
-    public void Delete(int id)
+    public async Task DeleteAsync(int id)
     {
       Repositories.Channels.Delete(id);
 
       Channels.Remove(Channels.Single(c => c.Id == id));
 
       StateHasChanged();
+
+      await ShowToastAsync("Supprimé", "Le salon a bien été supprimé.", ToastType.Success);
 
       NavigationManager.NavigateTo("/Channel/Manage");
     }

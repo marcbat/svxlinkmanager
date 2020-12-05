@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace SvxlinkManager.Pages.RadioProfile
 
     protected Models.RadioProfile RadioProfile { get; set; }
 
-    protected abstract void HandleValidSubmit();
+    protected abstract Task HandleValidSubmitAsync();
 
     protected abstract string SubmitTitle { get; }
   }
