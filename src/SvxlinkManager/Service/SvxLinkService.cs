@@ -41,6 +41,8 @@ namespace SvxlinkManager.Service
 
       NodeTx += n => lastTx = DateTime.Now;
       Connected += () => lastTx = DateTime.Now;
+
+      StartDefaultChannel();
     }
 
     /// <summary>
@@ -112,6 +114,10 @@ namespace SvxlinkManager.Service
     /// </summary>
     /// <value>Current status</value>
     public string Status { get; set; } = "Déconnecté";
+
+    /// <summary>Connecte le salon par défaut.</summary>
+    private void StartDefaultChannel() =>
+      Channel = repositories.Channels.GetDefault().Id;
 
     /// <summary>
     /// Execute a cli command
