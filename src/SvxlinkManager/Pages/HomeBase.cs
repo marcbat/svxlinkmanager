@@ -31,7 +31,7 @@ namespace SvxlinkManager.Pages
 
       SvxLinkService.Connected += async () =>
       {
-        await ShowToastAsync(Guid.NewGuid().ToString(), "Connecté", "Vous êtes maintenant connecté.", "success");
+        await ShowToastAsync("Connecté", "Vous êtes maintenant connecté.", ToastType.Success);
         await InvokeAsync(() => StateHasChanged());
       };
 

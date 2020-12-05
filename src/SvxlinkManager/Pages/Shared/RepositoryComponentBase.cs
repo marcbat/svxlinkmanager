@@ -11,6 +11,13 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages
 {
+  public enum ToastType
+  {
+    Success,
+    info,
+    Danger
+  }
+
   public class RepositoryComponentBase : ComponentBase
   {
     [Inject]
@@ -31,12 +38,33 @@ namespace SvxlinkManager.Pages
       await Js.InvokeVoidAsync("SetPopOver");
     }
 
-    protected virtual async Task ShowToastAsync(string id, string title, string body, string type, bool autohide = true, int delay = 5000)
+    /// <summary>Show new toast.</summary>
+    /// <param name="title">Toast title</param>
+    /// <param name="body">Toast body</param>
+    /// <param name="type">Toast type. Accept : success, info, danger</param>
+    /// <param name="autohide">Autohide, always false if type is danger</param>
+    /// <param name="delay">Autohide delay in second</param>
+    protected virtual async Task ShowToastAsync(string title, string body, ToastType type = ToastType.info, bool autohide = true, int delay = 5000)
     {
-      if (type == "danger")
-        autohide = false;
+      string toastclass;
 
-      await Js.InvokeVoidAsync("addToast", id, title, body, type, DateTime.Now.ToString("HH:mm"), autohide, delay);
+      switch (type)
+      {
+        case ToastType.Success:
+          toastclass = "success";
+          break;
+
+        case ToastType.Danger:
+          toastclass = "danger";
+          autohide = false;
+          break;
+
+        default:
+          toastclass = "info";
+          break;
+      }
+
+      await Js.InvokeVoidAsync("addToast", Guid.NewGuid().ToString(), title, body, toastclass, DateTime.Now.ToString("HH:mm"), autohide, delay);
     }
   }
 }

@@ -31,16 +31,18 @@ namespace SvxlinkManager.Pages.RadioProfile
 
     public List<Models.RadioProfile> RadioProfiles { get; set; }
 
-    public void Delete(int id)
+    public async Task DeleteAsync(int id)
     {
       Repositories.RadioProfiles.Delete(id);
 
       RadioProfiles.Remove(RadioProfiles.Single(c => c.Id == id));
 
+      await ShowToastAsync("Supprimé", "Le profil radio a bien été supprimé.", ToastType.Success);
+
       StateHasChanged();
     }
 
-    public void Apply(int id)
+    public async Task ApplyAsync(int id)
     {
       var profile = Repositories.RadioProfiles.Get(id);
 
@@ -49,17 +51,9 @@ namespace SvxlinkManager.Pages.RadioProfile
       profile.Enable = true;
       Repositories.RadioProfiles.Update(profile);
 
+      await ShowToastAsync($"{profile.Name} appliqué.", $"Le profil radio {profile.Name} a bien été appliqué.", ToastType.Success);
+
       NavigationManager.NavigateTo("/RadioProfile/Manage", true);
-    }
-
-    private void ShellOutputDataReceived(object sender, DataReceivedEventArgs e)
-    {
-      Logger.LogInformation(e.Data);
-    }
-
-    private void ShellErrorDataReceived(object sender, DataReceivedEventArgs e)
-    {
-      Logger.LogInformation(e.Data);
     }
   }
 }

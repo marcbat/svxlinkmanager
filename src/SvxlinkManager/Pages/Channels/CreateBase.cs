@@ -28,6 +28,8 @@ namespace SvxlinkManager.Pages.Channels
 
       Repositories.Channels.Add(Channel);
 
+      await ShowToastAsync("Success", $"Le salon {Channel.Name} a été crée.", ToastType.Success);
+
       NavigationManager.NavigateTo("Channel/Manage");
     }
 
