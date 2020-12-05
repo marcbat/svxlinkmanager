@@ -29,9 +29,9 @@ namespace SvxlinkManager.Pages
     {
       await base.OnInitializedAsync().ConfigureAwait(false);
 
-      SvxLinkService.Connected += async () =>
+      SvxLinkService.Connected += async (c) =>
       {
-        await ShowSuccessToastAsync("Connecté", "Vous êtes maintenant connecté.");
+        await ShowSuccessToastAsync("Connecté", $"Vous êtes maintenant connecté au salon {c.Name}.");
         await InvokeAsync(() => StateHasChanged());
       };
 
@@ -82,8 +82,8 @@ namespace SvxlinkManager.Pages
 
     public int Channel
     {
-      get => SvxLinkService.Channel;
-      set => SvxLinkService.Channel = value;
+      get => SvxLinkService.ChannelId;
+      set => SvxLinkService.ChannelId = value;
     }
 
     public List<Models.Node> Nodes
