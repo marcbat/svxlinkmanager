@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #################################################################################################
-# UpdateSvxlinkManager.sh is a simple script to update SvxlinkManager application               #
+# updater.sh is a simple script to update SvxlinkManager application                            #
 # Writen by Nathanael Mermoud (HB9GVE)                                                          #
 # 05.12.2020                                                                                    #
 #                                                                                               #
