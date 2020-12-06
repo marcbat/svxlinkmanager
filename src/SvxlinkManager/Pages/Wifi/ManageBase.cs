@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Models;
+using SvxlinkManager.Pages.Shared;
 using SvxlinkManager.Service;
 
 using System;

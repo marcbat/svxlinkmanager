@@ -15,10 +15,10 @@
       <FileName>Pages\Shared\ChannelBase.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="SvxlinkManager.Pages.RepositoryComponentBase">
+  <Class Name="SvxlinkManager.Pages.Shared.RepositoryComponentBase">
     <Position X="11" Y="2.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAIEAAAAAAAAAAQAAACIIAAACAAAAACAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Pages\Shared\RepositoryComponentBase.cs</FileName>
     </TypeIdentifier>
   </Class>

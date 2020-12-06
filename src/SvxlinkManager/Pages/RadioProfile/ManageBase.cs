@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
+using SvxlinkManager.Pages.Shared;
 using SvxlinkManager.Service;
 
 using System;
