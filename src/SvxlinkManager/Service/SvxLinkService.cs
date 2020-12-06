@@ -77,7 +77,15 @@ namespace SvxlinkManager.Service
     /// </summary>
     public event Action<Node> NodeTx;
 
+    /// <summary>
+    /// Occurs when an error is throw
+    /// </summary>
     public event Action<string, string> Error;
+
+    /// <summary>
+    /// Occurs when countdown change
+    /// </summary>
+    public event Action<double> TempChanged;
 
     /// <summary>
     /// Gets or sets the current channel Id
@@ -223,6 +231,8 @@ namespace SvxlinkManager.Service
       var diff = (DateTime.Now - lastTx).TotalSeconds;
 
       logger.LogInformation($"Durée depuis le dernier passage en émission {diff} secondes.");
+
+      TempChanged?.Invoke(diff);
 
       if (diff > 180)
       {
