@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 
 using SvxlinkManager.Models;
+using SvxlinkManager.Pages.Shared;
 
 using System;
 using System.Collections.Generic;
