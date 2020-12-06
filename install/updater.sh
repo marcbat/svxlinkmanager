@@ -55,9 +55,6 @@ get_release_info
 # download the update
 wget -q -N  $LATEST_URL -P /tmp/svxlinkmanager/
 
-# stop the application before update it
-sudo systemctl stop svxlinkmanager
-
 # make a backup of the application before update
 rsync -ar /etc/SvxlinkManager/ /etc/SvxlinkManager.bak/
 rm -rf  /etc/SvxlinkManager/
@@ -69,7 +66,7 @@ unzip -qq /tmp/svxlinkmanager/$UPDATE_FILENAME -d /etc/
 cp /etc/SvxlinkManager.bak/Spotnik.db /etc/SvxlinkManager/
 
 # start the application
-sudo systemctl start svxlinkmanager
+sudo systemctl restart svxlinkmanager
 fi
 
 ##############################################
