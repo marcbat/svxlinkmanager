@@ -25,6 +25,8 @@ namespace SvxlinkManager.Service
 
     private int channelId;
 
+    private Channel channel;
+
     /// <summary>
     /// Datetime of the last TX on the current channel.
     /// </summary>
@@ -40,7 +42,7 @@ namespace SvxlinkManager.Service
       this.repositories = repositories;
 
       NodeTx += n => lastTx = DateTime.Now;
-      Connected += () => lastTx = DateTime.Now;
+      Connected += (c) => lastTx = DateTime.Now;
 
       StartDefaultChannel();
     }
@@ -48,7 +50,7 @@ namespace SvxlinkManager.Service
     /// <summary>
     /// Occurs when svxlink is connected
     /// </summary>
-    public event Action Connected;
+    public event Action<Channel> Connected;
 
     /// <summary>
     /// Occurs when svxlink is disconnected
@@ -76,29 +78,46 @@ namespace SvxlinkManager.Service
     public event Action<Node> NodeTx;
 
     /// <summary>
+    /// Occurs when an error is throw
+    /// </summary>
+    public event Action<string, string> Error;
+
+    /// <summary>
+    /// Occurs when countdown change
+    /// </summary>
+    public event Action<double> TempChanged;
+
+    /// <summary>
     /// Gets or sets the current channel Id
     /// </summary>
     /// <value>Current channel Id</value>
-    public int Channel
+    public int ChannelId
     {
       get => channelId;
       set
       {
         channelId = value;
 
-        switch (value)
+        try
         {
-          case 0:
-            StopSvxlink();
-            break;
+          switch (value)
+          {
+            case 0:
+              StopSvxlink();
+              break;
 
-          case 1000:
-            Parrot();
-            break;
+            case 1000:
+              Parrot();
+              break;
 
-          default:
-            ChangeChannel();
-            break;
+            default:
+              ChangeChannel();
+              break;
+          }
+        }
+        catch (Exception e)
+        {
+          Error?.Invoke("Impossible de changer de salon.", e.Message);
         }
       }
     }
@@ -117,7 +136,7 @@ namespace SvxlinkManager.Service
 
     /// <summary>Connecte le salon par défaut.</summary>
     private void StartDefaultChannel() =>
-      Channel = repositories.Channels.GetDefault().Id;
+      ChannelId = repositories.Channels.GetDefault().Id;
 
     /// <summary>
     /// Execute a cli command
@@ -159,7 +178,7 @@ namespace SvxlinkManager.Service
       logger.LogInformation("Salon déconnecté");
 
       // Récupère le channel
-      var channel = repositories.Channels.Get(channelId);
+      channel = repositories.Channels.Get(channelId);
       logger.LogInformation($"Recupération du salon {channel.Name}");
 
       var radioProfile = repositories.RadioProfiles.GetCurrent();
@@ -213,10 +232,12 @@ namespace SvxlinkManager.Service
 
       logger.LogInformation($"Durée depuis le dernier passage en émission {diff} secondes.");
 
+      TempChanged?.Invoke(diff);
+
       if (diff > 180)
       {
         logger.LogInformation("Delai d'inactivité dépassé. Retour au salon par défaut.");
-        Channel = repositories.Channels.GetDefault().Id;
+        ChannelId = repositories.Channels.GetDefault().Id;
       }
     }
 
@@ -270,7 +291,7 @@ namespace SvxlinkManager.Service
       {
         Nodes.Clear();
         s.Split(':')[2].Split(',').ToList().ForEach(n => Nodes.Add(new Node { Name = n }));
-        Connected?.Invoke();
+        Connected?.Invoke(channel);
       }
 
       if (s.Contains("SIGTERM"))
@@ -306,6 +327,12 @@ namespace SvxlinkManager.Service
         node.ClassName = "node";
         NodeRx?.Invoke(node);
       }
+
+      if (s.Contains("Access denied"))
+        Error?.Invoke("Echec de la connexion.", $"Impossible de se connecter au salon {channel.Name}. <br/> Accès refusé.");
+
+      if (s.Contains("Host not found"))
+        Error?.Invoke("Echec de la connexion.", $"Impossible de se connecter au salon {channel.Name}. <br/> Server {channel.Host} introuvable.");
     }
 
     /// <summary>
@@ -365,14 +392,14 @@ namespace SvxlinkManager.Service
         var dtmf = File.ReadAllText(dtmfFilePath);
         logger.LogInformation($"Nouveau dtmf {dtmf}");
 
-        var channel = repositories.Channels.FindBy(c => c.Dtmf == Int32.Parse(dtmf));
-        if (channel == null)
+        var dtmfChannel = repositories.Channels.FindBy(c => c.Dtmf == Int32.Parse(dtmf));
+        if (dtmfChannel == null)
         {
           logger.LogInformation($"Le dtmf {dtmf} ne correspond à aucun channel.");
           return;
         }
 
-        Channel = channel.Id;
+        ChannelId = dtmfChannel.Id;
       };
 
       watcher.EnableRaisingEvents = true;
@@ -416,6 +443,9 @@ namespace SvxlinkManager.Service
     /// </summary>
     private void StartSvxLink()
     {
+      if (channel?.CallSign == "(CH) SVX4LINK H")
+        Error?.Invoke("Attention", "Vous êtes actuellement connecté avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.");
+
       var cmd = $"svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config={applicationPath}/SvxlinkConfig/svxlink.current";
 
       var escapedArgs = cmd.Replace("\"", "\\\"");
@@ -442,7 +472,6 @@ namespace SvxlinkManager.Service
       shell.BeginErrorReadLine();
       shell.BeginOutputReadLine();
 
-      var channel = repositories.Channels.Find(channelId);
       if (channel != null && channel.IsTemporized)
         SetTimer();
 

@@ -37,7 +37,7 @@ namespace SvxlinkManager.Pages.RadioProfile
 
       RadioProfiles.Remove(RadioProfiles.Single(c => c.Id == id));
 
-      await ShowToastAsync("Supprimé", "Le profil radio a bien été supprimé.", ToastType.Success);
+      await ShowSuccessToastAsync("Supprimé", "Le profil radio a bien été supprimé.");
 
       StateHasChanged();
     }
@@ -51,7 +51,7 @@ namespace SvxlinkManager.Pages.RadioProfile
       profile.Enable = true;
       Repositories.RadioProfiles.Update(profile);
 
-      await ShowToastAsync($"{profile.Name} appliqué.", $"Le profil radio {profile.Name} a bien été appliqué.", ToastType.Success);
+      await ShowSuccessToastAsync($"{profile.Name} appliqué.", $"Le profil radio {profile.Name} a bien été appliqué.");
 
       NavigationManager.NavigateTo("/RadioProfile/Manage", true);
     }

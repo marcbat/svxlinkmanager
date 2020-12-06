@@ -23,46 +23,88 @@ using System.Xml.Linq;
 
 namespace SvxlinkManager.Pages
 {
-  public class HomeBase : ChannelBase
+  public class HomeBase : ChannelBase, IDisposable
   {
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync().ConfigureAwait(false);
 
-      SvxLinkService.Connected += async () =>
-      {
-        await ShowToastAsync("Connecté", "Vous êtes maintenant connecté.", ToastType.Success);
-        await InvokeAsync(() => StateHasChanged());
-      };
+      SvxLinkService.Connected += SvxLinkService_ConnectedAsync;
 
-      SvxLinkService.Disconnected += () =>
-      {
-        CurrentTxNode = null;
-        InvokeAsync(() => StateHasChanged());
-      };
+      SvxLinkService.Disconnected += SvxLinkService_Disconnected;
 
-      SvxLinkService.NodeConnected += n =>
-        InvokeAsync(() => StateHasChanged());
+      SvxLinkService.NodeConnected += SvxLinkService_NodeConnected;
 
-      SvxLinkService.NodeDisconnected += n =>
-        InvokeAsync(() => StateHasChanged());
+      SvxLinkService.NodeDisconnected += SvxLinkService_NodeDisconnected;
 
-      SvxLinkService.NodeTx += n =>
-      {
-        CurrentTxNode = n;
-        InvokeAsync(() => StateHasChanged());
-      };
+      SvxLinkService.NodeTx += SvxLinkService_NodeTx;
 
-      SvxLinkService.NodeRx += n =>
-      {
-        CurrentTxNode = null;
-        InvokeAsync(() => StateHasChanged());
-      };
+      SvxLinkService.NodeRx += SvxLinkService_NodeRx;
+
+      SvxLinkService.Error += SvxLinkService_Error;
+    }
+
+    private async void SvxLinkService_Error(string t, string b)
+    {
+      await ShowErrorToastAsync(t, b);
+    }
+
+    private void SvxLinkService_NodeRx(Models.Node n)
+    {
+      CurrentTxNode = null;
+      InvokeAsync(() => StateHasChanged());
+    }
+
+    private void SvxLinkService_NodeTx(Models.Node n)
+    {
+      CurrentTxNode = n;
+      InvokeAsync(() => StateHasChanged());
+    }
+
+    private async void SvxLinkService_NodeDisconnected(Models.Node n)
+    {
+      await ShowInfoToastAsync(n.Name, "A quitté le salon.");
+      await InvokeAsync(() => StateHasChanged());
+    }
+
+    private async void SvxLinkService_NodeConnected(Models.Node n)
+    {
+      await ShowInfoToastAsync(n.Name, "A rejoint le salon.");
+      await InvokeAsync(() => StateHasChanged());
+    }
+
+    private void SvxLinkService_Disconnected()
+    {
+      CurrentTxNode = null;
+      InvokeAsync(() => StateHasChanged());
+    }
+
+    private async void SvxLinkService_ConnectedAsync(Channel c)
+    {
+      await ShowSuccessToastAsync("Connecté", $"Vous êtes maintenant connecté au salon:<br/><strong>{c.Name}</strong>");
+      await InvokeAsync(() => StateHasChanged());
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
       await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
+    }
+
+    public void Dispose()
+    {
+      SvxLinkService.Connected -= SvxLinkService_ConnectedAsync;
+
+      SvxLinkService.Disconnected -= SvxLinkService_Disconnected;
+
+      SvxLinkService.NodeConnected -= SvxLinkService_NodeConnected;
+
+      SvxLinkService.NodeDisconnected -= SvxLinkService_NodeDisconnected;
+
+      SvxLinkService.NodeTx -= SvxLinkService_NodeTx;
+
+      SvxLinkService.NodeRx -= SvxLinkService_NodeRx;
+
+      SvxLinkService.Error -= SvxLinkService_Error;
     }
 
     [Inject]
@@ -77,8 +119,8 @@ namespace SvxlinkManager.Pages
 
     public int Channel
     {
-      get => SvxLinkService.Channel;
-      set => SvxLinkService.Channel = value;
+      get => SvxLinkService.ChannelId;
+      set => SvxLinkService.ChannelId = value;
     }
 
     public List<Models.Node> Nodes

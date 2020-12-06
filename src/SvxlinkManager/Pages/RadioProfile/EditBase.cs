@@ -21,7 +21,7 @@ namespace SvxlinkManager.Pages.RadioProfile
     {
       Repositories.RadioProfiles.Update(RadioProfile);
 
-      await ShowToastAsync("Modifié", $"le profil radio {RadioProfile.Name} a bien été modifié.", ToastType.Success);
+      await ShowSuccessToastAsync("Modifié", $"le profil radio {RadioProfile.Name} a bien été modifié.");
 
       NavigationManager.NavigateTo("RadioProfile/Manage");
     }

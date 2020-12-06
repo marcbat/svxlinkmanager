@@ -27,7 +27,7 @@ namespace SvxlinkManager.Pages.Channels
 
       StateHasChanged();
 
-      await ShowToastAsync("Supprimé", "Le salon a bien été supprimé.", ToastType.Success);
+      await ShowSuccessToastAsync("Supprimé", "Le salon a bien été supprimé.");
 
       NavigationManager.NavigateTo("/Channel/Manage");
     }
