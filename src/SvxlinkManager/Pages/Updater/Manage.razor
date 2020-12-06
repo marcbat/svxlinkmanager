@@ -3,4 +3,29 @@
 
 @attribute [Authorize]
 
-<h3>Manage</h3>
+<h3>Releases</h3>
+
+<ul id="channel-manage-list" class="list-group-horizontal">
+  @foreach (var release in Releases)
+  {
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-md-3 text-nowrap">
+          @release.Name
+        </div>
+        <div class="col-md-2 text-nowrap">@release.Created</div>
+        <div class="col-md-5 text-truncate"><a href="@release.HtmlUrl" target="_blank">Détails de la release</a></div>
+        <div class="col-md-2">
+          @if (IsExist(@release))
+          {
+            <button id="install-@release.Id" type="button" class="btn btn-danger" @onclick="@(() => Install(release))">Installer</button>
+          }
+          else
+          {
+            <button id="download-@release.Id" type="button" class="btn btn-info" @onclick="@(() => DownloadAsync(release))">Obtenir</button>
+          }
+        </div>
+      </div>
+    </li>
+  }
+</ul>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace SvxlinkManager.Pages.Shared
 {
@@ -43,5 +44,31 @@ namespace SvxlinkManager.Pages.Shared
     /// <param name="delay">Autohide delay in second</param>
     private async Task ShowToastAsync(string title, string body, string type, bool autohide = true, int delay = 5000) =>
       await Js.InvokeVoidAsync("addToast", Guid.NewGuid().ToString(), title, body, type, DateTime.Now.ToString("HH:mm:ss"), autohide, delay);
+
+    protected (string, string) ExecuteCommand(string cmd)
+    {
+      var escapedArgs = cmd.Replace("\"", "\\\"");
+
+      Logger.LogInformation($"Execution de la commande {cmd}.");
+
+      var process = new Process()
+      {
+        StartInfo = new ProcessStartInfo
+        {
+          FileName = "/bin/bash",
+          Arguments = $"-c \"{escapedArgs}\"",
+          RedirectStandardOutput = true,
+          RedirectStandardError = true,
+          UseShellExecute = false,
+          CreateNoWindow = true,
+        }
+      };
+      process.Start();
+      string result = process.StandardOutput.ReadToEnd();
+      string error = process.StandardError.ReadToEnd();
+      process.WaitForExit();
+
+      return (result?.Trim(), error?.Trim());
+    }
   }
 }
