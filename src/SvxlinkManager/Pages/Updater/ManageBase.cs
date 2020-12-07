@@ -41,8 +41,15 @@ namespace SvxlinkManager.Pages.Updater
 
     public bool IsCurrent(Release release) => release.TagName == CurrentVersion;
 
-    public void Install(Release release)
+    public async Task InstallAsync(Release release)
     {
+      ExecuteCommand($"chmod 755 /tmp/svxlinkmanager/svxlinkmanager-{release.TagName}.zip");
+      ExecuteCommand($"chmod 755 /tmp/svxlinkmanager/updater-{release.TagName}.sh");
+
+      var (result, error) = ExecuteCommand($"/tmp/svxlinkmanager/updater-{release.TagName}.sh update");
+
+      if (!string.IsNullOrEmpty(error))
+        await ShowErrorToastAsync("Erreur", error);
     }
 
     public async Task DownloadAsync(Release release)
@@ -78,47 +85,5 @@ namespace SvxlinkManager.Pages.Updater
       await Js.InvokeVoidAsync("DownloadUpdate", release.Id);
       client.DownloadFileAsync(new Uri(package.DownloadUrl), $"/tmp/svxlinkmanager/{package.Name}", package.Name);
     }
-  }
-
-  public class Release
-  {
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
-
-    [JsonPropertyName("name")]
-    public string Name { get; set; }
-
-    [JsonPropertyName("tag_name")]
-    public string TagName { get; set; }
-
-    [JsonPropertyName("prerelease")]
-    public bool Prerelease { get; set; }
-
-    [JsonPropertyName("created_at")]
-    public string CreatedAt { get; set; }
-
-    [JsonIgnore]
-    public string Created => DateTime.Parse(CreatedAt).ToString("dd MMMM yyyy HH:mm");
-
-    [JsonPropertyName("assets_url")]
-    public string AssetsUrl { get; set; }
-
-    [JsonPropertyName("html_url")]
-    public string HtmlUrl { get; set; }
-
-    [JsonPropertyName("assets")]
-    public List<Asset> Assets { get; set; }
-  }
-
-  public class Asset
-  {
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
-
-    [JsonPropertyName("name")]
-    public string Name { get; set; }
-
-    [JsonPropertyName("browser_download_url")]
-    public string DownloadUrl { get; set; }
   }
 }

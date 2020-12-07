@@ -18,7 +18,7 @@
         <div class="col-md-2">
           @if (IsExist(@release))
           {
-            <button id="install-@release.Id" type="button" class="btn btn-danger" @onclick="@(() => Install(release))">Installer</button>
+            <button id="install-@release.Id" type="button" class="btn btn-danger" @onclick="@(() => InstallAsync(release))">Installer</button>
           }
           else
           {
