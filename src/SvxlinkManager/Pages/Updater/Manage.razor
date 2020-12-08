@@ -27,6 +27,10 @@
               <button id="download-@release.Id" type="button" class="btn btn-info" @onclick="@(() => DownloadAsync(release))">Obtenir</button>
             }
           }
+          else
+          {
+            <a class="btn btn-primary" href="Channel/Manage" role="button">Version courante</a>
+          }
         </div>
       </div>
     </li>
