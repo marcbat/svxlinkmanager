@@ -12,26 +12,14 @@
 # UpdateSvxlinkManager.sh clean         - clean the download temp dir of this script            #
 #################################################################################################
 
-#########################################################
-# fonction to get the file with the release information #
-# and useful stuf                                       #
-#########################################################
-get_release_info () {
-        wget -q -N  https://api.github.com/repos/marcbat/svxlinkmanager/releases/latest -P /tmp/svxlinkmanager/
-        LATEST_VERSION=$(grep tag_name /tmp/svxlinkmanager/latest | cut -d'"' -f4)
-        LATEST_URL=$(grep browser_download_url /tmp/svxlinkmanager/latest | cut -d'"' -f4)
-        UPDATE_FILENAME=$(grep -E "name.*zip" /tmp/svxlinkmanager/latest | cut -d'"' -f4)
-}
-
 #############################
 # get latest version number #
 #############################
 if [ $1 = "checkversion" ]
 then
-get_release_info
 
 # display the version number
-echo $LATEST_VERSION
+echo "__Build.BuildNumber__"
 fi
 
 ###########################
@@ -39,10 +27,9 @@ fi
 ###########################
 if [ $1 = "download" ]
 then
-get_release_info
 
 # download the update
-wget -q -N  $LATEST_URL -P /tmp/svxlinkmanager/
+wget -q -N  https://github.com/marcbat/svxlinkmanager/releases/download/__Build.BuildNumber__/svxlinkmanager-__Build.BuildNumber__.zip -P /tmp/svxlinkmanager/
 fi
 
 ########################################
@@ -50,17 +37,13 @@ fi
 ########################################
 if [ $1 = "update" ]
 then
-get_release_info
-
-# download the update
-wget -q -N  $LATEST_URL -P /tmp/svxlinkmanager/
 
 # make a backup of the application before update
 rsync -ar /etc/SvxlinkManager/ /etc/SvxlinkManager.bak/
 rm -rf  /etc/SvxlinkManager/
 
 # update the application
-unzip -qq /tmp/svxlinkmanager/$UPDATE_FILENAME -d /etc/
+unzip /tmp/svxlinkmanager/svxlinkmanager-__Build.BuildNumber__.zip -d /etc/
 
 # restore the old user db
 cp /etc/SvxlinkManager.bak/Spotnik.db /etc/SvxlinkManager/

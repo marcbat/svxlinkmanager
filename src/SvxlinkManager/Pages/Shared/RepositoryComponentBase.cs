@@ -9,44 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Pages
+namespace SvxlinkManager.Pages.Shared
 {
-  public class RepositoryComponentBase : ComponentBase
+  public class RepositoryComponentBase : SvxlinkManagerComponentBase
   {
     [Inject]
-    public ILogger<HomeBase> Logger { get; set; }
-
-    [Inject]
     public IRepositories Repositories { get; set; }
-
-    [Inject]
-    public IJSRuntime Js { get; set; }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-      await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
-
-      await Js.InvokeVoidAsync("SetToolTips");
-
-      await Js.InvokeVoidAsync("SetPopOver");
-    }
-
-    protected async Task ShowErrorToastAsync(string title, string body, bool autohide = true, int delay = 10000) =>
-      await ShowToastAsync(title, body, "danger", autohide, delay);
-
-    protected async Task ShowInfoToastAsync(string title, string body, bool autohide = true, int delay = 5000) =>
-      await ShowToastAsync(title, body, "info", autohide, delay);
-
-    protected async Task ShowSuccessToastAsync(string title, string body, bool autohide = true, int delay = 5000) =>
-      await ShowToastAsync(title, body, "success", autohide, delay);
-
-    /// <summary>Show new toast.</summary>
-    /// <param name="title">Toast title</param>
-    /// <param name="body">Toast body</param>
-    /// <param name="type">Toast type. Accept : success, info, danger</param>
-    /// <param name="autohide">Autohide, always false if type is danger</param>
-    /// <param name="delay">Autohide delay in second</param>
-    private async Task ShowToastAsync(string title, string body, string type, bool autohide = true, int delay = 5000) =>
-      await Js.InvokeVoidAsync("addToast", Guid.NewGuid().ToString(), title, body, type, DateTime.Now.ToString("HH:mm:ss"), autohide, delay);
   }
 }

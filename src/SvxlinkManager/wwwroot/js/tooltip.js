@@ -24,3 +24,15 @@ function addToast(id, title, body, type, hour, autohide, delay) {
 
   $('#toast-' + id).toast('show');
 };
+
+function DownloadUpdate(id) {
+  $('#download-' + id).prop("disabled", true);
+};
+
+function UpdateDownloadStatus(id, percent) {
+  $('#download-' + id).text("En cours " + percent + "%")
+}
+
+function UpdateInstallStatus(id, texte) {
+  $('#install-' + id).text(texte)
+}
