@@ -16,13 +16,16 @@
         <div class="col-md-2 text-nowrap">@release.Created</div>
         <div class="col-md-5 text-truncate"><a href="@release.HtmlUrl" target="_blank">Détails de la release</a></div>
         <div class="col-md-2">
-          @if (IsExist(@release))
+          @if (!IsCurrent(release))
           {
-            <button id="install-@release.Id" type="button" class="btn btn-danger" @onclick="@(() => InstallAsync(release))">Installer</button>
-          }
-          else
-          {
-            <button id="download-@release.Id" type="button" class="btn btn-info" @onclick="@(() => DownloadAsync(release))">Obtenir</button>
+            @if (IsExist(@release))
+            {
+              <button id="install-@release.Id" data-toggle="tooltip" title="L'installation peut prendre un certain temps. <br /> Vous devrez recharger la page dans 30 secondes environ." type="button" class="btn btn-danger" @onclick="@(() => InstallAsync(release))">Installer</button>
+            }
+            else
+            {
+              <button id="download-@release.Id" type="button" class="btn btn-info" @onclick="@(() => DownloadAsync(release))">Obtenir</button>
+            }
           }
         </div>
       </div>

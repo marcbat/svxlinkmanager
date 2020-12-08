@@ -43,6 +43,8 @@ namespace SvxlinkManager.Pages.Updater
 
     public async Task InstallAsync(Release release)
     {
+      await Js.InvokeVoidAsync("UpdateInstallStatus", "Installation en cours");
+
       ExecuteCommand($"chmod 755 /tmp/svxlinkmanager/svxlinkmanager-{release.TagName}.zip");
       ExecuteCommand($"chmod 755 /tmp/svxlinkmanager/updater-{release.TagName}.sh");
 
@@ -50,6 +52,8 @@ namespace SvxlinkManager.Pages.Updater
 
       if (!string.IsNullOrEmpty(error))
         await ShowErrorToastAsync("Erreur", error);
+
+      StateHasChanged();
     }
 
     public async Task DownloadAsync(Release release)

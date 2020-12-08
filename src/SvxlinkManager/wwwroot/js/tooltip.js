@@ -32,3 +32,7 @@ function DownloadUpdate(id) {
 function UpdateDownloadStatus(id, percent) {
   $('#download-' + id).text("En cours " + percent + "%")
 }
+
+function UpdateInstallStatus(id, texte) {
+  $('#install-' + id).text(texte)
+}
