@@ -16,6 +16,9 @@ namespace SvxlinkManager.Pages.Updater
 {
   public class ManageBase : SvxlinkManagerComponentBase
   {
+    private List<Release> releases;
+    private bool includePrerelease = false;
+
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync().ConfigureAwait(false);
@@ -31,11 +34,29 @@ namespace SvxlinkManager.Pages.Updater
       Releases = JsonSerializer.Deserialize<List<Release>>(result);
     }
 
-    public List<Release> Releases { get; set; }
+    public List<Release> Releases
+    {
+      get
+      {
+        if (IncludePrerelease)
+          return releases;
+        else
+          return releases.Where(r => !r.Prerelease).ToList();
+      }
+      set => releases = value;
+    }
 
     public string CurrentVersion => Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
-    public bool IncludePrerelease { get; set; } = false;
+    public bool IncludePrerelease
+    {
+      get => includePrerelease;
+      set
+      {
+        includePrerelease = value;
+        StateHasChanged();
+      }
+    }
 
     public bool IsExist(Release release) => File.Exists($"/tmp/svxlinkmanager/{release.Assets.SingleOrDefault(a => a.Name.Contains("updater"))?.Name}");
 

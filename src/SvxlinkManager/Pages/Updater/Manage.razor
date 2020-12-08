@@ -4,7 +4,15 @@
 @attribute [Authorize]
 
 <h3>Releases</h3>
-
+<form>
+  <div class="form-check">
+    <input class="form-check-input" @bind="IncludePrerelease" type="checkbox" id="IncludePrerelease">
+    <label class="form-check-label" for="defaultCheck1">
+      Inclure les versions preview
+    </label>
+  </div>
+  
+</form>
 <ul id="channel-manage-list" class="list-group-horizontal">
   @foreach (var release in Releases)
   {
