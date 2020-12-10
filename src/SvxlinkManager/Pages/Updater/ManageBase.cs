@@ -65,7 +65,7 @@ namespace SvxlinkManager.Pages.Updater
 
     public async Task InstallAsync(Release release)
     {
-      await Js.InvokeVoidAsync("UpdateInstallStatus", "Installation en cours");
+      await Js.InvokeVoidAsync("UpdateInstallStatus", release.Id, "Installation en cours");
 
       ExecuteCommand($"chmod 755 /tmp/svxlinkmanager/updater-{release.TagName}.sh");
 
@@ -79,52 +79,53 @@ namespace SvxlinkManager.Pages.Updater
 
     public async Task DownloadAsync(Release release)
     {
-      Directory.CreateDirectory("/tmp/svxlinkmanager");
+      var downloadPath = "/tmp/svxlinkmanager";
 
-      using WebClient client = new WebClient();
-      client.Headers.Add(HttpRequestHeader.UserAgent, "request");
-
-      var packageCheckSum = client.DownloadString(release.PackageCheckSum.DownloadUrl).Split(' ')[0].ToUpper();
-      var UpdaterCheckSum = client.DownloadString(release.UpdaterCheckSum.DownloadUrl).Split(' ')[0].ToUpper();
-
-      var packageTarget = $"/tmp/svxlinkmanager/{release.Package.Name}";
-      var updaterTarget = $"/tmp/svxlinkmanager/{release.Updater.Name}";
-
-      client.DownloadProgressChanged += async (s, e) =>
+      try
       {
-        if ((int)e.UserState == release.Package.Id)
-          await Js.InvokeVoidAsync("UpdateDownloadStatus", release.Id, e.ProgressPercentage);
-      };
+        Directory.Delete(downloadPath, true);
 
-      client.DownloadFileCompleted += async (s, e) =>
-      {
-        if ((int)e.UserState == release.Package.Id)
+        var downloadDirectory = Directory.CreateDirectory(downloadPath);
+
+        using WebClient client = new WebClient();
+        client.Headers.Add(HttpRequestHeader.UserAgent, "request");
+
+        var packageCheckSum = client.DownloadString(release.PackageCheckSum.DownloadUrl).Split(' ')[0].ToUpper();
+        var UpdaterCheckSum = client.DownloadString(release.UpdaterCheckSum.DownloadUrl).Split(' ')[0].ToUpper();
+
+        var packageTarget = $"{downloadDirectory.FullName}/{release.Package.Name}";
+        var updaterTarget = $"{downloadDirectory.FullName}/{release.Updater.Name}";
+
+        client.DownloadProgressChanged += async (s, e) =>
+            await Js.InvokeVoidAsync("UpdateDownloadStatus", release.Id, e.ProgressPercentage);
+
+        client.DownloadFileCompleted += async (s, e) =>
         {
           await ShowSuccessToastAsync("Mise à jour", $"La version {release.TagName} est téléchargée.");
 
           if (packageCheckSum != GetChecksum(packageTarget))
-          {
-            await ShowErrorToastAsync($"Erreur", $"Echec de la validation du fichier {release.Package.Name}.");
-            return;
-          }
+            throw new Exception($"Echec de la validation du fichier {release.Package.Name}.");
 
-          client.DownloadFileAsync(new Uri(release.Updater.DownloadUrl), updaterTarget, release.Updater.Id);
-        }
+          client.DownloadFile(new Uri(release.Updater.DownloadUrl), updaterTarget);
 
-        if ((int)e.UserState == release.Updater.Id)
-        {
           if (UpdaterCheckSum != GetChecksum(updaterTarget))
-          {
-            await ShowErrorToastAsync($"Erreur", $"Echec de la validation du fichier {release.Updater.Name}.");
-          }
+            throw new Exception($"Echec de la validation du fichier {release.Updater.Name}.");
 
           StateHasChanged();
-        }
-      };
+        };
 
-      await ShowInfoToastAsync("Mise à jour", $"La version {release.TagName} est en cours de téléchargent.");
-      await Js.InvokeVoidAsync("DownloadUpdate", release.Id);
-      client.DownloadFileAsync(new Uri(release.Package.DownloadUrl), packageTarget, release.Package.Id);
+        await ShowInfoToastAsync("Mise à jour", $"La version {release.TagName} est en cours de téléchargement.");
+        await Js.InvokeVoidAsync("DownloadUpdate", release.Id);
+        client.DownloadFileAsync(new Uri(release.Package.DownloadUrl), packageTarget);
+      }
+      catch (Exception e)
+      {
+        await ShowErrorToastAsync($"Erreur", $"Echec de la mise à jour {release.Package.Name}.<br/> {e.Message}");
+
+        Directory.Delete(downloadPath, true);
+
+        StateHasChanged();
+      }
     }
 
     private static string GetChecksum(string file)
