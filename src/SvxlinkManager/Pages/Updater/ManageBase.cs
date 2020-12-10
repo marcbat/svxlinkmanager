@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -58,7 +59,7 @@ namespace SvxlinkManager.Pages.Updater
       }
     }
 
-    public bool IsExist(Release release) => File.Exists($"/tmp/svxlinkmanager/{release.Assets.SingleOrDefault(a => a.Name.Contains("updater"))?.Name}");
+    public bool IsExist(Release release) => File.Exists($"/tmp/svxlinkmanager/{release.Updater?.Name}");
 
     public bool IsCurrent(Release release) => release.TagName == CurrentVersion;
 
@@ -66,7 +67,6 @@ namespace SvxlinkManager.Pages.Updater
     {
       await Js.InvokeVoidAsync("UpdateInstallStatus", "Installation en cours");
 
-      ExecuteCommand($"chmod 755 /tmp/svxlinkmanager/svxlinkmanager-{release.TagName}.zip");
       ExecuteCommand($"chmod 755 /tmp/svxlinkmanager/updater-{release.TagName}.sh");
 
       var (result, error) = ExecuteCommand($"/tmp/svxlinkmanager/updater-{release.TagName}.sh update");
@@ -79,36 +79,62 @@ namespace SvxlinkManager.Pages.Updater
 
     public async Task DownloadAsync(Release release)
     {
-      var package = release.Assets.Single(a => a.Name.Contains("svxlinkmanager"));
-      var updater = release.Assets.Single(a => a.Name.Contains("updater"));
-
       Directory.CreateDirectory("/tmp/svxlinkmanager");
 
       using WebClient client = new WebClient();
       client.Headers.Add(HttpRequestHeader.UserAgent, "request");
 
+      var packageCheckSum = client.DownloadString(release.PackageCheckSum.DownloadUrl).Split(' ')[0].ToUpper();
+      var UpdaterCheckSum = client.DownloadString(release.UpdaterCheckSum.DownloadUrl).Split(' ')[0].ToUpper();
+
+      var packageTarget = $"/tmp/svxlinkmanager/{release.Package.Name}";
+      var updaterTarget = $"/tmp/svxlinkmanager/{release.Updater.Name}";
+
       client.DownloadProgressChanged += async (s, e) =>
       {
-        if ((string)e.UserState == package.Name)
+        if ((int)e.UserState == release.Package.Id)
           await Js.InvokeVoidAsync("UpdateDownloadStatus", release.Id, e.ProgressPercentage);
       };
 
       client.DownloadFileCompleted += async (s, e) =>
       {
-        if ((string)e.UserState == package.Name)
+        if ((int)e.UserState == release.Package.Id)
         {
           await ShowSuccessToastAsync("Mise à jour", $"La version {release.TagName} est téléchargée.");
 
-          client.DownloadFileAsync(new Uri(updater.DownloadUrl), $"/tmp/svxlinkmanager/{updater.Name}", updater.Name);
+          if (packageCheckSum != GetChecksum(packageTarget))
+          {
+            await ShowErrorToastAsync($"Erreur", $"Echec de la validation du fichier {release.Package.Name}.");
+            return;
+          }
+
+          client.DownloadFileAsync(new Uri(release.Updater.DownloadUrl), updaterTarget, release.Updater.Id);
         }
 
-        if ((string)e.UserState == updater.Name)
+        if ((int)e.UserState == release.Updater.Id)
+        {
+          if (UpdaterCheckSum != GetChecksum(updaterTarget))
+          {
+            await ShowErrorToastAsync($"Erreur", $"Echec de la validation du fichier {release.Updater.Name}.");
+          }
+
           StateHasChanged();
+        }
       };
 
       await ShowInfoToastAsync("Mise à jour", $"La version {release.TagName} est en cours de téléchargent.");
       await Js.InvokeVoidAsync("DownloadUpdate", release.Id);
-      client.DownloadFileAsync(new Uri(package.DownloadUrl), $"/tmp/svxlinkmanager/{package.Name}", package.Name);
+      client.DownloadFileAsync(new Uri(release.Package.DownloadUrl), packageTarget, release.Package.Id);
+    }
+
+    private static string GetChecksum(string file)
+    {
+      using (FileStream stream = File.OpenRead(file))
+      {
+        var sha = new SHA256Managed();
+        byte[] checksum = sha.ComputeHash(stream);
+        return BitConverter.ToString(checksum).Replace("-", "");
+      }
     }
   }
 }

@@ -34,6 +34,18 @@ namespace SvxlinkManager.Pages.Updater
 
     [JsonPropertyName("assets")]
     public List<Asset> Assets { get; set; }
+
+    [JsonIgnore]
+    public Asset Package => Assets.SingleOrDefault(a => a.Name == $"svxlinkmanager-{TagName}.zip");
+
+    [JsonIgnore]
+    public Asset Updater => Assets.SingleOrDefault(a => a.Name == $"updater-{TagName}.sh");
+
+    [JsonIgnore]
+    public Asset PackageCheckSum => Assets.SingleOrDefault(a => a.Name == $"svxlinkmanager-{TagName}.zip.sha");
+
+    [JsonIgnore]
+    public Asset UpdaterCheckSum => Assets.SingleOrDefault(a => a.Name == $"updater-{TagName}.sh.sha");
   }
 
   public class Asset
