@@ -1,9 +1,10 @@
-﻿@page "/Channel/Edit/{Id}"
-@inherits SvxlinkManager.Pages.Channels.EditBase
+﻿@using SvxlinkManager.Models
+
+@page "/Channel/Edit/{Id}"
+@inherits SvxlinkManager.Pages.Channels.EditBase<SvxlinkChannel>
 
 @attribute [Authorize]
 
 <h3>Editer @Channel.Name</h3>
 
 <AddEditForm Channel="@Channel" HandleValidSubmit="@HandleValidSubmit" SubmitTitle="@SubmitTitle" />
-

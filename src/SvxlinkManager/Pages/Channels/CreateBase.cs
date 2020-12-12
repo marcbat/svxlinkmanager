@@ -9,20 +9,14 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Channels
 {
-  public class CreateBase : AddEditBase
+  public class CreateBase<TChannel> : AddEditBase<TChannel> where TChannel : Channel, new()
   {
-    #region Properties
-
     protected override string SubmitTitle => "Créer";
-
-    #endregion Properties
-
-    #region Methods
 
     /// <summary>
     /// Handles the form submit.
     /// </summary>
-    public override async Task HandleValidSubmit()
+    public async Task HandleValidSubmit(string redirect)
     {
       await base.HandleValidSubmit();
 
@@ -30,16 +24,14 @@ namespace SvxlinkManager.Pages.Channels
 
       await ShowSuccessToastAsync("Success", $"Le salon {Channel.Name} a été crée.");
 
-      NavigationManager.NavigateTo("Channel/Manage");
+      NavigationManager.NavigateTo($"{redirect}/Manage");
     }
 
     protected override void OnInitialized()
     {
       base.OnInitialized();
 
-      Channel = new Channel();
+      Channel = new TChannel();
     }
-
-    #endregion Methods
   }
 }

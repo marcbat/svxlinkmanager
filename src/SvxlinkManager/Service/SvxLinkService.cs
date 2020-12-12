@@ -25,7 +25,7 @@ namespace SvxlinkManager.Service
 
     private int channelId;
 
-    private Channel channel;
+    private SvxlinkChannel channel;
 
     /// <summary>
     /// Datetime of the last TX on the current channel.
@@ -178,7 +178,7 @@ namespace SvxlinkManager.Service
       logger.LogInformation("Salon déconnecté");
 
       // Récupère le channel
-      channel = repositories.Channels.Get(channelId);
+      channel = repositories.SvxlinkChannels.Get(channelId);
       logger.LogInformation($"Recupération du salon {channel.Name}");
 
       var radioProfile = repositories.RadioProfiles.GetCurrent();

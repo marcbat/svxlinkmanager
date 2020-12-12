@@ -1,14 +1,14 @@
 ﻿@using SvxlinkManager.Models
 
-@page "/Channel/Manage"
-@inherits SvxlinkManager.Pages.Channels.ManageBase<SvxlinkChannel>
+@page "/Echolink/Manage"
+@inherits SvxlinkManager.Pages.Channels.ManageBase<EcholinkChannel>
 
 @attribute [Authorize]
 
 <div class="row">
   <div class="col-md-2"><h3>Salons</h3></div>
-  <div class="col-md-2 offset-md-8">
-    <a class="btn btn-outline-success" href="Channel/Create" role="button">Créer un nouveau salon</a>
+  <div class="col-md-3 offset-md-5">
+    <a class="btn btn-outline-success" href="Echolink/Create" role="button">Créer une nouvelle configuration Echolink</a>
   </div>
 </div>
 
@@ -25,10 +25,9 @@
           &nbsp;@channel.Name
         </div>
         <div class="col-md-2 text-nowrap">@channel.CallSign</div>
-        <div class="col-md-4 text-truncate">@channel.Host</div>
-        <div class="col-md-1">@channel.Port</div>
+        <div class="col-md-5 text-truncate">@channel.Host</div>
         <div class="col-md-2">
-          <a class="btn btn-outline-primary" href="Channel/Edit/@channel.Id" role="button">Editer</a> &nbsp; @if (!channel.IsDefault)
+          <a class="btn btn-outline-primary" href="Echolink/Edit/@channel.Id" role="button">Editer</a> &nbsp; @if (!channel.IsDefault)
           {<button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(channel))">Supprimer</button>}
         </div>
       </div>

@@ -13,7 +13,6 @@ namespace SvxlinkManager.Pages.Shared
 {
   public class ChannelBase : RepositoryComponentBase
   {
-
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync().ConfigureAwait(false);
@@ -21,10 +20,8 @@ namespace SvxlinkManager.Pages.Shared
       LoadChannels();
     }
 
-    
-    public List<Channel> Channels { get; set; }
+    public List<SvxlinkChannel> Channels { get; set; }
 
-    private void LoadChannels() => Channels = Repositories.Channels.GetAll().ToList();
-
+    private void LoadChannels() => Channels = Repositories.SvxlinkChannels.GetAll().ToList();
   }
 }
