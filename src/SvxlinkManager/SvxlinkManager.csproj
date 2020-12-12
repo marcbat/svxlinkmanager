@@ -71,6 +71,9 @@
     <None Update="SvxlinkConfig\svxlink.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SvxlinkConfig\svxlink.current">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SvxlinkConfig\svxlink.d\ModuleDtmfRepeater.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

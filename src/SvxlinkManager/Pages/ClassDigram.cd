@@ -3,17 +3,10 @@
   <Class Name="SvxlinkManager.Pages.HomeBase">
     <Position X="3.5" Y="9.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>ABAgAAAkgCAEAAQAgAAAQAAAAACAAAECAAACAACAAAA=</HashCode>
+      <HashCode>ABAgAAAkgCAEAAQAgAAAQAAAAACBAAECAAACAACAEAA=</HashCode>
       <FileName>Pages\HomeBase.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="SvxlinkManager.Pages.Shared.ChannelBase">
-    <Position X="3.75" Y="6.75" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAACAAAAAAAAEAA=</HashCode>
-      <FileName>Pages\Shared\ChannelBase.cs</FileName>
-    </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Pages.Shared.RepositoryComponentBase">
     <Position X="12.75" Y="4.75" Width="2.25" />
