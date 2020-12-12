@@ -1,0 +1,99 @@
+﻿@using System.IO;
+
+<EditForm Model="@Channel" OnValidSubmit="@HandleValidSubmit">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label data-toggle="tooltip" title="Le nom du link s'affichera dans le menu déroulant de la page d'accueil.<br /> Choisissez un nom unique.">Nom du link</label>
+      <InputText @bind-Value="Channel.Name" type="text" class="form-control" id="inputName" placeholder="Nom du link" />
+    </div>
+    <div class="form-group col-md-6">
+      <label data-toggle="tooltip" title="Un fichier .wav qui sera joué lors de l'activation du link.">Annonce vocal</label>
+      <InputFile OnChange="@OnInputFileChange" class="form-control" id="inputName" />
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label data-toggle="tooltip" title="L'adresse internet du serveur Echolink.">Adresse du serveur</label>
+      <InputText @bind-Value="Channel.Host" type="text" class="form-control" id="inputHost" placeholder="europe.echolink.org" />
+    </div>
+    <div class="form-group col-md-6">
+      <label data-toggle="tooltip" title="Le nombre maximum de link pouvant de connecter simultanément.">Nombre de connexion maximum</label>
+      <InputNumber @bind-Value="Channel.MaxQso" type="text" class="form-control" id="inputMaxQso" />
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label data-toggle="tooltip" title="Le call du link Echolink.">Indicatif</label>
+      <InputText @bind-Value="Channel.CallSign" type="text" class="form-control" id="inputCallSign" placeholder="AB9CDE-L" />
+    </div>
+    <div class="form-group col-md-4">
+      <label data-toggle="tooltip" title="Mot de passe associé au Call">Mot de passe</label>
+      <InputText @bind-Value="Channel.Password" type="password" class="form-control" id="inputPassword" />
+    </div>
+    <div class="form-group col-md-4">
+      <label data-toggle="tooltip" title="Nom du responsable technique du link.">Nom du Sysop</label>
+      <InputText @bind-Value="Channel.SysopName" type="text" class="form-control" id="inputSysop" />
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label data-toggle="tooltip" title="L'emplacement géographique du link.">Emplacement géographique</label>
+      <InputText @bind-Value="Channel.Location" type="text" class="form-control" id="inputLocation" placeholder="[Svx] 144.700, Ma Ville" />
+    </div>
+    <div class="form-group col-md-6">
+      <label data-toggle="tooltip" title="Un description du link.">Description</label>
+      <InputText @bind-Value="Channel.Description" type="text" class="form-control" id="inputDescription" />
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-check form-check-inline">
+      <InputCheckbox @bind-Value="IsDefault" type="checkbox" class="form-check-input" id="inputIsDefault" />
+      <label class="form-check-label" data-toggle="tooltip" title="Si choché, c'est ce link qui sera séléctionné au terme du délai des links ou salons temporisés. <br /> Un link ne peut être à la fois link par défaut et link temporisé.">Link par défaut</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <InputCheckbox @bind-Value="IsTemporized" type="checkbox" class="form-check-input" id="inputIsTemporized" />
+      <label class="form-check-label" data-toggle="tooltip" title="Un link temporisé retournera automatiquement sur le link ou le salon par défaut après un délai de 3 minutes d'inactivité.">Temporisé</label>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-success">@SubmitTitle</button> <a class="btn btn-primary" href="Echolink/Manage" role="button">Annuler</a>
+</EditForm>
+
+@code{
+  [Parameter]
+  public Models.EcholinkChannel Channel { get; set; }
+
+  [Parameter]
+  public string SubmitTitle { get; set; }
+
+  [Parameter]
+  public EventCallback<EditContext> HandleValidSubmit { get; set; }
+
+  protected bool IsDefault
+  {
+    get => Channel.IsDefault;
+    set
+    {
+      Channel.IsDefault = value;
+      if (value)
+        IsTemporized = false;
+    }
+  }
+
+  protected bool IsTemporized
+  {
+    get => Channel.IsTemporized;
+    set => Channel.IsTemporized = value;
+  }
+
+  private void OnInputFileChange(InputFileChangeEventArgs eventArgs)
+  {
+    Channel.Sound = eventArgs.File;
+  }
+
+}

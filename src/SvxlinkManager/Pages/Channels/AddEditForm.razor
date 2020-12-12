@@ -6,7 +6,7 @@
 
   <div class="form-row">
     <div class="form-group col-md-6">
-      <label data-toggle="tooltip" title="Le nom du salon s'affichera dans le menu déroulant de la page d'accueil.<br/> Choisissez un nom unique.">Nom du salon</label>
+      <label data-toggle="tooltip" title="Le nom du salon s'affichera dans le menu déroulant de la page d'accueil.<br /> Choisissez un nom unique.">Nom du salon</label>
       <InputText @bind-Value="Channel.Name" type="text" class="form-control" id="inputName" placeholder="Nom du salon" />
     </div>
     <div class="form-group col-md-6">
@@ -30,7 +30,7 @@
       <InputText @bind-Value="Channel.ReportCallSign" type="text" class="form-control" id="inputCallSign" placeholder="AB9CE" />
     </div>
     <div class="form-group col-md-4">
-      <label data-toggle="tooltip" title="Le nom d'utilisateur qui sera utilisé pour vous connecter au svxlinkreflector. <br/> En général, votre indicatif.">Utilisateur svxreflector</label>
+      <label data-toggle="tooltip" title="Le nom d'utilisateur qui sera utilisé pour vous connecter au svxlinkreflector. <br /> En général, votre indicatif.">Utilisateur svxreflector</label>
       <InputText @bind-Value="Channel.CallSign" type="text" class="form-control" id="inputCallSign" placeholder="(CH) AB9CE H" />
     </div>
     <div class="form-group col-md-4">
@@ -42,7 +42,7 @@
   <div class="form-row">
     <div class="form-check form-check-inline">
       <InputCheckbox @bind-Value="IsDefault" type="checkbox" class="form-check-input" id="inputIsDefault" />
-      <label class="form-check-label" data-toggle="tooltip" title="Si choché, c'est ce salon qui sera séléctionné au terme du délai des salons temporisés. <br/> Un salon ne peut être à la fois salon par défaut et salon temporisé.">Salon par défaut</label>
+      <label class="form-check-label" data-toggle="tooltip" title="Si choché, c'est ce salon qui sera séléctionné au terme du délai des salons temporisés. <br /> Un salon ne peut être à la fois salon par défaut et salon temporisé.">Salon par défaut</label>
     </div>
     <div class="form-check form-check-inline">
       <InputCheckbox @bind-Value="IsTemporized" type="checkbox" class="form-check-input" id="inputIsTemporized" />
@@ -55,7 +55,7 @@
 
 @code{
   [Parameter]
-  public Models.Channel Channel { get; set; }
+  public Models.SvxlinkChannel Channel { get; set; }
 
   [Parameter]
   public string SubmitTitle { get; set; }

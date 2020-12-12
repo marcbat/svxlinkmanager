@@ -13,18 +13,35 @@ namespace SvxlinkManager.Repositories
     IChannelRepository Channels { get; }
 
     IRadioProfileRepository RadioProfiles { get; }
+
+    IRepository<SvxlinkChannel> SvxlinkChannels { get; set; }
+
+    IRepository<EcholinkChannel> EcholinkChannels { get; set; }
+
+    Repository<TEntity> Repository<TEntity>() where TEntity : class, IModelEntity;
   }
 
   public class Repositories : IRepositories
   {
+    private readonly IDbContextFactory<ApplicationDbContext> contextFactory;
+
     public Repositories(IDbContextFactory<ApplicationDbContext> contextFactory)
     {
       Channels = new ChannelRepository(contextFactory);
       RadioProfiles = new RadioProfileRepository(contextFactory);
+      SvxlinkChannels = new Repository<SvxlinkChannel>(contextFactory);
+      EcholinkChannels = new Repository<EcholinkChannel>(contextFactory);
+      this.contextFactory = contextFactory;
     }
 
     public IChannelRepository Channels { get; private set; }
 
     public IRadioProfileRepository RadioProfiles { get; private set; }
+
+    public IRepository<SvxlinkChannel> SvxlinkChannels { get; set; }
+
+    public IRepository<EcholinkChannel> EcholinkChannels { get; set; }
+
+    public Repository<TEntity> Repository<TEntity>() where TEntity : class, IModelEntity => new Repository<TEntity>(contextFactory);
   }
 }
