@@ -83,7 +83,8 @@ namespace SvxlinkManager.Pages.Updater
 
       try
       {
-        Directory.Delete(downloadPath, true);
+        if (Directory.Exists(downloadPath))
+          Directory.Delete(downloadPath, true);
 
         var downloadDirectory = Directory.CreateDirectory(downloadPath);
 
