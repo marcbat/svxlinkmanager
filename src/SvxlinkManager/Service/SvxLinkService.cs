@@ -298,7 +298,8 @@ namespace SvxlinkManager.Service
       if (channel.SoundName != null)
         File.Copy($"{applicationPath}/Sounds/{channel.SoundName}", "/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav", true);
 
-      logger.LogInformation("Remplacement du fichier wav d'annonce.");
+      // Ajout du link en tant que Node
+      Nodes.Add(new Node { Name = channel.CallSign });
 
       // Lance svxlink
       StartSvxLink(channel);
