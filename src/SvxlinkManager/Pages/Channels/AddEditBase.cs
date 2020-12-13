@@ -46,10 +46,10 @@ namespace SvxlinkManager.Pages.Channels
       var buffer = new byte[4 * 1096];
       int bytesRead;
 
-      while ((bytesRead = await stream.ReadAsync(buffer, cancelation.Token)) != 0)
-      {
-        await file.WriteAsync(buffer, cancelation.Token);
-      }
+      while ((bytesRead = await stream.ReadAsync(buffer)) != 0)
+        await file.WriteAsync(buffer);
+
+      Channel.SoundName = Channel.Sound.Name;
     }
 
     protected override void OnInitialized()

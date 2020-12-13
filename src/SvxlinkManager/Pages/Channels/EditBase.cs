@@ -27,6 +27,8 @@ namespace SvxlinkManager.Pages.Channels
     /// </summary>
     public async Task HandleValidSubmit(string redirect)
     {
+      await base.HandleValidSubmit();
+
       Repositories.Repository<TChannel>().Update(Channel);
 
       await ShowSuccessToastAsync("Modifié", $"Le salon {Channel.Name} a bien été modifié.");

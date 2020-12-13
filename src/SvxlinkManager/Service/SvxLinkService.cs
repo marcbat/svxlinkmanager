@@ -198,6 +198,7 @@ namespace SvxlinkManager.Service
       var radioProfile = repositories.RadioProfiles.GetCurrent();
 
       // Remplace le contenu de svxlink.conf avec le informations du channel
+      File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
       var global = new Dictionary<string, string>
       {
         { "LOGICS", "SimplexLogic,ReflectorLogic" }
@@ -245,6 +246,8 @@ namespace SvxlinkManager.Service
 
       var radioProfile = repositories.RadioProfiles.GetCurrent();
 
+      // Remplacement de la config
+      File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
       var global = new Dictionary<string, string>
       {
         { "LOGICS", "SimplexLogic" }
@@ -325,6 +328,7 @@ namespace SvxlinkManager.Service
       logger.LogInformation("Salon déconnecté");
 
       // Remplace le contenu de svxlink.conf avec le informations du channel
+      File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
       var global = new Dictionary<string, string>
       {
         { "LOGICS", "SimplexLogic" }

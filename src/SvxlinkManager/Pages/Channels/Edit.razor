@@ -7,4 +7,4 @@
 
 <h3>Editer @Channel.Name</h3>
 
-<AddEditForm Channel="@Channel" HandleValidSubmit="@HandleValidSubmit" SubmitTitle="@SubmitTitle" />
+<AddEditForm Channel="@Channel" HandleValidSubmit="@(()=>HandleValidSubmit("Channel"))" SubmitTitle="@SubmitTitle" />
