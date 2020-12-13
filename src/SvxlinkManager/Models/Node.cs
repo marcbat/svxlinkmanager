@@ -23,7 +23,6 @@ namespace SvxlinkManager.Models
       }
     }
 
-    public override bool Equals(object obj)=> Name == ((Node)obj).Name;
-    
+    public override bool Equals(object obj) => Name.Trim() == ((Node)obj).Name.Trim();
   }
 }
