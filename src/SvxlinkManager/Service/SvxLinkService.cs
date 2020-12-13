@@ -108,7 +108,7 @@ namespace SvxlinkManager.Service
               break;
 
             default:
-              ActivateChannel();
+              ActivateChannel(value);
               break;
           }
         }
@@ -162,9 +162,9 @@ namespace SvxlinkManager.Service
       return result.Trim();
     }
 
-    protected virtual void ActivateChannel()
+    public virtual void ActivateChannel(int channelid)
     {
-      var channel = repositories.Channels.Get(channelId);
+      var channel = repositories.Channels.Get(channelid);
 
       switch (channel)
       {

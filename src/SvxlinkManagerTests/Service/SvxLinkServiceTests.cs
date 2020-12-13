@@ -176,5 +176,47 @@ namespace SvxlinkManager.Service.Tests
       // assert
       Assert.AreEqual(message, $"Impossible de se connecter au salon {channel.Name}. <br/> Server {channel.Host} introuvable.");
     }
+
+    [Test(Description = "Test le changement de salon parrot")]
+    public void SetChannelIdParrot()
+    {
+      // arrange
+      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories);
+      service.When(x => x.Parrot()).DoNotCallBase();
+
+      // act
+      service.ChannelId = 1000;
+
+      // assert
+      service.Received(1).Parrot();
+    }
+
+    [Test(Description = "Test la deconnexion.")]
+    public void SetChannelIdStop()
+    {
+      // arrange
+      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories);
+      service.When(x => x.StopSvxlink()).DoNotCallBase();
+
+      // act
+      service.ChannelId = 1000;
+
+      // assert
+      service.Received(1).StopSvxlink();
+    }
+
+    [Test(Description = "Test l'activation d'un salon.")]
+    public void SetChannelIdActivate()
+    {
+      // arrange
+      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories);
+      service.When(x => x.ActivateChannel(30)).DoNotCallBase();
+
+      // act
+      service.ChannelId = 30;
+
+      // assert
+      service.Received(1).ActivateChannel(30);
+    }
   }
 }
