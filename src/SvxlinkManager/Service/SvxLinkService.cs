@@ -191,6 +191,13 @@ namespace SvxlinkManager.Service
     {
       logger.LogInformation("Restart salon.");
 
+      if (channel?.CallSign == "(CH) SVX4LINK H")
+      {
+        ChannelId = 0;
+        Error?.Invoke("Attention", "Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.");
+        return;
+      }
+
       // Stop svxlink
       StopSvxlink();
       logger.LogInformation("Salon déconnecté");
@@ -499,9 +506,6 @@ namespace SvxlinkManager.Service
     /// </summary>
     private void StartSvxLink(Channel channel = null)
     {
-      if (channel?.CallSign == "(CH) SVX4LINK H")
-        Error?.Invoke("Attention", "Vous êtes actuellement connecté avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.");
-
       var cmd = $"svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config={applicationPath}/SvxlinkConfig/svxlink.current";
 
       var escapedArgs = cmd.Replace("\"", "\\\"");
