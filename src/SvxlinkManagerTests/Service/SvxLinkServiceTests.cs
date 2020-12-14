@@ -9,15 +9,20 @@ using SvxlinkManager.Models;
 using SvxlinkManager.Repositories;
 using SvxlinkManager.Service;
 
+using SvxlinkManagerTests;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SvxlinkManager.Service.Tests
 {
   [TestFixture()]
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Non-substitutable member", "NS1001:Non-virtual setup specification.", Justification = "Marche quand même.")]
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Non-substitutable member", "NS1004:Argument matcher used with a non-virtual member of a class.", Justification = "Marche quand même.")]
   public class SvxLinkServiceTests
   {
     private ILogger<SvxLinkService> logger;
@@ -217,6 +222,75 @@ namespace SvxlinkManager.Service.Tests
 
       // assert
       service.Received(1).ActivateChannel(30);
+    }
+
+    [Test(Description = "Test le fonctinnement complet de l'activation du module Parrot")]
+    public void ParrotTest()
+    {
+      // arrange
+      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories);
+      service.When(x => x.StopSvxlink()).DoNotCallBase();
+      service.When(x => x.StartSvxLink()).DoNotCallBase();
+      Predicate<Dictionary<string, Dictionary<string, string>>> isParametersOk = x => x["GLOBAL"]["LOGICS"] == "SimplexLogic" && x["SimplexLogic"]["MODULES"] == "ModuleParrot";
+
+      // act
+      service.Parrot();
+
+      // assert
+      service.Received(1).StopSvxlink();
+      service.Received(1).Protected("CreateNewCurrentConfig");
+      service.Received(1).Protected("ReplaceConfig", Arg.Any<string>(), Arg.Is<Dictionary<string, Dictionary<string, string>>>(x => isParametersOk(x)));
+      service.Received(1).Protected("ReplaceSoundFile", Arg.Is<Channel>(x => x == null));
+      service.Received(1).StartSvxLink();
+      service.Received(1).Protected("ExecuteCommand", "echo '1#'> /tmp/dtmf_uhf");
+    }
+
+    [Test(Description = "Test la déconnection lors de l'utilisation du call par défaut")]
+    public void ActivateSvxlinkChannelDefaultCallTest()
+    {
+      // arrange
+      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories);
+      service.When(x => x.StopSvxlink()).DoNotCallBase();
+      var channel = new SvxlinkChannel { CallSign = "(CH) SVX4LINK H" };
+
+      // act
+      service.ActivateSvxlinkChannel(channel);
+
+      // assert
+      service.Received(1).StopSvxlink();
+      service.DidNotReceive().Protected("CreateNewCurrentConfig");
+    }
+
+    /// <summary>
+    /// Mockup for SvxLinkService
+    /// </summary>
+    /// <seealso cref="SvxlinkManager.Service.SvxLinkService" />
+    public class TestableSvxlinkService : SvxLinkService
+    {
+      public TestableSvxlinkService(ILogger<SvxLinkService> logger, IRepositories repositories) : base(logger, repositories)
+      {
+      }
+
+      protected override void ReplaceConfig(string filePath, Dictionary<string, Dictionary<string, string>> parameters)
+      {
+      }
+
+      protected override string ExecuteCommand(string cmd)
+      {
+        return string.Empty;
+      }
+
+      protected override void CreateNewCurrentConfig()
+      {
+      }
+
+      protected override void SetDtmfWatcher()
+      {
+      }
+
+      protected override void ReplaceSoundFile(Channel channel = null)
+      {
+      }
     }
   }
 }

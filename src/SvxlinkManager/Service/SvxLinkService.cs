@@ -140,7 +140,7 @@ namespace SvxlinkManager.Service
     /// </summary>
     /// <param name="cmd">The command.</param>
     /// <returns>Console output</returns>
-    public virtual string ExecuteCommand(string cmd)
+    protected virtual string ExecuteCommand(string cmd)
     {
       var escapedArgs = cmd.Replace("\"", "\\\"");
 
@@ -202,8 +202,8 @@ namespace SvxlinkManager.Service
 
       var radioProfile = repositories.RadioProfiles.GetCurrent();
 
-      // Remplace le contenu de svxlink.conf avec le informations du channel
-      File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
+      CreateNewCurrentConfig();
+
       var global = new Dictionary<string, string>
       {
         { "LOGICS", "SimplexLogic,ReflectorLogic" }
@@ -229,16 +229,28 @@ namespace SvxlinkManager.Service
       ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);
       logger.LogInformation("Remplacement du contenu svxlink.current");
 
-      // changement du son de l'annonce
-      if (!Directory.Exists("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager"))
-        Directory.CreateDirectory("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager");
-
-      File.Copy($"{applicationPath}/Sounds/{channel.SoundName}", "/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav", true);
-      logger.LogInformation("Remplacement du fichier wav d'annonce.");
+      ReplaceSoundFile(channel);
 
       // Lance svxlink
       StartSvxLink(channel);
       logger.LogInformation($"Le channel {channel.Name} est connecté.");
+    }
+
+    protected virtual void ReplaceSoundFile(Channel channel = null)
+    {
+      logger.LogInformation("Remplacement du fichier wav d'annonce.");
+
+      if (channel == null)
+      {
+        File.Delete("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav");
+        return;
+      }
+
+      if (!Directory.Exists("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager"))
+        Directory.CreateDirectory("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager");
+
+      if (!string.IsNullOrEmpty(channel.SoundName))
+        File.Copy($"{applicationPath}/Sounds/{channel.SoundName}", "/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav", true);
     }
 
     public virtual void ActivateEcholink(EcholinkChannel channel)
@@ -309,7 +321,7 @@ namespace SvxlinkManager.Service
     /// </summary>
     /// <param name="s">Timer</param>
     /// <param name="e">The <see cref="ElapsedEventArgs"/> instance containing the event data.</param>
-    public virtual void CheckTemporized(object s, ElapsedEventArgs e)
+    protected virtual void CheckTemporized(object s, ElapsedEventArgs e)
     {
       var diff = (DateTime.Now - lastTx).TotalSeconds;
 
@@ -333,8 +345,8 @@ namespace SvxlinkManager.Service
       StopSvxlink();
       logger.LogInformation("Salon déconnecté");
 
-      // Remplace le contenu de svxlink.conf avec le informations du channel
-      File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
+      CreateNewCurrentConfig();
+
       var global = new Dictionary<string, string>
       {
         { "LOGICS", "SimplexLogic" }
@@ -347,11 +359,13 @@ namespace SvxlinkManager.Service
         {"GLOBAL", global },
         {"SimplexLogic", simplexlogic }
       };
-      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);
+
+      // Remplace le contenu de svxlink.conf avec le informations du channel
       logger.LogInformation("Remplacement du contenu svxlink.current");
+      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);
 
       // suppression du fichier d'annonce
-      File.Delete("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav");
+      ReplaceSoundFile();
 
       // Lance svxlink
       StartSvxLink();
@@ -361,6 +375,9 @@ namespace SvxlinkManager.Service
       logger.LogInformation("Séléction du salon perroquet.");
       ExecuteCommand("echo '1#'> /tmp/dtmf_uhf");
     }
+
+    protected virtual void CreateNewCurrentConfig() =>
+      File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
 
     /// <summary>
     /// Parse the Svxlink logs
@@ -452,7 +469,7 @@ namespace SvxlinkManager.Service
     /// </para>
     /// <code></code>
     /// </example>
-    public virtual void ReplaceConfig(string filePath, Dictionary<string, Dictionary<string, string>> parameters)
+    protected virtual void ReplaceConfig(string filePath, Dictionary<string, Dictionary<string, string>> parameters)
     {
       var parser = new FileIniDataParser();
       parser.Parser.Configuration.NewLineStr = "\r\n";
@@ -472,7 +489,7 @@ namespace SvxlinkManager.Service
     /// <summary>
     /// Sets the file watcher. This watcher monitor dtmf.conf file.
     /// </summary>
-    public virtual void SetDtmfWatcher()
+    protected virtual void SetDtmfWatcher()
     {
       var dtmfFilePath = $"{applicationPath}/SvxlinkConfig/dtmf.conf";
 
