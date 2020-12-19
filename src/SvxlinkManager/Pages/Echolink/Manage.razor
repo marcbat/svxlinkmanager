@@ -11,6 +11,18 @@
     <a class="btn btn-outline-success" href="Echolink/Create" role="button">Créer une nouvelle configuration Echolink</a>
   </div>
 </div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="alert alert-primary" role="alert">
+      Pour pouvoir utiliser les salons Echolink, vous devez ouvrir les ports suivant en entrée.<br />
+      <ul>
+        <li>5198 et 5199 en UDP</li>
+        <li>5200 en TCP</li>
+      </ul>
+      Lorsque vous sélectionnez un salon Echolink, il faut attendre au moins une dizaine de seconde avant qu'une connexion entrante puisse être établie.
+    </div>
+  </div>
+</div>
 
 <ul id="channel-manage-list" class="list-group-horizontal">
   @foreach (var channel in Channels)
