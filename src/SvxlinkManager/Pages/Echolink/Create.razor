@@ -1,0 +1,10 @@
+﻿@using SvxlinkManager.Models
+
+@page "/Echolink/Create"
+@inherits SvxlinkManager.Pages.Channels.CreateBase<EcholinkChannel>
+
+@attribute [Authorize]
+
+<h3>Ajouter une configuration Echolink</h3>
+
+<AddEditForm Channel="@Channel" HandleValidSubmit="@(()=>HandleValidSubmit("Echolink"))" SubmitTitle="@SubmitTitle" />

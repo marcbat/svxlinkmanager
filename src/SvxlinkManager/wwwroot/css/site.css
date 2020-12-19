@@ -206,6 +206,7 @@ app {
 
 #channel-manage-list .list-group-item {
   margin-bottom: 3px;
+  border-left-width: thin;
 }
 
 #channel-manage-list {

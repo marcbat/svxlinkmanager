@@ -25,8 +25,6 @@ namespace SvxlinkManager.Service
 
     private int channelId;
 
-    private Channel channel;
-
     /// <summary>
     /// Datetime of the last TX on the current channel.
     /// </summary>
@@ -35,6 +33,7 @@ namespace SvxlinkManager.Service
     private Timer timer;
 
     private FileSystemWatcher watcher;
+    private Process shell;
 
     public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories)
     {
@@ -43,8 +42,6 @@ namespace SvxlinkManager.Service
 
       NodeTx += n => lastTx = DateTime.Now;
       Connected += (c) => lastTx = DateTime.Now;
-
-      StartDefaultChannel();
     }
 
     /// <summary>
@@ -111,7 +108,7 @@ namespace SvxlinkManager.Service
               break;
 
             default:
-              ChangeChannel();
+              ActivateChannel(value);
               break;
           }
         }
@@ -135,7 +132,7 @@ namespace SvxlinkManager.Service
     public string Status { get; set; } = "Déconnecté";
 
     /// <summary>Connecte le salon par défaut.</summary>
-    private void StartDefaultChannel() =>
+    public virtual void StartDefaultChannel() =>
       ChannelId = repositories.Channels.GetDefault().Id;
 
     /// <summary>
@@ -143,7 +140,7 @@ namespace SvxlinkManager.Service
     /// </summary>
     /// <param name="cmd">The command.</param>
     /// <returns>Console output</returns>
-    private static string ExecuteCommand(string cmd)
+    protected virtual string ExecuteCommand(string cmd)
     {
       var escapedArgs = cmd.Replace("\"", "\\\"");
 
@@ -165,40 +162,63 @@ namespace SvxlinkManager.Service
       return result.Trim();
     }
 
+    public virtual void ActivateChannel(int channelid)
+    {
+      var channel = repositories.Channels.Get(channelid);
+
+      switch (channel)
+      {
+        case SvxlinkChannel c:
+          ActivateSvxlinkChannel(c);
+          break;
+
+        case EcholinkChannel c:
+          ActivateEcholink(c);
+          break;
+
+        default:
+          throw new Exception("Impossible de trouver le type de channel.");
+      }
+    }
+
     /// <summary>
     /// <para>Changes the Current channel.</para>
     /// <para>Group Stop, replace config and start svxlink.</para>
     /// </summary>
-    private void ChangeChannel()
+    public virtual void ActivateSvxlinkChannel(SvxlinkChannel channel)
     {
       logger.LogInformation("Restart salon.");
+
+      if (channel?.CallSign == "(CH) SVX4LINK H")
+      {
+        ChannelId = 0;
+        Error?.Invoke("Attention", "Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.");
+        return;
+      }
 
       // Stop svxlink
       StopSvxlink();
       logger.LogInformation("Salon déconnecté");
 
-      // Récupère le channel
-      channel = repositories.Channels.Get(channelId);
-      logger.LogInformation($"Recupération du salon {channel.Name}");
-
       var radioProfile = repositories.RadioProfiles.GetCurrent();
 
-      // Remplace le contenu de svxlink.conf avec le informations du channel
+      CreateNewCurrentConfig();
+
       var global = new Dictionary<string, string>
       {
         { "LOGICS", "SimplexLogic,ReflectorLogic" }
       };
       var simplexlogic = new Dictionary<string, string> {
         { "MODULES", "ModuleHelp,ModuleMetarInfo,ModulePropagationMonitor"},
-        { "CALLSIGN", channel.ReportCallSign},
+        { "CALLSIGN", ((SvxlinkChannel)channel).ReportCallSign},
         { "REPORT_CTCSS", radioProfile.RxTone}
       };
       var ReflectorLogic = new Dictionary<string, string>
       {
         {"CALLSIGN", channel.CallSign },
         {"HOST", channel.Host },
-        {"AUTH_KEY",channel.AuthKey },
-        {"PORT" ,channel.Port.ToString()}
+        {"AUTH_KEY",((SvxlinkChannel)channel).AuthKey },
+        {"PORT" ,((SvxlinkChannel)channel).Port.ToString()}
       };
       var parameters = new Dictionary<string, Dictionary<string, string>>
       {
@@ -206,18 +226,93 @@ namespace SvxlinkManager.Service
         {"SimplexLogic", simplexlogic },
         {"ReflectorLogic" , ReflectorLogic}
       };
-      ReplaceConfig(parameters);
+      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);
       logger.LogInformation("Remplacement du contenu svxlink.current");
 
-      // cahngement du son de l'annonce
+      ReplaceSoundFile(channel);
+
+      // Lance svxlink
+      StartSvxLink(channel);
+      logger.LogInformation($"Le channel {channel.Name} est connecté.");
+    }
+
+    protected virtual void ReplaceSoundFile(Channel channel = null)
+    {
+      logger.LogInformation("Remplacement du fichier wav d'annonce.");
+
+      if (channel == null)
+      {
+        File.Delete("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav");
+        return;
+      }
+
       if (!Directory.Exists("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager"))
         Directory.CreateDirectory("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager");
 
-      File.Copy($"{applicationPath}/Sounds/{channel.SoundName}", "/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav", true);
-      logger.LogInformation("Remplacement du fichier wav d'annonce.");
+      if (!string.IsNullOrEmpty(channel.SoundName))
+        File.Copy($"{applicationPath}/Sounds/{channel.SoundName}", "/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav", true);
+    }
+
+    public virtual void ActivateEcholink(EcholinkChannel channel)
+    {
+      logger.LogInformation("Restart link echolink.");
+
+      // Stop svxlink
+      StopSvxlink();
+      logger.LogInformation("Salon déconnecté");
+
+      var radioProfile = repositories.RadioProfiles.GetCurrent();
+
+      // Remplacement de la config
+      File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
+      var global = new Dictionary<string, string>
+      {
+        { "LOGICS", "SimplexLogic" }
+      };
+      var simplexlogic = new Dictionary<string, string> {
+        { "MODULES", "ModuleHelp,ModuleMetarInfo,ModulePropagationMonitor,ModuleEchoLink,ModuleParrot"},
+        { "CALLSIGN", channel.CallSign},
+        { "REPORT_CTCSS", radioProfile.RxTone}
+      };
+      var parameters = new Dictionary<string, Dictionary<string, string>>
+      {
+        {"GLOBAL", global },
+        {"SimplexLogic", simplexlogic }
+      };
+
+      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);
+      logger.LogInformation("Remplacement du contenu svxlink.current");
+
+      var moduleEcholink = new Dictionary<string, string>
+      {
+        {"SERVERS", channel.Host },
+        {"CALLSIGN", channel.CallSign },
+        {"PASSWORD", ((EcholinkChannel)channel).Password },
+        {"SYSOPNAME", ((EcholinkChannel)channel).SysopName },
+        {"LOCATION", ((EcholinkChannel)channel).Location },
+        {"MAX_QSOS", ((EcholinkChannel)channel).MaxQso.ToString() },
+        {"MAX_CONNECTIONS", (((EcholinkChannel)channel).MaxQso + 1).ToString() },
+        {"DESCRIPTION", ((EcholinkChannel)channel).Description },
+      };
+      parameters = new Dictionary<string, Dictionary<string, string>>
+      {
+        {"ModuleEchoLink", moduleEcholink },
+      };
+      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", parameters);
+      logger.LogInformation("Remplacement du contenu de ModuleEcholink.conf");
+
+      // changement du son de l'annonce
+      if (!Directory.Exists("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager"))
+        Directory.CreateDirectory("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager");
+
+      if (channel.SoundName != null)
+        File.Copy($"{applicationPath}/Sounds/{channel.SoundName}", "/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav", true);
+
+      // Ajout du link en tant que Node
+      Nodes.Add(new Node { Name = channel.CallSign });
 
       // Lance svxlink
-      StartSvxLink();
+      StartSvxLink(channel);
       logger.LogInformation($"Le channel {channel.Name} est connecté.");
     }
 
@@ -226,7 +321,7 @@ namespace SvxlinkManager.Service
     /// </summary>
     /// <param name="s">Timer</param>
     /// <param name="e">The <see cref="ElapsedEventArgs"/> instance containing the event data.</param>
-    private void CheckTemporized(object s, ElapsedEventArgs e)
+    protected virtual void CheckTemporized(object s, ElapsedEventArgs e)
     {
       var diff = (DateTime.Now - lastTx).TotalSeconds;
 
@@ -244,13 +339,14 @@ namespace SvxlinkManager.Service
     /// <summary>
     /// Activate the Parrot module
     /// </summary>
-    private void Parrot()
+    public virtual void Parrot()
     {
       // Stop svxlink
       StopSvxlink();
       logger.LogInformation("Salon déconnecté");
 
-      // Remplace le contenu de svxlink.conf avec le informations du channel
+      CreateNewCurrentConfig();
+
       var global = new Dictionary<string, string>
       {
         { "LOGICS", "SimplexLogic" }
@@ -263,11 +359,13 @@ namespace SvxlinkManager.Service
         {"GLOBAL", global },
         {"SimplexLogic", simplexlogic }
       };
-      ReplaceConfig(parameters);
+
+      // Remplace le contenu de svxlink.conf avec le informations du channel
       logger.LogInformation("Remplacement du contenu svxlink.current");
+      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);
 
       // suppression du fichier d'annonce
-      File.Delete("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav");
+      ReplaceSoundFile();
 
       // Lance svxlink
       StartSvxLink();
@@ -278,11 +376,14 @@ namespace SvxlinkManager.Service
       ExecuteCommand("echo '1#'> /tmp/dtmf_uhf");
     }
 
+    protected virtual void CreateNewCurrentConfig() =>
+      File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
+
     /// <summary>
     /// Parse the Svxlink logs
     /// </summary>
     /// <param name="s">one Log line</param>
-    private void ParseLog(string s)
+    public virtual void ParseLog(Channel channel, string s)
     {
       if (string.IsNullOrEmpty(s))
         return;
@@ -292,12 +393,14 @@ namespace SvxlinkManager.Service
         Nodes.Clear();
         s.Split(':')[2].Split(',').ToList().ForEach(n => Nodes.Add(new Node { Name = n }));
         Connected?.Invoke(channel);
+        return;
       }
 
       if (s.Contains("SIGTERM"))
       {
         Nodes.Clear();
         Disconnected?.Invoke();
+        return;
       }
 
       if (s.Contains("Node left"))
@@ -305,6 +408,7 @@ namespace SvxlinkManager.Service
         var node = new Node { Name = s.Split(":")[2] };
         Nodes.Remove(node);
         NodeDisconnected?.Invoke(node);
+        return;
       }
 
       if (s.Contains("Node joined"))
@@ -312,6 +416,7 @@ namespace SvxlinkManager.Service
         var node = new Node { Name = s.Split(":")[2] };
         Nodes.Add(node);
         NodeConnected?.Invoke(node);
+        return;
       }
 
       if (s.Contains("Talker start"))
@@ -319,6 +424,7 @@ namespace SvxlinkManager.Service
         var node = Nodes.Single(nx => nx.Equals(new Node { Name = s.Split(":")[2] }));
         node.ClassName = "node node-tx";
         NodeTx?.Invoke(node);
+        return;
       }
 
       if (s.Contains("Talker stop"))
@@ -326,13 +432,20 @@ namespace SvxlinkManager.Service
         var node = Nodes.Single(nx => nx.Equals(new Node { Name = s.Split(":")[2] }));
         node.ClassName = "node";
         NodeRx?.Invoke(node);
+        return;
       }
 
       if (s.Contains("Access denied"))
+      {
         Error?.Invoke("Echec de la connexion.", $"Impossible de se connecter au salon {channel.Name}. <br/> Accès refusé.");
+        return;
+      }
 
       if (s.Contains("Host not found"))
+      {
         Error?.Invoke("Echec de la connexion.", $"Impossible de se connecter au salon {channel.Name}. <br/> Server {channel.Host} introuvable.");
+        return;
+      }
     }
 
     /// <summary>
@@ -356,7 +469,7 @@ namespace SvxlinkManager.Service
     /// </para>
     /// <code></code>
     /// </example>
-    private void ReplaceConfig(Dictionary<string, Dictionary<string, string>> parameters)
+    protected virtual void ReplaceConfig(string filePath, Dictionary<string, Dictionary<string, string>> parameters)
     {
       var parser = new FileIniDataParser();
       parser.Parser.Configuration.NewLineStr = "\r\n";
@@ -364,19 +477,19 @@ namespace SvxlinkManager.Service
 
       var utf8WithoutBom = new UTF8Encoding(false);
 
-      var data = parser.ReadFile($"{applicationPath}/SvxlinkConfig/svxlink.conf", utf8WithoutBom);
+      var data = parser.ReadFile(filePath, utf8WithoutBom);
 
       foreach (var section in parameters)
         foreach (var parameter in section.Value)
           data[section.Key][parameter.Key] = parameter.Value;
 
-      parser.WriteFile($"{applicationPath}/SvxlinkConfig/svxlink.current", data, utf8WithoutBom);
+      parser.WriteFile(filePath, data, utf8WithoutBom);
     }
 
     /// <summary>
     /// Sets the file watcher. This watcher monitor dtmf.conf file.
     /// </summary>
-    private void SetDtmfWatcher()
+    protected virtual void SetDtmfWatcher()
     {
       var dtmfFilePath = $"{applicationPath}/SvxlinkConfig/dtmf.conf";
 
@@ -408,7 +521,7 @@ namespace SvxlinkManager.Service
     /// <summary>
     /// Set the temporized timer for current channel
     /// </summary>
-    private void SetTimer()
+    public virtual void SetTimer()
     {
       timer = new Timer(1000);
       timer.Start();
@@ -417,40 +530,15 @@ namespace SvxlinkManager.Service
     }
 
     /// <summary>
-    /// Log Svxlink error output data
-    /// </summary>
-    /// <param name="sender">shell</param>
-    /// <param name="e">The <see cref="DataReceivedEventArgs"/> instance containing the event data.</param>
-    private void ShellErrorDataReceived(object sender, DataReceivedEventArgs e)
-    {
-      logger.LogInformation(e.Data);
-      ParseLog(e.Data);
-    }
-
-    /// <summary>
-    /// Log Svxlink output data
-    /// </summary>
-    /// <param name="sender">shell</param>
-    /// <param name="e">The <see cref="DataReceivedEventArgs"/> instance containing the event data.</param>
-    private void ShellOutputDataReceived(object sender, DataReceivedEventArgs e)
-    {
-      logger.LogInformation(e.Data);
-      ParseLog(e.Data);
-    }
-
-    /// <summary>
     /// Starts the SVXlink application with svxlink.current configuration
     /// </summary>
-    private void StartSvxLink()
+    public virtual void StartSvxLink(Channel channel = null)
     {
-      if (channel?.CallSign == "(CH) SVX4LINK H")
-        Error?.Invoke("Attention", "Vous êtes actuellement connecté avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.");
-
       var cmd = $"svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config={applicationPath}/SvxlinkConfig/svxlink.current";
 
       var escapedArgs = cmd.Replace("\"", "\\\"");
 
-      var shell = new Process()
+      shell = new Process()
       {
         StartInfo = new ProcessStartInfo
         {
@@ -465,8 +553,16 @@ namespace SvxlinkManager.Service
         }
       };
       shell.EnableRaisingEvents = true;
-      shell.ErrorDataReceived += new DataReceivedEventHandler(ShellErrorDataReceived);
-      shell.OutputDataReceived += new DataReceivedEventHandler(ShellOutputDataReceived);
+      shell.ErrorDataReceived += (s, e) =>
+      {
+        logger.LogInformation(e.Data);
+        ParseLog(channel, e.Data);
+      };
+      shell.OutputDataReceived += (s, e) =>
+      {
+        logger.LogInformation(e.Data);
+        ParseLog(channel, e.Data);
+      };
 
       shell.Start();
       shell.BeginErrorReadLine();
@@ -483,7 +579,7 @@ namespace SvxlinkManager.Service
     /// <summary>
     /// Stops the svxlink application. <br/> Kill the temporised timer and the dtmf file watcher
     /// </summary>
-    private void StopSvxlink()
+    public virtual void StopSvxlink()
     {
       logger.LogInformation("Kill de svxlink.");
 
@@ -494,6 +590,7 @@ namespace SvxlinkManager.Service
       if (pid != null)
         ExecuteCommand("pkill -TERM svxlink");
 
+      shell?.Dispose();
       Status = "Déconnecté";
     }
   }

@@ -11,8 +11,7 @@ using System.Xml.Serialization;
 
 namespace SvxlinkManager.Models
 {
-
-  public class Channel : IModelEntity
+  public abstract class Channel : IModelEntity
   {
     public int Id { get; set; }
 
@@ -22,16 +21,8 @@ namespace SvxlinkManager.Models
     [Required]
     public string Host { get; set; }
 
-    public string AuthKey { get; set; }
-
-    [Required]
-    public int Port { get; set; }
-
     [Required]
     public string CallSign { get; set; }
-
-    [Required]
-    public string ReportCallSign { get; set; }
 
     [Required]
     public bool IsDefault { get; set; }
@@ -42,7 +33,7 @@ namespace SvxlinkManager.Models
     public int Dtmf { get; set; }
 
     [NotMapped]
-    [FileValidation(new[] { ".wav"})]
+    [FileValidation(new[] { ".wav" })]
     public IBrowserFile Sound { get; set; }
 
     public string SoundName { get; set; }
@@ -58,7 +49,7 @@ namespace SvxlinkManager.Models
 
       protected override ValidationResult IsValid(object value, ValidationContext validationContext)
       {
-        if(value == null)
+        if (value == null)
           return ValidationResult.Success;
 
         var file = (IBrowserFile)value;

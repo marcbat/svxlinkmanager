@@ -2,10 +2,10 @@
 @model LoginModel
 
 @{
-  ViewData["Title"] = "Connection";
+  ViewData["Title"] = "Connexion";
 }
 
-<h1>Connection</h1>
+<h1>Connexion</h1>
 <div class="row">
     <div class="col-md-10">
         <section>
@@ -18,18 +18,11 @@
               <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-              <label asp-for="Input.Password"></label>
+              <label asp-for="Input.Password">Mot de passe</label>
               <input asp-for="Input.Password" class="form-control" />
               <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
-            <div class="form-group">
-              <div class="checkbox">
-                <label asp-for="Input.RememberMe">
-                  <input asp-for="Input.RememberMe" />
-                  @Html.DisplayNameFor(m => m.Input.RememberMe)
-                </label>
-              </div>
-            </div>
+            
             <div class="form-group">
               <button type="submit" class="btn btn-primary">Envoyer</button>
             </div>

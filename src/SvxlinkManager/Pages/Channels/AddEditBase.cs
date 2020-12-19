@@ -13,21 +13,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Channels
 {
-  public abstract class AddEditBase : RepositoryComponentBase, INotifyPropertyChanged
+  public abstract class AddEditBase<TChannel> : RepositoryComponentBase where TChannel : Channel
   {
-    #region Fields
-
     private CancellationTokenSource cancelation;
-
-    #endregion Fields
-
-    #region Events
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    #endregion Events
-
-    #region Properties
 
     [Inject]
     public NavigationManager NavigationManager { get; set; }
@@ -36,7 +24,7 @@ namespace SvxlinkManager.Pages.Channels
     /// Current Channel to Create or Edit
     /// </summary>
     /// <value>The channel.</value>
-    protected Channel Channel { get; set; }
+    protected TChannel Channel { get; set; }
 
     /// <summary>
     /// Submit button label
@@ -44,14 +32,10 @@ namespace SvxlinkManager.Pages.Channels
     /// <value>The submit label.</value>
     protected abstract string SubmitTitle { get; }
 
-    #endregion Properties
-
-    #region Methods
-
     /// <summary>
     /// Handles the form submit.
     /// </summary>
-    public virtual async Task HandleValidSubmit()
+    protected virtual async Task HandleValidSubmit()
     {
       if (Channel.Sound == null)
         return;
@@ -62,10 +46,10 @@ namespace SvxlinkManager.Pages.Channels
       var buffer = new byte[4 * 1096];
       int bytesRead;
 
-      while ((bytesRead = await stream.ReadAsync(buffer, cancelation.Token)) != 0)
-      {
-        await file.WriteAsync(buffer, cancelation.Token);
-      }
+      while ((bytesRead = await stream.ReadAsync(buffer)) != 0)
+        await file.WriteAsync(buffer);
+
+      Channel.SoundName = Channel.Sound.Name;
     }
 
     protected override void OnInitialized()
@@ -74,7 +58,5 @@ namespace SvxlinkManager.Pages.Channels
 
       cancelation = new CancellationTokenSource();
     }
-
-    #endregion Methods
   }
 }

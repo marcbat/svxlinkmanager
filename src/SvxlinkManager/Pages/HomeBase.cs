@@ -23,11 +23,11 @@ using System.Xml.Linq;
 
 namespace SvxlinkManager.Pages
 {
-  public class HomeBase : ChannelBase, IDisposable
+  public class HomeBase : RepositoryComponentBase, IDisposable
   {
     protected override async Task OnInitializedAsync()
     {
-      await base.OnInitializedAsync().ConfigureAwait(false);
+      LoadChannels();
 
       SvxLinkService.Connected += SvxLinkService_ConnectedAsync;
 
@@ -43,6 +43,10 @@ namespace SvxlinkManager.Pages
 
       SvxLinkService.Error += SvxLinkService_Error;
     }
+
+    public List<Channel> Channels { get; set; }
+
+    private void LoadChannels() => Channels = Repositories.Channels.GetAll().ToList();
 
     private async void SvxLinkService_Error(string t, string b)
     {

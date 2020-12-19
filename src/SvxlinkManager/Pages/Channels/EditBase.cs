@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 
+using SvxlinkManager.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Channels
 {
-  public class EditBase : AddEditBase
+  public class EditBase<TChannel> : AddEditBase<TChannel> where TChannel : Channel
   {
     #region Properties
 
@@ -23,18 +25,20 @@ namespace SvxlinkManager.Pages.Channels
     /// <summary>
     /// Handles the form submit.
     /// </summary>
-    public override async Task HandleValidSubmit()
+    public async Task HandleValidSubmit(string redirect)
     {
-      Repositories.Channels.Update(Channel);
+      await base.HandleValidSubmit();
+
+      Repositories.Repository<TChannel>().Update(Channel);
 
       await ShowSuccessToastAsync("Modifié", $"Le salon {Channel.Name} a bien été modifié.");
 
-      NavigationManager.NavigateTo("Channel/Manage");
+      NavigationManager.NavigateTo($"{redirect}/Manage");
     }
 
     protected override void OnInitialized()
     {
-      Channel = Repositories.Channels.Get(int.Parse(Id));
+      Channel = Repositories.Repository<TChannel>().Get(int.Parse(Id));
     }
 
     #endregion Methods

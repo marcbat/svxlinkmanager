@@ -34,5 +34,6 @@ function UpdateDownloadStatus(id, percent) {
 }
 
 function UpdateInstallStatus(id, texte) {
+  $('#install-' + id).prop("disabled", true);
   $('#install-' + id).text(texte)
 }
