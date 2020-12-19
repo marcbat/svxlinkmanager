@@ -65,10 +65,13 @@
     <None Update="SvxlinkConfig\Logic.tcl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SvxlinkConfig\svxlink.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SvxlinkConfig\svxlink-prod.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SvxlinkConfig\svxlink.conf">
+    <None Update="SvxlinkConfig\svxlink.comment.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SvxlinkConfig\svxlink.d\ModuleDtmfRepeater.conf">

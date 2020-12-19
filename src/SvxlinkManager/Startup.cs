@@ -81,6 +81,10 @@ namespace SvxlinkManager
       {
         var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         context.Database.Migrate();
+
+        // start default channel
+        var svxlinkservice = serviceScope.ServiceProvider.GetRequiredService<SvxLinkService>();
+        svxlinkservice.StartDefaultChannel();
       }
 
       app.UseHttpsRedirection();
