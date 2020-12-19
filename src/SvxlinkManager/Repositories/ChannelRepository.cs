@@ -1,5 +1,6 @@
 ﻿using SvxlinkManager.Data;
 using SvxlinkManager.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,26 @@ namespace SvxlinkManager.Repositories
   public interface IChannelRepository : IRepository<Channel>
   {
     Channel GetDefault();
-   }
+  }
 
   public class ChannelRepository : Repository<Channel>, IChannelRepository
   {
     public ChannelRepository(IDbContextFactory<ApplicationDbContext> contextFactory) : base(contextFactory)
     {
+    }
+
+    public override Channel Add(Channel channel)
+    {
+      if (channel.IsDefault)
+      {
+        foreach (var c in GetAll())
+        {
+          c.IsDefault = false;
+          Update(c);
+        }
+      }
+
+      return base.Add(channel);
     }
 
     public override void Update(Channel channel)
@@ -47,7 +62,5 @@ namespace SvxlinkManager.Repositories
       using var dbcontext = contextFactory.CreateDbContext();
       return dbcontext.Channels.Single(c => c.IsDefault);
     }
-
-    
   }
 }
