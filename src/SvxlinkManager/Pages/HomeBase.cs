@@ -50,43 +50,92 @@ namespace SvxlinkManager.Pages
 
     private async void SvxLinkService_Error(string t, string b)
     {
-      await ShowErrorToastAsync(t, b);
+      try
+      {
+        await ShowErrorToastAsync(t, b);
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour d'afficher le toast. {e.Message}");
+      }
     }
 
     private void SvxLinkService_NodeRx(Models.Node n)
     {
-      CurrentTxNode = null;
-      InvokeAsync(() => StateHasChanged());
+      try
+      {
+        CurrentTxNode = null;
+        InvokeAsync(() => StateHasChanged());
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de repasser le node en RX. {e.Message}");
+      }
     }
 
     private void SvxLinkService_NodeTx(Models.Node n)
     {
-      CurrentTxNode = n;
-      InvokeAsync(() => StateHasChanged());
+      try
+      {
+        CurrentTxNode = n;
+        InvokeAsync(() => StateHasChanged());
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de passer le node en TX. {e.Message}");
+      }
     }
 
     private async void SvxLinkService_NodeDisconnected(Models.Node n)
     {
-      await ShowInfoToastAsync(n.Name, "A quitté le salon.");
-      await InvokeAsync(() => StateHasChanged());
+      try
+      {
+        await InvokeAsync(() => StateHasChanged());
+        await ShowInfoToastAsync(n.Name, "A quitté le salon.");
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible d'indiquer qu'un noeus a quitté le salon. {e.Message}");
+      }
     }
 
     private async void SvxLinkService_NodeConnected(Models.Node n)
     {
-      await ShowInfoToastAsync(n.Name, "A rejoint le salon.");
-      await InvokeAsync(() => StateHasChanged());
+      try
+      {
+        await InvokeAsync(() => StateHasChanged());
+        await ShowInfoToastAsync(n.Name, "A rejoint le salon.");
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible d'indiquer qu'un noeud a rejoint le salon. {e.Message}");
+      }
     }
 
     private void SvxLinkService_Disconnected()
     {
-      CurrentTxNode = null;
-      InvokeAsync(() => StateHasChanged());
+      try
+      {
+        CurrentTxNode = null;
+        InvokeAsync(() => StateHasChanged());
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible d'indiquer l'état déconnecté. {e.Message}");
+      }
     }
 
     private async void SvxLinkService_ConnectedAsync(Channel c)
     {
-      await ShowSuccessToastAsync("Connecté", $"Vous êtes maintenant connecté au salon:<br/><strong>{c.Name}</strong>");
-      await InvokeAsync(() => StateHasChanged());
+      try
+      {
+        await InvokeAsync(() => StateHasChanged());
+        await ShowSuccessToastAsync("Connecté", $"Vous êtes maintenant connecté au salon:<br/><strong>{c.Name}</strong>");
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour d'afficher le toast. {e.Message}");
+      }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
