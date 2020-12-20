@@ -213,17 +213,22 @@ namespace SvxlinkManager.Service
         { "CALLSIGN", ((SvxlinkChannel)channel).ReportCallSign},
         { "REPORT_CTCSS", radioProfile.RxTone}
       };
+      var rx = new Dictionary<string, string>
+      {
+        {"SQL_DET", radioProfile.SquelchDetection },
+      };
       var ReflectorLogic = new Dictionary<string, string>
       {
         {"CALLSIGN", channel.CallSign },
         {"HOST", channel.Host },
-        {"AUTH_KEY",((SvxlinkChannel)channel).AuthKey },
-        {"PORT" ,((SvxlinkChannel)channel).Port.ToString()}
+        {"AUTH_KEY",channel.AuthKey },
+        {"PORT" ,channel.Port.ToString()}
       };
       var parameters = new Dictionary<string, Dictionary<string, string>>
       {
         {"GLOBAL", global },
         {"SimplexLogic", simplexlogic },
+        {"Rx1", rx},
         {"ReflectorLogic" , ReflectorLogic}
       };
       ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);

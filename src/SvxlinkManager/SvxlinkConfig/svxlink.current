@@ -1,5 +1,5 @@
 [GLOBAL]
-LOGICS=SimplexLogic
+LOGICS=SimplexLogic,ReflectorLogic
 CFG_DIR=svxlink.d
 TIMESTAMP_FORMAT=%c
 CARD_SAMPLE_RATE=16000
@@ -10,7 +10,7 @@ LINKS=ALLlink
 TYPE=Simplex
 RX=Rx1
 TX=Tx1
-MODULES=ModuleHelp,ModuleMetarInfo,ModulePropagationMonitor,ModuleEchoLink,ModuleParrot
+MODULES=ModuleHelp,ModuleMetarInfo,ModulePropagationMonitor
 CALLSIGN=HB9GXP
 SHORT_IDENT_INTERVAL=15
 LONG_IDENT_INTERVAL=60
@@ -101,7 +101,7 @@ COMMENT=>>> SpotNik V4.0 <<<<<
 TYPE=Reflector
 AUDIO_CODEC=OPUS
 JITTER_BUFFER_DELAY=2
-CALLSIGN=CALLSIGN
-HOST=HOST
-AUTH_KEY=AUTH_KEY
-PORT=PORT
+CALLSIGN=(CH) HB9GXP H
+HOST=rrf3.f5nlg.ovh
+AUTH_KEY=Magnifique123456789!
+PORT=5303
