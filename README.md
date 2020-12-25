@@ -2,9 +2,9 @@
 [![Build Status](https://dev.azure.com/marcbat79/SvxlinkManager/_apis/build/status/SvxlinkManager-core-CI?repoName=marcbat%2Fsvxlinkmanager&branchName=develop)](https://dev.azure.com/marcbat79/SvxlinkManager/_build/latest?definitionId=8&repoName=marcbat%2Fsvxlinkmanager&branchName=develop)
 
 ## Présentation
-Le projet SvxlinkManager permet la gestion de plusieurs connexions à des Svxlink Reflector. 
+Le projet SvxlinkManager permet la gestion de plusieurs connexions à des [Svxlink Reflector](https://github.com/sm0svx/svxlink). 
 Le programme gère également les connexions à Echolink. 
-Il se présente sous la forme d’une application web qui pilote les redémarrages et reconfigurations du client Svxlink. 
+Il se présente sous la forme d’une application web qui pilote les redémarrages et reconfigurations du client [Svxlink](http://www.svxlink.org). 
 
 Il est fortement inspiré du super projet [RRF](https://f5nlg.wordpress.com) de l’équipe F4HWN, F4VSJ, F1EVM, F5NLG, F1TZO. SvxlinkManager est d’ailleurs compatible avec le RRF. Vous pouvez l’utiliser pour vous connecter aux salons traditionnels. Il peut s’installer sur un [Spotnik](https://f5nlg.wordpress.com/2016/01/06/svx-boutique) et le piloter sans problème.
 
