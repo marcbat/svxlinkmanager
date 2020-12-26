@@ -37,3 +37,5 @@ Mise à jour
 
 ### Mise à jour
 * Possibité de mettre à jour l'application directement depuis le site web
+
+![](https://github.com/marcbat/svxlinkmanager/wiki/images/Accueil.png)
