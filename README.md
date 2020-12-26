@@ -40,6 +40,6 @@ Mise à jour
 
 ### Documentation
 
-La documentation détaillée se trouve sur la page [Wifi](https://github.com/marcbat/svxlinkmanager/wiki).
+La documentation détaillée se trouve sur la page [Wiki](https://github.com/marcbat/svxlinkmanager/wiki).
 
 ![](https://github.com/marcbat/svxlinkmanager/wiki/images/Accueil.png)
