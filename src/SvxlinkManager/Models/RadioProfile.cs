@@ -16,12 +16,14 @@ namespace SvxlinkManager.Models
 
     public string Name { get; set; }
 
-    public bool Enable { 
+    public bool Enable
+    {
       get => enable;
-      set {
+      set
+      {
         enable = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Enable)));
-      } 
+      }
     }
 
     [RegularExpression("^[0-9]{3}.[0-9]{3}")]
@@ -30,20 +32,29 @@ namespace SvxlinkManager.Models
     [RegularExpression("^[0-9]{3}.[0-9]{3}")]
     public string TxFrequ { get; set; }
 
+    [Required]
     public string Squelch { get; set; } = "2";
 
+    [Required]
     public string TxCtcss { get; set; } = "0000";
 
+    [Required]
     public string RxCtcss { get; set; } = "0000";
 
+    [Required]
     public string Volume { get; set; } = "4";
 
+    [Required]
     public string PreEmph { get; set; } = "0";
 
+    [Required]
     public string HightPass { get; set; } = "0";
 
+    [Required]
     public string LowPass { get; set; } = "0";
 
+    [Required]
+    public string SquelchDetection { get; set; } = "CTCSS";
 
     [NotMapped]
     public string TxTone { get => Ctcss.Single(c => c.Key == TxCtcss).Value; }

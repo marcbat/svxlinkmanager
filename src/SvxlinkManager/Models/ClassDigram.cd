@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SvxlinkManager.Models.Channel">
+    <Position X="10.5" Y="1.25" Width="1.5" />
+    <NestedTypes>
+      <Class Name="SvxlinkManager.Models.Channel.FileValidationAttribute" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Models\Channel.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAACARABAAAAAAAAAAAAAAQAAAAACAAABAQAAAAAAAA=</HashCode>
+      <FileName>Models\Channel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SvxlinkManager.Models.EcholinkChannel">
+    <Position X="11.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAIAAAAAEAAAAAAiAAAAAAAAAAA=</HashCode>
+      <FileName>Models\EcholinkChannel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SvxlinkManager.Models.Node" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAACAAAAAgAAAAAQAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Node.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SvxlinkManager.Models.RadioProfile" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgABAgABAAAAIAAAACCQghAAAABCEAAIAAAAAACA=</HashCode>
+      <FileName>Models\RadioProfile.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SvxlinkManager.Models.Rule" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAgIAACAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Rule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SvxlinkManager.Models.SvxlinkChannel">
+    <Position X="9.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAABAAAIAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\SvxlinkChannel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="SvxlinkManager.Models.IModelEntity" Collapsed="true">
+    <Position X="14" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\IModelEntity.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
