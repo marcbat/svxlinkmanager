@@ -35,3 +35,5 @@ Mise à jour
 *	Gestion des mises à jour avec installation automatique
 *	Vous pouvez choisir la version cible et tester les versions en avant-première
 
+### Mise à jour
+* Possibité de mettre à jour l'application directement depuis le site web
