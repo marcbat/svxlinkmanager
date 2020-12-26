@@ -38,4 +38,8 @@ Mise à jour
 ### Mise à jour
 * Possibité de mettre à jour l'application directement depuis le site web
 
+### Documentation
+
+La documentation détaillée se trouve sur la page [Wifi](https://github.com/marcbat/svxlinkmanager/wiki).
+
 ![](https://github.com/marcbat/svxlinkmanager/wiki/images/Accueil.png)
