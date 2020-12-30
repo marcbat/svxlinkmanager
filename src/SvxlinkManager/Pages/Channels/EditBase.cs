@@ -29,7 +29,7 @@ namespace SvxlinkManager.Pages.Channels
     {
       await base.HandleValidSubmit();
 
-      Repositories.Repository<TChannel>().Update(Channel);
+      Repositories.Channels.Update(Channel);
 
       await ShowSuccessToastAsync("Modifié", $"Le salon {Channel.Name} a bien été modifié.");
 
