@@ -59,8 +59,29 @@ namespace SvxlinkManager.Repositories
 
     public Channel GetDefault()
     {
-      using var dbcontext = contextFactory.CreateDbContext();
-      return dbcontext.Channels.Single(c => c.IsDefault);
+      using (var dbcontext = contextFactory.CreateDbContext())
+      {
+        var defaut = dbcontext.Channels.SingleOrDefault(c => c.IsDefault);
+        if (defaut != null)
+          return defaut;
+      }
+
+      return SetFirstAsDefault();
+    }
+
+    private Channel SetFirstAsDefault()
+    {
+      Channel first;
+
+      using (var dbcontext = contextFactory.CreateDbContext())
+      {
+        first = dbcontext.Channels.Find(1);
+        first.IsDefault = true;
+      }
+
+      Update(first);
+
+      return first;
     }
   }
 }
