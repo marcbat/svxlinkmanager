@@ -17,7 +17,7 @@ namespace SvxlinkManager.Service
 {
   public class SvxLinkService
   {
-    private readonly string applicationPath = Directory.GetCurrentDirectory();
+    public readonly string applicationPath = Directory.GetCurrentDirectory();
 
     private readonly ILogger<SvxLinkService> logger;
 
@@ -202,6 +202,7 @@ namespace SvxlinkManager.Service
 
       var radioProfile = repositories.RadioProfiles.GetCurrent();
 
+      // Remplacement de la config
       CreateNewCurrentConfig();
 
       var global = new Dictionary<string, string>
@@ -210,7 +211,7 @@ namespace SvxlinkManager.Service
       };
       var simplexlogic = new Dictionary<string, string> {
         { "MODULES", "ModuleHelp,ModuleMetarInfo,ModulePropagationMonitor"},
-        { "CALLSIGN", ((SvxlinkChannel)channel).ReportCallSign},
+        { "CALLSIGN", channel.ReportCallSign},
         { "REPORT_CTCSS", radioProfile.RxTone}
       };
       var rx = new Dictionary<string, string>
@@ -231,6 +232,7 @@ namespace SvxlinkManager.Service
         {"Rx1", rx},
         {"ReflectorLogic" , ReflectorLogic}
       };
+
       ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);
       logger.LogInformation("Remplacement du contenu svxlink.current");
 
@@ -269,7 +271,8 @@ namespace SvxlinkManager.Service
       var radioProfile = repositories.RadioProfiles.GetCurrent();
 
       // Remplacement de la config
-      File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
+      CreateNewCurrentConfig();
+
       var global = new Dictionary<string, string>
       {
         { "LOGICS", "SimplexLogic" }
@@ -292,12 +295,12 @@ namespace SvxlinkManager.Service
       {
         {"SERVERS", channel.Host },
         {"CALLSIGN", channel.CallSign },
-        {"PASSWORD", ((EcholinkChannel)channel).Password },
-        {"SYSOPNAME", ((EcholinkChannel)channel).SysopName },
-        {"LOCATION", ((EcholinkChannel)channel).Location },
-        {"MAX_QSOS", ((EcholinkChannel)channel).MaxQso.ToString() },
-        {"MAX_CONNECTIONS", (((EcholinkChannel)channel).MaxQso + 1).ToString() },
-        {"DESCRIPTION", ((EcholinkChannel)channel).Description },
+        {"PASSWORD", channel.Password },
+        {"SYSOPNAME", channel.SysopName },
+        {"LOCATION", channel.Location },
+        {"MAX_QSOS", channel.MaxQso.ToString() },
+        {"MAX_CONNECTIONS", (channel.MaxQso + 1).ToString() },
+        {"DESCRIPTION", channel.Description },
       };
       parameters = new Dictionary<string, Dictionary<string, string>>
       {
@@ -306,12 +309,8 @@ namespace SvxlinkManager.Service
       ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", parameters);
       logger.LogInformation("Remplacement du contenu de ModuleEcholink.conf");
 
-      // changement du son de l'annonce
-      if (!Directory.Exists("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager"))
-        Directory.CreateDirectory("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager");
-
-      if (channel.SoundName != null)
-        File.Copy($"{applicationPath}/Sounds/{channel.SoundName}", "/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav", true);
+      // Remplacement du son de l'annonce
+      ReplaceSoundFile(channel);
 
       // Ajout du link en tant que Node
       Nodes.Add(new Node { Name = channel.CallSign });
@@ -381,6 +380,9 @@ namespace SvxlinkManager.Service
       ExecuteCommand("echo '1#'> /tmp/dtmf_uhf");
     }
 
+    /// <summary>
+    /// Copy svxlink.conf vers svxlink.current
+    /// </summary>
     protected virtual void CreateNewCurrentConfig() =>
       File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
 
@@ -526,7 +528,7 @@ namespace SvxlinkManager.Service
     /// <summary>
     /// Set the temporized timer for current channel
     /// </summary>
-    public virtual void SetTimer()
+    protected virtual void SetTimer()
     {
       timer = new Timer(1000);
       timer.Start();

@@ -261,6 +261,103 @@ namespace SvxlinkManager.Service.Tests
       service.DidNotReceive().Protected("CreateNewCurrentConfig");
     }
 
+    [Test(Description = "Test de l'activation d'un channel Svxlink")]
+    public void ActivateSvxlinkChannelTest()
+    {
+      // arrange
+      var radioProfile = new RadioProfile { RxCtcss = "0002" };
+      repositories.RadioProfiles.GetCurrent().Returns(radioProfile);
+
+      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories);
+      service.When(x => x.StopSvxlink()).DoNotCallBase();
+      service.When(x => x.StartSvxLink(Arg.Any<SvxlinkChannel>())).DoNotCallBase();
+      var channel = new SvxlinkChannel { CallSign = "(CH) HB9GXP H" };
+
+      Predicate<Dictionary<string, Dictionary<string, string>>> isParametersOk = x =>
+      {
+        return x["GLOBAL"]["LOGICS"] == "SimplexLogic,ReflectorLogic"
+            && x["SimplexLogic"]["MODULES"] == "ModuleHelp,ModuleMetarInfo,ModulePropagationMonitor"
+            && x["SimplexLogic"]["CALLSIGN"] == channel.ReportCallSign
+            && x["SimplexLogic"]["REPORT_CTCSS"] == radioProfile.RxTone
+            && x["Rx1"]["SQL_DET"] == radioProfile.SquelchDetection
+            && x["ReflectorLogic"]["CALLSIGN"] == channel.CallSign
+            && x["ReflectorLogic"]["HOST"] == channel.Host
+            && x["ReflectorLogic"]["AUTH_KEY"] == channel.AuthKey
+            && x["ReflectorLogic"]["PORT"] == channel.Port.ToString();
+      };
+
+      // act
+      service.ActivateSvxlinkChannel(channel);
+
+      // assert
+      service.Received(1).StopSvxlink();
+      service.Received(1).Protected("CreateNewCurrentConfig");
+      service.Received(1).Protected("ReplaceConfig", $"{service.applicationPath}/SvxlinkConfig/svxlink.current", Arg.Is<Dictionary<string, Dictionary<string, string>>>(x => isParametersOk(x)));
+      service.Received(1).Protected("ReplaceSoundFile", channel);
+      service.Received(1).StartSvxLink(channel);
+    }
+
+    [Test(Description = "Test de l'activation d'un channel Echolink")]
+    public void ActivateEcholinkTest()
+    {
+      // arrange
+      var radioProfile = new RadioProfile { RxCtcss = "0002" };
+      repositories.RadioProfiles.GetCurrent().Returns(radioProfile);
+
+      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories);
+      service.When(x => x.StopSvxlink()).DoNotCallBase();
+      service.When(x => x.StartSvxLink(Arg.Any<EcholinkChannel>())).DoNotCallBase();
+      var channel = new EcholinkChannel { CallSign = "HB9GXP-L" };
+
+      Predicate<Dictionary<string, Dictionary<string, string>>> isParametersOk = x =>
+      {
+        return x["GLOBAL"]["LOGICS"] == "SimplexLogic"
+            && x["SimplexLogic"]["MODULES"] == "ModuleHelp,ModuleMetarInfo,ModulePropagationMonitor,ModuleEchoLink,ModuleParrot"
+            && x["SimplexLogic"]["CALLSIGN"] == channel.CallSign
+            && x["SimplexLogic"]["REPORT_CTCSS"] == radioProfile.RxTone;
+      };
+      Predicate<Dictionary<string, Dictionary<string, string>>> isEcholinkParametersOk = x =>
+      {
+        return x["ModuleEchoLink"]["SERVERS"] == channel.Host
+              && x["ModuleEchoLink"]["CALLSIGN"] == channel.CallSign
+              && x["ModuleEchoLink"]["PASSWORD"] == channel.Password
+              && x["ModuleEchoLink"]["SYSOPNAME"] == channel.SysopName
+              && x["ModuleEchoLink"]["LOCATION"] == channel.Location
+              && x["ModuleEchoLink"]["MAX_QSOS"] == channel.MaxQso.ToString()
+              && x["ModuleEchoLink"]["MAX_CONNECTIONS"] == (channel.MaxQso + 1).ToString()
+              && x["ModuleEchoLink"]["DESCRIPTION"] == channel.Description;
+      };
+
+      // act
+      service.ActivateEcholink(channel);
+
+      // assert
+      service.Received(1).StopSvxlink();
+      service.Received(1).Protected("CreateNewCurrentConfig");
+      service.Received(1).Protected("ReplaceConfig", $"{service.applicationPath}/SvxlinkConfig/svxlink.current", Arg.Is<Dictionary<string, Dictionary<string, string>>>(x => isParametersOk(x)));
+      service.Received(1).Protected("ReplaceConfig", $"{service.applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", Arg.Is<Dictionary<string, Dictionary<string, string>>>(x => isEcholinkParametersOk(x)));
+      service.Received(1).Protected("ReplaceSoundFile", channel);
+      service.Received(1).StartSvxLink(channel);
+    }
+
+    [Test(Description = "Test l'activation du canal par defaut.")]
+    public void StartDefaultChannelTest()
+    {
+      // arrange
+      var channel = new SvxlinkChannel { Id = 300 };
+      repositories.Channels.GetDefault().Returns(channel);
+
+      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories);
+      service.When(x => x.ActivateChannel(Arg.Any<int>())).DoNotCallBase();
+
+      // act
+      service.StartDefaultChannel();
+
+      // assert
+      Assert.AreEqual(service.ChannelId, channel.Id);
+      service.Received(1).ActivateChannel(channel.Id);
+    }
+
     /// <summary>
     /// Mockup for SvxLinkService
     /// </summary>
