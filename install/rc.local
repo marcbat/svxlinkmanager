@@ -19,6 +19,4 @@ echo "2" > /sys/class/gpio/export
 sleep 1
 echo in > /sys/class/gpio/gpio2/direction
 
-systemctl start svxlinkmanager
-
 exit 0
