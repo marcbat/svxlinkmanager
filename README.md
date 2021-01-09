@@ -21,8 +21,8 @@ Interface web protégée par authentification sécurisée.
 *	Visualisation en temps réel de l’activité du reflector courant
 
 ### Echolink
-*	Configuration de multiples profils Echolink
-*	Connection à Echolink et suivi en temps réel de l’activité
+*	Configuration de plusieurs profils Echolink
+*	Connexion à Echolink et suivi en temps réel de l’activité
 
 ### Gestion radio
 *	Configuration de multiples profils radio, fréquence, tone, etc…
@@ -31,12 +31,11 @@ Interface web protégée par authentification sécurisée.
 ### Wifi
 *	Gestion des connexions WiFi avec détection automatique des SSID à portée
 *	Activation, désactivation en 1 click d’une ou plusieurs connexions WiFi
-Mise à jour
-*	Gestion des mises à jour avec installation automatique
-*	Vous pouvez choisir la version cible et tester les versions en avant-première
 
 ### Mise à jour
 * Possibité de mettre à jour l'application directement depuis le site web
+*	Gestion des mises à jour avec installation automatique
+*	Vous pouvez choisir la version cible et tester les versions en avant-première
 
 ### Documentation
 
