@@ -1,0 +1,24 @@
+#!/bin/sh -e
+#
+## demarrage VPN Hamnet
+# pon hamnet
+
+echo "7" > /sys/class/gpio/export
+sleep 1
+echo out > /sys/class/gpio/gpio7/direction
+
+echo "10" > /sys/class/gpio/export
+sleep 1
+echo in > /sys/class/gpio/gpio10/direction
+
+echo "6" > /sys/class/gpio/export
+sleep 1
+echo out > /sys/class/gpio/gpio6/direction
+
+echo "2" > /sys/class/gpio/export
+sleep 1
+echo in > /sys/class/gpio/gpio2/direction
+
+systemctl start svxlinkmanager
+
+exit 0
