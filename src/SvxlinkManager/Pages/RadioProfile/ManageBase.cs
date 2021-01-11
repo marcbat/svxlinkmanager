@@ -49,7 +49,9 @@ namespace SvxlinkManager.Pages.RadioProfile
     public async Task ApplyAsync(int id)
     {
       var profile = Repositories.RadioProfiles.Get(id);
-      Sa818Service.WriteRadioProfile(profile);
+
+      if (profile.HasSa818)
+        Sa818Service.WriteRadioProfile(profile);
 
       profile.Enable = true;
       Repositories.RadioProfiles.Update(profile);
