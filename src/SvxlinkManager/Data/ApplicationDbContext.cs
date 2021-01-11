@@ -43,7 +43,7 @@ namespace SvxlinkManager.Data
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-      optionsBuilder.UseSqlite("Data Source=Spotnik.db");
+      optionsBuilder.UseSqlite("Data Source=SvxlinkManager.db");
     }
 
     /// <summary>
@@ -65,8 +65,8 @@ namespace SvxlinkManager.Data
       builder.Entity<SvxlinkChannel>().HasData(new SvxlinkChannel { Id = 7, Name = "Salon Local", SoundName = "Sloc.wav", CallSign = "(CH) SVX4LINK H", ReportCallSign = "SVX4LINK", Host = "serveur.f1tzo.com", Port = 5302, AuthKey = "FON-F1TZO", IsTemporized = true, Dtmf = 101 });
       builder.Entity<SvxlinkChannel>().HasData(new SvxlinkChannel { Id = 8, Name = "Salon Expérimental", SoundName = "Sexp.wav", CallSign = "(CH) SVX4LINK H", ReportCallSign = "SVX4LINK", Host = "rrf3.f5nlg.ovh", Port = 5303, AuthKey = "Magnifique123456789!", IsTemporized = true, Dtmf = 102 });
 
-      builder.Entity<RadioProfile>().HasData(new RadioProfile { Id = 1, Name = "VHF défaut", TxFrequ = "144.700", RxFequ = "144.700", Squelch = "2", RxCtcss = "0002", SquelchDetection = "CTCSS", Enable = true });
-      builder.Entity<RadioProfile>().HasData(new RadioProfile { Id = 2, Name = "UHF défaut", TxFrequ = "436.375", RxFequ = "436.375", Squelch = "2", RxCtcss = "0005", SquelchDetection = "CTCSS", Enable = false });
+      builder.Entity<RadioProfile>().HasData(new RadioProfile { Id = 1, Name = "VHF défaut", TxFrequ = "144.700", RxFequ = "144.700", Squelch = "2", RxCtcss = "0002", SquelchDetection = "GPIO", Enable = true });
+      builder.Entity<RadioProfile>().HasData(new RadioProfile { Id = 2, Name = "UHF défaut", TxFrequ = "436.375", RxFequ = "436.375", Squelch = "2", RxCtcss = "0005", SquelchDetection = "GPIO", Enable = false });
     }
 
     #endregion Methods
