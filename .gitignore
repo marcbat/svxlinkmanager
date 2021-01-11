@@ -342,3 +342,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /src/SvxlinkManager/Sounds/echolink.wav
+/gitversion.exe
