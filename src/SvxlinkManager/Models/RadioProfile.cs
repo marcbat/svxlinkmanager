@@ -56,6 +56,8 @@ namespace SvxlinkManager.Models
     [Required]
     public string SquelchDetection { get; set; } = "CTCSS";
 
+    public bool HasSa818 { get; set; }
+
     [NotMapped]
     public string TxTone { get => Ctcss.Single(c => c.Key == TxCtcss).Value; }
 
