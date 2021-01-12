@@ -46,7 +46,7 @@ rm -rf  /etc/SvxlinkManager/
 unzip /tmp/svxlinkmanager/svxlinkmanager-__Build.BuildNumber__.zip -d /etc/
 
 # restore the old user db
-cp /etc/SvxlinkManager.bak/Spotnik.db /etc/SvxlinkManager/
+cp /etc/SvxlinkManager.bak/SvxlinkManager.db /etc/SvxlinkManager/
 
 # start the application
 sudo systemctl restart svxlinkmanager
