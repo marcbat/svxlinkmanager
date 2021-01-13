@@ -39,16 +39,31 @@
     </div>
   </div>
 
-  <div class="form-row">
-    <div class="form-check form-check-inline">
-      <InputCheckbox @bind-Value="IsDefault" type="checkbox" class="form-check-input" id="inputIsDefault" />
-      <label class="form-check-label" data-toggle="tooltip" title="Si choché, c'est ce salon qui sera séléctionné au terme du délai des salons temporisés. <br /> Un salon ne peut être à la fois salon par défaut et salon temporisé.">Salon par défaut</label>
+  @if (CanEditType)
+  {
+    <div class="form-row">
+      <div class="form-group col-md-2">
+        <div class="form-check form-check-inline">
+          <div class="pretty p-default p-curve p-bigger">
+            <InputCheckbox @bind-Value="IsDefault" type="checkbox" id="inputIsDefault" />
+            <div class="state">
+              <label data-toggle="tooltip" title="Si choché, c'est ce salon qui sera séléctionné au terme du délai des salons temporisés. <br /> Un salon ne peut être à la fois salon par défaut et salon temporisé.">Salon par défaut</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-md-2">
+        <div class="form-check form-check-inline">
+          <div class="pretty p-default p-curve p-bigger">
+            <InputCheckbox @bind-Value="IsTemporized" type="checkbox" id="inputIsTemporized" />
+            <div class="state">
+              <label data-toggle="tooltip" title="Un salon temporisé retournera automatiquement sur le salon par défaut après un délai de 3 minutes d'inactivité.">Temporisé</label>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="form-check form-check-inline">
-      <InputCheckbox @bind-Value="IsTemporized" type="checkbox" class="form-check-input" id="inputIsTemporized" />
-      <label class="form-check-label" data-toggle="tooltip" title="Un salon temporisé retournera automatiquement sur le salon par défaut après un délai de 3 minutes d'inactivité.">Temporisé</label>
-    </div>
-  </div>
+  }
 
   <button type="submit" class="btn btn-success">@SubmitTitle</button> <a class="btn btn-primary" href="Channel/Manage" role="button">Annuler</a>
 </EditForm>
@@ -59,6 +74,9 @@
 
   [Parameter]
   public string SubmitTitle { get; set; }
+
+  [Parameter]
+  public bool CanEditType { get; set; }
 
   [Parameter]
   public EventCallback<EditContext> HandleValidSubmit { get; set; }
@@ -77,7 +95,12 @@
   protected bool IsTemporized
   {
     get => Channel.IsTemporized;
-    set => Channel.IsTemporized = value;
+    set
+    {
+      Channel.IsTemporized = value;
+      if (value)
+        IsDefault = false;
+    }
   }
 
   private void OnInputFileChange(InputFileChangeEventArgs eventArgs)

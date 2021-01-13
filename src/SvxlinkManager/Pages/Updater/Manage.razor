@@ -5,13 +5,16 @@
 
 <h3>Releases</h3>
 <form>
-  <div class="form-check">
-    <input class="form-check-input" @bind="IncludePrerelease" type="checkbox" id="IncludePrerelease">
-    <label class="form-check-label" for="defaultCheck1">
-      Inclure les versions preview
-    </label>
+  <div>
+    <div class="pretty p-default p-curve p-bigger">
+      <input @bind="IncludePrerelease" type="checkbox" id="IncludePrerelease">
+      <div class="state">
+        <label class="form-check-label" for="defaultCheck1">
+          Inclure les versions preview
+        </label>
+      </div>
+    </div>
   </div>
-  
 </form>
 <ul id="channel-manage-list" class="list-group-horizontal">
   @foreach (var release in Releases)

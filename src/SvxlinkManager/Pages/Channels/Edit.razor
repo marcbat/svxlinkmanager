@@ -5,6 +5,10 @@
 
 @attribute [Authorize]
 
-<h3>Editer @Channel.Name</h3>
+<h3>
+  @if (Channel.IsDefault)
+  {<span class="oi oi-home" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Le salon @Channel.Name est actuellement le salon par défaut."></span>}
+  Editer @Channel.Name
+</h3>
 
-<AddEditForm Channel="@Channel" HandleValidSubmit="@(()=>HandleValidSubmit("Channel"))" SubmitTitle="@SubmitTitle" />
+<AddEditForm Channel="@Channel" HandleValidSubmit="@(()=>HandleValidSubmit("Channel"))" SubmitTitle="@SubmitTitle" CanEditType="@CanEditType" />
