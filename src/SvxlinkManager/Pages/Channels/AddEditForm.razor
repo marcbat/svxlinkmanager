@@ -19,9 +19,13 @@
       <label data-toggle="tooltip" title="L'adresse internet du reflector svxlink.">Adresse du reflector</label>
       <InputText @bind-Value="Channel.Host" type="text" class="form-control" id="inputHost" placeholder="http://www.monsvxlinkserver.com" />
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-3">
       <label data-toggle="tooltip" title="Le port sur lequel est exposé le svxlink reflector. <br> En général, il s'agit du port 5300.">Port</label>
       <InputNumber @bind-Value="Channel.Port" type="number" class="form-control" id="inputPort" placeholder="5300" />
+    </div>
+    <div class="form-group col-md-3">
+      <label data-toggle="tooltip" title="Le DTMF à composer pour activer le salon.">DTMF</label>
+      <InputNumber @bind-Value="Channel.Dtmf" type="number" class="form-control" id="inputDtmf" placeholder="100" />
     </div>
   </div>
   <div class="form-row">
