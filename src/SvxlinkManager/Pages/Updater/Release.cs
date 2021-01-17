@@ -35,6 +35,20 @@ namespace SvxlinkManager.Pages.Updater
     [JsonPropertyName("assets")]
     public List<Asset> Assets { get; set; }
 
+    public bool IsValid()
+    {
+      try
+      {
+        if (Package != null && PackageCheckSum != null && Updater != null && UpdaterCheckSum != null)
+          return true;
+      }
+      catch (Exception e)
+      {
+      }
+
+      return false;
+    }
+
     [JsonIgnore]
     public Asset Package => Assets.SingleOrDefault(a => a.Name.StartsWith("svxlinkmanager-") && a.Name.EndsWith(".zip"));
 
@@ -58,5 +72,8 @@ namespace SvxlinkManager.Pages.Updater
 
     [JsonPropertyName("browser_download_url")]
     public string DownloadUrl { get; set; }
+
+    [JsonPropertyName("download_count")]
+    public int DownloadCount { get; set; }
   }
 }
