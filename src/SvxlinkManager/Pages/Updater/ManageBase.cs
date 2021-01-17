@@ -67,9 +67,9 @@ namespace SvxlinkManager.Pages.Updater
     {
       await Js.InvokeVoidAsync("UpdateInstallStatus", release.Id, "Installation en cours");
 
-      ExecuteCommand($"chmod 755 /tmp/svxlinkmanager/updater-{release.TagName}.sh");
+      ExecuteCommand($"chmod 755 /tmp/svxlinkmanager/{release.Updater.Name}");
 
-      var (result, error) = ExecuteCommand($"/tmp/svxlinkmanager/updater-{release.TagName}.sh update");
+      var (result, error) = ExecuteCommand($"/tmp/svxlinkmanager/{release.Updater.Name} update");
 
       if (!string.IsNullOrEmpty(error))
         await ShowErrorToastAsync("Erreur", error);
@@ -131,7 +131,7 @@ namespace SvxlinkManager.Pages.Updater
 
     private static string GetChecksum(string file)
     {
-      using (FileStream stream = File.OpenRead(file))
+      using (var stream = File.OpenRead(file))
       {
         var sha = new SHA256Managed();
         byte[] checksum = sha.ComputeHash(stream);
