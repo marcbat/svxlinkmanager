@@ -178,7 +178,7 @@ namespace SvxlinkManager.Pages
 
     public List<Models.Node> Nodes
     {
-      get => SvxLinkService.Nodes;
+      get => SvxLinkService.Nodes.OrderBy(n => n.Name).ToList();
       set => SvxLinkService.Nodes = value;
     }
   }

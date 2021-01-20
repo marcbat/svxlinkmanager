@@ -2,9 +2,11 @@
   <DataAnnotationsValidator />
   <ValidationSummary />
 
-  <div class="form-group">
-    <label data-toggle="tooltip" title="Le nom du profil radio. <br /> Choisissez un nom unique.">Nom du profil</label>
-    <InputText @bind-Value="RadioProfile.Name" type="text" class="form-control" id="inputName" placeholder="Mon profil au QRA" />
+  <div class="form-row">
+    <div class="form-group">
+      <label data-toggle="tooltip" title="Le nom du profil radio. <br /> Choisissez un nom unique.">Nom du profil</label>
+      <InputText @bind-Value="RadioProfile.Name" type="text" class="form-control" id="inputName" placeholder="Mon profil au QRA" />
+    </div>
   </div>
   <div class="form-row">
     <div class="form-group col-md-6">
@@ -95,7 +97,18 @@
       </InputSelect>
     </div>
   </div>
-
+  <div class="form-row">
+    <div class="form-group col-md-2">
+      <div class="form-check form-check-inline">
+        <div class="pretty p-default p-curve p-bigger">
+          <InputCheckbox @bind-Value="RadioProfile.HasSa818" type="checkbox" id="HasSa818" />
+          <div class="state">
+            <label data-toggle="tooltip" title="Indiquez si un module SA818 est présent.">SA818</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <button type="submit" class="btn btn-success">Sauver</button> <a class="btn btn-primary" href="RadioProfile/Manage" role="button">Annuler</a>
 </EditForm>
 

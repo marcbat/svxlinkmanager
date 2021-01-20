@@ -32,6 +32,8 @@ namespace SvxlinkManager.Pages.Channels
     /// <value>The submit label.</value>
     protected abstract string SubmitTitle { get; }
 
+    protected bool CanEditType => !Channel.IsDefault;
+
     /// <summary>
     /// Handles the form submit.
     /// </summary>

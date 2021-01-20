@@ -1,4 +1,6 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Configuration;
+using Microsoft.JSInterop;
 
 using SvxlinkManager.Pages.Shared;
 
@@ -18,7 +20,6 @@ namespace SvxlinkManager.Pages.Updater
   public class ManageBase : SvxlinkManagerComponentBase
   {
     private List<Release> releases;
-    private bool includePrerelease = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -26,6 +27,9 @@ namespace SvxlinkManager.Pages.Updater
 
       LoadReleases();
     }
+
+    [Inject]
+    public IConfiguration Configuration { get; set; }
 
     private void LoadReleases()
     {
@@ -39,7 +43,7 @@ namespace SvxlinkManager.Pages.Updater
     {
       get
       {
-        if (IncludePrerelease)
+        if (Configuration.GetValue<bool>("Config:IsPreRelease"))
           return releases;
         else
           return releases.Where(r => !r.Prerelease).ToList();
@@ -49,16 +53,6 @@ namespace SvxlinkManager.Pages.Updater
 
     public string CurrentVersion => Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
-    public bool IncludePrerelease
-    {
-      get => includePrerelease;
-      set
-      {
-        includePrerelease = value;
-        StateHasChanged();
-      }
-    }
-
     public bool IsExist(Release release) => File.Exists($"/tmp/svxlinkmanager/{release.Updater?.Name}");
 
     public bool IsCurrent(Release release) => release.TagName == CurrentVersion;
@@ -67,9 +61,9 @@ namespace SvxlinkManager.Pages.Updater
     {
       await Js.InvokeVoidAsync("UpdateInstallStatus", release.Id, "Installation en cours");
 
-      ExecuteCommand($"chmod 755 /tmp/svxlinkmanager/updater-{release.TagName}.sh");
+      ExecuteCommand($"chmod 755 /tmp/svxlinkmanager/{release.Updater.Name}");
 
-      var (result, error) = ExecuteCommand($"/tmp/svxlinkmanager/updater-{release.TagName}.sh update");
+      var (result, error) = ExecuteCommand($"/tmp/svxlinkmanager/{release.Updater.Name} update");
 
       if (!string.IsNullOrEmpty(error))
         await ShowErrorToastAsync("Erreur", error);
@@ -131,7 +125,7 @@ namespace SvxlinkManager.Pages.Updater
 
     private static string GetChecksum(string file)
     {
-      using (FileStream stream = File.OpenRead(file))
+      using (var stream = File.OpenRead(file))
       {
         var sha = new SHA256Managed();
         byte[] checksum = sha.ComputeHash(stream);

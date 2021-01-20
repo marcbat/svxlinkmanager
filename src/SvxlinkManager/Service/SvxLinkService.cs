@@ -162,6 +162,9 @@ namespace SvxlinkManager.Service
       return result.Trim();
     }
 
+    /// <summary>Test channel type and activate</summary>
+    /// <param name="channelid">Channel Id</param>
+    /// <exception cref="Exception">Impossible de trouver le type de channel.</exception>
     public virtual void ActivateChannel(int channelid)
     {
       var channel = repositories.Channels.Get(channelid);
@@ -243,6 +246,8 @@ namespace SvxlinkManager.Service
       logger.LogInformation($"Le channel {channel.Name} est connecté.");
     }
 
+    /// <summary>Replaces the sound file for the channel</summary>
+    /// <param name="channel">The channel.</param>
     protected virtual void ReplaceSoundFile(Channel channel = null)
     {
       logger.LogInformation("Remplacement du fichier wav d'annonce.");
@@ -260,6 +265,8 @@ namespace SvxlinkManager.Service
         File.Copy($"{applicationPath}/Sounds/{channel.SoundName}", "/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav", true);
     }
 
+    /// <summary>Activates an Echolink channel</summary>
+    /// <param name="channel">The Echolink channel</param>
     public virtual void ActivateEcholink(EcholinkChannel channel)
     {
       logger.LogInformation("Restart link echolink.");

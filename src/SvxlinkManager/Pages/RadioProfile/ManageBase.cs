@@ -25,6 +25,9 @@ namespace SvxlinkManager.Pages.RadioProfile
     private void LoadRadioProfiles() => RadioProfiles = Repositories.RadioProfiles.GetAll().ToList();
 
     [Inject]
+    public SvxLinkService SvxLinkService { get; set; }
+
+    [Inject]
     public NavigationManager NavigationManager { get; set; }
 
     [Inject]
@@ -47,10 +50,13 @@ namespace SvxlinkManager.Pages.RadioProfile
     {
       var profile = Repositories.RadioProfiles.Get(id);
 
-      Sa818Service.WriteRadioProfile(profile);
+      if (profile.HasSa818)
+        Sa818Service.WriteRadioProfile(profile);
 
       profile.Enable = true;
       Repositories.RadioProfiles.Update(profile);
+
+      SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
 
       await ShowSuccessToastAsync($"{profile.Name} appliqué.", $"Le profil radio {profile.Name} a bien été appliqué.");
 

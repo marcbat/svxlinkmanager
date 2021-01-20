@@ -35,17 +35,31 @@ namespace SvxlinkManager.Pages.Updater
     [JsonPropertyName("assets")]
     public List<Asset> Assets { get; set; }
 
-    [JsonIgnore]
-    public Asset Package => Assets.SingleOrDefault(a => a.Name == $"svxlinkmanager-{TagName}.zip");
+    public bool IsValid()
+    {
+      try
+      {
+        if (Package != null && PackageCheckSum != null && Updater != null && UpdaterCheckSum != null)
+          return true;
+      }
+      catch (Exception e)
+      {
+      }
+
+      return false;
+    }
 
     [JsonIgnore]
-    public Asset Updater => Assets.SingleOrDefault(a => a.Name == $"updater-{TagName}.sh");
+    public Asset Package => Assets.SingleOrDefault(a => a.Name.StartsWith("svxlinkmanager-") && a.Name.EndsWith(".zip"));
 
     [JsonIgnore]
-    public Asset PackageCheckSum => Assets.SingleOrDefault(a => a.Name == $"svxlinkmanager-{TagName}.zip.sha");
+    public Asset Updater => Assets.SingleOrDefault(a => a.Name.StartsWith("updater-") && a.Name.EndsWith(".sh"));
 
     [JsonIgnore]
-    public Asset UpdaterCheckSum => Assets.SingleOrDefault(a => a.Name == $"updater-{TagName}.sh.sha");
+    public Asset PackageCheckSum => Assets.SingleOrDefault(a => a.Name.StartsWith("svxlinkmanager-") && a.Name.EndsWith(".zip.sha"));
+
+    [JsonIgnore]
+    public Asset UpdaterCheckSum => Assets.SingleOrDefault(a => a.Name.StartsWith("updater-") && a.Name.EndsWith(".sh.sha"));
   }
 
   public class Asset
@@ -58,5 +72,8 @@ namespace SvxlinkManager.Pages.Updater
 
     [JsonPropertyName("browser_download_url")]
     public string DownloadUrl { get; set; }
+
+    [JsonPropertyName("download_count")]
+    public int DownloadCount { get; set; }
   }
 }
