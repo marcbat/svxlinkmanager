@@ -30,6 +30,9 @@ namespace SvxlinkManager.Models
     [Required]
     public bool IsTemporized { get; set; }
 
+    [Required]
+    public int TimerDelay { get; set; } = 180;
+
     public int Dtmf { get; set; }
 
     [NotMapped]
