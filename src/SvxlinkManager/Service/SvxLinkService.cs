@@ -335,12 +335,13 @@ namespace SvxlinkManager.Service
     protected virtual void CheckTemporized(object s, ElapsedEventArgs e)
     {
       var diff = (DateTime.Now - lastTx).TotalSeconds;
+      var channel = repositories.Channels.Get(channelId);
 
       logger.LogInformation($"Durée depuis le dernier passage en émission {diff} secondes.");
 
       TempChanged?.Invoke(diff);
 
-      if (diff > 180)
+      if (diff > channel.TimerDelay)
       {
         logger.LogInformation("Delai d'inactivité dépassé. Retour au salon par défaut.");
         ChannelId = repositories.Channels.GetDefault().Id;

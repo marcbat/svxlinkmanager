@@ -64,9 +64,14 @@
               <label data-toggle="tooltip" title="Un salon temporisé retournera automatiquement sur le salon par défaut après un délai de 3 minutes d'inactivité.">Temporisé</label>
             </div>
           </div>
+          @if (Channel.IsTemporized)
+          {
+            <InputNumber @bind-Value="Channel.TimerDelay" type="number" class="form-control" id="inputTimerDelay" />
+          }
         </div>
       </div>
     </div>
+
   }
 
   <button type="submit" class="btn btn-success">@SubmitTitle</button> <a class="btn btn-primary" href="Channel/Manage" role="button">Annuler</a>
@@ -104,8 +109,11 @@
       Channel.IsTemporized = value;
       if (value)
         IsDefault = false;
+
     }
   }
+
+  protected string DelayVisibility { get; set; }
 
   private void OnInputFileChange(InputFileChangeEventArgs eventArgs)
   {
