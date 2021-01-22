@@ -42,6 +42,22 @@ namespace SvxlinkManager.Pages
       SvxLinkService.NodeRx += SvxLinkService_NodeRx;
 
       SvxLinkService.Error += SvxLinkService_Error;
+
+      SvxLinkService.TempChanged += SvxLinkService_TempChanged;
+    }
+
+    private void SvxLinkService_TempChanged(double timer)
+    {
+      try
+      {
+        TimerStatus = Convert.ToInt32(timer);
+
+        InvokeAsync(() => StateHasChanged());
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour la valeur du timer status. {e.Message}");
+      }
     }
 
     public List<Channel> Channels { get; set; }
@@ -129,6 +145,8 @@ namespace SvxlinkManager.Pages
     {
       try
       {
+        TimerStatus = 0;
+
         await InvokeAsync(() => StateHasChanged());
         await ShowSuccessToastAsync("Connecté", $"Vous êtes maintenant connecté au salon:<br/><strong>{c.Name}</strong>");
       }
@@ -175,6 +193,8 @@ namespace SvxlinkManager.Pages
       get => SvxLinkService.ChannelId;
       set => SvxLinkService.ChannelId = value;
     }
+
+    public int TimerStatus { get; set; } = 0;
 
     public List<Models.Node> Nodes
     {

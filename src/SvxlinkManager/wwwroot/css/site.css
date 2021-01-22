@@ -186,7 +186,7 @@ app {
 
 .node {
   display: inline-block;
-  width: 150px;
+  min-width: 150px;
   text-align: left;
   padding: 5px;
   border-width: 1px;
@@ -242,4 +242,8 @@ app {
 
 .toast-danger .toast-body {
   background-color: #f8d7da;
+}
+
+.badge-info {
+  background-color: #24265d;
 }

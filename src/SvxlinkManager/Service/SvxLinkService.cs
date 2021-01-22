@@ -339,7 +339,7 @@ namespace SvxlinkManager.Service
 
       logger.LogInformation($"Durée depuis le dernier passage en émission {diff} secondes.");
 
-      TempChanged?.Invoke(diff);
+      TempChanged?.Invoke(channel.TimerDelay - diff);
 
       if (diff > channel.TimerDelay)
       {
