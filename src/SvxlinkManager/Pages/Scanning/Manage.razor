@@ -1,0 +1,35 @@
+﻿@page "/Scanning/Manage"
+@attribute [Authorize]
+
+@inherits SvxlinkManager.Pages.Scanning.ManageBase
+
+<h3>Scan</h3>
+
+<EditForm Model="@ScanProfile" OnValidSubmit="@HandleValidSubmitAsync">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+  <div class="form-row">
+    <div class="form-group">
+      <label data-toggle="tooltip" title="Délai d'inactivité avant que le scan soit lancé.">Délai</label>
+      <InputNumber @bind-Value="ScanProfile.ScanDelay" type="number" class="form-control" id="inputScanDelay" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    @foreach (var channel in Channels)
+    {
+      <div class="form-check form-check-inline">
+        <div class="pretty p-default p-curve p-bigger">
+          <input type="checkbox" @onchange="e => AddRemoveChannel(channel,e)" />
+          <div class="state">
+            <label>@channel.Name</label>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <button type="submit" class="btn btn-success">Sauver</button>
+  <button type="button" class="btn btn-outline-success" @onclick="@(() => EnableScan())">Activer</button>
+  <button type="button" class="btn btn-outline-danger" @onclick="@(() => DisableScan())">Désactiver</button>
+</EditForm>
