@@ -5,7 +5,7 @@
 
 <h3>Scan</h3>
 
-<EditForm Model="@ScanProfile" OnValidSubmit="@HandleValidSubmitAsync">
+<EditForm EditContext="@EditContext" OnValidSubmit="@HandleValidSubmitAsync">
   <DataAnnotationsValidator />
   <ValidationSummary />
   <div class="form-row">
@@ -20,7 +20,14 @@
     {
       <div class="form-check form-check-inline">
         <div class="pretty p-default p-curve p-bigger">
-          <input type="checkbox" @onchange="e => AddRemoveChannel(channel,e)" />
+          @if (IsChecked(channel))
+          {
+            <input type="checkbox" checked @onchange="e => AddRemoveChannel(channel, e)" />
+          }
+          else
+          {
+            <input type="checkbox" @onchange="e => AddRemoveChannel(channel, e)" />
+          }
           <div class="state">
             <label>@channel.Name</label>
           </div>
@@ -28,8 +35,21 @@
       </div>
     }
   </div>
-
-  <button type="submit" class="btn btn-success">Sauver</button>
-  <button type="button" class="btn btn-outline-success" @onclick="@(() => EnableScan())">Activer</button>
-  <button type="button" class="btn btn-outline-danger" @onclick="@(() => DisableScan())">Désactiver</button>
+  <div class="btn-toolbar">
+    @if (IsChanged)
+    {
+      <button type="submit" class="btn btn-success">Sauver</button>
+    }
+    else
+    {
+      @if (ScanProfile.Enable)
+      {
+        <button type="button" class="btn btn-outline-danger" @onclick="@(() => DisableScan())">Désactiver</button>
+      }
+      else
+      {
+        <button type="button" class="btn btn-outline-success" @onclick="@(() => EnableScan())">Activer</button>
+      }
+    }
+  </div>
 </EditForm>

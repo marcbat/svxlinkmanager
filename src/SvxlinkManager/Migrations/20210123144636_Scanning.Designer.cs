@@ -9,7 +9,7 @@ using SvxlinkManager.Data;
 namespace SvxlinkManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210122201532_Scanning")]
+    [Migration("20210123144636_Scanning")]
     partial class Scanning
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,8 +61,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5a751d75-1137-415c-add4-ff5f9b88003a",
-                            ConcurrencyStamp = "b0391070-934b-4215-a6b2-00be311608e9",
+                            Id = "2eee69b8-4227-45b7-8bde-cf9c8bf543db",
+                            ConcurrencyStamp = "dadb32a9-44c0-4141-a61c-67ca65fb42b5",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -422,7 +422,7 @@ namespace SvxlinkManager.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ScanProfile");
+                    b.ToTable("ScanProfiles");
 
                     b.HasData(
                         new

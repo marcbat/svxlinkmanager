@@ -33,7 +33,7 @@ namespace SvxlinkManager.Repositories
       RadioProfiles = new RadioProfileRepository(contextFactory);
       SvxlinkChannels = new Repository<SvxlinkChannel>(contextFactory);
       EcholinkChannels = new Repository<EcholinkChannel>(contextFactory);
-      ScanProfiles = new Repository<ScanProfile>(contextFactory);
+      ScanProfiles = new ScanProfileRepository(contextFactory);
       this.contextFactory = contextFactory;
     }
 

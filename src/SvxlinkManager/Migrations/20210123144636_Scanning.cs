@@ -18,7 +18,7 @@ namespace SvxlinkManager.Migrations
                 nullable: true);
 
             migrationBuilder.CreateTable(
-                name: "ScanProfile",
+                name: "ScanProfiles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -29,7 +29,7 @@ namespace SvxlinkManager.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ScanProfile", x => x.Id);
+                    table.PrimaryKey("PK_ScanProfiles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,9 +49,9 @@ namespace SvxlinkManager.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ChannelScanProfile_ScanProfile_ScanProfilesId",
+                        name: "FK_ChannelScanProfile_ScanProfiles_ScanProfilesId",
                         column: x => x.ScanProfilesId,
-                        principalTable: "ScanProfile",
+                        principalTable: "ScanProfiles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -59,7 +59,7 @@ namespace SvxlinkManager.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "5a751d75-1137-415c-add4-ff5f9b88003a", "b0391070-934b-4215-a6b2-00be311608e9", "Admin", "ADMIN" });
+                values: new object[] { "2eee69b8-4227-45b7-8bde-cf9c8bf543db", "dadb32a9-44c0-4141-a61c-67ca65fb42b5", "Admin", "ADMIN" });
 
             migrationBuilder.UpdateData(
                 table: "Channels",
@@ -111,7 +111,7 @@ namespace SvxlinkManager.Migrations
                 value: "");
 
             migrationBuilder.InsertData(
-                table: "ScanProfile",
+                table: "ScanProfiles",
                 columns: new[] { "Id", "Enable", "Name", "ScanDelay" },
                 values: new object[] { 1, false, "default", 60 });
 
@@ -127,12 +127,12 @@ namespace SvxlinkManager.Migrations
                 name: "ChannelScanProfile");
 
             migrationBuilder.DropTable(
-                name: "ScanProfile");
+                name: "ScanProfiles");
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "5a751d75-1137-415c-add4-ff5f9b88003a");
+                keyValue: "2eee69b8-4227-45b7-8bde-cf9c8bf543db");
 
             migrationBuilder.DropColumn(
                 name: "TrackerUrl",

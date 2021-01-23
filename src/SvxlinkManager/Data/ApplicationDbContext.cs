@@ -35,6 +35,8 @@ namespace SvxlinkManager.Data
 
     public DbSet<RadioProfile> RadioProfiles { get; set; }
 
+    public DbSet<ScanProfile> ScanProfiles { get; set; }
+
     public DbSet<Rule> Rules { get; set; }
 
     #endregion Properties

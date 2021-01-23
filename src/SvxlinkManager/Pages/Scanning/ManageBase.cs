@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Shared;
@@ -12,13 +13,17 @@ namespace SvxlinkManager.Pages.Scanning
 {
   public class ManageBase : RepositoryComponentBase
   {
+    public EditContext EditContext;
+
     protected override async Task OnInitializedAsync()
     {
       await base.OnInitializedAsync().ConfigureAwait(false);
 
       LoadScanProfile();
-
       LoadChannels();
+
+      EditContext = new EditContext(ScanProfile);
+      EditContext.OnFieldChanged += (s, e) => IsChanged = true;
     }
 
     private void LoadScanProfile()
@@ -30,6 +35,10 @@ namespace SvxlinkManager.Pages.Scanning
     {
       Channels = Repositories.Channels.GetAll().Where(c => !string.IsNullOrEmpty(c.TrackerUrl)).ToList();
     }
+
+    public bool IsChanged { get; set; }
+
+    protected bool IsChecked(Channel channel) => ScanProfile.Channels.Contains(channel);
 
     public ScanProfile ScanProfile { get; set; }
 
@@ -57,6 +66,8 @@ namespace SvxlinkManager.Pages.Scanning
         ScanProfile.Channels.Add(channel);
       else
         ScanProfile.Channels.Remove(channel);
+
+      IsChanged = true;
     }
 
     public List<Channel> Channels { get; protected set; }
@@ -64,6 +75,8 @@ namespace SvxlinkManager.Pages.Scanning
     protected async Task HandleValidSubmitAsync()
     {
       Repositories.ScanProfiles.Update(ScanProfile);
+
+      IsChanged = false;
 
       await ShowSuccessToastAsync("Modifié", $"le scan profil {ScanProfile.Name} a bien été modifié.");
     }
