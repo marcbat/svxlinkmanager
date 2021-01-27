@@ -183,7 +183,7 @@ namespace SvxlinkManager.Service
     /// <exception cref="Exception">Impossible de trouver le type de channel.</exception>
     public virtual void ActivateChannel(int channelid)
     {
-      var channel = repositories.Channels.Get(channelid);
+      var channel = repositories.Channels.Find(channelid);
 
       switch (channel)
       {
@@ -196,7 +196,8 @@ namespace SvxlinkManager.Service
           break;
 
         default:
-          throw new Exception("Impossible de trouver le type de channel.");
+          logger.LogError("Impossible de trouver le type de channel.");
+          break;
       }
     }
 
@@ -648,6 +649,8 @@ namespace SvxlinkManager.Service
       logger.LogInformation("Kill de svxlink.");
 
       tempoTimer?.Stop();
+      scanTimer?.Stop();
+
       watcher?.Dispose();
 
       var pid = ExecuteCommand("pgrep -x svxlink");

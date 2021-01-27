@@ -142,6 +142,8 @@ namespace SvxlinkManager.Pages
     {
       try
       {
+        Scanning = false;
+
         CurrentTxNode = n;
         InvokeAsync(() => StateHasChanged());
       }
@@ -226,6 +228,8 @@ namespace SvxlinkManager.Pages
       SvxLinkService.NodeRx -= SvxLinkService_NodeRx;
 
       SvxLinkService.Error -= SvxLinkService_Error;
+
+      SvxLinkService.Scanning -= SvxLinkService_Scanning;
     }
 
     [Inject]

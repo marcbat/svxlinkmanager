@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Forms;
 
 using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Shared;
+using SvxlinkManager.Service;
 
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,9 @@ namespace SvxlinkManager.Pages.Scanning
       EditContext.OnFieldChanged += (s, e) => IsChanged = true;
     }
 
+    [Inject]
+    public SvxLinkService SvxLinkService { get; set; }
+
     private void LoadScanProfile()
     {
       ScanProfile = Repositories.ScanProfiles.Get(1);
@@ -48,6 +52,8 @@ namespace SvxlinkManager.Pages.Scanning
 
       Repositories.ScanProfiles.Update(ScanProfile);
 
+      SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
+
       await ShowSuccessToastAsync("Activé", $"le scan a bien été activé.");
     }
 
@@ -56,6 +62,8 @@ namespace SvxlinkManager.Pages.Scanning
       ScanProfile.Enable = false;
 
       Repositories.ScanProfiles.Update(ScanProfile);
+
+      SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
 
       await ShowSuccessToastAsync("Désactivé", $"le scan a bien été désactivé.");
     }
@@ -75,6 +83,8 @@ namespace SvxlinkManager.Pages.Scanning
     protected async Task HandleValidSubmitAsync()
     {
       Repositories.ScanProfiles.Update(ScanProfile);
+
+      SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
 
       IsChanged = false;
 
