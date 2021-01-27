@@ -38,6 +38,7 @@ namespace SvxlinkManager.Repositories
         existingScanProfile.Channels.Remove(channel);
 
       existingScanProfile.ScanDelay = scanProfile.ScanDelay;
+      existingScanProfile.Enable = scanProfile.Enable;
 
       dbcontext.SaveChanges();
     }

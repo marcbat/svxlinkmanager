@@ -22,7 +22,7 @@ namespace SvxlinkManager.Service
     private readonly ILogger<SvxLinkService> logger;
 
     private readonly IRepositories repositories;
-
+    private readonly ScanService scanService;
     private int channelId;
 
     /// <summary>
@@ -30,16 +30,17 @@ namespace SvxlinkManager.Service
     /// </summary>
     private DateTime lastTx;
 
-    private Timer timer;
+    private Timer tempoTimer;
+    private Timer scanTimer;
 
     private FileSystemWatcher watcher;
     private Process shell;
 
-    public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories)
+    public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories, ScanService scanService)
     {
       this.logger = logger;
       this.repositories = repositories;
-
+      this.scanService = scanService;
       NodeTx += n => lastTx = DateTime.Now;
       Connected += (c) => lastTx = DateTime.Now;
     }
@@ -341,11 +342,26 @@ namespace SvxlinkManager.Service
 
       TempChanged?.Invoke(channel.TimerDelay - diff);
 
-      if (diff > channel.TimerDelay)
-      {
-        logger.LogInformation("Delai d'inactivité dépassé. Retour au salon par défaut.");
-        ChannelId = repositories.Channels.GetDefault().Id;
-      }
+      if (diff < channel.TimerDelay)
+        return;
+
+      logger.LogInformation("Delai d'inactivité dépassé. Retour au salon par défaut.");
+      ChannelId = repositories.Channels.GetDefault().Id;
+    }
+
+    protected virtual void CheckScan(object sender, ElapsedEventArgs e)
+    {
+      var diff = (DateTime.Now - lastTx).TotalSeconds;
+      var scanProfile = repositories.ScanProfiles.Get(1);
+
+      logger.LogInformation($"Durée depuis le dernier passage en émission {diff} secondes.");
+
+      if (diff < scanProfile.ScanDelay)
+        return;
+
+      var activeChannel = scanService.GetActiveChannel(scanProfile);
+      if (activeChannel != null)
+        ChannelId = activeChannel.Id;
     }
 
     /// <summary>
@@ -538,10 +554,18 @@ namespace SvxlinkManager.Service
     /// </summary>
     protected virtual void SetTimer()
     {
-      timer = new Timer(1000);
-      timer.Start();
+      tempoTimer = new Timer(1000);
+      tempoTimer.Start();
 
-      timer.Elapsed += CheckTemporized;
+      tempoTimer.Elapsed += CheckTemporized;
+    }
+
+    protected virtual void SetScanTimer()
+    {
+      scanTimer = new Timer(5000);
+      scanTimer.Start();
+
+      scanTimer.Elapsed += CheckScan;
     }
 
     /// <summary>
@@ -583,8 +607,13 @@ namespace SvxlinkManager.Service
       shell.BeginErrorReadLine();
       shell.BeginOutputReadLine();
 
+      var scanProfil = repositories.ScanProfiles.Get(1);
+
       if (channel != null && channel.IsTemporized)
         SetTimer();
+
+      if (channel != null && scanProfil.Enable)
+        SetScanTimer();
 
       SetDtmfWatcher();
 
@@ -598,7 +627,7 @@ namespace SvxlinkManager.Service
     {
       logger.LogInformation("Kill de svxlink.");
 
-      timer?.Stop();
+      tempoTimer?.Stop();
       watcher?.Dispose();
 
       var pid = ExecuteCommand("pgrep -x svxlink");
