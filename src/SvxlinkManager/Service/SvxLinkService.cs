@@ -41,8 +41,25 @@ namespace SvxlinkManager.Service
       this.logger = logger;
       this.repositories = repositories;
       this.scanService = scanService;
-      NodeTx += n => lastTx = DateTime.Now;
-      Connected += (c) => lastTx = DateTime.Now;
+
+      NodeTx += n => StopTemporization();
+      NodeRx += n => StartTemporization();
+
+      tempoTimer = new Timer(1000)
+      {
+        Enabled = false
+      };
+      tempoTimer.Start();
+
+      tempoTimer.Elapsed += CheckTemporized;
+
+      scanTimer = new Timer(5000)
+      {
+        Enabled = false
+      };
+      scanTimer.Start();
+
+      scanTimer.Elapsed += CheckScan;
     }
 
     /// <summary>
@@ -574,9 +591,18 @@ namespace SvxlinkManager.Service
     /// <summary>
     /// Set the temporized timer for current channel
     /// </summary>
-    protected virtual void SetTempoTimer()
+    protected virtual void StartTemporization()
     {
-      tempoTimer.Elapsed += CheckTemporized;
+      lastTx = DateTime.Now;
+      tempoTimer.Enabled = true;
+    }
+
+    protected virtual void StopTemporization()
+    {
+      lastTx = DateTime.Now;
+      tempoTimer.Enabled = false;
+
+      TempChanged?.Invoke(string.Empty);
     }
 
     protected virtual void SetScanTimer()
@@ -629,7 +655,7 @@ namespace SvxlinkManager.Service
       var scanProfil = repositories.ScanProfiles.Get(1);
 
       if (channel != null && channel.IsTemporized)
-        SetTempoTimer();
+        StartTemporization();
 
       if (channel != null && scanProfil.Enable)
         SetScanTimer();
@@ -646,7 +672,7 @@ namespace SvxlinkManager.Service
     {
       logger.LogInformation("Kill de svxlink.");
 
-      tempoTimer?.Stop();
+      StopTemporization();
       scanTimer?.Stop();
 
       watcher?.Dispose();
