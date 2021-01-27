@@ -8,10 +8,10 @@
     Salons
   </h3>
 </div>
-@if (!string.IsNullOrEmpty(TimerStatus))
+@if (TemporizationIsActive)
 {
   <div class="d-inline-block" style="margin-left:5px;">
-    <span class="badge badge-info">@TimerStatus</span>
+    <span class="badge badge-info">@TemporizationValue</span>
   </div>
 }
 

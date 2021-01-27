@@ -43,6 +43,10 @@ namespace SvxlinkManager.Pages
 
       SvxLinkService.Error += SvxLinkService_Error;
 
+      SvxLinkService.StopTempo += SvxLinkService_StopTempo;
+
+      SvxLinkService.StartTempo += SvxLinkService_StartTempo;
+
       SvxLinkService.TempChanged += SvxLinkService_TempChanged;
 
       SvxLinkService.TempoQsy += SvxLinkService_TempoQsy;
@@ -50,6 +54,34 @@ namespace SvxlinkManager.Pages
       SvxLinkService.Scanning += SvxLinkService_Scanning;
 
       SvxLinkService.ScanningQsy += SvxLinkService_ScanningQsy;
+    }
+
+    private void SvxLinkService_StartTempo()
+    {
+      try
+      {
+        TemporizationIsActive = true;
+
+        InvokeAsync(() => StateHasChanged());
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour la valeur TemporizationIsActive. {e.Message}");
+      }
+    }
+
+    private void SvxLinkService_StopTempo()
+    {
+      try
+      {
+        TemporizationIsActive = false;
+
+        InvokeAsync(() => StateHasChanged());
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour la valeur TemporizationIsActive. {e.Message}");
+      }
     }
 
     private async void SvxLinkService_TempoQsy()
@@ -85,9 +117,9 @@ namespace SvxlinkManager.Pages
 
         Scanning = true;
 
-        await ShowInfoToastAsync("Scan", "Le scan a débuté.");
+        await InvokeAsync(() => StateHasChanged());
 
-        InvokeAsync(() => StateHasChanged());
+        await ShowInfoToastAsync("Scan", "Le scan a débuté.");
       }
       catch (Exception e)
       {
@@ -99,7 +131,9 @@ namespace SvxlinkManager.Pages
     {
       try
       {
-        TimerStatus = timer;
+        Logger.LogInformation($"La valeur de compte à rebour a changé. {timer}");
+
+        TemporizationValue = timer;
 
         InvokeAsync(() => StateHasChanged());
       }
@@ -142,8 +176,6 @@ namespace SvxlinkManager.Pages
     {
       try
       {
-        Scanning = false;
-
         CurrentTxNode = n;
         InvokeAsync(() => StateHasChanged());
       }
@@ -184,6 +216,7 @@ namespace SvxlinkManager.Pages
       try
       {
         CurrentTxNode = null;
+        Scanning = false;
         InvokeAsync(() => StateHasChanged());
       }
       catch (Exception e)
@@ -196,7 +229,7 @@ namespace SvxlinkManager.Pages
     {
       try
       {
-        TimerStatus = string.Empty;
+        TemporizationValue = string.Empty;
         Scanning = false;
 
         await InvokeAsync(() => StateHasChanged());
@@ -229,6 +262,10 @@ namespace SvxlinkManager.Pages
 
       SvxLinkService.Error -= SvxLinkService_Error;
 
+      SvxLinkService.StopTempo -= SvxLinkService_StopTempo;
+
+      SvxLinkService.StartTempo -= SvxLinkService_StartTempo;
+
       SvxLinkService.TempChanged -= SvxLinkService_TempChanged;
 
       SvxLinkService.TempoQsy -= SvxLinkService_TempoQsy;
@@ -254,7 +291,9 @@ namespace SvxlinkManager.Pages
       set => SvxLinkService.ChannelId = value;
     }
 
-    public string TimerStatus { get; set; }
+    public string TemporizationValue { get; set; }
+
+    public bool TemporizationIsActive { get; set; } = false;
 
     public bool Scanning { get; set; } = false;
 
