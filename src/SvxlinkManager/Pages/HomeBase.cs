@@ -44,6 +44,55 @@ namespace SvxlinkManager.Pages
       SvxLinkService.Error += SvxLinkService_Error;
 
       SvxLinkService.TempChanged += SvxLinkService_TempChanged;
+
+      SvxLinkService.TempoQsy += SvxLinkService_TempoQsy;
+
+      SvxLinkService.Scanning += SvxLinkService_Scanning;
+
+      SvxLinkService.ScanningQsy += SvxLinkService_ScanningQsy;
+    }
+
+    private async void SvxLinkService_TempoQsy()
+    {
+      try
+      {
+        await ShowInfoToastAsync("QSY", "Vous avez été redirigé sur le salon principal par la temporisation.");
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour d'afficher le toast. {e.Message}");
+      }
+    }
+
+    private async void SvxLinkService_ScanningQsy()
+    {
+      try
+      {
+        await ShowInfoToastAsync("QSY", "Vous avez été redirigé par le scanner.");
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour d'afficher le toast. {e.Message}");
+      }
+    }
+
+    private async void SvxLinkService_Scanning()
+    {
+      try
+      {
+        if (Scanning)
+          return;
+
+        Scanning = true;
+
+        await ShowInfoToastAsync("Scan", "Le scan a débuté.");
+
+        InvokeAsync(() => StateHasChanged());
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour la valeur du scannning. {e.Message}");
+      }
     }
 
     private void SvxLinkService_TempChanged(double timer)
@@ -93,6 +142,8 @@ namespace SvxlinkManager.Pages
     {
       try
       {
+        Scanning = false;
+
         CurrentTxNode = n;
         InvokeAsync(() => StateHasChanged());
       }
@@ -146,6 +197,7 @@ namespace SvxlinkManager.Pages
       try
       {
         TimerStatus = 0;
+        Scanning = false;
 
         await InvokeAsync(() => StateHasChanged());
         await ShowSuccessToastAsync("Connecté", $"Vous êtes maintenant connecté au salon:<br/><strong>{c.Name}</strong>");
@@ -176,6 +228,8 @@ namespace SvxlinkManager.Pages
       SvxLinkService.NodeRx -= SvxLinkService_NodeRx;
 
       SvxLinkService.Error -= SvxLinkService_Error;
+
+      SvxLinkService.Scanning -= SvxLinkService_Scanning;
     }
 
     [Inject]
@@ -195,6 +249,8 @@ namespace SvxlinkManager.Pages
     }
 
     public int TimerStatus { get; set; } = 0;
+
+    public bool Scanning { get; set; } = false;
 
     public List<Models.Node> Nodes
     {

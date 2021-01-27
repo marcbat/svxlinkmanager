@@ -11,7 +11,14 @@
 @if (TimerStatus > 0)
 {
   <div class="d-inline-block" style="margin-left:5px;">
-      <span class="badge badge-info">Tempo @TimerStatus</span>
+    <span class="badge badge-info">Tempo @TimerStatus</span>
+  </div>
+}
+
+@if (Scanning)
+{
+  <div class="blink d-inline-block" style="margin-left:5px;">
+    <span class="badge badge-danger">Scan</span>
   </div>
 }
 

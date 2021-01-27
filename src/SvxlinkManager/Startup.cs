@@ -48,6 +48,7 @@ namespace SvxlinkManager
       services.AddSingleton<Data.IDbContextFactory<ApplicationDbContext>, DbContextFactory<ApplicationDbContext>>();
       services.AddSingleton<IRepositories, Repositories.Repositories>();
       services.AddSingleton<SvxLinkService>();
+      services.AddSingleton<ScanService>();
 
 #if DEBUG
       services.AddSingleton<ISa818Service, Sa818ServiceMockup>();

@@ -33,7 +33,16 @@ namespace SvxlinkManager.Models
     [Required]
     public int TimerDelay { get; set; } = 180;
 
+    public string TrackerUrl { get; set; }
+
+    public List<ScanProfile> ScanProfiles { get; set; }
+
     public int Dtmf { get; set; }
+
+    public override bool Equals(object obj)
+    {
+      return Id == ((Channel)obj).Id;
+    }
 
     [NotMapped]
     [FileValidation(new[] { ".wav" })]

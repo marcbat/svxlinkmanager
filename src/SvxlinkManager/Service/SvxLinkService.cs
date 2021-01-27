@@ -22,7 +22,7 @@ namespace SvxlinkManager.Service
     private readonly ILogger<SvxLinkService> logger;
 
     private readonly IRepositories repositories;
-
+    private readonly ScanService scanService;
     private int channelId;
 
     /// <summary>
@@ -30,16 +30,17 @@ namespace SvxlinkManager.Service
     /// </summary>
     private DateTime lastTx;
 
-    private Timer timer;
+    private Timer tempoTimer;
+    private Timer scanTimer;
 
     private FileSystemWatcher watcher;
     private Process shell;
 
-    public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories)
+    public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories, ScanService scanService)
     {
       this.logger = logger;
       this.repositories = repositories;
-
+      this.scanService = scanService;
       NodeTx += n => lastTx = DateTime.Now;
       Connected += (c) => lastTx = DateTime.Now;
     }
@@ -83,6 +84,21 @@ namespace SvxlinkManager.Service
     /// Occurs when countdown change
     /// </summary>
     public event Action<double> TempChanged;
+
+    /// <summary>
+    /// Occurs when temporisation limit is out.
+    /// </summary>
+    public event Action TempoQsy;
+
+    /// <summary>
+    /// Occurs when scanning.
+    /// </summary>
+    public event Action Scanning;
+
+    /// <summary>
+    /// Occurs when scanning make a QSY.
+    /// </summary>
+    public event Action ScanningQsy;
 
     /// <summary>
     /// Gets or sets the current channel Id
@@ -167,7 +183,7 @@ namespace SvxlinkManager.Service
     /// <exception cref="Exception">Impossible de trouver le type de channel.</exception>
     public virtual void ActivateChannel(int channelid)
     {
-      var channel = repositories.Channels.Get(channelid);
+      var channel = repositories.Channels.Find(channelid);
 
       switch (channel)
       {
@@ -180,7 +196,8 @@ namespace SvxlinkManager.Service
           break;
 
         default:
-          throw new Exception("Impossible de trouver le type de channel.");
+          logger.LogError("Impossible de trouver le type de channel.");
+          break;
       }
     }
 
@@ -341,10 +358,30 @@ namespace SvxlinkManager.Service
 
       TempChanged?.Invoke(channel.TimerDelay - diff);
 
-      if (diff > channel.TimerDelay)
+      if (diff < channel.TimerDelay)
+        return;
+
+      TempoQsy?.Invoke();
+
+      logger.LogInformation("Delai d'inactivité dépassé. Retour au salon par défaut.");
+      ChannelId = repositories.Channels.GetDefault().Id;
+    }
+
+    protected virtual void CheckScan(object sender, ElapsedEventArgs e)
+    {
+      var diff = (DateTime.Now - lastTx).TotalSeconds;
+      var scanProfile = repositories.ScanProfiles.Get(1);
+
+      if (diff < scanProfile.ScanDelay)
+        return;
+
+      Scanning?.Invoke();
+
+      var activeChannel = scanService.GetActiveChannel(scanProfile);
+      if (activeChannel != null && activeChannel.Id != channelId)
       {
-        logger.LogInformation("Delai d'inactivité dépassé. Retour au salon par défaut.");
-        ChannelId = repositories.Channels.GetDefault().Id;
+        ScanningQsy?.Invoke();
+        ChannelId = activeChannel.Id;
       }
     }
 
@@ -538,10 +575,18 @@ namespace SvxlinkManager.Service
     /// </summary>
     protected virtual void SetTimer()
     {
-      timer = new Timer(1000);
-      timer.Start();
+      tempoTimer = new Timer(1000);
+      tempoTimer.Start();
 
-      timer.Elapsed += CheckTemporized;
+      tempoTimer.Elapsed += CheckTemporized;
+    }
+
+    protected virtual void SetScanTimer()
+    {
+      scanTimer = new Timer(5000);
+      scanTimer.Start();
+
+      scanTimer.Elapsed += CheckScan;
     }
 
     /// <summary>
@@ -583,8 +628,13 @@ namespace SvxlinkManager.Service
       shell.BeginErrorReadLine();
       shell.BeginOutputReadLine();
 
+      var scanProfil = repositories.ScanProfiles.Get(1);
+
       if (channel != null && channel.IsTemporized)
         SetTimer();
+
+      if (channel != null && scanProfil.Enable)
+        SetScanTimer();
 
       SetDtmfWatcher();
 
@@ -598,7 +648,9 @@ namespace SvxlinkManager.Service
     {
       logger.LogInformation("Kill de svxlink.");
 
-      timer?.Stop();
+      tempoTimer?.Stop();
+      scanTimer?.Stop();
+
       watcher?.Dispose();
 
       var pid = ExecuteCommand("pgrep -x svxlink");
