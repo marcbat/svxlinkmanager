@@ -86,6 +86,21 @@ namespace SvxlinkManager.Service
     public event Action<double> TempChanged;
 
     /// <summary>
+    /// Occurs when temporisation limit is out.
+    /// </summary>
+    public event Action TempoQsy;
+
+    /// <summary>
+    /// Occurs when scanning.
+    /// </summary>
+    public event Action Scanning;
+
+    /// <summary>
+    /// Occurs when scanning make a QSY.
+    /// </summary>
+    public event Action ScanningQsy;
+
+    /// <summary>
     /// Gets or sets the current channel Id
     /// </summary>
     /// <value>Current channel Id</value>
@@ -345,6 +360,8 @@ namespace SvxlinkManager.Service
       if (diff < channel.TimerDelay)
         return;
 
+      TempoQsy?.Invoke();
+
       logger.LogInformation("Delai d'inactivité dépassé. Retour au salon par défaut.");
       ChannelId = repositories.Channels.GetDefault().Id;
     }
@@ -354,14 +371,17 @@ namespace SvxlinkManager.Service
       var diff = (DateTime.Now - lastTx).TotalSeconds;
       var scanProfile = repositories.ScanProfiles.Get(1);
 
-      logger.LogInformation($"Durée depuis le dernier passage en émission {diff} secondes.");
-
       if (diff < scanProfile.ScanDelay)
         return;
 
+      Scanning?.Invoke();
+
       var activeChannel = scanService.GetActiveChannel(scanProfile);
-      if (activeChannel != null)
+      if (activeChannel != null && activeChannel.Id != channelId)
+      {
+        ScanningQsy?.Invoke();
         ChannelId = activeChannel.Id;
+      }
     }
 
     /// <summary>
