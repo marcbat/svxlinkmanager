@@ -33,7 +33,7 @@ namespace SvxlinkManager.Service
           string response = client.DownloadString(channel.TrackerUrl);
           var tracker = JsonConvert.DeserializeObject<Tracker>(response);
 
-          if (tracker?.Metadata.First().Tot > 0)
+          if (tracker?.Metadata.First().Tot > 3)
           {
             logger.LogInformation($"Le channel {channel.Name} est activé par {tracker?.Metadata.First().Indicatif}");
             return channel;
