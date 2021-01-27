@@ -8,10 +8,10 @@
     Salons
   </h3>
 </div>
-@if (TimerStatus > 0)
+@if (!string.IsNullOrEmpty(TimerStatus))
 {
   <div class="d-inline-block" style="margin-left:5px;">
-    <span class="badge badge-info">Tempo @TimerStatus</span>
+    <span class="badge badge-info">@TimerStatus</span>
   </div>
 }
 

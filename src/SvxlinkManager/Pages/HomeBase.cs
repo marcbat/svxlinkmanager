@@ -95,11 +95,11 @@ namespace SvxlinkManager.Pages
       }
     }
 
-    private void SvxLinkService_TempChanged(double timer)
+    private void SvxLinkService_TempChanged(string timer)
     {
       try
       {
-        TimerStatus = Convert.ToInt32(timer);
+        TimerStatus = timer;
 
         InvokeAsync(() => StateHasChanged());
       }
@@ -196,7 +196,7 @@ namespace SvxlinkManager.Pages
     {
       try
       {
-        TimerStatus = 0;
+        TimerStatus = string.Empty;
         Scanning = false;
 
         await InvokeAsync(() => StateHasChanged());
@@ -229,7 +229,13 @@ namespace SvxlinkManager.Pages
 
       SvxLinkService.Error -= SvxLinkService_Error;
 
+      SvxLinkService.TempChanged -= SvxLinkService_TempChanged;
+
+      SvxLinkService.TempoQsy -= SvxLinkService_TempoQsy;
+
       SvxLinkService.Scanning -= SvxLinkService_Scanning;
+
+      SvxLinkService.ScanningQsy -= SvxLinkService_ScanningQsy;
     }
 
     [Inject]
@@ -248,7 +254,7 @@ namespace SvxlinkManager.Pages
       set => SvxLinkService.ChannelId = value;
     }
 
-    public int TimerStatus { get; set; } = 0;
+    public string TimerStatus { get; set; }
 
     public bool Scanning { get; set; } = false;
 

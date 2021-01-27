@@ -83,7 +83,7 @@ namespace SvxlinkManager.Service
     /// <summary>
     /// Occurs when countdown change
     /// </summary>
-    public event Action<double> TempChanged;
+    public event Action<string> TempChanged;
 
     /// <summary>
     /// Occurs when temporisation limit is out.
@@ -354,9 +354,10 @@ namespace SvxlinkManager.Service
       var diff = (DateTime.Now - lastTx).TotalSeconds;
       var channel = repositories.Channels.Get(channelId);
 
-      logger.LogInformation($"Durée depuis le dernier passage en émission {diff} secondes.");
+      logger.LogDebug($"Durée depuis le dernier passage en émission {diff} secondes.");
 
-      TempChanged?.Invoke(channel.TimerDelay - diff);
+      var countdown = TimeSpan.FromSeconds(channel.TimerDelay - diff);
+      TempChanged?.Invoke(countdown.ToString(@"mm\:ss"));
 
       if (diff < channel.TimerDelay)
         return;
@@ -573,11 +574,8 @@ namespace SvxlinkManager.Service
     /// <summary>
     /// Set the temporized timer for current channel
     /// </summary>
-    protected virtual void SetTimer()
+    protected virtual void SetTempoTimer()
     {
-      tempoTimer = new Timer(1000);
-      tempoTimer.Start();
-
       tempoTimer.Elapsed += CheckTemporized;
     }
 
@@ -631,7 +629,7 @@ namespace SvxlinkManager.Service
       var scanProfil = repositories.ScanProfiles.Get(1);
 
       if (channel != null && channel.IsTemporized)
-        SetTimer();
+        SetTempoTimer();
 
       if (channel != null && scanProfil.Enable)
         SetScanTimer();
