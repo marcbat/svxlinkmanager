@@ -53,6 +53,8 @@ namespace SvxlinkManager.Pages
 
       SvxLinkService.Scanning += SvxLinkService_Scanning;
 
+      SvxLinkService.StopScanning += SvxLinkService_StopScanning;
+
       SvxLinkService.ScanningQsy += SvxLinkService_ScanningQsy;
     }
 
@@ -105,6 +107,25 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible de mettre à jour d'afficher le toast. {e.Message}");
+      }
+    }
+
+    private async void SvxLinkService_StopScanning()
+    {
+      try
+      {
+        if (!Scanning)
+          return;
+
+        Scanning = false;
+
+        await InvokeAsync(() => StateHasChanged());
+
+        await ShowInfoToastAsync("Scan", "Le scan a été suspendu.");
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour la valeur du scannning. {e.Message}");
       }
     }
 
@@ -271,6 +292,8 @@ namespace SvxlinkManager.Pages
       SvxLinkService.TempoQsy -= SvxLinkService_TempoQsy;
 
       SvxLinkService.Scanning -= SvxLinkService_Scanning;
+
+      SvxLinkService.StopScanning -= SvxLinkService_StopScanning;
 
       SvxLinkService.ScanningQsy -= SvxLinkService_ScanningQsy;
     }
