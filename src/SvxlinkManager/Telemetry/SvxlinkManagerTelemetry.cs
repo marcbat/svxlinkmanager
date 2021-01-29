@@ -1,4 +1,6 @@
-﻿using Microsoft.ApplicationInsights.Channel;
+﻿using DeviceId;
+
+using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 
@@ -14,16 +16,20 @@ namespace SvxlinkManager.Telemetry
   {
     private string informationalVersion => Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
+    private string deviceId = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString();
+
     public void Initialize(ITelemetry telemetry)
     {
       switch (telemetry)
       {
         case RequestTelemetry requestTelemetry:
           requestTelemetry.Properties["SvxlinkmanagerVersion"] = informationalVersion;
+          requestTelemetry.Properties["DeviceId"] = deviceId;
           break;
 
         case TraceTelemetry traceTelemetry:
           traceTelemetry.Properties["SvxlinkmanagerVersion"] = informationalVersion;
+          traceTelemetry.Properties["DeviceId"] = deviceId;
           break;
 
         default:
