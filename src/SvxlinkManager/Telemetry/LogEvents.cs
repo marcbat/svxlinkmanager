@@ -14,5 +14,7 @@ namespace SvxlinkManager.Telemetry
     public const int StartTemporisation = 1001;
 
     public const int StartScan = 1002;
+
+    public const int HostNotFound = 1003;
   }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.ApplicationInsights;
+using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Models;
 
@@ -20,11 +21,13 @@ namespace SvxlinkManager.Service
   {
     private readonly string device = "/dev/ttyS2";
     private readonly ILogger<Sa818Service> logger;
+    private readonly TelemetryClient telemetry;
     private readonly int mode = 1;
 
-    public Sa818Service(ILogger<Sa818Service> logger)
+    public Sa818Service(ILogger<Sa818Service> logger, TelemetryClient telemetry)
     {
       this.logger = logger;
+      this.telemetry = telemetry;
     }
 
     /// <summary>
@@ -33,6 +36,8 @@ namespace SvxlinkManager.Service
     /// <param name="radioProfile">Selected radio profile</param>
     public void WriteRadioProfile(RadioProfile radioProfile)
     {
+      telemetry.TrackEvent("Write radio profile", radioProfile.TrackProperties);
+
       logger.LogInformation($"Application du profil {radioProfile.Name}.");
 
       WriteModule($"AT+DMOSETGROUP={mode},{radioProfile.RxFequ}0,{radioProfile.TxFrequ}0,{radioProfile.RxCtcss},{radioProfile.Squelch},{radioProfile.TxCtcss}\r\n");

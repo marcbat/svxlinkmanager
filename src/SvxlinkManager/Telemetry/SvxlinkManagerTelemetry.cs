@@ -32,6 +32,11 @@ namespace SvxlinkManager.Telemetry
           traceTelemetry.Properties["DeviceId"] = deviceId;
           break;
 
+        case EventTelemetry eventTelementry:
+          eventTelementry.Properties["SvxlinkmanagerVersion"] = informationalVersion;
+          eventTelementry.Properties["DeviceId"] = deviceId;
+          break;
+
         default:
           break;
       }

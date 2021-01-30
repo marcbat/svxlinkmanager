@@ -108,6 +108,22 @@ namespace SvxlinkManager.Models
       {"0038","250.3"}
     };
 
+    [NotMapped]
+    public Dictionary<string, string> TrackProperties => new Dictionary<string, string> {
+        { nameof(Name), Name },
+        { nameof(RxFequ), RxFequ },
+        { nameof(TxFrequ), TxFrequ },
+        { nameof(RxTone), RxTone },
+        { nameof(TxTone), TxTone },
+        { nameof(Squelch), Squelch },
+        { nameof(SquelchDetection), SquelchDetection },
+        { nameof(Volume), Volume },
+        { nameof(PreEmph), PreEmph },
+        { nameof(HightPass), HightPass },
+        { nameof(LowPass), LowPass },
+        { nameof(HasSa818), HasSa818.ToString() },
+        };
+
     public event PropertyChangedEventHandler PropertyChanged;
   }
 }

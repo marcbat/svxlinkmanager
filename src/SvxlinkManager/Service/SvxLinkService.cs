@@ -1,5 +1,7 @@
 ﻿using IniParser;
 
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Models;
@@ -24,6 +26,7 @@ namespace SvxlinkManager.Service
 
     private readonly IRepositories repositories;
     private readonly ScanService scanService;
+    private readonly TelemetryClient telemetry;
     private int channelId;
 
     /// <summary>
@@ -37,11 +40,12 @@ namespace SvxlinkManager.Service
     private FileSystemWatcher watcher;
     private Process shell;
 
-    public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories, ScanService scanService)
+    public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories, ScanService scanService, TelemetryClient telemetry)
     {
       this.logger = logger;
       this.repositories = repositories;
       this.scanService = scanService;
+      this.telemetry = telemetry;
 
       tempoTimer = new Timer(1000)
       {
@@ -307,6 +311,8 @@ namespace SvxlinkManager.Service
     /// <param name="channel">The Echolink channel</param>
     public virtual void ActivateEcholink(EcholinkChannel channel)
     {
+      telemetry.TrackEvent("Start echolink", new Dictionary<string, string> { { "linkName", channel.Name } });
+
       logger.LogInformation("Restart link echolink.");
 
       // Stop svxlink
@@ -415,6 +421,8 @@ namespace SvxlinkManager.Service
     /// </summary>
     public virtual void Parrot()
     {
+      telemetry.TrackEvent("Start parrot");
+
       // Stop svxlink
       StopSvxlink();
       logger.LogInformation("Salon déconnecté");
@@ -513,6 +521,7 @@ namespace SvxlinkManager.Service
 
       if (s.Contains("Host not found"))
       {
+        logger.LogWarning(LogEvents.HostNotFound, "Impossible de se connecter au salon {channelName}. <br/> Server {channelHost} introuvable.", channel.Name, channel.Host);
         Error?.Invoke("Echec de la connexion.", $"Impossible de se connecter au salon {channel.Name}. <br/> Server {channel.Host} introuvable.");
         return;
       }
@@ -571,6 +580,8 @@ namespace SvxlinkManager.Service
 
       watcher.Changed += (s, e) =>
       {
+        telemetry.TrackEvent("DTMF change");
+
         logger.LogInformation("Changement de dtmf détécté.");
         var dtmf = File.ReadAllText(dtmfFilePath);
         logger.LogInformation($"Nouveau dtmf {dtmf}");
@@ -578,7 +589,7 @@ namespace SvxlinkManager.Service
         var dtmfChannel = repositories.Channels.FindBy(c => c.Dtmf == Int32.Parse(dtmf));
         if (dtmfChannel == null)
         {
-          logger.LogInformation($"Le dtmf {dtmf} ne correspond à aucun channel.");
+          logger.LogWarning("Le dtmf {dtmf} ne correspond à aucun channel.", dtmf);
           return;
         }
 
@@ -593,6 +604,8 @@ namespace SvxlinkManager.Service
     /// </summary>
     protected virtual void StartTemporization(Node node = null)
     {
+      telemetry.TrackEvent("Start temporization", new Dictionary<string, string> { { "node", node?.Name } });
+
       logger.LogInformation(LogEvents.StartTemporisation, $"La temporisation a été enclenchée par {node?.Name}.");
 
       lastTx = DateTime.Now;
@@ -603,6 +616,8 @@ namespace SvxlinkManager.Service
 
     protected virtual void StopTemporization(Node node = null)
     {
+      telemetry.TrackEvent("Stop temporization", new Dictionary<string, string> { { "node", node?.Name } });
+
       logger.LogInformation($"La temporisation a été stoppée par {node?.Name}.");
 
       lastTx = DateTime.Now;
@@ -613,7 +628,9 @@ namespace SvxlinkManager.Service
 
     protected virtual void StartScan(Node node = null)
     {
-      logger.LogInformation(LogEvents.StartScan, $"Le scan a été enclenchée par {node?.Name}.");
+      telemetry.TrackEvent("Start scan", new Dictionary<string, string> { { "node", node?.Name } });
+
+      logger.LogDebug(LogEvents.StartScan, "Le scan a été enclenchée par {nodeName}.", node?.Name);
 
       lastTx = DateTime.Now;
       scanTimer.Enabled = true;
@@ -621,6 +638,8 @@ namespace SvxlinkManager.Service
 
     protected virtual void StopScan(Node node = null)
     {
+      telemetry.TrackEvent("Stop scan", new Dictionary<string, string> { { "node", node?.Name } });
+
       logger.LogInformation($"Le scan a été stoppée par {node?.Name}.");
 
       lastTx = DateTime.Now;
@@ -634,7 +653,9 @@ namespace SvxlinkManager.Service
     /// </summary>
     public virtual void StartSvxLink(Channel channel)
     {
-      logger.LogInformation(LogEvents.ChannelConnexion, "Connection au channel {ChannelName}.", channel?.Name);
+      telemetry.TrackEvent("Channel Connection", channel.TrackProperties);
+
+      logger.LogInformation(LogEvents.ChannelConnexion, "Connection au channel {ChannelName}.", channel.Name);
 
       var cmd = $"svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config={applicationPath}/SvxlinkConfig/svxlink.current";
 

@@ -76,5 +76,8 @@ namespace SvxlinkManager.Models
         return ValidationResult.Success;
       }
     }
+
+    [NotMapped]
+    public abstract Dictionary<string, string> TrackProperties { get; }
   }
 }

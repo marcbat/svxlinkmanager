@@ -21,6 +21,9 @@ using System.IO;
 using SvxlinkManager.ServiceMockup;
 using Microsoft.ApplicationInsights.Extensibility;
 using SvxlinkManager.Telemetry;
+using Microsoft.ApplicationInsights;
+using DeviceId;
+using System.Reflection;
 
 namespace SvxlinkManager
 {
@@ -63,7 +66,6 @@ namespace SvxlinkManager
 #endif
 
       services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
-
       services.AddSingleton<ITelemetryInitializer, SvxlinkManagerTelemetry>();
       services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
     }
