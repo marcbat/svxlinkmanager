@@ -55,24 +55,6 @@ namespace SvxlinkManager.Service.Tests
       Assert.AreEqual(8, service.Nodes.Count);
     }
 
-    [Test(Description = "Test le log SIGTERM")]
-    public void ParseLogDisconnectedTest()
-    {
-      // arrange
-      var channel = new SvxlinkChannel();
-      bool disconnected = false;
-
-      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService);
-      service.Disconnected += () => disconnected = true;
-
-      // act
-      service.ParseLog(channel, "SIGTERM");
-
-      // assert
-      Assert.IsTrue(disconnected);
-      Assert.IsEmpty(service.Nodes);
-    }
-
     [Test(Description = "Test le log Node left")]
     public void ParseLogNodeDisconnectedTest()
     {
@@ -232,7 +214,7 @@ namespace SvxlinkManager.Service.Tests
       // arrange
       var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories, scanService);
       service.When(x => x.StopSvxlink()).DoNotCallBase();
-      service.When(x => x.StartSvxLink()).DoNotCallBase();
+      service.When(x => x.StartSvxLink(Arg.Any<SvxlinkChannel>())).DoNotCallBase();
       Predicate<Dictionary<string, Dictionary<string, string>>> isParametersOk = x => x["GLOBAL"]["LOGICS"] == "SimplexLogic" && x["SimplexLogic"]["MODULES"] == "ModuleParrot";
 
       // act
@@ -243,7 +225,7 @@ namespace SvxlinkManager.Service.Tests
       service.Received(1).Protected("CreateNewCurrentConfig");
       service.Received(1).Protected("ReplaceConfig", Arg.Any<string>(), Arg.Is<Dictionary<string, Dictionary<string, string>>>(x => isParametersOk(x)));
       service.Received(1).Protected("ReplaceSoundFile", Arg.Is<Channel>(x => x == null));
-      service.Received(1).StartSvxLink();
+      service.Received(1).StartSvxLink(Arg.Any<SvxlinkChannel>());
       service.Received(1).Protected("ExecuteCommand", "echo '1#'> /tmp/dtmf_uhf");
     }
 

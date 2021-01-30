@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Models;
 using SvxlinkManager.Repositories;
+using SvxlinkManager.Telemetry;
 
 using System;
 using System.Collections.Generic;
@@ -441,7 +442,7 @@ namespace SvxlinkManager.Service
       ReplaceSoundFile();
 
       // Lance svxlink
-      StartSvxLink();
+      StartSvxLink(new SvxlinkChannel { Name = "Parrot" });
 
       System.Threading.Thread.Sleep(1000);
 
@@ -469,13 +470,6 @@ namespace SvxlinkManager.Service
         Nodes.Clear();
         s.Split(':')[2].Split(',').ToList().ForEach(n => Nodes.Add(new Node { Name = n }));
         Connected?.Invoke(channel);
-        return;
-      }
-
-      if (s.Contains("SIGTERM"))
-      {
-        Nodes.Clear();
-        Disconnected?.Invoke();
         return;
       }
 
@@ -599,7 +593,7 @@ namespace SvxlinkManager.Service
     /// </summary>
     protected virtual void StartTemporization(Node node = null)
     {
-      logger.LogInformation($"La temporisation a été enclenchée par {node?.Name}.");
+      logger.LogInformation(LogEvents.StartTemporisation, $"La temporisation a été enclenchée par {node?.Name}.");
 
       lastTx = DateTime.Now;
       tempoTimer.Enabled = true;
@@ -619,7 +613,7 @@ namespace SvxlinkManager.Service
 
     protected virtual void StartScan(Node node = null)
     {
-      logger.LogInformation($"Le scan a été enclenchée par {node?.Name}.");
+      logger.LogInformation(LogEvents.StartScan, $"Le scan a été enclenchée par {node?.Name}.");
 
       lastTx = DateTime.Now;
       scanTimer.Enabled = true;
@@ -638,8 +632,10 @@ namespace SvxlinkManager.Service
     /// <summary>
     /// Starts the SVXlink application with svxlink.current configuration
     /// </summary>
-    public virtual void StartSvxLink(Channel channel = null)
+    public virtual void StartSvxLink(Channel channel)
     {
+      logger.LogInformation(LogEvents.ChannelConnexion, "Connection au channel {ChannelName}.", channel?.Name);
+
       var cmd = $"svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config={applicationPath}/SvxlinkConfig/svxlink.current";
 
       var escapedArgs = cmd.Replace("\"", "\\\"");
@@ -676,16 +672,14 @@ namespace SvxlinkManager.Service
 
       var scanProfil = repositories.ScanProfiles.Get(1);
 
-      var Istemporized = channel != null && channel.IsTemporized;
-      if (Istemporized)
+      if (channel.IsTemporized)
       {
         StartTemporization();
         NodeTx += StopTemporization;
         NodeRx += StartTemporization;
       }
 
-      var IsScanEnable = channel != null && scanProfil.Enable;
-      if (IsScanEnable)
+      if (scanProfil.Enable)
       {
         StartScan();
         NodeTx += StopScan;
@@ -693,8 +687,6 @@ namespace SvxlinkManager.Service
       }
 
       SetDtmfWatcher();
-
-      Status = "Connecté";
     }
 
     /// <summary>
@@ -719,7 +711,9 @@ namespace SvxlinkManager.Service
         ExecuteCommand("pkill -TERM svxlink");
 
       shell?.Dispose();
-      Status = "Déconnecté";
+
+      Nodes.Clear();
+      Disconnected?.Invoke();
     }
   }
 }
