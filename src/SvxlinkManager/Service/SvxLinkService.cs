@@ -392,7 +392,12 @@ namespace SvxlinkManager.Service
       TempoQsy?.Invoke();
 
       logger.LogInformation("Delai d'inactivité dépassé. Retour au salon par défaut.");
-      ChannelId = repositories.Channels.GetDefault().Id;
+
+      var defaultChannel = repositories.Channels.GetDefault();
+
+      telemetry.TrackEvent("Temporized QSY", defaultChannel.TrackProperties);
+
+      ChannelId = defaultChannel.Id;
     }
 
     protected virtual void CheckScan(object sender, ElapsedEventArgs e)
@@ -412,6 +417,8 @@ namespace SvxlinkManager.Service
       if (activeChannel != null && activeChannel.Id != channelId)
       {
         ScanningQsy?.Invoke();
+
+        telemetry.TrackEvent("Scan QSY", activeChannel.TrackProperties);
         ChannelId = activeChannel.Id;
       }
     }
