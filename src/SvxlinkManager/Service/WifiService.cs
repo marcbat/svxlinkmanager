@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.ApplicationInsights;
+using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Pages.Wifi;
 
@@ -28,16 +29,20 @@ namespace SvxlinkManager.Service
   public class WifiService : IWifiService
   {
     private readonly ILogger<WifiService> logger;
+    private readonly TelemetryClient telemetry;
 
-    public WifiService(ILogger<WifiService> logger)
+    public WifiService(ILogger<WifiService> logger, TelemetryClient telemetry)
     {
       this.logger = logger;
+      this.telemetry = telemetry;
     }
 
     /// <summary>Create a new connection for the device</summary>
     /// <param name="device">The device.</param>
     public void Connect(Device device)
     {
+      telemetry.TrackEvent("Connect Wifi", new Dictionary<string, string> { { nameof(device.Ssid), device.Ssid } });
+
       var (result, error) = ExecuteCommand($"nmcli d wifi connect \"{device.Ssid}\" password {device.Password}");
 
       if (!string.IsNullOrEmpty(error))
@@ -53,6 +58,8 @@ namespace SvxlinkManager.Service
     /// <param name="connection">The connection.</param>
     public void Disconnect(Connection connection)
     {
+      telemetry.TrackEvent("Disconnect Wifi", new Dictionary<string, string> { { nameof(connection.Name), connection.Name } });
+
       var (result, error) = ExecuteCommand($"nmcli connection delete {connection.Uuid}");
 
       if (!string.IsNullOrEmpty(error))
@@ -68,6 +75,8 @@ namespace SvxlinkManager.Service
     /// <param name="connection">The connection.</param>
     public void Up(Connection connection)
     {
+      telemetry.TrackEvent("Active Wifi connection", new Dictionary<string, string> { { nameof(connection.Name), connection.Name } });
+
       var (result, error) = ExecuteCommand($"nmcli connection up {connection.Uuid}");
 
       if (!string.IsNullOrEmpty(error))
@@ -83,6 +92,8 @@ namespace SvxlinkManager.Service
     /// <param name="connection">The connection.</param>
     public void Down(Connection connection)
     {
+      telemetry.TrackEvent("Deactivate Wifi connection", new Dictionary<string, string> { { nameof(connection.Name), connection.Name } });
+
       var (result, error) = ExecuteCommand($"nmcli connection down {connection.Uuid}");
 
       if (!string.IsNullOrEmpty(error))

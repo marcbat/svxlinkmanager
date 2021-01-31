@@ -9,10 +9,13 @@
     <Company />
     <Authors>HB9GXP</Authors>
     <StartupObject></StartupObject>
+    <ApplicationInsightsResourceId>/subscriptions/db6983fb-b1b7-4a94-9bf0-1556179d2d27/resourceGroups/Reseau-repeteur-romand/providers/microsoft.insights/components/SvxlinkManager-Insights</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DeviceId" Version="5.2.0" />
     <PackageReference Include="ini-parser-netstandard" Version="2.5.2" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.0" />

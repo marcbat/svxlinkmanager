@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.ApplicationInsights;
+using Microsoft.Extensions.Logging;
 
 using NSubstitute;
 using NSubstitute.Extensions;
@@ -28,13 +29,15 @@ namespace SvxlinkManager.Service.Tests
     private ILogger<SvxLinkService> logger;
     private IRepositories repositories;
     private ScanService scanService;
+    private TelemetryClient telemetry;
 
     [SetUp]
     public void Setup()
     {
       logger = Substitute.For<ILogger<SvxLinkService>>();
       repositories = Substitute.For<IRepositories>();
-      scanService = new ScanService(Substitute.For<ILogger<ScanService>>());
+      scanService = new ScanService(Substitute.For<ILogger<ScanService>>(), new TelemetryClient());
+      telemetry = new TelemetryClient();
     }
 
     [Test(Description = "Test le log Connected nodes")]
@@ -44,7 +47,7 @@ namespace SvxlinkManager.Service.Tests
       var channel = new SvxlinkChannel();
       Channel returnedChannel = null;
 
-      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService, telemetry);
       service.Connected += c => returnedChannel = c;
 
       // act
@@ -55,24 +58,6 @@ namespace SvxlinkManager.Service.Tests
       Assert.AreEqual(8, service.Nodes.Count);
     }
 
-    [Test(Description = "Test le log SIGTERM")]
-    public void ParseLogDisconnectedTest()
-    {
-      // arrange
-      var channel = new SvxlinkChannel();
-      bool disconnected = false;
-
-      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService);
-      service.Disconnected += () => disconnected = true;
-
-      // act
-      service.ParseLog(channel, "SIGTERM");
-
-      // assert
-      Assert.IsTrue(disconnected);
-      Assert.IsEmpty(service.Nodes);
-    }
-
     [Test(Description = "Test le log Node left")]
     public void ParseLogNodeDisconnectedTest()
     {
@@ -80,7 +65,7 @@ namespace SvxlinkManager.Service.Tests
       var channel = new SvxlinkChannel();
       Node node = null;
 
-      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService, telemetry);
       service.NodeDisconnected += (n) => node = n;
       service.Nodes.Add(new Node { Name = " (CH) HB9GXP H" });
 
@@ -99,7 +84,7 @@ namespace SvxlinkManager.Service.Tests
       var channel = new SvxlinkChannel();
       Node node = null;
 
-      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService, telemetry);
       service.NodeConnected += (n) => node = n;
 
       // act
@@ -117,7 +102,7 @@ namespace SvxlinkManager.Service.Tests
       var channel = new SvxlinkChannel();
       Node node = null;
 
-      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService, telemetry);
       service.Nodes.Add(new Node { Name = " (CH) HB9GXP H" });
       service.NodeTx += (n) => node = n;
 
@@ -136,7 +121,7 @@ namespace SvxlinkManager.Service.Tests
       var channel = new SvxlinkChannel();
       Node node = null;
 
-      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService, telemetry);
       service.Nodes.Add(new Node { Name = " (CH) HB9GXP H" });
       service.NodeRx += (n) => node = n;
 
@@ -155,7 +140,7 @@ namespace SvxlinkManager.Service.Tests
       var channel = new SvxlinkChannel { Name = "Default" };
       string message = null;
 
-      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService, telemetry);
       service.Nodes.Add(new Node { Name = " (CH) HB9GXP H" });
       service.Error += (t, m) => message = m;
 
@@ -173,7 +158,7 @@ namespace SvxlinkManager.Service.Tests
       var channel = new SvxlinkChannel { Name = "Default", Host = "Default Host" };
       string message = null;
 
-      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService, telemetry);
       service.Nodes.Add(new Node { Name = " (CH) HB9GXP H" });
       service.Error += (t, m) => message = m;
 
@@ -188,7 +173,7 @@ namespace SvxlinkManager.Service.Tests
     public void SetChannelIdParrot()
     {
       // arrange
-      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService, telemetry);
       service.When(x => x.Parrot()).DoNotCallBase();
 
       // act
@@ -202,7 +187,7 @@ namespace SvxlinkManager.Service.Tests
     public void SetChannelIdStop()
     {
       // arrange
-      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService, telemetry);
       service.When(x => x.StopSvxlink()).DoNotCallBase();
 
       // act
@@ -216,7 +201,7 @@ namespace SvxlinkManager.Service.Tests
     public void SetChannelIdActivate()
     {
       // arrange
-      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService, telemetry);
       service.When(x => x.ActivateChannel(30)).DoNotCallBase();
 
       // act
@@ -230,9 +215,9 @@ namespace SvxlinkManager.Service.Tests
     public void ParrotTest()
     {
       // arrange
-      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories, scanService, telemetry);
       service.When(x => x.StopSvxlink()).DoNotCallBase();
-      service.When(x => x.StartSvxLink()).DoNotCallBase();
+      service.When(x => x.StartSvxLink(Arg.Any<SvxlinkChannel>())).DoNotCallBase();
       Predicate<Dictionary<string, Dictionary<string, string>>> isParametersOk = x => x["GLOBAL"]["LOGICS"] == "SimplexLogic" && x["SimplexLogic"]["MODULES"] == "ModuleParrot";
 
       // act
@@ -243,7 +228,7 @@ namespace SvxlinkManager.Service.Tests
       service.Received(1).Protected("CreateNewCurrentConfig");
       service.Received(1).Protected("ReplaceConfig", Arg.Any<string>(), Arg.Is<Dictionary<string, Dictionary<string, string>>>(x => isParametersOk(x)));
       service.Received(1).Protected("ReplaceSoundFile", Arg.Is<Channel>(x => x == null));
-      service.Received(1).StartSvxLink();
+      service.Received(1).StartSvxLink(Arg.Any<SvxlinkChannel>());
       service.Received(1).Protected("ExecuteCommand", "echo '1#'> /tmp/dtmf_uhf");
     }
 
@@ -251,7 +236,7 @@ namespace SvxlinkManager.Service.Tests
     public void ActivateSvxlinkChannelDefaultCallTest()
     {
       // arrange
-      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories, scanService, telemetry);
       service.When(x => x.StopSvxlink()).DoNotCallBase();
       var channel = new SvxlinkChannel { CallSign = "(CH) SVX4LINK H" };
 
@@ -270,7 +255,7 @@ namespace SvxlinkManager.Service.Tests
       var radioProfile = new RadioProfile { RxCtcss = "0002" };
       repositories.RadioProfiles.GetCurrent().Returns(radioProfile);
 
-      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories, scanService, telemetry);
       service.When(x => x.StopSvxlink()).DoNotCallBase();
       service.When(x => x.StartSvxLink(Arg.Any<SvxlinkChannel>())).DoNotCallBase();
       var channel = new SvxlinkChannel { CallSign = "(CH) HB9GXP H" };
@@ -306,7 +291,7 @@ namespace SvxlinkManager.Service.Tests
       var radioProfile = new RadioProfile { RxCtcss = "0002" };
       repositories.RadioProfiles.GetCurrent().Returns(radioProfile);
 
-      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories, scanService, telemetry);
       service.When(x => x.StopSvxlink()).DoNotCallBase();
       service.When(x => x.StartSvxLink(Arg.Any<EcholinkChannel>())).DoNotCallBase();
       var channel = new EcholinkChannel { CallSign = "HB9GXP-L" };
@@ -349,7 +334,7 @@ namespace SvxlinkManager.Service.Tests
       var channel = new SvxlinkChannel { Id = 300 };
       repositories.Channels.GetDefault().Returns(channel);
 
-      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories, scanService);
+      var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories, scanService, telemetry);
       service.When(x => x.ActivateChannel(Arg.Any<int>())).DoNotCallBase();
 
       // act
@@ -366,7 +351,7 @@ namespace SvxlinkManager.Service.Tests
     /// <seealso cref="SvxlinkManager.Service.SvxLinkService" />
     public class TestableSvxlinkService : SvxLinkService
     {
-      public TestableSvxlinkService(ILogger<SvxLinkService> logger, IRepositories repositories, ScanService scanService) : base(logger, repositories, scanService)
+      public TestableSvxlinkService(ILogger<SvxLinkService> logger, IRepositories repositories, ScanService scanService, TelemetryClient telemetry) : base(logger, repositories, scanService, telemetry)
       {
       }
 

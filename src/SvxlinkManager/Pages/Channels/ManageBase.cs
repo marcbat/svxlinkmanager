@@ -37,6 +37,8 @@ namespace SvxlinkManager.Pages.Channels
 
       Channels.Remove(channel);
 
+      Telemetry.TrackEvent("Delete channel", channel.TrackProperties);
+
       StateHasChanged();
 
       await ShowSuccessToastAsync("Supprimé", "Le salon a bien été supprimé.");

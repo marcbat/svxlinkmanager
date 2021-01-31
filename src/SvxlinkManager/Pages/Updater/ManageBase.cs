@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
+using SvxlinkManager.Exceptions;
 using SvxlinkManager.Pages.Shared;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -33,10 +36,19 @@ namespace SvxlinkManager.Pages.Updater
 
     private void LoadReleases()
     {
-      using WebClient client = new WebClient();
-      client.Headers.Add(HttpRequestHeader.UserAgent, "request");
-      var result = client.DownloadString(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases"));
-      Releases = JsonSerializer.Deserialize<List<Release>>(result);
+      Logger.LogInformation("Chargement de la list des release.");
+
+      try
+      {
+        using WebClient client = new WebClient();
+        client.Headers.Add(HttpRequestHeader.UserAgent, "request");
+        var result = client.DownloadString(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases"));
+        Releases = JsonSerializer.Deserialize<List<Release>>(result);
+      }
+      catch (Exception e)
+      {
+        Logger.LogError("Impossible de charger la liste des releases.", e);
+      }
     }
 
     public List<Release> Releases
@@ -44,7 +56,10 @@ namespace SvxlinkManager.Pages.Updater
       get
       {
         if (Configuration.GetValue<bool>("Config:IsPreRelease"))
+        {
+          Telemetry.TrackEvent("Chargement des PreRelease.");
           return releases;
+        }
         else
           return releases.Where(r => !r.Prerelease).ToList();
       }
@@ -66,13 +81,19 @@ namespace SvxlinkManager.Pages.Updater
       var (result, error) = ExecuteCommand($"/tmp/svxlinkmanager/{release.Updater.Name} update");
 
       if (!string.IsNullOrEmpty(error))
+      {
+        Telemetry.TrackException(new UpdateException("Echec de l'installation de la release."), new Dictionary<string, string> { { "Message", error } });
+
         await ShowErrorToastAsync("Erreur", error);
+      }
 
       StateHasChanged();
     }
 
     public async Task DownloadAsync(Release release)
     {
+      var stopwatch = Stopwatch.StartNew();
+
       var downloadPath = "/tmp/svxlinkmanager";
 
       try
@@ -107,6 +128,10 @@ namespace SvxlinkManager.Pages.Updater
             throw new Exception($"Echec de la validation du fichier {release.Updater.Name}.");
 
           StateHasChanged();
+
+          stopwatch.Stop();
+
+          Telemetry.TrackEvent("Download Update", new Dictionary<string, string> { { "Name", release.Name } }, new Dictionary<string, double> { { "ProcessingTime", stopwatch.Elapsed.TotalMilliseconds } });
         };
 
         await ShowInfoToastAsync("Mise à jour", $"La version {release.TagName} est en cours de téléchargement.");
@@ -115,7 +140,9 @@ namespace SvxlinkManager.Pages.Updater
       }
       catch (Exception e)
       {
-        await ShowErrorToastAsync($"Erreur", $"Echec de la mise à jour {release.Package.Name}.<br/> {e.Message}");
+        Telemetry.TrackException(new UpdateException("Echec du telechargement de la mise à jour.", e), new Dictionary<string, string> { { "Name", release.Name } });
+
+        await ShowErrorToastAsync($"Erreur", $"Echec du telechargement de la mise à jour {release.Package.Name}.<br/> {e.Message}");
 
         Directory.Delete(downloadPath, true);
 

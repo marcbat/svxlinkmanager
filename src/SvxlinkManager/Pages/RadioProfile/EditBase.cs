@@ -21,6 +21,8 @@ namespace SvxlinkManager.Pages.RadioProfile
     {
       Repositories.RadioProfiles.Update(RadioProfile);
 
+      Telemetry.TrackEvent("Update radio profile", RadioProfile.TrackProperties);
+
       await ShowSuccessToastAsync("Modifié", $"le profil radio {RadioProfile.Name} a bien été modifié.");
 
       NavigationManager.NavigateTo("RadioProfile/Manage");

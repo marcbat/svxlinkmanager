@@ -39,6 +39,8 @@ namespace SvxlinkManager.Pages.Wifi
     {
       Logger.LogInformation($"Creation de la connection {device.Ssid}");
 
+      Telemetry.TrackEvent("Connect Wifi");
+
       WifiService.Connect(device);
 
       NavigationManager.NavigateTo("Wifi/Manage", true);
@@ -50,6 +52,8 @@ namespace SvxlinkManager.Pages.Wifi
 
       WifiService.Up(device.Connection);
 
+      Telemetry.TrackEvent("Activate Wifi");
+
       NavigationManager.NavigateTo("Wifi/Manage", true);
     }
 
@@ -59,6 +63,8 @@ namespace SvxlinkManager.Pages.Wifi
 
       WifiService.Down(device.Connection);
 
+      Telemetry.TrackEvent("Deactivate Wifi");
+
       NavigationManager.NavigateTo("Wifi/Manage", true);
     }
 
@@ -67,6 +73,8 @@ namespace SvxlinkManager.Pages.Wifi
       Logger.LogInformation($"Suppression de la connection {device.Connection.Name} {device.Connection.Uuid}");
 
       WifiService.Disconnect(device.Connection);
+
+      Telemetry.TrackEvent("Deconnect Wifi");
 
       NavigationManager.NavigateTo("Wifi/Manage", true);
     }

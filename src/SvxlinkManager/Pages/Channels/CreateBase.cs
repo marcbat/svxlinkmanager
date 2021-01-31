@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Forms;
 
 using SvxlinkManager.Models;
 
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ namespace SvxlinkManager.Pages.Channels
     /// </summary>
     public async Task HandleValidSubmit(string redirect)
     {
+      Telemetry.TrackEvent("Create channel", Channel.TrackProperties);
+
       await base.HandleValidSubmit();
 
       Repositories.Channels.Add(Channel);
