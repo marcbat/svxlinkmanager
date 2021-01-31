@@ -39,6 +39,8 @@ namespace SvxlinkManager.Pages.RadioProfile
     {
       Repositories.RadioProfiles.Delete(id);
 
+      Telemetry.TrackEvent("Delete radio profile", RadioProfiles.Single(c => c.Id == id).TrackProperties);
+
       RadioProfiles.Remove(RadioProfiles.Single(c => c.Id == id));
 
       await ShowSuccessToastAsync("Supprimé", "Le profil radio a bien été supprimé.");
@@ -55,6 +57,8 @@ namespace SvxlinkManager.Pages.RadioProfile
 
       profile.Enable = true;
       Repositories.RadioProfiles.Update(profile);
+
+      Telemetry.TrackEvent("Apply radio profile", profile.TrackProperties);
 
       SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
 

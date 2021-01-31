@@ -19,7 +19,7 @@ namespace SvxlinkManager.Pages.Channels
     /// </summary>
     public async Task HandleValidSubmit(string redirect)
     {
-      Telemetry.TrackEvent("Create channel", new Dictionary<string, string> { { nameof(Channel.Name), Channel.Name } });
+      Telemetry.TrackEvent("Create channel", Channel.TrackProperties);
 
       await base.HandleValidSubmit();
 

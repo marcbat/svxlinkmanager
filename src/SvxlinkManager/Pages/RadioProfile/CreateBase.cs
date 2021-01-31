@@ -20,6 +20,8 @@ namespace SvxlinkManager.Pages.RadioProfile
     {
       Repositories.RadioProfiles.Add(RadioProfile);
 
+      Telemetry.TrackEvent("Create radio profile", RadioProfile.TrackProperties);
+
       await ShowSuccessToastAsync("Crée", $"Le profil radio {RadioProfile.Name} a bien été crée.");
 
       NavigationManager.NavigateTo("RadioProfile/Manage");

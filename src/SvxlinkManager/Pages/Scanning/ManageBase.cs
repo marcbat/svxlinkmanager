@@ -52,6 +52,8 @@ namespace SvxlinkManager.Pages.Scanning
 
       Repositories.ScanProfiles.Update(ScanProfile);
 
+      Telemetry.TrackEvent("Activate scan", ScanProfile.TrackProperties);
+
       SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
 
       await ShowSuccessToastAsync("Activé", $"le scan a bien été activé.");
@@ -62,6 +64,8 @@ namespace SvxlinkManager.Pages.Scanning
       ScanProfile.Enable = false;
 
       Repositories.ScanProfiles.Update(ScanProfile);
+
+      Telemetry.TrackEvent("Activate scan", ScanProfile.TrackProperties);
 
       SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
 
@@ -83,6 +87,8 @@ namespace SvxlinkManager.Pages.Scanning
     protected async Task HandleValidSubmitAsync()
     {
       Repositories.ScanProfiles.Update(ScanProfile);
+
+      Telemetry.TrackEvent("Update scan profile", ScanProfile.TrackProperties);
 
       SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
 
