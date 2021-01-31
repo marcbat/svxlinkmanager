@@ -52,7 +52,7 @@ namespace SvxlinkManager.Pages.Scanning
 
       Repositories.ScanProfiles.Update(ScanProfile);
 
-      Telemetry.TrackEvent("Activate scan", ScanProfile.TrackProperties);
+      Telemetry.TrackEvent("Enable scan", ScanProfile.TrackProperties);
 
       SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
 
@@ -65,7 +65,7 @@ namespace SvxlinkManager.Pages.Scanning
 
       Repositories.ScanProfiles.Update(ScanProfile);
 
-      Telemetry.TrackEvent("Activate scan", ScanProfile.TrackProperties);
+      Telemetry.TrackEvent("Disable scan", ScanProfile.TrackProperties);
 
       SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
 

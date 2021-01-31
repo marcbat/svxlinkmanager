@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.ApplicationInsights;
+using Microsoft.Extensions.Logging;
 
 using Newtonsoft.Json;
 
@@ -15,14 +16,18 @@ namespace SvxlinkManager.Service
   public class ScanService
   {
     private readonly ILogger<ScanService> logger;
+    private readonly TelemetryClient telemetry;
 
-    public ScanService(ILogger<ScanService> logger)
+    public ScanService(ILogger<ScanService> logger, TelemetryClient telemetry)
     {
       this.logger = logger;
+      this.telemetry = telemetry;
     }
 
     public virtual Channel GetActiveChannel(ScanProfile scanProfile)
     {
+      telemetry.TrackEvent("Scan execution", scanProfile.TrackProperties);
+
       foreach (var channel in scanProfile.Channels)
       {
         try

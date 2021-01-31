@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.ApplicationInsights;
+using Microsoft.Extensions.Logging;
 
 using NSubstitute;
 
@@ -28,9 +29,10 @@ namespace SvxlinkManager.Service.Tests
         "        Sunrise_2.4GHz_8F92E0        Infra  11    195 Mbit/s  14      *     WPA1 WPA2\r\n";
 
       var logger = Substitute.For<ILogger<WifiService>>();
+      var telemetry = new TelemetryClient();
 
       // act
-      var service = new WifiService(logger);
+      var service = new WifiService(logger, telemetry);
       var devices = service.ParseDeviceConsoleOutput(output);
 
       // assert
@@ -48,9 +50,10 @@ namespace SvxlinkManager.Service.Tests
         "Honor 9              986cb8c6-fe8e-4951-903f-105aef31a3ab  wifi      --\r\n";
 
       var logger = Substitute.For<ILogger<WifiService>>();
+      var telemetry = new TelemetryClient();
 
       // act
-      var service = new WifiService(logger);
+      var service = new WifiService(logger, telemetry);
       var connections = service.ParseConnectionConsoleOutput(output);
 
       // assert
