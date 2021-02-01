@@ -26,8 +26,6 @@ namespace SvxlinkManager.Service
 
     public virtual Channel GetActiveChannel(ScanProfile scanProfile)
     {
-      telemetry.TrackEvent("Scan execution", scanProfile.TrackProperties);
-
       foreach (var channel in scanProfile.Channels)
       {
         try
