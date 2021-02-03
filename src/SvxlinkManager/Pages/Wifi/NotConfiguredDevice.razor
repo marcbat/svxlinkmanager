@@ -5,22 +5,22 @@
 
   <li class="list-group-item">
     <div class="row">
-      <div class="col-md-2 text-nowrap">
+      <div class="col-xl-2 text-nowrap">
         @Device.Ssid
       </div>
-      <div class="col-md-2 text-nowrap">
+      <div class="col-xl-2 text-nowrap">
         @Device.Rate
       </div>
-      <div class="col-md-2 text-nowrap">
+      <div class="col-xl-2 text-nowrap">
         <BarTabs Bars="@Device.Bars" />
       </div>
-      <div class="col-md-2 text-nowrap">
+      <div class="col-xl-2 text-nowrap">
         @Device.Security
       </div>
-      <div class="col-md-2 text-nowrap">
+      <div class="col-xl-2 text-nowrap">
         <InputText @bind-Value="@Device.Password" type="password" class="form-control" />
       </div>
-      <div class="col-md-2">
+      <div class="col-xl-2">
         <button type="button" class="btn btn-outline-primary" @onclick="(()=> Connect(Device))">Connecter</button>
       </div>
     </div>

@@ -2,23 +2,23 @@
 
 <li class="list-group-item">
   <div class="row">
-    <div class="col-md-2 text-nowrap">
+    <div class="col-xl-2 text-nowrap">
       <span class="oi oi-home" aria-hidden="true"></span>
       @Device.Ssid
     </div>
-    <div class="col-md-2 text-nowrap">
+    <div class="col-xl-2 text-nowrap">
       @Device.Rate
     </div>
-    <div class="col-md-2 text-nowrap">
+    <div class="col-xl-2 text-nowrap">
       <BarTabs Bars="@Device.Bars" />
     </div>
-    <div class="col-md-2 text-nowrap">
+    <div class="col-mxl-2 text-nowrap">
       @Device.Security
     </div>
-    <div class="col-md-2 text-nowrap">
+    <div class="col-xl-2 text-nowrap">
       Configuré
     </div>
-    <div class="col-md-2">
+    <div class="col-xl-2">
       <button type="button" class="btn btn-danger" @onclick="@(() => Down(Device))">Déconnecter</button>
     </div>
   </div>
