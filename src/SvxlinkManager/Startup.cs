@@ -87,12 +87,19 @@ namespace SvxlinkManager
 
       using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
       {
+        // migrate database
         var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         context.Database.Migrate();
 
         // start default channel
         var svxlinkservice = serviceScope.ServiceProvider.GetRequiredService<SvxLinkService>();
         svxlinkservice.StartDefaultChannel();
+
+        // set telemetry global settings
+        //var telemetry = serviceScope.ServiceProvider.GetRequiredService<TelemetryClient>();
+        //telemetry.Context.Device.Id = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString();
+        //telemetry.Context.Device.OperatingSystem = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
+        //telemetry.Context.Component.Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
       }
 
       app.UseHttpsRedirection();

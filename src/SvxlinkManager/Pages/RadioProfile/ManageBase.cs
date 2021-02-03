@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Pages.Shared;
@@ -17,6 +18,8 @@ namespace SvxlinkManager.Pages.RadioProfile
   {
     protected override async Task OnInitializedAsync()
     {
+      Telemetry.TrackPageView(new PageViewTelemetry("Radio Profile Manage Page") { Url = new Uri("/RadioProfile/Manage", UriKind.Relative) });
+
       await base.OnInitializedAsync().ConfigureAwait(false);
 
       LoadRadioProfiles();

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
@@ -26,6 +27,8 @@ namespace SvxlinkManager.Pages.Updater
 
     protected override async Task OnInitializedAsync()
     {
+      Telemetry.TrackPageView(new PageViewTelemetry("Updater page") { Url = new Uri("/Updater/Manage", UriKind.Relative) });
+
       await base.OnInitializedAsync().ConfigureAwait(false);
 
       LoadReleases();

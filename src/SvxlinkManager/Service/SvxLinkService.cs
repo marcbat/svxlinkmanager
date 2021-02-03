@@ -1,6 +1,7 @@
 ﻿using IniParser;
 
 using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
 
@@ -236,6 +237,8 @@ namespace SvxlinkManager.Service
 
       if (channel?.CallSign == "(CH) SVX4LINK H")
       {
+        telemetry.TrackTrace("Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.", SeverityLevel.Error, channel.TrackProperties);
+
         ChannelId = 0;
         Error?.Invoke("Attention", "Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.");
         return;
@@ -522,13 +525,14 @@ namespace SvxlinkManager.Service
 
       if (s.Contains("Access denied"))
       {
+        telemetry.TrackTrace($"Impossible de se connecter au salon {channel.Name}. <br/> Accès refusé.", SeverityLevel.Error, channel.TrackProperties);
         Error?.Invoke("Echec de la connexion.", $"Impossible de se connecter au salon {channel.Name}. <br/> Accès refusé.");
         return;
       }
 
       if (s.Contains("Host not found"))
       {
-        logger.LogWarning(LogEvents.HostNotFound, "Impossible de se connecter au salon {channelName}. <br/> Server {channelHost} introuvable.", channel.Name, channel.Host);
+        telemetry.TrackTrace($"Impossible de se connecter au salon {channel.Name}. <br/> Server {channel.Host} introuvable.", SeverityLevel.Error, channel.TrackProperties);
         Error?.Invoke("Echec de la connexion.", $"Impossible de se connecter au salon {channel.Name}. <br/> Server {channel.Host} introuvable.");
         return;
       }
@@ -613,7 +617,7 @@ namespace SvxlinkManager.Service
     {
       telemetry.TrackEvent("Start temporization", new Dictionary<string, string> { { "node", node?.Name } });
 
-      logger.LogInformation(LogEvents.StartTemporisation, $"La temporisation a été enclenchée par {node?.Name}.");
+      logger.LogInformation($"La temporisation a été enclenchée par {node?.Name}.");
 
       lastTx = DateTime.Now;
       tempoTimer.Enabled = true;
@@ -637,7 +641,7 @@ namespace SvxlinkManager.Service
     {
       telemetry.TrackEvent("Start scan", new Dictionary<string, string> { { "node", node?.Name } });
 
-      logger.LogDebug(LogEvents.StartScan, "Le scan a été enclenchée par {nodeName}.", node?.Name);
+      logger.LogDebug("Le scan a été enclenchée par {nodeName}.", node?.Name);
 
       lastTx = DateTime.Now;
       scanTimer.Enabled = true;
@@ -662,7 +666,7 @@ namespace SvxlinkManager.Service
     {
       telemetry.TrackEvent("Channel Connection", channel.TrackProperties);
 
-      logger.LogInformation(LogEvents.ChannelConnexion, "Connection au channel {ChannelName}.", channel.Name);
+      logger.LogInformation("Connection au channel {ChannelName}.", channel.Name);
 
       var cmd = $"svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config={applicationPath}/SvxlinkConfig/svxlink.current";
 

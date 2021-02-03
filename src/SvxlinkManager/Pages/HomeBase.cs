@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
@@ -27,6 +28,8 @@ namespace SvxlinkManager.Pages
   {
     protected override async Task OnInitializedAsync()
     {
+      Telemetry.TrackPageView(new PageViewTelemetry("Accueil Page") { Url = new Uri("/", UriKind.Relative) });
+
       LoadChannels();
 
       SvxLinkService.Connected += SvxLinkService_ConnectedAsync;

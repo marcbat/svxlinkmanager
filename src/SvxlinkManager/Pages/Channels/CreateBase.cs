@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
 using SvxlinkManager.Models;
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -32,6 +34,21 @@ namespace SvxlinkManager.Pages.Channels
 
     protected override void OnInitialized()
     {
+      switch (Channel)
+      {
+        case SvxlinkChannel channel:
+          Telemetry.TrackPageView(new PageViewTelemetry("Svxlink Channel Create Page") { Url = new Uri("/Channel/Create", UriKind.Relative) });
+          break;
+
+        case EcholinkChannel channel:
+          Telemetry.TrackPageView(new PageViewTelemetry("Echolink Channel Create Page") { Url = new Uri("/Echolink/Create", UriKind.Relative) });
+          break;
+
+        default:
+          Telemetry.TrackPageView("Channel Edit Page");
+          break;
+      }
+
       base.OnInitialized();
 
       Channel = new TChannel();

@@ -20,21 +20,26 @@ namespace SvxlinkManager.Telemetry
 
     public void Initialize(ITelemetry telemetry)
     {
+      telemetry.Context.Device.Id = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString();
+      telemetry.Context.Device.OperatingSystem = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
+      telemetry.Context.Component.Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+
       switch (telemetry)
       {
         case RequestTelemetry requestTelemetry:
-          requestTelemetry.Properties["SvxlinkmanagerVersion"] = informationalVersion;
           requestTelemetry.Properties["DeviceId"] = deviceId;
           break;
 
         case TraceTelemetry traceTelemetry:
-          traceTelemetry.Properties["SvxlinkmanagerVersion"] = informationalVersion;
           traceTelemetry.Properties["DeviceId"] = deviceId;
           break;
 
         case EventTelemetry eventTelementry:
-          eventTelementry.Properties["SvxlinkmanagerVersion"] = informationalVersion;
           eventTelementry.Properties["DeviceId"] = deviceId;
+          break;
+
+        case PageViewTelemetry pageViewTelemetry:
+          pageViewTelemetry.Properties["DeviceId"] = deviceId;
           break;
 
         default:

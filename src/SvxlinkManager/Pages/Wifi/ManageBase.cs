@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Models;
@@ -17,6 +18,8 @@ namespace SvxlinkManager.Pages.Wifi
   {
     protected override void OnInitialized()
     {
+      Telemetry.TrackPageView(new PageViewTelemetry("Wifi Page") { Url = new Uri("/Wifi/Manage", UriKind.Relative) });
+
       base.OnInitialized();
 
       LoadDevices();

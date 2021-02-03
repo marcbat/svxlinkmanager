@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
 using SvxlinkManager.Models;
@@ -18,6 +19,8 @@ namespace SvxlinkManager.Pages.Scanning
 
     protected override async Task OnInitializedAsync()
     {
+      Telemetry.TrackPageView(new PageViewTelemetry("Scan page") { Url = new Uri("/Scanning/Manage", UriKind.Relative) });
+
       await base.OnInitializedAsync().ConfigureAwait(false);
 
       LoadScanProfile();

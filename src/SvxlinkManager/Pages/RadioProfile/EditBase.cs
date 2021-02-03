@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Components;
 
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace SvxlinkManager.Pages.RadioProfile
   {
     protected override void OnInitialized()
     {
+      Telemetry.TrackPageView(new PageViewTelemetry("Radio Profile Edit Page") { Url = new Uri("/RadioProfile/Edit", UriKind.Relative) });
+
       RadioProfile = Repositories.RadioProfiles.Get(int.Parse(Id));
     }
 
