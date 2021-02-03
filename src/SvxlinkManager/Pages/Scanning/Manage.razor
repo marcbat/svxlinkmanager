@@ -3,37 +3,51 @@
 
 @inherits SvxlinkManager.Pages.Scanning.ManageBase
 
-<h3>Scan</h3>
+<div class="d-inline-block">
+  <h3>Scan</h3>
+</div>
+
+@if (ScanProfile.Enable)
+{<div class="blink d-inline-block" style="margin-left:5px;">
+    <span class="badge badge-danger">activé</span>
+  </div>}
+else
+{ <div class="d-inline-block" style="margin-left:5px;">
+    <span class="badge badge-info">déactivé</span>
+  </div>}
 
 <EditForm EditContext="@EditContext" OnValidSubmit="@HandleValidSubmitAsync">
   <DataAnnotationsValidator />
   <ValidationSummary />
   <div class="form-row">
     <div class="form-group">
-      <label data-toggle="tooltip" title="Délai d'inactivité avant que le scan soit lancé.">Délai</label>
+      <label data-toggle="tooltip" title="Délai d'inactivité en secondes avant que le scan soit lancé.">Délai d'inactivité avant lancement</label>
       <InputNumber @bind-Value="ScanProfile.ScanDelay" type="number" class="form-control" id="inputScanDelay" />
     </div>
   </div>
+  <label data-toggle="tooltip" title="Liste des salons scannés lors de l'activation du scan.  <br /> Seul les salons du RRF peuvent être scannés pour l'instant.">Liste des salons scannés</label>
+  <div class="form-row">
 
-  <div class="form-group">
-    @foreach (var channel in Channels)
-    {
-      <div class="form-check form-check-inline">
-        <div class="pretty p-default p-curve p-bigger">
-          @if (IsChecked(channel))
-          {
-            <input type="checkbox" checked @onchange="e => AddRemoveChannel(channel, e)" />
-          }
-          else
-          {
-            <input type="checkbox" @onchange="e => AddRemoveChannel(channel, e)" />
-          }
-          <div class="state">
-            <label>@channel.Name</label>
+    <div class="form-group">
+      @foreach (var channel in Channels)
+      {
+        <div class="form-check form-check-inline">
+          <div class="pretty p-default p-curve p-bigger">
+            @if (IsChecked(channel))
+            {
+              <input type="checkbox" checked @onchange="e => AddRemoveChannel(channel, e)" />
+            }
+            else
+            {
+              <input type="checkbox" @onchange="e => AddRemoveChannel(channel, e)" />
+            }
+            <div class="state">
+              <label>@channel.Name</label>
+            </div>
           </div>
         </div>
-      </div>
-    }
+      }
+    </div>
   </div>
   <div class="btn-toolbar">
     @if (IsChanged)
