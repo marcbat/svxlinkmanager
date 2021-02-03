@@ -66,7 +66,7 @@ namespace SvxlinkManager
 #endif
 
       services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
-      services.AddSingleton<ITelemetryInitializer, SvxlinkManagerTelemetry>();
+      //services.AddSingleton<ITelemetryInitializer, SvxlinkManagerTelemetry>();
       services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
     }
 
@@ -96,10 +96,12 @@ namespace SvxlinkManager
         svxlinkservice.StartDefaultChannel();
 
         // set telemetry global settings
-        //var telemetry = serviceScope.ServiceProvider.GetRequiredService<TelemetryClient>();
-        //telemetry.Context.Device.Id = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString();
-        //telemetry.Context.Device.OperatingSystem = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
-        //telemetry.Context.Component.Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+        var telemetry = serviceScope.ServiceProvider.GetRequiredService<TelemetryClient>();
+        var deviceId = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString(); ;
+        telemetry.Context.GlobalProperties["DeviceId"] = deviceId;
+        telemetry.Context.Device.Id = deviceId;
+        telemetry.Context.Device.OperatingSystem = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
+        telemetry.Context.Component.Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
       }
 
       app.UseHttpsRedirection();
