@@ -233,47 +233,60 @@ namespace SvxlinkManager.Service
     /// </summary>
     public virtual void ActivateSvxlinkChannel(SvxlinkChannel channel)
     {
-      logger.LogInformation("Restart salon.");
+      var url = new UriBuilder("http", channel.Host, channel.Port).Uri;
 
-      if (channel?.CallSign == "(CH) SVX4LINK H")
+      var dependencyTracker = new DependencyTelemetry
       {
-        telemetry.TrackTrace("Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.", SeverityLevel.Error, channel.TrackProperties);
+        Id = Guid.NewGuid().ToString(),
+        Name = "ActivateSvxlinkChannel",
+        Data = url.AbsolutePath,
+        Target = url.Authority,
+        Type = "http"
+      };
 
-        ChannelId = 0;
-        Error?.Invoke("Attention", "Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.");
-        return;
-      }
+      using (var operation = telemetry.StartOperation(dependencyTracker))
+      {
+        logger.LogInformation("Restart salon.");
 
-      // Stop svxlink
-      StopSvxlink();
-      logger.LogInformation("Salon déconnecté");
+        if (channel?.CallSign == "(CH) SVX4LINK H")
+        {
+          telemetry.TrackTrace("Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.", SeverityLevel.Error, channel.TrackProperties);
 
-      var radioProfile = repositories.RadioProfiles.GetCurrent();
+          ChannelId = 0;
+          Error?.Invoke("Attention", "Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.");
+          return;
+        }
 
-      // Remplacement de la config
-      CreateNewCurrentConfig();
+        // Stop svxlink
+        StopSvxlink();
+        logger.LogInformation("Salon déconnecté");
 
-      var global = new Dictionary<string, string>
+        var radioProfile = repositories.RadioProfiles.GetCurrent();
+
+        // Remplacement de la config
+        CreateNewCurrentConfig();
+
+        var global = new Dictionary<string, string>
       {
         { "LOGICS", "SimplexLogic,ReflectorLogic" }
       };
-      var simplexlogic = new Dictionary<string, string> {
+        var simplexlogic = new Dictionary<string, string> {
         { "MODULES", "ModuleHelp,ModuleMetarInfo,ModulePropagationMonitor"},
         { "CALLSIGN", channel.ReportCallSign},
         { "REPORT_CTCSS", radioProfile.RxTone}
       };
-      var rx = new Dictionary<string, string>
+        var rx = new Dictionary<string, string>
       {
         {"SQL_DET", radioProfile.SquelchDetection },
       };
-      var ReflectorLogic = new Dictionary<string, string>
+        var ReflectorLogic = new Dictionary<string, string>
       {
         {"CALLSIGN", channel.CallSign },
         {"HOST", channel.Host },
         {"AUTH_KEY",channel.AuthKey },
         {"PORT" ,channel.Port.ToString()}
       };
-      var parameters = new Dictionary<string, Dictionary<string, string>>
+        var parameters = new Dictionary<string, Dictionary<string, string>>
       {
         {"GLOBAL", global },
         {"SimplexLogic", simplexlogic },
@@ -281,14 +294,15 @@ namespace SvxlinkManager.Service
         {"ReflectorLogic" , ReflectorLogic}
       };
 
-      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);
-      logger.LogInformation("Remplacement du contenu svxlink.current");
+        ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);
+        logger.LogInformation("Remplacement du contenu svxlink.current");
 
-      ReplaceSoundFile(channel);
+        ReplaceSoundFile(channel);
 
-      // Lance svxlink
-      StartSvxLink(channel);
-      logger.LogInformation($"Le channel {channel.Name} est connecté.");
+        // Lance svxlink
+        StartSvxLink(channel);
+        logger.LogInformation($"Le channel {channel.Name} est connecté.");
+      }
     }
 
     /// <summary>Replaces the sound file for the channel</summary>
