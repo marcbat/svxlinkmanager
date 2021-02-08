@@ -13,13 +13,13 @@
 
       <li class="list-group-item">
         <div class="row">
-          <div class="col-md-3 text-nowrap">
+          <div class="col-xl-3 text-nowrap">
             @release.Name
           </div>
-          <div class="col-md-2 text-nowrap">@release.Created</div>
-          <div class="col-md-3 text-truncate"><a href="@release.HtmlUrl" target="_blank">Détails de la release</a></div>
-          <div class="col-md-2 text-nowrap">@release.Package.DownloadCount téléchargements</div>
-          <div class="col-md-2">
+          <div class="col-xl-2 text-nowrap">@release.Created</div>
+          <div class="col-xl-3 text-truncate"><a href="@release.HtmlUrl" target="_blank">Détails de la release</a></div>
+          <div class="col-xl-2 text-nowrap">@release.Package.DownloadCount téléchargements</div>
+          <div class="col-xl-2">
             @if (!IsCurrent(release))
             {
               @if (IsExist(@release))

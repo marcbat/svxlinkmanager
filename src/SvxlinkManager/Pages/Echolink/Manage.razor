@@ -6,8 +6,8 @@
 @attribute [Authorize]
 
 <div class="row">
-  <div class="col-md-2"><h3>Echolink</h3></div>
-  <div class="col-md-3 offset-md-7">
+  <div class="col-xl-2"><h3>Echolink</h3></div>
+  <div class="col-xl-3 offset-xl-7">
     <a class="btn btn-outline-success" href="Echolink/Create" role="button">Créer une nouvelle configuration Echolink</a>
   </div>
 </div>
@@ -29,16 +29,16 @@
   {
     <li class="list-group-item">
       <div class="row">
-        <div class="col-md-3 text-nowrap">
+        <div class="col-xl-3 text-nowrap">
           @if (channel.IsDefault)
           {<span class="oi oi-home" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Le salon @channel.Name est actuellement le salon par défaut."></span>}
           @if (channel.IsTemporized)
           {<span class="oi oi-clock" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Le salon @channel.Name est temporisé."></span>}
           &nbsp;@channel.Name
         </div>
-        <div class="col-md-2 text-nowrap">@channel.CallSign</div>
-        <div class="col-md-5 text-truncate">@channel.Host</div>
-        <div class="col-md-2">
+        <div class="col-xl-2 text-nowrap">@channel.CallSign</div>
+        <div class="col-xl-5 text-truncate">@channel.Host</div>
+        <div class="col-xl-2">
           <a class="btn btn-outline-primary" href="Echolink/Edit/@channel.Id" role="button">Editer</a> &nbsp; @if (!channel.IsDefault)
           {<button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(channel))">Supprimer</button>}
         </div>

@@ -19,6 +19,11 @@ using SvxlinkManager.Repositories;
 using SvxlinkManager.Service;
 using System.IO;
 using SvxlinkManager.ServiceMockup;
+using Microsoft.ApplicationInsights.Extensibility;
+using SvxlinkManager.Telemetry;
+using Microsoft.ApplicationInsights;
+using DeviceId;
+using System.Reflection;
 
 namespace SvxlinkManager
 {
@@ -48,6 +53,7 @@ namespace SvxlinkManager
       services.AddSingleton<Data.IDbContextFactory<ApplicationDbContext>, DbContextFactory<ApplicationDbContext>>();
       services.AddSingleton<IRepositories, Repositories.Repositories>();
       services.AddSingleton<SvxLinkService>();
+      services.AddSingleton<ScanService>();
 
 #if DEBUG
       services.AddSingleton<ISa818Service, Sa818ServiceMockup>();
@@ -60,6 +66,8 @@ namespace SvxlinkManager
 #endif
 
       services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
+      //services.AddSingleton<ITelemetryInitializer, SvxlinkManagerTelemetry>();
+      services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,12 +87,21 @@ namespace SvxlinkManager
 
       using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
       {
+        // migrate database
         var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         context.Database.Migrate();
 
         // start default channel
         var svxlinkservice = serviceScope.ServiceProvider.GetRequiredService<SvxLinkService>();
         svxlinkservice.StartDefaultChannel();
+
+        // set telemetry global settings
+        var telemetry = serviceScope.ServiceProvider.GetRequiredService<TelemetryClient>();
+        var deviceId = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString(); ;
+        telemetry.Context.GlobalProperties["DeviceId"] = deviceId;
+        telemetry.Context.Device.Id = deviceId;
+        telemetry.Context.Device.OperatingSystem = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
+        telemetry.Context.Component.Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
       }
 
       app.UseHttpsRedirection();

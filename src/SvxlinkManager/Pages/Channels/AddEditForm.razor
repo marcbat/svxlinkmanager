@@ -17,7 +17,7 @@
   <div class="form-row">
     <div class="form-group col-md-6">
       <label data-toggle="tooltip" title="L'adresse internet du reflector svxlink.">Adresse du reflector</label>
-      <InputText @bind-Value="Channel.Host" type="text" class="form-control" id="inputHost" placeholder="http://www.monsvxlinkserver.com" />
+      <InputText @bind-Value="Channel.Host" type="text" class="form-control" id="inputHost" placeholder="rrf2.f5nlg.ovh ou 137.74.192.234" />
     </div>
     <div class="form-group col-md-3">
       <label data-toggle="tooltip" title="Le port sur lequel est exposé le svxlink reflector. <br> En général, il s'agit du port 5300.">Port</label>
@@ -64,9 +64,14 @@
               <label data-toggle="tooltip" title="Un salon temporisé retournera automatiquement sur le salon par défaut après un délai de 3 minutes d'inactivité.">Temporisé</label>
             </div>
           </div>
+          @if (Channel.IsTemporized)
+          {
+            <InputNumber @bind-Value="Channel.TimerDelay" type="number" class="form-control" id="inputTimerDelay" />
+          }
         </div>
       </div>
     </div>
+
   }
 
   <button type="submit" class="btn btn-success">@SubmitTitle</button> <a class="btn btn-primary" href="Channel/Manage" role="button">Annuler</a>
@@ -104,8 +109,11 @@
       Channel.IsTemporized = value;
       if (value)
         IsDefault = false;
+
     }
   }
+
+  protected string DelayVisibility { get; set; }
 
   private void OnInputFileChange(InputFileChangeEventArgs eventArgs)
   {

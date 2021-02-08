@@ -30,7 +30,19 @@ namespace SvxlinkManager.Models
     [Required]
     public bool IsTemporized { get; set; }
 
+    [Required]
+    public int TimerDelay { get; set; } = 180;
+
+    public string TrackerUrl { get; set; }
+
+    public List<ScanProfile> ScanProfiles { get; set; }
+
     public int Dtmf { get; set; }
+
+    public override bool Equals(object obj)
+    {
+      return Id == ((Channel)obj).Id;
+    }
 
     [NotMapped]
     [FileValidation(new[] { ".wav" })]
@@ -64,5 +76,8 @@ namespace SvxlinkManager.Models
         return ValidationResult.Success;
       }
     }
+
+    [NotMapped]
+    public abstract Dictionary<string, string> TrackProperties { get; }
   }
 }

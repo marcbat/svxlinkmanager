@@ -2,34 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SvxlinkManager.Data;
 
 namespace SvxlinkManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210121202557_TimerDelay")]
+    partial class TimerDelay
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.0");
-
-            modelBuilder.Entity("ChannelScanProfile", b =>
-                {
-                    b.Property<int>("ChannelsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ScanProfilesId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ChannelsId", "ScanProfilesId");
-
-                    b.HasIndex("ScanProfilesId");
-
-                    b.ToTable("ChannelScanProfile");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -59,8 +46,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2eee69b8-4227-45b7-8bde-cf9c8bf543db",
-                            ConcurrencyStamp = "dadb32a9-44c0-4141-a61c-67ca65fb42b5",
+                            Id = "66356e37-1a92-4890-a44a-9422ff48b3fe",
+                            ConcurrencyStamp = "17202d1b-dfaf-4e48-a872-916b2ae1606a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -273,9 +260,6 @@ namespace SvxlinkManager.Migrations
                     b.Property<int>("TimerDelay")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("TrackerUrl")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.ToTable("Channels");
@@ -402,36 +386,6 @@ namespace SvxlinkManager.Migrations
                     b.ToTable("Rules");
                 });
 
-            modelBuilder.Entity("SvxlinkManager.Models.ScanProfile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Enable")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("ScanDelay")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ScanProfiles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Enable = false,
-                            Name = "default",
-                            ScanDelay = 60
-                        });
-                });
-
             modelBuilder.Entity("SvxlinkManager.Models.EcholinkChannel", b =>
                 {
                     b.HasBaseType("SvxlinkManager.Models.Channel");
@@ -486,7 +440,6 @@ namespace SvxlinkManager.Migrations
                             Name = "Réseau des Répéteurs Francophones",
                             SoundName = "Srrf.wav",
                             TimerDelay = 180,
-                            TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
                             AuthKey = "Magnifique123456789!",
                             Port = 5300,
                             ReportCallSign = "SVX4LINK"
@@ -517,7 +470,6 @@ namespace SvxlinkManager.Migrations
                             Name = "French Open Network",
                             SoundName = "Sfon.wav",
                             TimerDelay = 180,
-                            TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json",
                             AuthKey = "FON-F1TZO",
                             Port = 5300,
                             ReportCallSign = "SVX4LINK"
@@ -533,7 +485,6 @@ namespace SvxlinkManager.Migrations
                             Name = "Salon Technique",
                             SoundName = "Stec.wav",
                             TimerDelay = 180,
-                            TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
                             AuthKey = "Magnifique123456789!",
                             Port = 5301,
                             ReportCallSign = "SVX4LINK"
@@ -549,7 +500,6 @@ namespace SvxlinkManager.Migrations
                             Name = "Salon International",
                             SoundName = "Sint.wav",
                             TimerDelay = 180,
-                            TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
                             AuthKey = "Magnifique123456789!",
                             Port = 5302,
                             ReportCallSign = "SVX4LINK"
@@ -565,7 +515,6 @@ namespace SvxlinkManager.Migrations
                             Name = "Salon Bavardage",
                             SoundName = "Sbav.wav",
                             TimerDelay = 180,
-                            TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
                             AuthKey = "FON-F1TZO",
                             Port = 5301,
                             ReportCallSign = "SVX4LINK"
@@ -581,7 +530,6 @@ namespace SvxlinkManager.Migrations
                             Name = "Salon Local",
                             SoundName = "Sloc.wav",
                             TimerDelay = 180,
-                            TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
                             AuthKey = "FON-F1TZO",
                             Port = 5302,
                             ReportCallSign = "SVX4LINK"
@@ -597,26 +545,10 @@ namespace SvxlinkManager.Migrations
                             Name = "Salon Expérimental",
                             SoundName = "Sexp.wav",
                             TimerDelay = 180,
-                            TrackerUrl = "",
                             AuthKey = "Magnifique123456789!",
                             Port = 5303,
                             ReportCallSign = "SVX4LINK"
                         });
-                });
-
-            modelBuilder.Entity("ChannelScanProfile", b =>
-                {
-                    b.HasOne("SvxlinkManager.Models.Channel", null)
-                        .WithMany()
-                        .HasForeignKey("ChannelsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SvxlinkManager.Models.ScanProfile", null)
-                        .WithMany()
-                        .HasForeignKey("ScanProfilesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
@@ -27,6 +28,8 @@ namespace SvxlinkManager.Pages
   {
     protected override async Task OnInitializedAsync()
     {
+      Telemetry.TrackPageView(new PageViewTelemetry("Accueil Page") { Url = new Uri("/", UriKind.Relative) });
+
       LoadChannels();
 
       SvxLinkService.Connected += SvxLinkService_ConnectedAsync;
@@ -42,6 +45,126 @@ namespace SvxlinkManager.Pages
       SvxLinkService.NodeRx += SvxLinkService_NodeRx;
 
       SvxLinkService.Error += SvxLinkService_Error;
+
+      SvxLinkService.StopTempo += SvxLinkService_StopTempo;
+
+      SvxLinkService.StartTempo += SvxLinkService_StartTempo;
+
+      SvxLinkService.TempChanged += SvxLinkService_TempChanged;
+
+      SvxLinkService.TempoQsy += SvxLinkService_TempoQsy;
+
+      SvxLinkService.Scanning += SvxLinkService_Scanning;
+
+      SvxLinkService.StopScanning += SvxLinkService_StopScanning;
+
+      SvxLinkService.ScanningQsy += SvxLinkService_ScanningQsy;
+    }
+
+    private void SvxLinkService_StartTempo()
+    {
+      try
+      {
+        TemporizationIsActive = true;
+
+        InvokeAsync(() => StateHasChanged());
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour la valeur TemporizationIsActive. {e.Message}");
+      }
+    }
+
+    private void SvxLinkService_StopTempo()
+    {
+      try
+      {
+        TemporizationIsActive = false;
+
+        InvokeAsync(() => StateHasChanged());
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour la valeur TemporizationIsActive. {e.Message}");
+      }
+    }
+
+    private async void SvxLinkService_TempoQsy()
+    {
+      try
+      {
+        await ShowInfoToastAsync("QSY", "Vous avez été redirigé sur le salon principal par la temporisation.");
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour d'afficher le toast. {e.Message}");
+      }
+    }
+
+    private async void SvxLinkService_ScanningQsy()
+    {
+      try
+      {
+        await ShowInfoToastAsync("QSY", "Vous avez été redirigé par le scanner.");
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour d'afficher le toast. {e.Message}");
+      }
+    }
+
+    private async void SvxLinkService_StopScanning()
+    {
+      try
+      {
+        if (!Scanning)
+          return;
+
+        Scanning = false;
+
+        await InvokeAsync(() => StateHasChanged());
+
+        await ShowInfoToastAsync("Scan", "Le scan a été suspendu.");
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour la valeur du scannning. {e.Message}");
+      }
+    }
+
+    private async void SvxLinkService_Scanning()
+    {
+      try
+      {
+        if (Scanning)
+          return;
+
+        Scanning = true;
+
+        await InvokeAsync(() => StateHasChanged());
+
+        await ShowInfoToastAsync("Scan", "Le scan a débuté.");
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour la valeur du scannning. {e.Message}");
+      }
+    }
+
+    private void SvxLinkService_TempChanged(string timer)
+    {
+      try
+      {
+        Logger.LogInformation($"La valeur de compte à rebour a changé. {timer}");
+
+        TemporizationValue = timer;
+
+        InvokeAsync(() => StateHasChanged());
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Impossible de mettre à jour la valeur du timer status. {e.Message}");
+      }
     }
 
     public List<Channel> Channels { get; set; }
@@ -117,6 +240,7 @@ namespace SvxlinkManager.Pages
       try
       {
         CurrentTxNode = null;
+        Scanning = false;
         InvokeAsync(() => StateHasChanged());
       }
       catch (Exception e)
@@ -129,6 +253,9 @@ namespace SvxlinkManager.Pages
     {
       try
       {
+        TemporizationValue = string.Empty;
+        Scanning = false;
+
         await InvokeAsync(() => StateHasChanged());
         await ShowSuccessToastAsync("Connecté", $"Vous êtes maintenant connecté au salon:<br/><strong>{c.Name}</strong>");
       }
@@ -158,6 +285,20 @@ namespace SvxlinkManager.Pages
       SvxLinkService.NodeRx -= SvxLinkService_NodeRx;
 
       SvxLinkService.Error -= SvxLinkService_Error;
+
+      SvxLinkService.StopTempo -= SvxLinkService_StopTempo;
+
+      SvxLinkService.StartTempo -= SvxLinkService_StartTempo;
+
+      SvxLinkService.TempChanged -= SvxLinkService_TempChanged;
+
+      SvxLinkService.TempoQsy -= SvxLinkService_TempoQsy;
+
+      SvxLinkService.Scanning -= SvxLinkService_Scanning;
+
+      SvxLinkService.StopScanning -= SvxLinkService_StopScanning;
+
+      SvxLinkService.ScanningQsy -= SvxLinkService_ScanningQsy;
     }
 
     [Inject]
@@ -175,6 +316,12 @@ namespace SvxlinkManager.Pages
       get => SvxLinkService.ChannelId;
       set => SvxLinkService.ChannelId = value;
     }
+
+    public string TemporizationValue { get; set; }
+
+    public bool TemporizationIsActive { get; set; } = false;
+
+    public bool Scanning { get; set; } = false;
 
     public List<Models.Node> Nodes
     {

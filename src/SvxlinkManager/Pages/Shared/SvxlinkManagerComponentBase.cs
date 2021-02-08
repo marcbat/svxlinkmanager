@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using Microsoft.ApplicationInsights;
 
 namespace SvxlinkManager.Pages.Shared
 {
@@ -14,6 +15,9 @@ namespace SvxlinkManager.Pages.Shared
   {
     [Inject]
     public ILogger<SvxlinkManagerComponentBase> Logger { get; set; }
+
+    [Inject]
+    public TelemetryClient Telemetry { get; set; }
 
     [Inject]
     public IJSRuntime Js { get; set; }

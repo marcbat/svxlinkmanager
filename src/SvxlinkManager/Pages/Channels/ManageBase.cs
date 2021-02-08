@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 using SvxlinkManager.Models;
@@ -18,6 +19,21 @@ namespace SvxlinkManager.Pages.Channels
 
     protected override async Task OnInitializedAsync()
     {
+      switch (default(TChannel))
+      {
+        case SvxlinkChannel:
+          Telemetry.TrackPageView(new PageViewTelemetry("Svxlink Channel Manage Page") { Url = new Uri("/Channel/Manage", UriKind.Relative) });
+          break;
+
+        case EcholinkChannel:
+          Telemetry.TrackPageView(new PageViewTelemetry("Echolink Channel Manage Page") { Url = new Uri("/Echolink/Manage", UriKind.Relative) });
+          break;
+
+        default:
+          Telemetry.TrackPageView("Channel Manage Page");
+          break;
+      }
+
       await base.OnInitializedAsync().ConfigureAwait(false);
 
       LoadChannels();
@@ -36,6 +52,8 @@ namespace SvxlinkManager.Pages.Channels
       Repositories.Channels.Delete(channel.Id);
 
       Channels.Remove(channel);
+
+      Telemetry.TrackEvent("Delete channel", channel.TrackProperties);
 
       StateHasChanged();
 

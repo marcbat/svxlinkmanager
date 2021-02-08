@@ -1,9 +1,13 @@
 ﻿using IniParser;
 
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Models;
 using SvxlinkManager.Repositories;
+using SvxlinkManager.Telemetry;
 
 using System;
 using System.Collections.Generic;
@@ -22,7 +26,8 @@ namespace SvxlinkManager.Service
     private readonly ILogger<SvxLinkService> logger;
 
     private readonly IRepositories repositories;
-
+    private readonly ScanService scanService;
+    private readonly TelemetryClient telemetry;
     private int channelId;
 
     /// <summary>
@@ -30,18 +35,34 @@ namespace SvxlinkManager.Service
     /// </summary>
     private DateTime lastTx;
 
-    private Timer timer;
+    private Timer tempoTimer;
+    private Timer scanTimer;
 
     private FileSystemWatcher watcher;
     private Process shell;
 
-    public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories)
+    public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories, ScanService scanService, TelemetryClient telemetry)
     {
       this.logger = logger;
       this.repositories = repositories;
+      this.scanService = scanService;
+      this.telemetry = telemetry;
 
-      NodeTx += n => lastTx = DateTime.Now;
-      Connected += (c) => lastTx = DateTime.Now;
+      tempoTimer = new Timer(1000)
+      {
+        Enabled = false
+      };
+      tempoTimer.Start();
+
+      tempoTimer.Elapsed += CheckTemporized;
+
+      scanTimer = new Timer(5000)
+      {
+        Enabled = false
+      };
+      scanTimer.Start();
+
+      scanTimer.Elapsed += CheckScan;
     }
 
     /// <summary>
@@ -79,10 +100,31 @@ namespace SvxlinkManager.Service
     /// </summary>
     public event Action<string, string> Error;
 
+    public event Action StartTempo;
+
+    public event Action StopTempo;
+
     /// <summary>
     /// Occurs when countdown change
     /// </summary>
-    public event Action<double> TempChanged;
+    public event Action<string> TempChanged;
+
+    /// <summary>
+    /// Occurs when temporisation limit is out.
+    /// </summary>
+    public event Action TempoQsy;
+
+    /// <summary>
+    /// Occurs when scanning.
+    /// </summary>
+    public event Action Scanning;
+
+    public event Action StopScanning;
+
+    /// <summary>
+    /// Occurs when scanning make a QSY.
+    /// </summary>
+    public event Action ScanningQsy;
 
     /// <summary>
     /// Gets or sets the current channel Id
@@ -167,7 +209,7 @@ namespace SvxlinkManager.Service
     /// <exception cref="Exception">Impossible de trouver le type de channel.</exception>
     public virtual void ActivateChannel(int channelid)
     {
-      var channel = repositories.Channels.Get(channelid);
+      var channel = repositories.Channels.Find(channelid);
 
       switch (channel)
       {
@@ -180,7 +222,8 @@ namespace SvxlinkManager.Service
           break;
 
         default:
-          throw new Exception("Impossible de trouver le type de channel.");
+          logger.LogError("Impossible de trouver le type de channel.");
+          break;
       }
     }
 
@@ -190,45 +233,60 @@ namespace SvxlinkManager.Service
     /// </summary>
     public virtual void ActivateSvxlinkChannel(SvxlinkChannel channel)
     {
-      logger.LogInformation("Restart salon.");
+      var url = new UriBuilder("http", channel.Host, channel.Port).Uri;
 
-      if (channel?.CallSign == "(CH) SVX4LINK H")
+      var dependencyTracker = new DependencyTelemetry
       {
-        ChannelId = 0;
-        Error?.Invoke("Attention", "Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.");
-        return;
-      }
+        Id = Guid.NewGuid().ToString(),
+        Name = "ActivateSvxlinkChannel",
+        Data = url.AbsolutePath,
+        Target = url.Authority,
+        Type = "http"
+      };
 
-      // Stop svxlink
-      StopSvxlink();
-      logger.LogInformation("Salon déconnecté");
+      using (var operation = telemetry.StartOperation(dependencyTracker))
+      {
+        logger.LogInformation("Restart salon.");
 
-      var radioProfile = repositories.RadioProfiles.GetCurrent();
+        if (channel?.CallSign == "(CH) SVX4LINK H")
+        {
+          telemetry.TrackTrace("Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.", SeverityLevel.Error, channel.TrackProperties);
 
-      // Remplacement de la config
-      CreateNewCurrentConfig();
+          ChannelId = 0;
+          Error?.Invoke("Attention", "Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.");
+          return;
+        }
 
-      var global = new Dictionary<string, string>
+        // Stop svxlink
+        StopSvxlink();
+        logger.LogInformation("Salon déconnecté");
+
+        var radioProfile = repositories.RadioProfiles.GetCurrent();
+
+        // Remplacement de la config
+        CreateNewCurrentConfig();
+
+        var global = new Dictionary<string, string>
       {
         { "LOGICS", "SimplexLogic,ReflectorLogic" }
       };
-      var simplexlogic = new Dictionary<string, string> {
+        var simplexlogic = new Dictionary<string, string> {
         { "MODULES", "ModuleHelp,ModuleMetarInfo,ModulePropagationMonitor"},
         { "CALLSIGN", channel.ReportCallSign},
         { "REPORT_CTCSS", radioProfile.RxTone}
       };
-      var rx = new Dictionary<string, string>
+        var rx = new Dictionary<string, string>
       {
         {"SQL_DET", radioProfile.SquelchDetection },
       };
-      var ReflectorLogic = new Dictionary<string, string>
+        var ReflectorLogic = new Dictionary<string, string>
       {
         {"CALLSIGN", channel.CallSign },
         {"HOST", channel.Host },
         {"AUTH_KEY",channel.AuthKey },
         {"PORT" ,channel.Port.ToString()}
       };
-      var parameters = new Dictionary<string, Dictionary<string, string>>
+        var parameters = new Dictionary<string, Dictionary<string, string>>
       {
         {"GLOBAL", global },
         {"SimplexLogic", simplexlogic },
@@ -236,14 +294,15 @@ namespace SvxlinkManager.Service
         {"ReflectorLogic" , ReflectorLogic}
       };
 
-      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);
-      logger.LogInformation("Remplacement du contenu svxlink.current");
+        ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);
+        logger.LogInformation("Remplacement du contenu svxlink.current");
 
-      ReplaceSoundFile(channel);
+        ReplaceSoundFile(channel);
 
-      // Lance svxlink
-      StartSvxLink(channel);
-      logger.LogInformation($"Le channel {channel.Name} est connecté.");
+        // Lance svxlink
+        StartSvxLink(channel);
+        logger.LogInformation($"Le channel {channel.Name} est connecté.");
+      }
     }
 
     /// <summary>Replaces the sound file for the channel</summary>
@@ -269,6 +328,8 @@ namespace SvxlinkManager.Service
     /// <param name="channel">The Echolink channel</param>
     public virtual void ActivateEcholink(EcholinkChannel channel)
     {
+      telemetry.TrackEvent("Start echolink", new Dictionary<string, string> { { "linkName", channel.Name } });
+
       logger.LogInformation("Restart link echolink.");
 
       // Stop svxlink
@@ -335,15 +396,47 @@ namespace SvxlinkManager.Service
     protected virtual void CheckTemporized(object s, ElapsedEventArgs e)
     {
       var diff = (DateTime.Now - lastTx).TotalSeconds;
+      var channel = repositories.Channels.Get(channelId);
 
-      logger.LogInformation($"Durée depuis le dernier passage en émission {diff} secondes.");
+      logger.LogDebug($"Durée depuis le dernier passage en émission {diff} secondes.");
 
-      TempChanged?.Invoke(diff);
+      var countdown = TimeSpan.FromSeconds(channel.TimerDelay - diff);
+      TempChanged?.Invoke(countdown.ToString(@"mm\:ss"));
 
-      if (diff > 180)
+      if (diff < channel.TimerDelay)
+        return;
+
+      TempoQsy?.Invoke();
+
+      logger.LogInformation("Delai d'inactivité dépassé. Retour au salon par défaut.");
+
+      var defaultChannel = repositories.Channels.GetDefault();
+
+      telemetry.TrackEvent("Temporized QSY", defaultChannel.TrackProperties);
+
+      ChannelId = defaultChannel.Id;
+    }
+
+    protected virtual void CheckScan(object sender, ElapsedEventArgs e)
+    {
+      var diff = (DateTime.Now - lastTx).TotalSeconds;
+      var scanProfile = repositories.ScanProfiles.Get(1);
+
+      if (diff < scanProfile.ScanDelay)
       {
-        logger.LogInformation("Delai d'inactivité dépassé. Retour au salon par défaut.");
-        ChannelId = repositories.Channels.GetDefault().Id;
+        logger.LogInformation($"Le scan delay de {scanProfile.ScanDelay} n'a pas encore été atteint.");
+        return;
+      }
+
+      Scanning?.Invoke();
+
+      var activeChannel = scanService.GetActiveChannel(scanProfile);
+      if (activeChannel != null && activeChannel.Id != channelId)
+      {
+        ScanningQsy?.Invoke();
+
+        telemetry.TrackEvent("Scan QSY", activeChannel.TrackProperties);
+        ChannelId = activeChannel.Id;
       }
     }
 
@@ -352,6 +445,8 @@ namespace SvxlinkManager.Service
     /// </summary>
     public virtual void Parrot()
     {
+      telemetry.TrackEvent("Start parrot");
+
       // Stop svxlink
       StopSvxlink();
       logger.LogInformation("Salon déconnecté");
@@ -379,7 +474,7 @@ namespace SvxlinkManager.Service
       ReplaceSoundFile();
 
       // Lance svxlink
-      StartSvxLink();
+      StartSvxLink(new SvxlinkChannel { Name = "Parrot" });
 
       System.Threading.Thread.Sleep(1000);
 
@@ -407,13 +502,6 @@ namespace SvxlinkManager.Service
         Nodes.Clear();
         s.Split(':')[2].Split(',').ToList().ForEach(n => Nodes.Add(new Node { Name = n }));
         Connected?.Invoke(channel);
-        return;
-      }
-
-      if (s.Contains("SIGTERM"))
-      {
-        Nodes.Clear();
-        Disconnected?.Invoke();
         return;
       }
 
@@ -451,12 +539,14 @@ namespace SvxlinkManager.Service
 
       if (s.Contains("Access denied"))
       {
+        telemetry.TrackTrace($"Impossible de se connecter au salon {channel.Name}. <br/> Accès refusé.", SeverityLevel.Error, channel.TrackProperties);
         Error?.Invoke("Echec de la connexion.", $"Impossible de se connecter au salon {channel.Name}. <br/> Accès refusé.");
         return;
       }
 
       if (s.Contains("Host not found"))
       {
+        telemetry.TrackTrace($"Impossible de se connecter au salon {channel.Name}. <br/> Server {channel.Host} introuvable.", SeverityLevel.Error, channel.TrackProperties);
         Error?.Invoke("Echec de la connexion.", $"Impossible de se connecter au salon {channel.Name}. <br/> Server {channel.Host} introuvable.");
         return;
       }
@@ -515,6 +605,8 @@ namespace SvxlinkManager.Service
 
       watcher.Changed += (s, e) =>
       {
+        telemetry.TrackEvent("DTMF change");
+
         logger.LogInformation("Changement de dtmf détécté.");
         var dtmf = File.ReadAllText(dtmfFilePath);
         logger.LogInformation($"Nouveau dtmf {dtmf}");
@@ -522,7 +614,7 @@ namespace SvxlinkManager.Service
         var dtmfChannel = repositories.Channels.FindBy(c => c.Dtmf == Int32.Parse(dtmf));
         if (dtmfChannel == null)
         {
-          logger.LogInformation($"Le dtmf {dtmf} ne correspond à aucun channel.");
+          logger.LogWarning("Le dtmf {dtmf} ne correspond à aucun channel.", dtmf);
           return;
         }
 
@@ -535,19 +627,61 @@ namespace SvxlinkManager.Service
     /// <summary>
     /// Set the temporized timer for current channel
     /// </summary>
-    protected virtual void SetTimer()
+    protected virtual void StartTemporization(Node node = null)
     {
-      timer = new Timer(1000);
-      timer.Start();
+      telemetry.TrackEvent("Start temporization", new Dictionary<string, string> { { "node", node?.Name } });
 
-      timer.Elapsed += CheckTemporized;
+      logger.LogInformation($"La temporisation a été enclenchée par {node?.Name}.");
+
+      lastTx = DateTime.Now;
+      tempoTimer.Enabled = true;
+
+      StartTempo?.Invoke();
+    }
+
+    protected virtual void StopTemporization(Node node = null)
+    {
+      telemetry.TrackEvent("Stop temporization", new Dictionary<string, string> { { "node", node?.Name } });
+
+      logger.LogInformation($"La temporisation a été stoppée par {node?.Name}.");
+
+      lastTx = DateTime.Now;
+      tempoTimer.Enabled = false;
+
+      StopTempo?.Invoke();
+    }
+
+    protected virtual void StartScan(Node node = null)
+    {
+      telemetry.TrackEvent("Start scan", new Dictionary<string, string> { { "node", node?.Name } });
+
+      logger.LogDebug("Le scan a été enclenchée par {nodeName}.", node?.Name);
+
+      lastTx = DateTime.Now;
+      scanTimer.Enabled = true;
+    }
+
+    protected virtual void StopScan(Node node = null)
+    {
+      telemetry.TrackEvent("Stop scan", new Dictionary<string, string> { { "node", node?.Name } });
+
+      logger.LogInformation($"Le scan a été stoppée par {node?.Name}.");
+
+      lastTx = DateTime.Now;
+      scanTimer.Enabled = false;
+
+      StopScanning?.Invoke();
     }
 
     /// <summary>
     /// Starts the SVXlink application with svxlink.current configuration
     /// </summary>
-    public virtual void StartSvxLink(Channel channel = null)
+    public virtual void StartSvxLink(Channel channel)
     {
+      telemetry.TrackEvent("Channel Connection", channel.TrackProperties);
+
+      logger.LogInformation("Connection au channel {ChannelName}.", channel.Name);
+
       var cmd = $"svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config={applicationPath}/SvxlinkConfig/svxlink.current";
 
       var escapedArgs = cmd.Replace("\"", "\\\"");
@@ -582,12 +716,23 @@ namespace SvxlinkManager.Service
       shell.BeginErrorReadLine();
       shell.BeginOutputReadLine();
 
-      if (channel != null && channel.IsTemporized)
-        SetTimer();
+      var scanProfil = repositories.ScanProfiles.Get(1);
+
+      if (channel.IsTemporized)
+      {
+        StartTemporization();
+        NodeTx += StopTemporization;
+        NodeRx += StartTemporization;
+      }
+
+      if (scanProfil.Enable)
+      {
+        StartScan();
+        NodeTx += StopScan;
+        NodeRx += StartScan;
+      }
 
       SetDtmfWatcher();
-
-      Status = "Connecté";
     }
 
     /// <summary>
@@ -597,7 +742,14 @@ namespace SvxlinkManager.Service
     {
       logger.LogInformation("Kill de svxlink.");
 
-      timer?.Stop();
+      StopTemporization();
+      NodeTx -= StopTemporization;
+      NodeRx -= StartTemporization;
+
+      StopScan();
+      NodeTx -= StopScan;
+      NodeRx -= StartScan;
+
       watcher?.Dispose();
 
       var pid = ExecuteCommand("pgrep -x svxlink");
@@ -605,7 +757,9 @@ namespace SvxlinkManager.Service
         ExecuteCommand("pkill -TERM svxlink");
 
       shell?.Dispose();
-      Status = "Déconnecté";
+
+      Nodes.Clear();
+      Disconnected?.Invoke();
     }
   }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Components;
 
 using SvxlinkManager.Models;
 using SvxlinkManager.Service;
@@ -39,6 +40,21 @@ namespace SvxlinkManager.Pages.Channels
 
     protected override void OnInitialized()
     {
+      switch (Channel)
+      {
+        case SvxlinkChannel channel:
+          Telemetry.TrackPageView(new PageViewTelemetry("Svxlink Channel Edit Page") { Url = new Uri("/Channel/Edit", UriKind.Relative) });
+          break;
+
+        case EcholinkChannel channel:
+          Telemetry.TrackPageView(new PageViewTelemetry("Echolink Channel Edit Page") { Url = new Uri("/Echolink/Edit", UriKind.Relative) });
+          break;
+
+        default:
+          Telemetry.TrackPageView("Channel Edit Page");
+          break;
+      }
+
       Channel = Repositories.Repository<TChannel>().Get(int.Parse(Id));
     }
   }

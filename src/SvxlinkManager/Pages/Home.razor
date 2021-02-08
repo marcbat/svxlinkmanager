@@ -3,7 +3,24 @@
 
 @inherits SvxlinkManager.Pages.HomeBase
 
-<h3>Salons <small>(@Subtitle)</small></h3> 
+<div class="d-inline-block">
+  <h3>
+    Salons
+  </h3>
+</div>
+@if (TemporizationIsActive)
+{
+  <div class="d-inline-block" style="margin-left:5px;">
+    <span class="badge badge-info">@TemporizationValue</span>
+  </div>
+}
+
+@if (Scanning)
+{
+  <div class="blink d-inline-block" style="margin-left:5px;">
+    <span class="badge badge-danger">Scan</span>
+  </div>
+}
 
 <div class="row">
   <div class="col-5">
@@ -17,12 +34,13 @@
         }
       </select>
     </div>
-    <div class="d-inline-block">
-      @if (CurrentTxNode != null)
-      {<Node CurrentNode="@CurrentTxNode" />}
-    </div>
+    @if (CurrentTxNode != null)
+    {
+      <div class="d-inline-block">
+        <Node CurrentNode="@CurrentTxNode" />
+      </div>
+    }
   </div>
-
 </div>
 
 <div class="row node-list">
@@ -47,4 +65,3 @@
   }
 
 }
-

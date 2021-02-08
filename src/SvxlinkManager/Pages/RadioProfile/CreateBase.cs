@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Components;
 
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace SvxlinkManager.Pages.RadioProfile
   {
     protected override void OnInitialized()
     {
+      Telemetry.TrackPageView(new PageViewTelemetry("Radio Profile Create Page") { Url = new Uri("/RadioProfile/Create", UriKind.Relative) });
+
       RadioProfile = new Models.RadioProfile();
     }
 
@@ -19,6 +22,8 @@ namespace SvxlinkManager.Pages.RadioProfile
     protected override async Task HandleValidSubmitAsync()
     {
       Repositories.RadioProfiles.Add(RadioProfile);
+
+      Telemetry.TrackEvent("Create radio profile", RadioProfile.TrackProperties);
 
       await ShowSuccessToastAsync("Crée", $"Le profil radio {RadioProfile.Name} a bien été crée.");
 
