@@ -1,34 +1,34 @@
 ﻿@inherits SvxlinkManager.Pages.Wifi.ManageBase
 
-<EditForm Model="@Device">
-  <DataAnnotationsValidator />
+  <EditForm Model="@Device">
+    <DataAnnotationsValidator />
 
-  <li class="list-group-item">
-    <div class="row">
-      <div class="col-xl-2 text-nowrap">
-        @Device.Ssid
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-xl-2 text-nowrap">
+          @Device.Ssid
+        </div>
+        <div class="col-xl-2 text-nowrap">
+          @Device.Rate
+        </div>
+        <div class="col-xl-2 text-nowrap">
+          <BarTabs Bars="@Device.Bars" />
+        </div>
+        <div class="col-xl-2 text-nowrap">
+          @Device.Security
+        </div>
+        <div class="col-xl-2 text-nowrap">
+          <InputText @bind-Value="@Device.Password" type="password" class="form-control" />
+        </div>
+        <div class="col-xl-2">
+          <button type="button" class="btn btn-outline-primary" @onclick="(()=> Connect(Device))">Connecter</button>
+        </div>
       </div>
-      <div class="col-xl-2 text-nowrap">
-        @Device.Rate
-      </div>
-      <div class="col-xl-2 text-nowrap">
-        <BarTabs Bars="@Device.Bars" />
-      </div>
-      <div class="col-xl-2 text-nowrap">
-        @Device.Security
-      </div>
-      <div class="col-xl-2 text-nowrap">
-        <InputText @bind-Value="@Device.Password" type="password" class="form-control" />
-      </div>
-      <div class="col-xl-2">
-        <button type="button" class="btn btn-outline-primary" @onclick="(()=> Connect(Device))">Connecter</button>
-      </div>
-    </div>
-  </li>
-</EditForm>
+    </li>
+  </EditForm>
 
-@code {
-  [Parameter]
-  public Device Device { get; set; }
+  @code {
+    [Parameter]
+    public Device Device { get; set; }
 
-}
+  }

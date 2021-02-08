@@ -238,7 +238,7 @@ namespace SvxlinkManager.Service.Tests
       // arrange
       var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories, scanService, telemetry);
       service.When(x => x.StopSvxlink()).DoNotCallBase();
-      var channel = new SvxlinkChannel { CallSign = "(CH) SVX4LINK H" };
+      var channel = new SvxlinkChannel { CallSign = "(CH) SVX4LINK H", Host = "google.fr", Port = 80 };
 
       // act
       service.ActivateSvxlinkChannel(channel);
@@ -258,7 +258,7 @@ namespace SvxlinkManager.Service.Tests
       var service = Substitute.ForPartsOf<TestableSvxlinkService>(logger, repositories, scanService, telemetry);
       service.When(x => x.StopSvxlink()).DoNotCallBase();
       service.When(x => x.StartSvxLink(Arg.Any<SvxlinkChannel>())).DoNotCallBase();
-      var channel = new SvxlinkChannel { CallSign = "(CH) HB9GXP H" };
+      var channel = new SvxlinkChannel { CallSign = "(CH) HB9GXP H", Host = "google.fr", Port = 80 };
 
       Predicate<Dictionary<string, Dictionary<string, string>>> isParametersOk = x =>
       {
