@@ -1,4 +1,5 @@
 ﻿using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Models;
@@ -36,13 +37,20 @@ namespace SvxlinkManager.Service
     /// <param name="radioProfile">Selected radio profile</param>
     public void WriteRadioProfile(RadioProfile radioProfile)
     {
-      telemetry.TrackEvent("Write radio profile", radioProfile.TrackProperties);
+      try
+      {
+        telemetry.TrackEvent("Write radio profile", radioProfile.TrackProperties);
 
-      logger.LogInformation($"Application du profil {radioProfile.Name}.");
+        logger.LogInformation($"Application du profil {radioProfile.Name}.");
 
-      WriteModule($"AT+DMOSETGROUP={mode},{radioProfile.RxFequ}0,{radioProfile.TxFrequ}0,{radioProfile.RxCtcss},{radioProfile.Squelch},{radioProfile.TxCtcss}\r\n");
-      WriteModule($"AT+DMOSETVOLUME={radioProfile.Volume}\r\n");
-      WriteModule($"AT+SETFILTER={radioProfile.PreEmph},{radioProfile.HightPass},{radioProfile.LowPass}\r\n");
+        WriteModule($"AT+DMOSETGROUP={mode},{radioProfile.RxFequ}0,{radioProfile.TxFrequ}0,{radioProfile.RxCtcss},{radioProfile.Squelch},{radioProfile.TxCtcss}\r\n");
+        WriteModule($"AT+DMOSETVOLUME={radioProfile.Volume}\r\n");
+        WriteModule($"AT+SETFILTER={radioProfile.PreEmph},{radioProfile.HightPass},{radioProfile.LowPass}\r\n");
+      }
+      catch (Exception e)
+      {
+        telemetry.TrackException(e, radioProfile.TrackProperties);
+      }
     }
 
     /// <summary>
@@ -75,7 +83,8 @@ namespace SvxlinkManager.Service
     {
       string data = ((SerialPort)sender).ReadLine();
 
-      logger.LogInformation($"Eéponse de SA818: {data}.");
+      telemetry.TrackTrace("Réponse de SA818", SeverityLevel.Information, new Dictionary<string, string> { { "response", data } });
+      logger.LogInformation($"Réponse de SA818: {data}.");
     }
 
     /// <summary>
@@ -89,6 +98,8 @@ namespace SvxlinkManager.Service
         serial.DataReceived += Serial_DataReceived;
 
         serial.Open();
+
+        telemetry.TrackTrace("Envoi du message au SA818", SeverityLevel.Information, new Dictionary<string, string> { { "message", message } });
 
         logger.LogInformation($"Envoi du message : {message}");
 

@@ -24,6 +24,7 @@ using SvxlinkManager.Telemetry;
 using Microsoft.ApplicationInsights;
 using DeviceId;
 using System.Reflection;
+using Microsoft.ApplicationInsights.SnapshotCollector;
 
 namespace SvxlinkManager
 {
@@ -68,6 +69,7 @@ namespace SvxlinkManager
       services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
       //services.AddSingleton<ITelemetryInitializer, SvxlinkManagerTelemetry>();
       services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
+      services.AddSnapshotCollector((configuration) => Configuration.Bind(nameof(SnapshotCollectorConfiguration), configuration));
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

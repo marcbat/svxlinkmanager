@@ -156,6 +156,7 @@ namespace SvxlinkManager.Service
         }
         catch (Exception e)
         {
+          telemetry.TrackException(e, new Dictionary<string, string> { { "ChannelId", value.ToString() } });
           Error?.Invoke("Impossible de changer de salon.", e.Message);
         }
       }
@@ -222,8 +223,7 @@ namespace SvxlinkManager.Service
           break;
 
         default:
-          logger.LogError("Impossible de trouver le type de channel.");
-          break;
+          throw new Exception($"Impossible de trouver le type de channel. {channel.GetType()} ");
       }
     }
 
