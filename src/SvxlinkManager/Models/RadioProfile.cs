@@ -35,10 +35,16 @@ namespace SvxlinkManager.Models
     [Required]
     public string Squelch { get; set; } = "2";
 
+    /// <summary>CTCSS au format SA818</summary>
+    /// <value>The rx tone.</value>
     [Required]
+    // CTCSS au format SA818
     public string TxCtcss { get; set; } = "0000";
 
+    /// <summary>CTCSS au format SA818</summary>
+    /// <value>The rx tone.</value>
     [Required]
+    // CTCSS au format SA818
     public string RxCtcss { get; set; } = "0000";
 
     [Required]
@@ -58,9 +64,13 @@ namespace SvxlinkManager.Models
 
     public bool HasSa818 { get; set; }
 
+    /// <summary>CTCSS au format classique</summary>
+    /// <value>The rx tone.</value>
     [NotMapped]
     public string TxTone { get => Ctcss.Single(c => c.Key == TxCtcss).Value; }
 
+    /// <summary>CTCSS au format classique</summary>
+    /// <value>The rx tone.</value>
     [NotMapped]
     public string RxTone { get => Ctcss.Single(c => c.Key == RxCtcss).Value; }
 
