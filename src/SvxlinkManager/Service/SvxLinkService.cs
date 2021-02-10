@@ -278,6 +278,11 @@ namespace SvxlinkManager.Service
         var rx = new Dictionary<string, string>
       {
         {"SQL_DET", radioProfile.SquelchDetection },
+        {"CTCSS_FQ", radioProfile.RxTone }
+      };
+        var tx = new Dictionary<string, string>
+      {
+        {"CTCSS_FQ", radioProfile.TxTone }
       };
         var ReflectorLogic = new Dictionary<string, string>
       {
@@ -291,6 +296,7 @@ namespace SvxlinkManager.Service
         {"GLOBAL", global },
         {"SimplexLogic", simplexlogic },
         {"Rx1", rx},
+        { "Tx1", tx },
         {"ReflectorLogic" , ReflectorLogic}
       };
 
