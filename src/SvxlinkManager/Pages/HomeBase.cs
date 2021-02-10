@@ -72,6 +72,7 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible de mettre à jour la valeur TemporizationIsActive. {e.Message}");
+        Telemetry.TrackException(e);
       }
     }
 
@@ -86,6 +87,7 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible de mettre à jour la valeur TemporizationIsActive. {e.Message}");
+        Telemetry.TrackException(e);
       }
     }
 
@@ -98,6 +100,7 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible de mettre à jour d'afficher le toast. {e.Message}");
+        Telemetry.TrackException(e);
       }
     }
 
@@ -110,6 +113,7 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible de mettre à jour d'afficher le toast. {e.Message}");
+        Telemetry.TrackException(e);
       }
     }
 
@@ -129,6 +133,7 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible de mettre à jour la valeur du scannning. {e.Message}");
+        Telemetry.TrackException(e);
       }
     }
 
@@ -148,6 +153,7 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible de mettre à jour la valeur du scannning. {e.Message}");
+        Telemetry.TrackException(e);
       }
     }
 
@@ -164,6 +170,7 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible de mettre à jour la valeur du timer status. {e.Message}");
+        Telemetry.TrackException(e);
       }
     }
 
@@ -180,6 +187,7 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible de mettre à jour d'afficher le toast. {e.Message}");
+        Telemetry.TrackException(e);
       }
     }
 
@@ -193,6 +201,7 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible de repasser le node en RX. {e.Message}");
+        Telemetry.TrackException(e);
       }
     }
 
@@ -206,6 +215,7 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible de passer le node en TX. {e.Message}");
+        Telemetry.TrackException(e);
       }
     }
 
@@ -219,6 +229,7 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible d'indiquer qu'un noeus a quitté le salon. {e.Message}");
+        Telemetry.TrackException(e);
       }
     }
 
@@ -232,6 +243,7 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible d'indiquer qu'un noeud a rejoint le salon. {e.Message}");
+        Telemetry.TrackException(e);
       }
     }
 
@@ -246,6 +258,7 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible d'indiquer l'état déconnecté. {e.Message}");
+        Telemetry.TrackException(e);
       }
     }
 
@@ -262,6 +275,7 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible de mettre à jour d'afficher le toast. {e.Message}");
+        Telemetry.TrackException(e);
       }
     }
 

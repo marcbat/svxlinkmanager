@@ -1,6 +1,7 @@
 ﻿using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Logging;
 
+using SvxlinkManager.Exceptions;
 using SvxlinkManager.Pages.Wifi;
 
 using System;
@@ -47,6 +48,7 @@ namespace SvxlinkManager.Service
 
       if (!string.IsNullOrEmpty(error))
       {
+        telemetry.TrackException(new WifiException(error));
         logger.LogError(error);
         return;
       }
@@ -64,6 +66,7 @@ namespace SvxlinkManager.Service
 
       if (!string.IsNullOrEmpty(error))
       {
+        telemetry.TrackException(new WifiException(error));
         logger.LogError(error);
         return;
       }
@@ -81,6 +84,7 @@ namespace SvxlinkManager.Service
 
       if (!string.IsNullOrEmpty(error))
       {
+        telemetry.TrackException(new WifiException(error));
         logger.LogError(error);
         return;
       }
@@ -98,6 +102,7 @@ namespace SvxlinkManager.Service
 
       if (!string.IsNullOrEmpty(error))
       {
+        telemetry.TrackException(new WifiException(error));
         logger.LogError(error);
         return;
       }
@@ -111,22 +116,29 @@ namespace SvxlinkManager.Service
     {
       var devices = new List<Device>();
 
-      var (result, error) = ExecuteCommand("nmcli device wifi");
-
-      if (!string.IsNullOrEmpty(error))
+      try
       {
-        logger.LogError(error);
-        return devices;
+        var (result, error) = ExecuteCommand("nmcli device wifi");
+
+        if (!string.IsNullOrEmpty(error))
+        {
+          logger.LogError(error);
+          throw new Exception(error);
+        }
+
+        devices = ParseDeviceConsoleOutput(result);
+
+        logger.LogInformation($"{devices.Count} devices trouvées.");
+
+        var connections = GetConnections();
+
+        foreach (var device in devices)
+          device.Connection = connections.FirstOrDefault(c => c.Name == device.Ssid);
       }
-
-      devices = ParseDeviceConsoleOutput(result);
-
-      logger.LogInformation($"{devices.Count} devices trouvées.");
-
-      var connections = GetConnections();
-
-      foreach (var device in devices)
-        device.Connection = connections.FirstOrDefault(c => c.Name == device.Ssid);
+      catch (Exception e)
+      {
+        telemetry.TrackException(new WifiException("Echec de la liste des devices", e));
+      }
 
       return devices;
     }

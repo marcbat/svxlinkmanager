@@ -52,6 +52,7 @@ namespace SvxlinkManager.Pages.Updater
       catch (Exception e)
       {
         Logger.LogError("Impossible de charger la liste des releases.", e);
+        Telemetry.TrackException(e);
       }
     }
 
