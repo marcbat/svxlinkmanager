@@ -1,4 +1,6 @@
-﻿using SvxlinkManager.Data;
+﻿using Microsoft.EntityFrameworkCore;
+
+using SvxlinkManager.Data;
 using SvxlinkManager.Models;
 
 using System;
@@ -11,11 +13,13 @@ namespace SvxlinkManager.Repositories
   public interface IChannelRepository : IRepository<Channel>
   {
     Channel GetDefault();
+
+    Channel GetWithSound(int id);
   }
 
   public class ChannelRepository : Repository<Channel>, IChannelRepository
   {
-    public ChannelRepository(IDbContextFactory<ApplicationDbContext> contextFactory) : base(contextFactory)
+    public ChannelRepository(Data.IDbContextFactory<ApplicationDbContext> contextFactory) : base(contextFactory)
     {
     }
 
@@ -82,6 +86,12 @@ namespace SvxlinkManager.Repositories
       Update(first);
 
       return first;
+    }
+
+    public Channel GetWithSound(int id)
+    {
+      using var dbcontext = contextFactory.CreateDbContext();
+      return dbcontext.Channels.Include(c => c.Sound).Single(e => e.Id == id);
     }
   }
 }
