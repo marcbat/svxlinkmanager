@@ -51,7 +51,10 @@ namespace SvxlinkManager.Pages.Channels
 
       base.OnInitialized();
 
-      Channel = new TChannel();
+      Channel = new TChannel
+      {
+        Sound = new Sound()
+      };
     }
   }
 }
