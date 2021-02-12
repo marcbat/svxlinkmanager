@@ -210,7 +210,7 @@ namespace SvxlinkManager.Service
     /// <exception cref="Exception">Impossible de trouver le type de channel.</exception>
     public virtual void ActivateChannel(int channelid)
     {
-      var channel = repositories.Channels.Find(channelid);
+      var channel = repositories.Channels.GetWithSound(channelid);
 
       switch (channel)
       {
@@ -326,8 +326,11 @@ namespace SvxlinkManager.Service
       if (!Directory.Exists("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager"))
         Directory.CreateDirectory("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager");
 
-      if (!string.IsNullOrEmpty(channel.SoundName))
-        File.Copy($"{applicationPath}/Sounds/{channel.SoundName}", "/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav", true);
+      if (!string.IsNullOrEmpty(channel.Sound.SoundName))
+      {
+        File.Delete("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav");
+        File.WriteAllBytes("/usr/share/svxlink/sounds/fr_FR/svxlinkmanager/Name.wav", channel.Sound.SoundFile);
+      }
     }
 
     /// <summary>Activates an Echolink channel</summary>

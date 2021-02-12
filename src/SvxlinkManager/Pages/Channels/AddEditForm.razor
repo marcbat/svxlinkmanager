@@ -117,16 +117,16 @@
 
   private void OnInputFileChange(InputFileChangeEventArgs eventArgs)
   {
-    Channel.Sound = eventArgs.File;
+    Channel.SoundBrowserFile = eventArgs.File;
   }
 
   public string CurrentSoundName
   {
     get
     {
-      if (!string.IsNullOrEmpty(Channel.SoundName))
+      if (!string.IsNullOrEmpty(Channel.Sound.SoundName))
       {
-        return $"({Channel.SoundName})";
+        return $"({Channel.Sound.SoundName})";
       }
       else
         return string.Empty;
