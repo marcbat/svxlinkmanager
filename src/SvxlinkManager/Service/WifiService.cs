@@ -118,7 +118,7 @@ namespace SvxlinkManager.Service
 
       try
       {
-        var (result, error) = ExecuteCommand("nmcli device wifi");
+        var (result, error) = ExecuteCommand("nmcli -f IN-USE,SSID,MODE,CHAN,RATE,SIGNAL,BARS,SECURITY device wifi");
 
         if (!string.IsNullOrEmpty(error))
         {
