@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
+using SvxlinkManager.Common.Models;
 using SvxlinkManager.Data;
 using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Shared;
@@ -262,7 +263,7 @@ namespace SvxlinkManager.Pages
       }
     }
 
-    private async void SvxLinkService_ConnectedAsync(Channel c)
+    private async void SvxLinkService_ConnectedAsync(ChannelBase c)
     {
       try
       {
