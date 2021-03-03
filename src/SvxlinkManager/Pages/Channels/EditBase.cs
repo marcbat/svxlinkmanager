@@ -30,6 +30,9 @@ namespace SvxlinkManager.Pages.Channels
 
       Repositories.Channels.Update(Channel);
 
+      if (Channel.Sound != null)
+        Repositories.Repository<Sound>().Update(Channel.Sound);
+
       if (SvxLinkService.ChannelId == Channel.Id)
         SvxLinkService.ActivateChannel(Channel.Id);
 
