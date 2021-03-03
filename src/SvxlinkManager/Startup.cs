@@ -127,6 +127,7 @@ namespace SvxlinkManager
         Directory.CreateDirectory("/usr/share/svxlink/events.d/local");
 
       File.Copy($"{Directory.GetCurrentDirectory()}/SvxlinkConfig/Logic.tcl", "/usr/share/svxlink/events.d/local/Logic.tcl", true);
+      File.Copy($"{Directory.GetCurrentDirectory()}/SvxlinkConfig/Locale.tcl", "/usr/share/svxlink/events.d/local/Locale.tcl", true);
     }
   }
 }
