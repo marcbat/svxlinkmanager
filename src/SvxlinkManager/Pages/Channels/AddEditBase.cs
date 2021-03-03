@@ -51,8 +51,6 @@ namespace SvxlinkManager.Pages.Channels
       }
 
       Channel.Sound.SoundName = Channel.SoundBrowserFile.Name;
-
-      Repositories.Repository<Sound>().Update(Channel.Sound);
     }
 
     protected override void OnInitialized()
