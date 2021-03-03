@@ -56,7 +56,7 @@
           </div>
         </div>
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-md-3">
         <div class="form-check form-check-inline">
           <div class="pretty p-default p-curve p-bigger">
             <InputCheckbox @bind-Value="IsTemporized" type="checkbox" id="inputIsTemporized" />
@@ -117,16 +117,16 @@
 
   private void OnInputFileChange(InputFileChangeEventArgs eventArgs)
   {
-    Channel.Sound = eventArgs.File;
+    Channel.SoundBrowserFile = eventArgs.File;
   }
 
   public string CurrentSoundName
   {
     get
     {
-      if (!string.IsNullOrEmpty(Channel.SoundName))
+      if (!string.IsNullOrEmpty(Channel.Sound.SoundName))
       {
-        return $"({Channel.SoundName})";
+        return $"({Channel.Sound.SoundName})";
       }
       else
         return string.Empty;

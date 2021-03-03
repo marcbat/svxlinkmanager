@@ -32,34 +32,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Sounds\Sbav.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Sounds\Sexp.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Sounds\Sfon.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Sounds\Sint.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Sounds\Sloc.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Sounds\Sreg.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Sounds\Srrf.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Sounds\Ssat.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Sounds\Stec.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="SvxlinkConfig\dtmf.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SvxlinkConfig\Locale.tcl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SvxlinkConfig\Logic.tcl">
@@ -69,9 +45,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SvxlinkConfig\svxlink-prod.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SvxlinkConfig\svxlink.comment.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SvxlinkConfig\svxlink.d\ModuleDtmfRepeater.conf">

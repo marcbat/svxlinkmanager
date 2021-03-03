@@ -46,9 +46,9 @@ namespace SvxlinkManager.Models
 
     [NotMapped]
     [FileValidation(new[] { ".wav" })]
-    public IBrowserFile Sound { get; set; }
+    public IBrowserFile SoundBrowserFile { get; set; }
 
-    public string SoundName { get; set; }
+    public Sound Sound { get; set; }
 
     private class FileValidationAttribute : ValidationAttribute
     {

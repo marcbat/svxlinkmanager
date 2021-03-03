@@ -39,19 +39,20 @@ namespace SvxlinkManager.Pages.Channels
     /// </summary>
     protected virtual async Task HandleValidSubmit()
     {
-      if (Channel.Sound == null)
+      if (Channel.SoundBrowserFile == null)
         return;
 
-      using var file = File.OpenWrite(Path.Combine(Directory.GetCurrentDirectory(), "Sounds", Channel.Sound.Name));
-      using var stream = Channel.Sound.OpenReadStream();
+      using var stream = Channel.SoundBrowserFile.OpenReadStream();
 
-      var buffer = new byte[4 * 1096];
-      int bytesRead;
+      using (var memoryStream = new MemoryStream())
+      {
+        await stream.CopyToAsync(memoryStream);
+        Channel.Sound.SoundFile = memoryStream.ToArray();
+      }
 
-      while ((bytesRead = await stream.ReadAsync(buffer)) != 0)
-        await file.WriteAsync(buffer);
+      Channel.Sound.SoundName = Channel.SoundBrowserFile.Name;
 
-      Channel.SoundName = Channel.Sound.Name;
+      Repositories.Repository<Sound>().Update(Channel.Sound);
     }
 
     protected override void OnInitialized()

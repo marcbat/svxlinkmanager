@@ -25,7 +25,6 @@ namespace SvxlinkManager.Models
       {nameof(IsTemporized), IsTemporized.ToString()},
       {nameof(TimerDelay), TimerDelay.ToString()},
       {nameof(Dtmf), Dtmf.ToString() },
-      {nameof(SoundName), SoundName },
       {nameof(ReportCallSign),ReportCallSign },
     };
   }

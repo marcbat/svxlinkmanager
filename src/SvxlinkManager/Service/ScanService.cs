@@ -47,6 +47,7 @@ namespace SvxlinkManager.Service
         catch (Exception e)
         {
           logger.LogError($"Erreur lors du scan du channel {channel.Name}.", e);
+          telemetry.TrackException(e, new Dictionary<string, string> { { "ChannelName", channel.Name } });
         }
       }
 

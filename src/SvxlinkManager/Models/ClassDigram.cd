@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="SvxlinkManager.Models.Channel">
-    <Position X="10.5" Y="1.25" Width="1.5" />
+    <Position X="7.25" Y="1.25" Width="1.75" />
     <NestedTypes>
       <Class Name="SvxlinkManager.Models.Channel.FileValidationAttribute" Collapsed="true">
         <TypeIdentifier>
@@ -10,20 +10,23 @@
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAACARABAAAAAAAAAAAAAAQAAAAACAAABAQAAAAAAAA=</HashCode>
+      <HashCode>AAACARABAAoAAAAAhQAAAAQAAAAACAAAFAQAAAAAAAA=</HashCode>
       <FileName>Models\Channel.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="ScanProfiles" />
+    </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="SvxlinkManager.Models.EcholinkChannel">
-    <Position X="11.5" Y="5" Width="1.5" />
+    <Position X="8.5" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAgAAAAAAIAAAAAEAAAAAAiAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAgAAAAAQIAAAAAEAAAAAAiAAAAAAAAAAA=</HashCode>
       <FileName>Models\EcholinkChannel.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Models.Node" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="14" Y="1.25" Width="1.5" />
+    <Position X="12.75" Y="1.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAIAAAACAAAAAgAAAAAQAgAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Node.cs</FileName>
@@ -31,15 +34,15 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="SvxlinkManager.Models.RadioProfile" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="15.75" Y="1.25" Width="1.5" />
+    <Position X="14.5" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACgABAgABAAAAIAAAACCQghAAAABCEAAIAAAAAACA=</HashCode>
+      <HashCode>AAACgABAgABAAAAIIQAACCUghAAAABCEAAIAAAAAACA=</HashCode>
       <FileName>Models\RadioProfile.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="SvxlinkManager.Models.Rule" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="14" Y="2.25" Width="1.5" />
+    <Position X="12.75" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAgIAACAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Rule.cs</FileName>
@@ -47,14 +50,36 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="SvxlinkManager.Models.SvxlinkChannel">
-    <Position X="9.25" Y="5" Width="1.5" />
+    <Position X="6.25" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAEAAAAAAABAAAIAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAEAAAAAAABAAAAQAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\SvxlinkChannel.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="SvxlinkManager.Models.ScanProfile">
+    <Position X="10.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAACAAAAAAAQAACAQAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Models\ScanProfile.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Channels" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SvxlinkManager.Models.Sound" BaseTypeListCollapsed="true">
+    <Position X="4.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAhAAAAAAAAAAAAAAAAAAAAAAAIAAQAAAAAAAA=</HashCode>
+      <FileName>Models\Sound.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Channel" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
   <Interface Name="SvxlinkManager.Models.IModelEntity" Collapsed="true">
-    <Position X="14" Y="3.5" Width="1.5" />
+    <Position X="12.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\IModelEntity.cs</FileName>

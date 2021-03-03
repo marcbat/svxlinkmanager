@@ -55,7 +55,7 @@ namespace SvxlinkManager.Pages.Channels
           break;
       }
 
-      Channel = Repositories.Repository<TChannel>().Get(int.Parse(Id));
+      Channel = (TChannel)Repositories.Channels.GetWithSound(int.Parse(Id));
     }
   }
 }
