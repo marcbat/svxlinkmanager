@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
+using SvxlinkManager.Common.Models;
 using SvxlinkManager.Data;
 using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Shared;
@@ -191,7 +192,7 @@ namespace SvxlinkManager.Pages
       }
     }
 
-    private void SvxLinkService_NodeRx(Models.Node n)
+    private void SvxLinkService_NodeRx(Common.Models.Node n)
     {
       try
       {
@@ -205,7 +206,7 @@ namespace SvxlinkManager.Pages
       }
     }
 
-    private void SvxLinkService_NodeTx(Models.Node n)
+    private void SvxLinkService_NodeTx(Common.Models.Node n)
     {
       try
       {
@@ -219,7 +220,7 @@ namespace SvxlinkManager.Pages
       }
     }
 
-    private async void SvxLinkService_NodeDisconnected(Models.Node n)
+    private async void SvxLinkService_NodeDisconnected(Common.Models.Node n)
     {
       try
       {
@@ -233,7 +234,7 @@ namespace SvxlinkManager.Pages
       }
     }
 
-    private async void SvxLinkService_NodeConnected(Models.Node n)
+    private async void SvxLinkService_NodeConnected(Common.Models.Node n)
     {
       try
       {
@@ -262,7 +263,7 @@ namespace SvxlinkManager.Pages
       }
     }
 
-    private async void SvxLinkService_ConnectedAsync(Channel c)
+    private async void SvxLinkService_ConnectedAsync(ChannelBase c)
     {
       try
       {
@@ -318,7 +319,7 @@ namespace SvxlinkManager.Pages
     [Inject]
     public SvxLinkService SvxLinkService { get; set; }
 
-    public Models.Node CurrentTxNode { get; set; }
+    public Common.Models.Node CurrentTxNode { get; set; }
 
     public string Status
     {
@@ -337,7 +338,7 @@ namespace SvxlinkManager.Pages
 
     public bool Scanning { get; set; } = false;
 
-    public List<Models.Node> Nodes
+    public List<Common.Models.Node> Nodes
     {
       get => SvxLinkService.Nodes.OrderBy(n => n.Name).ToList();
       set => SvxLinkService.Nodes = value;
