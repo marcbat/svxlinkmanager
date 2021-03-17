@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 
+using SvxlinkManager.Common.Models;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,19 +13,8 @@ using System.Xml.Serialization;
 
 namespace SvxlinkManager.Models
 {
-  public abstract class Channel : IModelEntity
+  public abstract class Channel : ChannelBase, IModelEntity
   {
-    public int Id { get; set; }
-
-    [Required]
-    public string Name { get; set; }
-
-    [Required]
-    public string Host { get; set; }
-
-    [Required]
-    public string CallSign { get; set; }
-
     [Required]
     public bool IsDefault { get; set; }
 
@@ -36,13 +27,6 @@ namespace SvxlinkManager.Models
     public string TrackerUrl { get; set; }
 
     public List<ScanProfile> ScanProfiles { get; set; }
-
-    public int Dtmf { get; set; }
-
-    public override bool Equals(object obj)
-    {
-      return Id == ((Channel)obj).Id;
-    }
 
     [NotMapped]
     [FileValidation(new[] { ".wav" })]
@@ -76,8 +60,5 @@ namespace SvxlinkManager.Models
         return ValidationResult.Success;
       }
     }
-
-    [NotMapped]
-    public abstract Dictionary<string, string> TrackProperties { get; }
   }
 }

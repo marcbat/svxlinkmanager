@@ -6,6 +6,7 @@ using NSubstitute.Extensions;
 
 using NUnit.Framework;
 
+using SvxlinkManager.Common.Models;
 using SvxlinkManager.Models;
 using SvxlinkManager.Repositories;
 using SvxlinkManager.Service;
@@ -45,7 +46,7 @@ namespace SvxlinkManager.Service.Tests
     {
       // arrange
       var channel = new SvxlinkChannel();
-      Channel returnedChannel = null;
+      ChannelBase returnedChannel = null;
 
       var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService, telemetry);
       service.Connected += c => returnedChannel = c;

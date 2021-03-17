@@ -5,6 +5,8 @@ using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
 
+using SvxlinkManager.Common.Models;
+using SvxlinkManager.Common.Service;
 using SvxlinkManager.Models;
 using SvxlinkManager.Repositories;
 using SvxlinkManager.Telemetry;
@@ -19,7 +21,7 @@ using System.Timers;
 
 namespace SvxlinkManager.Service
 {
-  public class SvxLinkService
+  public class SvxLinkService : SvxlinkServiceBase
   {
     public readonly string applicationPath = Directory.GetCurrentDirectory();
 
@@ -41,7 +43,7 @@ namespace SvxlinkManager.Service
     private FileSystemWatcher watcher;
     private Process shell;
 
-    public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories, ScanService scanService, TelemetryClient telemetry)
+    public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories, ScanService scanService, TelemetryClient telemetry) : base(logger, telemetry)
     {
       this.logger = logger;
       this.repositories = repositories;
@@ -64,41 +66,6 @@ namespace SvxlinkManager.Service
 
       scanTimer.Elapsed += CheckScan;
     }
-
-    /// <summary>
-    /// Occurs when svxlink is connected
-    /// </summary>
-    public event Action<Channel> Connected;
-
-    /// <summary>
-    /// Occurs when svxlink is disconnected
-    /// </summary>
-    public event Action Disconnected;
-
-    /// <summary>
-    /// Occurs when a new node join the channel
-    /// </summary>
-    public event Action<Node> NodeConnected;
-
-    /// <summary>
-    /// Occurs when a node quit the channel
-    /// </summary>
-    public event Action<Node> NodeDisconnected;
-
-    /// <summary>
-    /// Occurs when a node stop a transmission.
-    /// </summary>
-    public event Action<Node> NodeRx;
-
-    /// <summary>
-    /// Occurs when a node start a transmission.
-    /// </summary>
-    public event Action<Node> NodeTx;
-
-    /// <summary>
-    /// Occurs when an error is throw
-    /// </summary>
-    public event Action<string, string> Error;
 
     public event Action StartTempo;
 
@@ -157,16 +124,10 @@ namespace SvxlinkManager.Service
         catch (Exception e)
         {
           telemetry.TrackException(e, new Dictionary<string, string> { { "ChannelId", value.ToString() } });
-          Error?.Invoke("Impossible de changer de salon.", e.Message);
+          OnError("Impossible de changer de salon.", e.Message);
         }
       }
     }
-
-    /// <summary>
-    /// List of connected nodes
-    /// </summary>
-    /// <value>connected nodes</value>
-    public List<Node> Nodes { get; set; } = new List<Node>();
 
     /// <summary>
     /// Current channel status
@@ -177,33 +138,6 @@ namespace SvxlinkManager.Service
     /// <summary>Connecte le salon par défaut.</summary>
     public virtual void StartDefaultChannel() =>
       ChannelId = repositories.Channels.GetDefault().Id;
-
-    /// <summary>
-    /// Execute a cli command
-    /// </summary>
-    /// <param name="cmd">The command.</param>
-    /// <returns>Console output</returns>
-    protected virtual string ExecuteCommand(string cmd)
-    {
-      var escapedArgs = cmd.Replace("\"", "\\\"");
-
-      var process = new Process()
-      {
-        StartInfo = new ProcessStartInfo
-        {
-          FileName = "/bin/bash",
-          Arguments = $"-c \"{escapedArgs}\"",
-          RedirectStandardOutput = true,
-          UseShellExecute = false,
-          CreateNoWindow = true,
-        }
-      };
-      process.Start();
-      string result = process.StandardOutput.ReadToEnd();
-      process.WaitForExit();
-
-      return result.Trim();
-    }
 
     /// <summary>Test channel type and activate</summary>
     /// <param name="channelid">Channel Id</param>
@@ -253,7 +187,7 @@ namespace SvxlinkManager.Service
           telemetry.TrackTrace("Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.", SeverityLevel.Error, channel.TrackProperties);
 
           ChannelId = 0;
-          Error?.Invoke("Attention", "Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.");
+          OnError("Attention", "Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.");
           return;
         }
 
@@ -498,70 +432,6 @@ namespace SvxlinkManager.Service
       File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
 
     /// <summary>
-    /// Parse the Svxlink logs
-    /// </summary>
-    /// <param name="s">one Log line</param>
-    public virtual void ParseLog(Channel channel, string s)
-    {
-      if (string.IsNullOrEmpty(s))
-        return;
-
-      if (s.Contains("Connected nodes"))
-      {
-        Nodes.Clear();
-        s.Split(':')[2].Split(',').ToList().ForEach(n => Nodes.Add(new Node { Name = n }));
-        Connected?.Invoke(channel);
-        return;
-      }
-
-      if (s.Contains("Node left"))
-      {
-        var node = new Node { Name = s.Split(":")[2] };
-        Nodes.Remove(node);
-        NodeDisconnected?.Invoke(node);
-        return;
-      }
-
-      if (s.Contains("Node joined"))
-      {
-        var node = new Node { Name = s.Split(":")[2] };
-        Nodes.Add(node);
-        NodeConnected?.Invoke(node);
-        return;
-      }
-
-      if (s.Contains("Talker start"))
-      {
-        var node = Nodes.Single(nx => nx.Equals(new Node { Name = s.Split(":")[2] }));
-        node.ClassName = "node node-tx";
-        NodeTx?.Invoke(node);
-        return;
-      }
-
-      if (s.Contains("Talker stop"))
-      {
-        var node = Nodes.Single(nx => nx.Equals(new Node { Name = s.Split(":")[2] }));
-        node.ClassName = "node";
-        NodeRx?.Invoke(node);
-        return;
-      }
-
-      if (s.Contains("Access denied"))
-      {
-        telemetry.TrackTrace($"Impossible de se connecter au salon {channel.Name}. <br/> Accès refusé.", SeverityLevel.Error, channel.TrackProperties);
-        Error?.Invoke("Echec de la connexion.", $"Impossible de se connecter au salon {channel.Name}. <br/> Accès refusé.");
-        return;
-      }
-
-      if (s.Contains("Host not found"))
-      {
-        telemetry.TrackTrace($"Impossible de se connecter au salon {channel.Name}. <br/> Server {channel.Host} introuvable.", SeverityLevel.Error, channel.TrackProperties);
-        Error?.Invoke("Echec de la connexion.", $"Impossible de se connecter au salon {channel.Name}. <br/> Server {channel.Host} introuvable.");
-        return;
-      }
-    }
-
-    /// <summary>
     /// Replace parameters int svxlink.current ini file
     /// </summary>
     /// <param name="parameters">Dictionnary of parameters</param>
@@ -691,39 +561,7 @@ namespace SvxlinkManager.Service
 
       logger.LogInformation("Connection au channel {ChannelName}.", channel.Name);
 
-      var cmd = $"svxlink --pidfile=/var/run/svxlink.pid --runasuser=root --config={applicationPath}/SvxlinkConfig/svxlink.current";
-
-      var escapedArgs = cmd.Replace("\"", "\\\"");
-
-      shell = new Process()
-      {
-        StartInfo = new ProcessStartInfo
-        {
-          FileName = "/bin/bash",
-          Arguments = $"-c \"{escapedArgs}\"",
-          RedirectStandardOutput = true,
-          StandardOutputEncoding = Encoding.UTF8,
-          RedirectStandardError = true,
-          StandardErrorEncoding = Encoding.UTF8,
-          UseShellExecute = false,
-          CreateNoWindow = true,
-        }
-      };
-      shell.EnableRaisingEvents = true;
-      shell.ErrorDataReceived += (s, e) =>
-      {
-        logger.LogInformation(e.Data);
-        ParseLog(channel, e.Data);
-      };
-      shell.OutputDataReceived += (s, e) =>
-      {
-        logger.LogInformation(e.Data);
-        ParseLog(channel, e.Data);
-      };
-
-      shell.Start();
-      shell.BeginErrorReadLine();
-      shell.BeginOutputReadLine();
+      base.StartSvxlink(channel, pidFile: "/var/run/svxlink.pid", runAs: "root", configFile: $"{applicationPath}/SvxlinkConfig/svxlink.current");
 
       var scanProfil = repositories.ScanProfiles.Get(1);
 
@@ -747,7 +585,7 @@ namespace SvxlinkManager.Service
     /// <summary>
     /// Stops the svxlink application. <br/> Kill the temporised timer and the dtmf file watcher
     /// </summary>
-    public virtual void StopSvxlink()
+    public override void StopSvxlink()
     {
       logger.LogInformation("Kill de svxlink.");
 
@@ -761,14 +599,7 @@ namespace SvxlinkManager.Service
 
       watcher?.Dispose();
 
-      var pid = ExecuteCommand("pgrep -x svxlink");
-      if (pid != null)
-        ExecuteCommand("pkill -TERM svxlink");
-
-      shell?.Dispose();
-
-      Nodes.Clear();
-      Disconnected?.Invoke();
+      base.StopSvxlink();
     }
   }
 }
