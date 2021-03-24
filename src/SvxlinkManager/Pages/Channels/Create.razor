@@ -3,8 +3,6 @@
 @page "/Channel/Create"
 @inherits SvxlinkManager.Pages.Channels.CreateBase<SvxlinkChannel>
 
-@attribute [Authorize]
-
 <h3>Ajouter un salon</h3>
 
 <AddEditForm Channel="@Channel" HandleValidSubmit="@(()=>HandleValidSubmit("Channel"))" SubmitTitle="@SubmitTitle" CanEditType="@CanEditType" />

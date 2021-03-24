@@ -1,4 +1,5 @@
 ﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
 using System;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.RadioProfile
 {
+  [Authorize]
   public class EditBase : AddEditBase
   {
     protected override void OnInitialized()

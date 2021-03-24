@@ -1,4 +1,5 @@
 ﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
@@ -25,6 +26,7 @@ using System.Xml.Linq;
 
 namespace SvxlinkManager.Pages
 {
+  [Authorize]
   public class HomeBase : RepositoryComponentBase, IDisposable
   {
     protected override async Task OnInitializedAsync()

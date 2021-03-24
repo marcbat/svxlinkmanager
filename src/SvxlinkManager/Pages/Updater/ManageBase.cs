@@ -1,5 +1,6 @@
 ﻿using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -22,6 +23,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Updater
 {
+  [Authorize]
   public class ManageBase : SvxlinkManagerComponentBase
   {
     private List<Release> releases;
