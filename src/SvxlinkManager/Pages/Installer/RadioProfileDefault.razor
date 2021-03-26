@@ -1,0 +1,88 @@
+﻿@using SvxlinkManager.Models;
+
+<div class="alert alert-primary" role="alert">
+  Il est maintenant temps de configurer le profil radio par défaut.<br />
+  Choisis une fréquence d'émission et de récéption ainsi que les tones CTCSS.
+</div>
+
+<EditForm Model="@InstallerModel.RadioProfile">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label>Type de TRX</label>
+      <select class="form-control" @onchange="TrxChange">
+        <option value="interne">Hotspot</option>
+        <option value="externe">Externe</option>
+      </select>
+    </div>
+    <div class="form-group col-md-4">
+      <label data-toggle="tooltip" title="La fréquence d'émission du module SA818.">Fréquence d'émission</label>
+      <InputText @bind-Value="InstallerModel.RadioProfile.TxFrequ" type="text" class="form-control" id="inputHost" placeholder="145.450 ou 434.400" />
+    </div>
+    <div class="form-group col-md-4">
+      <label data-toggle="tooltip" title="La fréquence de récéption du module SA818.">Fréquence de récéption</label>
+      <InputText @bind-Value="InstallerModel.RadioProfile.RxFequ" type="text" class="form-control" id="inputPort" placeholder="145.450 ou 434.400" />
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label>Tone CTCSS en émission</label>
+      <InputSelect @bind-Value="InstallerModel.RadioProfile.TxCtcss" class="form-control">
+        @foreach (var ct in InstallerModel.RadioProfile.Ctcss)
+{
+<option value="@ct.Key">@ct.Value</option>
+}
+      </InputSelect>
+    </div>
+    <div class="form-group col-md-4">
+      <label>Tone CTCSS en récéption</label>
+      <InputSelect @bind-Value="InstallerModel.RadioProfile.RxCtcss" class="form-control">
+        @foreach (var ct in InstallerModel.RadioProfile.Ctcss)
+{
+<option value="@ct.Key">@ct.Value</option>
+}
+      </InputSelect>
+    </div>
+    <div class="form-group col-md-4">
+      <label>Squelch</label>
+      <InputSelect @bind-Value="InstallerModel.RadioProfile.Squelch" class="form-control">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+      </InputSelect>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.DefaultChannel)">Précédent</button> <button class="btn btn-primary" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Wifi)">Suivant</button>
+</EditForm>
+
+@code {
+  [Parameter]
+  public InstallerModel InstallerModel { get; set; }
+
+  [Parameter]
+  public EventCallback<InstallationStatus> OnSubmit { get; set; }
+
+  public void TrxChange(ChangeEventArgs e)
+  {
+    if (e.Value.ToString() == "interne")
+    {
+      InstallerModel.RadioProfile.SquelchDetection = "GPIO";
+      InstallerModel.RadioProfile.HasSa818 = true;
+    }
+    else
+    {
+      InstallerModel.RadioProfile.SquelchDetection = "CTCSS";
+      InstallerModel.RadioProfile.HasSa818 = false;
+    }
+
+  }
+}

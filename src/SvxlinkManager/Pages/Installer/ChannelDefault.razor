@@ -1,0 +1,44 @@
+﻿@using SvxlinkManager.Models;
+
+<div class="alert alert-primary" role="alert">
+  Ok, maintenant, merci de choisir, parmis les salons que vous allez concerver, lequel sera le <strong>salon par défaut</strong>.<br />
+  Ce salon sera celui vers lequel retourneront les salons enfin de temporisation ou le scanner au terme d'une période d'inactivité.
+</div>
+
+<EditForm Model="@InstallerModel">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <div class="form-row">
+    <div class="form-group">
+      @foreach (var channel in InstallerModel.ChannelsToPreserved)
+      {
+        <div class="form-check form-check-inline">
+          <div class="pretty p-default p-curve p-bigger">
+            <input type="radio" name="defaultChannel" checked @onchange="e => SetDefaultChannel(channel, e)" />
+            <div class="state">
+              <label>@channel.Name</label>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <button class="btn btn-primary" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Channel)">Précédent</button> <button class="btn btn-primary" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.RadioProfile)">Suivant</button>
+</EditForm>
+
+@code {
+  [Parameter]
+  public InstallerModel InstallerModel { get; set; }
+
+  [Parameter]
+  public EventCallback<InstallationStatus> OnSubmit { get; set; }
+
+  public void SetDefaultChannel(SvxlinkChannel channel, ChangeEventArgs e)
+  {
+    if (((string)e.Value).Equals("on"))
+      InstallerModel.DefaultChannel = channel;
+
+  }
+}

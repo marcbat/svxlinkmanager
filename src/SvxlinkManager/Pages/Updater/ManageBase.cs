@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Updater
 {
-  [Authorize]
+  ///[Authorize]
   public class ManageBase : SvxlinkManagerComponentBase
   {
     private List<Release> releases;
