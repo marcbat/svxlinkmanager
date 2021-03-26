@@ -16,6 +16,8 @@ namespace SvxlinkManager.Pages.Installer
     [Required(ErrorMessage = "Le mot de passe est obligatoire.")]
     public string Password { get; set; }
 
+    public string Password2 { get; set; }
+
     public string CallSign { get; set; }
 
     public string AnnonceCallSign { get; set; }
