@@ -24,6 +24,8 @@ namespace SvxlinkManager.Service
 
     List<Device> GetDevices();
 
+    Task<List<Device>> GetDevicesAsync();
+
     void Up(Connection connection);
   }
 
@@ -141,6 +143,11 @@ namespace SvxlinkManager.Service
       }
 
       return devices;
+    }
+
+    public async Task<List<Device>> GetDevicesAsync()
+    {
+      return await Task.Run(() => GetDevices());
     }
 
     /// <summary>Extract list of wifi devices from console output</summary>

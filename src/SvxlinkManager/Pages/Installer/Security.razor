@@ -4,7 +4,7 @@
 </div>
 
 <EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.Channel)">
-  <FluentValidator TValidator="UserPasswordValidator" />
+  @*<FluentValidator TValidator="UserPasswordValidator" />*@
 
   <div class="form-row">
     <div class="form-group col-md-6">

@@ -6,7 +6,7 @@
 </div>
 
 <EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.DefaultChannel)">
-  <FluentValidator TValidator="ChannelChooseValidator" />
+  @*<FluentValidator TValidator="ChannelChooseValidator" />*@
 
   <div class="form-row">
     <div class="form-group col-md-6">

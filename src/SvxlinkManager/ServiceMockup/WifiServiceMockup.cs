@@ -75,5 +75,10 @@ namespace SvxlinkManager.ServiceMockup
 
       return devices;
     }
+
+    public async Task<List<Device>> GetDevicesAsync()
+    {
+      return await Task.Run(GetDevices);
+    }
   }
 }

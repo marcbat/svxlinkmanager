@@ -5,8 +5,8 @@
   Ce salon sera celui vers lequel retourneront les salons en fin de temporisation ou le scanner au terme d'une période d'inactivité.
 </div>
 
-<EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.Wifi)">
-  <FluentValidator TValidator="ChannelDefaultValidator" />
+<EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.RadioProfile)">
+  @*<FluentValidator TValidator="ChannelDefaultValidator" />*@
 
   <div class="form-row">
     <div class="form-group">

@@ -20,6 +20,7 @@
     <RadioProfileDefault InstallerModel="@InstallerModel" OnSubmit="ChangeInstallationStatus" />
     break;
   case InstallationStatus.Wifi:
+    <WifiChoose InstallerModel="@InstallerModel" OnSubmit="ChangeInstallationStatus" OnConnect="Connect" OnDown="Down" OnUp="Up" />
     break;
   case InstallationStatus.Update:
     break;

@@ -1,4 +1,5 @@
 ﻿using SvxlinkManager.Models;
+using SvxlinkManager.Pages.Wifi;
 
 using System;
 using System.Collections.Generic;
@@ -31,5 +32,7 @@ namespace SvxlinkManager.Pages.Installer
     public Models.RadioProfile RadioProfile { get; set; } = new Models.RadioProfile { SquelchDetection = "GPIO" };
 
     public List<SvxlinkChannel> ChannelsToPreserved => Channels.Where(c => !ChannelsToDelete.Any(e => c.Equals(e))).ToList();
+
+    public List<Device> Devices { get; set; }
   }
 }

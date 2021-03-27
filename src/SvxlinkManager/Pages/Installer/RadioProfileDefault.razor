@@ -5,25 +5,35 @@
   Choisis une fréquence d'émission et de récéption ainsi que les tones CTCSS.
 </div>
 
-<EditForm Model="@InstallerModel.RadioProfile">
-  <DataAnnotationsValidator />
-  <ValidationSummary />
+<EditForm Model="@InstallerModel.RadioProfile" OnValidSubmit="() => OnSubmit.InvokeAsync(InstallationStatus.Wifi)">
+  @*<FluentValidator TValidator="RadioProfileValidator" />*@
 
   <div class="form-row">
     <div class="form-group col-md-4">
       <label>Type de TRX</label>
-      <select class="form-control" @onchange="TrxChange">
-        <option value="interne">Hotspot</option>
-        <option value="externe">Externe</option>
-      </select>
+      <InputSelect @bind-Value="InstallerModel.RadioProfile.Trx" class="form-control">
+        @foreach (var trx in InstallerModel.RadioProfile.TrxTypes)
+{
+@if (InstallerModel.RadioProfile.Trx == trx.Key)
+{
+<option selected value="@trx.Key">@trx.Value</option>
+}
+else
+{
+<option value="@trx.Key">@trx.Value</option>
+}
+}
+      </InputSelect>
     </div>
     <div class="form-group col-md-4">
       <label data-toggle="tooltip" title="La fréquence d'émission du module SA818.">Fréquence d'émission</label>
-      <InputText @bind-Value="InstallerModel.RadioProfile.TxFrequ" type="text" class="form-control" id="inputHost" placeholder="145.450 ou 434.400" />
+      <InputText @bind-Value="InstallerModel.RadioProfile.TxFrequ" type="text" class="form-control" id="inputHost" placeholder="145.450 ou 434.400 par exemple" />
+      <ValidationMessage For="@(() => InstallerModel.RadioProfile.TxFrequ)" />
     </div>
     <div class="form-group col-md-4">
       <label data-toggle="tooltip" title="La fréquence de récéption du module SA818.">Fréquence de récéption</label>
-      <InputText @bind-Value="InstallerModel.RadioProfile.RxFequ" type="text" class="form-control" id="inputPort" placeholder="145.450 ou 434.400" />
+      <InputText @bind-Value="InstallerModel.RadioProfile.RxFequ" type="text" class="form-control" id="inputPort" placeholder="145.450 ou 434.400 par exemple" />
+      <ValidationMessage For="@(() => InstallerModel.RadioProfile.RxFequ)" />
     </div>
   </div>
   <div class="form-row">
@@ -35,6 +45,7 @@
 <option value="@ct.Key">@ct.Value</option>
 }
       </InputSelect>
+      <ValidationMessage For="@(() => InstallerModel.RadioProfile.TxCtcss)" />
     </div>
     <div class="form-group col-md-4">
       <label>Tone CTCSS en récéption</label>
@@ -44,6 +55,7 @@
 <option value="@ct.Key">@ct.Value</option>
 }
       </InputSelect>
+      <ValidationMessage For="@(() => InstallerModel.RadioProfile.RxCtcss)" />
     </div>
     <div class="form-group col-md-4">
       <label>Squelch</label>
@@ -58,10 +70,11 @@
         <option value="7">7</option>
         <option value="8">8</option>
       </InputSelect>
+      <ValidationMessage For="@(() => InstallerModel.RadioProfile.Squelch)" />
     </div>
   </div>
 
-  <button class="btn btn-primary" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.DefaultChannel)">Précédent</button> <button class="btn btn-primary" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Wifi)">Suivant</button>
+  <button class="btn btn-primary" type="button" role="button" @onclick="() => OnSubmit.InvokeAsync(InstallationStatus.DefaultChannel)">Précédent</button> <button class="btn btn-primary" type="submit">Suivant</button>
 </EditForm>
 
 @code {
@@ -73,6 +86,8 @@
 
   public void TrxChange(ChangeEventArgs e)
   {
+    InstallerModel.RadioProfile.Trx = e.Value.ToString();
+
     if (e.Value.ToString() == "interne")
     {
       InstallerModel.RadioProfile.SquelchDetection = "GPIO";
