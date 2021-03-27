@@ -2,20 +2,28 @@
 
 <div class="alert alert-primary" role="alert">
   Ok, maintenant, merci de choisir, parmis les salons que vous allez concerver, lequel sera le <strong>salon par défaut</strong>.<br />
-  Ce salon sera celui vers lequel retourneront les salons enfin de temporisation ou le scanner au terme d'une période d'inactivité.
+  Ce salon sera celui vers lequel retourneront les salons en fin de temporisation ou le scanner au terme d'une période d'inactivité.
 </div>
 
-<EditForm Model="@InstallerModel">
-  <DataAnnotationsValidator />
-  <ValidationSummary />
+<EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.Wifi)">
+  <FluentValidator TValidator="ChannelDefaultValidator" />
 
   <div class="form-row">
     <div class="form-group">
+      <ValidationMessage For="@(() => InstallerModel.DefaultChannel)" />
       @foreach (var channel in InstallerModel.ChannelsToPreserved)
       {
         <div class="form-check form-check-inline">
           <div class="pretty p-default p-curve p-bigger">
-            <input type="radio" name="defaultChannel" checked @onchange="e => SetDefaultChannel(channel, e)" />
+            @if (channel == InstallerModel.DefaultChannel)
+            {
+              <input type="radio" checked name="defaultChannel" @onchange="e => SetDefaultChannel(channel, e)" />
+            }
+            else
+            {
+              <input type="radio" name="defaultChannel" @onchange="e => SetDefaultChannel(channel, e)" />
+            }
+
             <div class="state">
               <label>@channel.Name</label>
             </div>
@@ -25,7 +33,7 @@
     </div>
   </div>
 
-  <button class="btn btn-primary" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Channel)">Précédent</button> <button class="btn btn-primary" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.RadioProfile)">Suivant</button>
+  <button class="btn btn-primary" type="button" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Channel)">Précédent</button> <button class="btn btn-primary" type="submit">Suivant</button>
 </EditForm>
 
 @code {
