@@ -87,7 +87,11 @@ namespace SvxlinkManager.Pages.Installer
             break;
 
           case InstallationStatus.Wifi:
-            InstallerModel.Devices = LoadDevices();
+            Task.Run(async () =>
+            {
+              InstallerModel.Devices = LoadDevices();
+              await InvokeAsync(() => StateHasChanged());
+            });
             break;
 
           case InstallationStatus.Update:

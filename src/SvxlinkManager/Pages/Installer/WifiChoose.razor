@@ -4,27 +4,36 @@
   Si vous le souhaitez, vous pouvez connecter un ou plusieurs Wifi.
 </div>
 
-<ul id="channel-manage-list" class="list-group-horizontal">
-  @foreach (var device in InstallerModel.Devices)
-  {
-    if (IsInUse(device.InUse))
+@if (InstallerModel.Devices == null)
+{
+  <div class="alert alert-primary" role="alert">
+    Recherche de réseau wifi
+  </div>
+}
+else
+{
+
+  <ul id="channel-manage-list" class="list-group-horizontal">
+    @foreach (var device in InstallerModel.Devices)
     {
-      <InUseDevice Device="device" OnDown="OnDown" />
-    }
-    else
-    {
-      if (device.HasConnection)
+      if (IsInUse(device.InUse))
       {
-        <ConfiguredDevice Device="device" OnUp="OnUp" />
+        <InUseDevice Device="device" OnDown="OnDown" />
       }
       else
       {
-        <NotConfiguredDevice Device="device" OnConnect="OnConnect" />
+        if (device.HasConnection)
+        {
+          <ConfiguredDevice Device="device" OnUp="OnUp" />
+        }
+        else
+        {
+          <NotConfiguredDevice Device="device" OnConnect="OnConnect" />
+        }
       }
     }
-  }
-</ul>
-
+  </ul>
+}
 <button class="btn btn-primary" type="button" role="button" @onclick="() => OnSubmit.InvokeAsync(InstallationStatus.RadioProfile)">Précédent</button>
 <button class="btn btn-primary" type="button" @onclick="() => OnSubmit.InvokeAsync(InstallationStatus.Update)">Suivant</button>
 
