@@ -1,0 +1,11 @@
+﻿<div class="alert alert-primary" role="alert">
+  Vous pouvez mettre à jour SvxlinkManager maintenant.
+</div>
+
+@code {
+  [Parameter]
+  public InstallerModel InstallerModel { get; set; }
+
+  [Parameter]
+  public EventCallback<InstallationStatus> OnSubmit { get; set; }
+}

@@ -56,6 +56,7 @@ namespace SvxlinkManager
       services.AddSingleton<IRepositories, Repositories.Repositories>();
       services.AddSingleton<SvxLinkService>();
       services.AddSingleton<ScanService>();
+      services.AddSingleton<UpdaterService>();
 
 #if DEBUG
       services.AddSingleton<ISa818Service, Sa818ServiceMockup>();

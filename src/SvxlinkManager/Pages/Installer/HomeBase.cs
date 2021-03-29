@@ -9,6 +9,7 @@ using SvxlinkManager.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Installer
@@ -72,6 +73,8 @@ namespace SvxlinkManager.Pages.Installer
 
       Telemetry.TrackEvent("Deactivate Wifi");
     }
+
+    public string InformationalVersion => Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
     public InstallationStatus InstallationStatus
     {

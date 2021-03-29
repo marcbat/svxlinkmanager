@@ -23,6 +23,7 @@
     <WifiChoose InstallerModel="@InstallerModel" OnSubmit="ChangeInstallationStatus" OnConnect="Connect" OnDown="Down" OnUp="Up" />
     break;
   case InstallationStatus.Update:
+    <UpdaterChoose InstallerModel="@InstallerModel" OnSubmit="ChangeInstallationStatus" />
     break;
   default:
     break;
