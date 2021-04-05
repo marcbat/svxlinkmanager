@@ -95,12 +95,12 @@ namespace SvxlinkManager
         context.Database.Migrate();
 
         // start default channel
-        var svxlinkservice = serviceScope.ServiceProvider.GetRequiredService<SvxLinkService>();
-        svxlinkservice.StartDefaultChannel();
+        //var svxlinkservice = serviceScope.ServiceProvider.GetRequiredService<SvxLinkService>();
+        //svxlinkservice.StartDefaultChannel();
 
         // set telemetry global settings
         var telemetry = serviceScope.ServiceProvider.GetRequiredService<TelemetryClient>();
-        var deviceId = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString(); ;
+        var deviceId = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString();
         telemetry.Context.GlobalProperties["DeviceId"] = deviceId;
         telemetry.Context.Device.Id = deviceId;
         telemetry.Context.Device.OperatingSystem = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
@@ -122,8 +122,10 @@ namespace SvxlinkManager
         endpoints.MapFallbackToPage("/_Host");
       });
 
+
+
       // ajout de l'utilisateur admin
-      ApplicationDbInitializer.SeedUsers(userManager);
+      // ApplicationDbInitializer.SeedUsers(userManager);
 
       // Copy du fichier logic.tcl
       if (!Directory.Exists("/usr/share/svxlink/events.d/local"))

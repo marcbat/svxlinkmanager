@@ -6,7 +6,7 @@
 </div>
 
 <EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.RadioProfile)">
-  @*<FluentValidator TValidator="ChannelDefaultValidator" />*@
+  <FluentValidator TValidator="ChannelDefaultValidator" />
 
   <div class="form-row">
     <div class="form-group">
