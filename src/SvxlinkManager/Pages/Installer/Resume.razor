@@ -1,0 +1,111 @@
+﻿<div class="alert alert-primary" role="alert">
+  Merci de vérifier les informations ci-dessous et de lancer l'installation.
+</div>
+
+<EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.DefaultChannel)">
+
+  <h4>Informations générales</h4>
+  <ul id="channel-manage-list" class="list-group-horizontal">
+
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-xl-2  text-nowrap font-weight-bold">
+          Utilisateur
+        </div>
+        <div class="col-xl-10">@InstallerModel.UserName</div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-xl-2  text-nowrap font-weight-bold">
+          Indicatif
+        </div>
+        <div class="col-xl-10">@InstallerModel.CallSign</div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-xl-2  text-nowrap font-weight-bold">
+          Indicatif annoncé
+        </div>
+        <div class="col-xl-10">@InstallerModel.AnnonceCallSign</div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-xl-2  text-nowrap font-weight-bold">
+          Salons à installer
+        </div>
+        <div class="col-xl-10">@InstallerModel.ChannelsToPreservedList</div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-xl-2  text-nowrap font-weight-bold">
+          Salons principal
+        </div>
+        <div class="col-xl-10">@InstallerModel.DefaultChannel</div>
+      </div>
+    </li>
+  </ul>
+
+  <h4>Profil radio</h4>
+  <ul id="channel-manage-list" class="list-group-horizontal">
+
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-xl-2  text-nowrap font-weight-bold">
+          Fréquence RX
+        </div>
+        <div class="col-xl-10">@InstallerModel.RadioProfile.RxFequ CTCSS: @InstallerModel.RadioProfile.RxTone</div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-xl-2  text-nowrap font-weight-bold">
+          Fréquence TX
+        </div>
+        <div class="col-xl-10">@InstallerModel.RadioProfile.TxFrequ CTCSS: @InstallerModel.RadioProfile.TxTone</div>
+      </div>
+    </li>
+  </ul>
+
+
+  @if (InstallerModel.UpdateToLastRelease)
+  {
+    <h4>Mise à jour</h4>
+    <ul id="channel-manage-list" class="list-group-horizontal">
+
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-xl-2  text-nowrap font-weight-bold">
+            Mise à jour à installer
+          </div>
+          <div class="col-xl-10">@InstallerModel.LastRelease.TagName</div>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-xl-2  text-nowrap font-weight-bold">
+            Fréquence TX
+          </div>
+          <div class="col-xl-10">@InstallerModel.RadioProfile.TxFrequ CTCSS: @InstallerModel.RadioProfile.TxTone</div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="alert alert-warning" role="alert">
+      Attention, la mise à jour redémarre automatiquement l'application. Vous devrez recharger la page dans 30 seconde environ.
+    </div>
+  }
+
+  <button class="btn btn-primary" type="button" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Security)">Modifier</button> <button class="btn btn-danger" type="submit">Installer</button>
+</EditForm>
+
+@code {
+  [Parameter]
+  public InstallerModel InstallerModel { get; set; }
+
+  [Parameter]
+  public EventCallback<InstallationStatus> OnSubmit { get; set; }
+}

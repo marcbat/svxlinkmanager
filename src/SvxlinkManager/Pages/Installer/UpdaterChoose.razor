@@ -1,6 +1,26 @@
 ﻿<div class="alert alert-primary" role="alert">
-  Vous pouvez mettre à jour SvxlinkManager maintenant.
+  Une mise à jour est disponible. Voulez vous l'installer?
 </div>
+
+<EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.Resume)">
+
+  <table>
+    <tr>
+      <td>Version actuelle: </td>
+      <td>@InstallerModel.CurrentVersion</td>
+    </tr>
+    <tr>
+      <td>Version disponible: </td>
+      <td>@InstallerModel.LastRelease.TagName</td>
+    </tr>
+    <tr>
+      <td>Mettre à jour</td>
+      <td><InputCheckbox @bind-Value="InstallerModel.UpdateToLastRelease" /></td>
+    </tr>
+  </table>
+
+  <button class="btn btn-primary" type="button" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Wifi)">Précédent</button> <button class="btn btn-primary" type="submit">Suivant</button>
+</EditForm>
 
 @code {
   [Parameter]

@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.Updater
 {
   ///[Authorize]
-  public class ManageBase : SvxlinkManagerComponentBase
+  public class ManageBase : SvxlinkManagerComponentBase, IDisposable
   {
     private List<Release> releases;
 
@@ -40,6 +40,26 @@ namespace SvxlinkManager.Pages.Updater
       UpdaterService.OnDownloadStart += UpdaterService_OnDownloadStart;
 
       UpdaterService.OndownloadComplete += UpdaterService_OndownloadComplete;
+
+      UpdaterService.OnReleasesDownloadCompleted += UpdaterService_OnReleasesDownloadCompleted;
+
+      try
+      {
+        UpdaterService.LoadReleases();
+      }
+      catch (Exception e)
+      {
+        Logger.LogError("Impossible de charger la liste des releases.", e);
+        Telemetry.TrackException(e);
+
+        await ShowErrorToastAsync("Release", $"Impossible d'otenir la liste des release.");
+      }
+    }
+
+    private async void UpdaterService_OnReleasesDownloadCompleted()
+    {
+      await ShowSuccessToastAsync("Release", $"Les releases ont bien été téléchargée.");
+      StateHasChanged();
     }
 
     private async void UpdaterService_OndownloadComplete(Release release)
@@ -98,6 +118,17 @@ namespace SvxlinkManager.Pages.Updater
 
         await ShowErrorToastAsync($"Erreur", $"Echec du telechargement de la mise à jour {release.Package.Name}.<br/> {e.Message}");
       }
+    }
+
+    public void Dispose()
+    {
+      UpdaterService.OnDownloadProgress -= UpdaterService_OnDownloadProgressAsync;
+
+      UpdaterService.OnDownloadStart -= UpdaterService_OnDownloadStart;
+
+      UpdaterService.OndownloadComplete -= UpdaterService_OndownloadComplete;
+
+      UpdaterService.OnReleasesDownloadCompleted -= UpdaterService_OnReleasesDownloadCompleted;
     }
   }
 }

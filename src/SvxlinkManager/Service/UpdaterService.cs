@@ -25,6 +25,10 @@ namespace SvxlinkManager.Service
     private readonly TelemetryClient telemetry;
     private readonly ILogger<UpdaterService> logger;
 
+    private List<Release> releases;
+
+    public event Action OnReleasesDownloadCompleted;
+
     public event Action<Release> OnDownloadStart;
 
     public event Action<(int releaseId, int progressPercentage)> OnDownloadProgress;
@@ -38,34 +42,50 @@ namespace SvxlinkManager.Service
       this.logger = logger;
     }
 
-    private List<Release> LoadReleases()
+    public void LoadReleases()
     {
       logger.LogInformation("Chargement de la list des release.");
-
-      List<Release> releases = null;
 
       try
       {
         using WebClient client = new WebClient();
-        client.Headers.Add(HttpRequestHeader.UserAgent, "request");
-        var result = client.DownloadString(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases"));
-        releases = JsonSerializer.Deserialize<List<Release>>(result);
-      }
-      catch (Exception e)
-      {
-        logger.LogError("Impossible de charger la liste des releases.", e);
-        telemetry.TrackException(e);
-      }
 
-      return releases;
+        client.DownloadStringCompleted += (s, e) =>
+        {
+          releases = JsonSerializer.Deserialize<List<Release>>(e.Result);
+          OnReleasesDownloadCompleted?.Invoke();
+        };
+
+        client.Headers.Add(HttpRequestHeader.UserAgent, "request");
+        client.DownloadStringAsync(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases"));
+      }
+      catch (Exception)
+      {
+        throw;
+      }
+    }
+
+    public Release GetLastRelease()
+    {
+      try
+      {
+        using WebClient client = new WebClient();
+
+        client.Headers.Add(HttpRequestHeader.UserAgent, "request");
+        var result = client.DownloadString(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases/latest"));
+
+        return JsonSerializer.Deserialize<Release>(result);
+      }
+      catch (Exception)
+      {
+        throw;
+      }
     }
 
     public List<Release> Releases
     {
       get
       {
-        var releases = LoadReleases();
-
         if (configuration.GetValue<bool>("Config:IsPreRelease"))
         {
           telemetry.TrackEvent("Chargement des PreRelease.");
@@ -81,6 +101,10 @@ namespace SvxlinkManager.Service
     public bool IsExist(Release release) => File.Exists($"/tmp/svxlinkmanager/{release.Updater?.Name}");
 
     public bool IsCurrent(Release release) => release.TagName == CurrentVersion;
+
+    public bool IsUpToDate() => IsCurrent(Releases.First());
+
+    public Release LastRelease => Releases.First();
 
     public void Install(Release release)
     {

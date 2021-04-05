@@ -3,39 +3,48 @@
 
 <h3>Releases</h3>
 
-<ul id="channel-manage-list" class="list-group-horizontal">
-  @foreach (var release in Releases)
-  {
-    if (release.IsValid())
+@if (UpdaterService.Releases == null)
+{
+  <div class="alert alert-primary" role="alert">
+    Recherche de mise à jour.
+  </div>
+}
+else
+{
+  <ul id="channel-manage-list" class="list-group-horizontal">
+    @foreach (var release in Releases)
     {
+      if (release.IsValid())
+      {
 
-      <li class="list-group-item">
-        <div class="row">
-          <div class="col-xl-3 text-nowrap">
-            @release.Name
-          </div>
-          <div class="col-xl-2 text-nowrap">@release.Created</div>
-          <div class="col-xl-3 text-truncate"><a href="@release.HtmlUrl" target="_blank">Détails de la release</a></div>
-          <div class="col-xl-2 text-nowrap">@release.Package.DownloadCount téléchargements</div>
-          <div class="col-xl-2">
-            @if (!IsCurrent(release))
-            {
-              @if (IsExist(@release))
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-xl-3 text-nowrap">
+              @release.Name
+            </div>
+            <div class="col-xl-2 text-nowrap">@release.Created</div>
+            <div class="col-xl-3 text-truncate"><a href="@release.HtmlUrl" target="_blank">Détails de la release</a></div>
+            <div class="col-xl-2 text-nowrap">@release.Package.DownloadCount téléchargements</div>
+            <div class="col-xl-2">
+              @if (!IsCurrent(release))
               {
-                <button id="install-@release.Id" data-toggle="tooltip" title="L'installation peut prendre un certain temps. <br /> Vous devrez recharger la page dans 30 secondes environ." type="button" class="btn btn-danger" @onclick="@(() => InstallAsync(release))">Installer</button>
+                @if (IsExist(@release))
+                {
+                  <button id="install-@release.Id" data-toggle="tooltip" title="L'installation peut prendre un certain temps. <br /> Vous devrez recharger la page dans 30 secondes environ." type="button" class="btn btn-danger" @onclick="@(() => InstallAsync(release))">Installer</button>
+                }
+                else
+                {
+                  <button id="download-@release.Id" type="button" class="btn btn-outline-success" @onclick="@(() => DownloadAsync(release))">Obtenir</button>
+                }
               }
               else
               {
-                <button id="download-@release.Id" type="button" class="btn btn-outline-success" @onclick="@(() => DownloadAsync(release))">Obtenir</button>
+                <a class="btn btn-primary" href="Channel/Manage" role="button">Version courante</a>
               }
-            }
-            else
-            {
-              <a class="btn btn-primary" href="Channel/Manage" role="button">Version courante</a>
-            }
+            </div>
           </div>
-        </div>
-      </li>
+        </li>
+      }
     }
-  }
-</ul>
+  </ul>
+}

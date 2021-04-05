@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Shared;
+using SvxlinkManager.Pages.Updater;
 using SvxlinkManager.Pages.Wifi;
 using SvxlinkManager.Service;
 
@@ -21,7 +22,8 @@ namespace SvxlinkManager.Pages.Installer
     DefaultChannel,
     RadioProfile,
     Wifi,
-    Update
+    Update,
+    Resume
   }
 
   public class HomeBase : RepositoryComponentBase
@@ -41,9 +43,16 @@ namespace SvxlinkManager.Pages.Installer
     [Inject]
     public IWifiService WifiService { get; set; }
 
+    [Inject]
+    public UpdaterService UpdaterService { get; set; }
+
     private List<Device> LoadDevices() => WifiService.GetDevices();
 
     private List<SvxlinkChannel> LoadChannels() => Repositories.SvxlinkChannels.GetAll().ToList();
+
+    private Release LoadLastRelease() => UpdaterService.GetLastRelease();
+
+    public bool IsCurrentRelease() => UpdaterService.IsCurrent(InstallerModel.LastRelease);
 
     public InstallerModel InstallerModel { get; set; }
 
@@ -98,6 +107,8 @@ namespace SvxlinkManager.Pages.Installer
             break;
 
           case InstallationStatus.Update:
+            InstallerModel.LastRelease = LoadLastRelease();
+            InstallerModel.CurrentVersion = UpdaterService.CurrentVersion;
             break;
 
           default:
