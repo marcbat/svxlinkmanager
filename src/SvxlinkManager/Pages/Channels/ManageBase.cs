@@ -1,4 +1,5 @@
 ﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Channels
 {
+  [Authorize]
   public class ManageBase<TChannel> : RepositoryComponentBase where TChannel : Channel
   {
     [Inject]

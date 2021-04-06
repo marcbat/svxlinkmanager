@@ -1,0 +1,96 @@
+﻿<div class="alert @UserStatus" role="alert">
+  Création de l'utilisateur
+</div>
+
+<div class="alert @ChannelsStatus" role="alert">
+  Installation des salons
+</div>
+
+<div class="alert @DefaultChannelStatus" role="alert">
+  Définition du salon principal
+</div>
+
+<div class="alert @RadioProfileStatus" role="alert">
+  Création du profil radio
+</div>
+
+<div class="alert @DownloadStatus" role="alert">
+  Téléchargement de la mise à jour. @DownloadProgress %
+</div>
+
+<div class="alert @InstallStatus" role="alert">
+  Installation de la mise à jour. Vous pourrez recharger la page dans 30 secondes environs.
+</div>
+
+@code {
+
+  protected override async Task OnInitializedAsync()
+  {
+    await base.OnInitializedAsync();
+
+    Home.OnSetUser += () =>
+    {
+      UserStatus = "alert-success";
+      InvokeAsync(() => StateHasChanged());
+    };
+
+    Home.OnInstallChannels += () =>
+    {
+      ChannelsStatus = "alert-success";
+      InvokeAsync(() => StateHasChanged());
+    };
+    Home.OnSetDefaultChannel += () =>
+    {
+      DefaultChannelStatus = "alert-success";
+      InvokeAsync(() => StateHasChanged());
+    };
+    Home.OnCreateRadioProfile += () =>
+    {
+      RadioProfileStatus = "alert-success";
+      InvokeAsync(() => StateHasChanged());
+    };
+
+    Home.OnDownloadStart += () =>
+    {
+      DownloadStatus = "alert-primary";
+      InvokeAsync(() => StateHasChanged());
+    };
+
+    Home.OnDownloadProgress += p =>
+    {
+      DownloadProgress = p;
+      InvokeAsync(() => StateHasChanged());
+    };
+
+    Home.OnDownloadComplete += () =>
+    {
+      DownloadStatus = "alert-success";
+      InvokeAsync(() => StateHasChanged());
+    };
+
+    Home.OnInstall += () =>
+    {
+      InstallStatus = "alert-success";
+      InvokeAsync(() => StateHasChanged());
+    };
+
+    Task.Run(() => Home.Install());
+  }
+
+  public string UserStatus { get; set; } = "alert-secondary";
+
+  public string ChannelsStatus { get; set; } = "alert-secondary";
+
+  public string DefaultChannelStatus { get; set; } = "alert-secondary";
+
+  public string RadioProfileStatus { get; set; } = "alert-secondary";
+
+  public string DownloadStatus { get; set; } = "alert-secondary";
+
+  public string InstallStatus { get; set; } = "alert-secondary";
+
+  public int DownloadProgress { get; set; } = 0;
+
+  [CascadingParameter]
+  Home Home { get; set; }
+}

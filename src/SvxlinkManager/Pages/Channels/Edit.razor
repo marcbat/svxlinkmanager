@@ -3,8 +3,6 @@
 @page "/Channel/Edit/{Id}"
 @inherits SvxlinkManager.Pages.Channels.EditBase<SvxlinkChannel>
 
-@attribute [Authorize]
-
 <h3>
   @if (Channel.IsDefault)
   {<span class="oi oi-home" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Le salon @Channel.Name est actuellement le salon par défaut."></span>}

@@ -1,0 +1,68 @@
+﻿@using SvxlinkManager.Models;
+
+<div class="alert alert-primary" role="alert">
+  A présent, choisissez les <strong>salons</strong> qui seront installés par défaut. <br />
+  Les mots de passe de ces salons sont déjà renseignés pour vous. Indiquez simplement votre indicatif et décochez les salons que vous ne voulez pas.
+</div>
+
+<EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.DefaultChannel)">
+  <FluentValidator TValidator="ChannelChooseValidator" />
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label data-toggle="tooltip" title="Votre indicatif. Il servira également à vous identifier sur les salons">Votre indicatif</label>
+      <InputText @bind-Value="InstallerModel.CallSign" type="text" class="form-control" id="CallSign" placeholder="Votre indicatif, par exemple (CH) HB9GXP H" />
+      <ValidationMessage For="@(() => InstallerModel.CallSign)" />
+    </div>
+    <div class="form-group col-md-6">
+      <label data-toggle="tooltip" title="L'indicatif annoncé sera utilisé par Svxlink pour annoncer le point d'accès à interval régulier.">Indicatif annoncé</label>
+      <InputText @bind-Value="InstallerModel.AnnonceCallSign" type="text" class="form-control" id="AnnonceCallSign" placeholder="Utilisez également votre indicatif, mais sous sa forme simple, par exemple HB9GXP" />
+      <ValidationMessage For="@(() => InstallerModel.AnnonceCallSign)" />
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <ValidationMessage For="@(() => InstallerModel.Channels)" />
+      @foreach (var channel in InstallerModel.Channels)
+      {
+        <div class="form-check form-check-inline">
+          <div class="pretty p-default p-curve p-bigger">
+            @if (InstallerModel.ChannelsToPreserved.Contains(channel))
+            {
+              <input type="checkbox" checked @onchange="e => AddRemoveChannel(channel, e)" />
+            }
+            else
+            {
+              <input type="checkbox" @onchange="e => AddRemoveChannel(channel, e)" />
+            }
+
+            <div class="state">
+              <label>@channel.Name</label>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <button class="btn btn-primary" type="button" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Security)">Précédent</button> <button class="btn btn-primary" type="submit">Suivant</button>
+</EditForm>
+
+@code {
+  [Parameter]
+  public InstallerModel InstallerModel { get; set; }
+
+  [Parameter]
+  public EventCallback<InstallationStatus> OnSubmit { get; set; }
+
+  public void AddRemoveChannel(SvxlinkChannel channel, ChangeEventArgs e)
+  {
+    if ((bool)e.Value)
+      InstallerModel.ChannelsToDelete.Remove(channel);
+    else
+      InstallerModel.ChannelsToDelete.Add(channel);
+
+  }
+
+}

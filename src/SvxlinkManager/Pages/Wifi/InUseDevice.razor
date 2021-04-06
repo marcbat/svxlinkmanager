@@ -1,6 +1,4 @@
-﻿@inherits SvxlinkManager.Pages.Wifi.ManageBase
-
-<li class="list-group-item">
+﻿<li class="list-group-item">
   <div class="row">
     <div class="col-xl-2 text-nowrap">
       <span class="oi oi-home" aria-hidden="true"></span>
@@ -19,7 +17,7 @@
       Configuré
     </div>
     <div class="col-xl-2">
-      <button type="button" class="btn btn-danger" @onclick="@(() => Down(Device))">Déconnecter</button>
+      <button type="button" class="btn btn-danger" @onclick="@(() => OnDown.InvokeAsync(Device))">Déconnecter</button>
     </div>
   </div>
 </li>
@@ -27,4 +25,7 @@
 @code {
   [Parameter]
   public Device Device { get; set; }
+
+  [Parameter]
+  public EventCallback<Device> OnDown { get; set; }
 }

@@ -1,0 +1,56 @@
+﻿@page "/Install"
+@layout InstallLayout
+
+@inherits SvxlinkManager.Pages.Installer.HomeBase
+
+<h3>Installation</h3>
+
+@switch (InstallationStatus)
+{
+  case InstallationStatus.Security:
+    <Security InstallerModel="@InstallerModel" OnSubmit="ChangeInstallationStatus" />
+    break;
+  case InstallationStatus.Channel:
+    <ChannelsChoose InstallerModel="@InstallerModel" OnSubmit="ChangeInstallationStatus" />
+    break;
+  case InstallationStatus.DefaultChannel:
+    <ChannelDefault InstallerModel="@InstallerModel" OnSubmit="ChangeInstallationStatus" />
+    break;
+  case InstallationStatus.RadioProfile:
+    <RadioProfileDefault InstallerModel="@InstallerModel" OnSubmit="ChangeInstallationStatus" />
+    break;
+  case InstallationStatus.Wifi:
+    <WifiChoose InstallerModel="@InstallerModel" OnSubmit="ChangeInstallationStatus" OnConnect="Connect" OnDown="Down" OnUp="Up" />
+    break;
+  case InstallationStatus.Update:
+    @if (IsCurrentRelease())
+    {
+      <Resume InstallerModel="@InstallerModel" OnSubmit="ChangeInstallationStatus" />
+    }
+    else
+    {
+      <UpdaterChoose InstallerModel="@InstallerModel" OnSubmit="ChangeInstallationStatus" />
+    }
+
+    break;
+  case InstallationStatus.Resume:
+    <Resume InstallerModel="@InstallerModel" OnSubmit="ChangeInstallationStatus" />
+
+    break;
+
+  case InstallationStatus.Progress:
+    <CascadingValue Value="this">
+      <InstallProgress />
+    </CascadingValue>
+
+    break;
+  default:
+    break;
+}
+
+@code {
+  public void ChangeInstallationStatus(InstallationStatus status)
+  {
+    InstallationStatus = status;
+  }
+}

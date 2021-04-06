@@ -1,6 +1,4 @@
-﻿@inherits SvxlinkManager.Pages.Wifi.ManageBase
-
-<li class="list-group-item">
+﻿<li class="list-group-item">
   <div class="row">
     <div class="col-xl-2 text-nowrap">
       @Device.Ssid
@@ -18,7 +16,7 @@
       Configuré
     </div>
     <div class="col-xl-2">
-      <button type="button" class="btn btn-outline-primary" @onclick="(()=> Up(Device))">Connecter</button>
+      <button type="button" class="btn btn-outline-primary" @onclick="() => OnUp.InvokeAsync(Device)">Connecter</button>
     </div>
   </div>
 </li>
@@ -26,4 +24,7 @@
 @code {
   [Parameter]
   public Device Device { get; set; }
+
+  [Parameter]
+  public EventCallback<Device> OnUp { get; set; }
 }
