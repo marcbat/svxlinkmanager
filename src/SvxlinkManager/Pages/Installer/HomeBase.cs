@@ -153,7 +153,6 @@ namespace SvxlinkManager.Pages.Installer
         SetDefaultChannel();
         CreateRadioProfile();
         Update();
-        InstallUpdate();
       }
       catch (Exception e)
       {
@@ -248,7 +247,11 @@ namespace SvxlinkManager.Pages.Installer
     {
       UpdaterService.OnDownloadStart += r => OnDownloadStart?.Invoke();
       UpdaterService.OnDownloadProgress += x => OnDownloadProgress?.Invoke(x.progressPercentage);
-      UpdaterService.OndownloadComplete += r => OnDownloadComplete?.Invoke();
+      UpdaterService.OndownloadComplete += r =>
+      {
+        OnDownloadComplete?.Invoke();
+        InstallUpdate();
+      };
 
       UpdaterService.Download(InstallerModel.LastRelease);
     }
