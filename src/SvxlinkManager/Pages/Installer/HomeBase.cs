@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Models;
@@ -23,12 +24,21 @@ namespace SvxlinkManager.Pages.Installer
     RadioProfile,
     Wifi,
     Update,
-    Resume
+    Resume,
+    Progress
   }
 
   public class HomeBase : RepositoryComponentBase
   {
     private InstallationStatus installationStatus = InstallationStatus.Security;
+
+    public event Action OnSetUser;
+
+    public event Action OnInstallChannels;
+
+    public event Action OnSetDefaultChannel;
+
+    public event Action OnCreateRadioProfile;
 
     protected override void OnInitialized()
     {
@@ -45,6 +55,12 @@ namespace SvxlinkManager.Pages.Installer
 
     [Inject]
     public UpdaterService UpdaterService { get; set; }
+
+    [Inject]
+    public ISa818Service Sa818Service { get; set; }
+
+    [Inject]
+    public UserManager<IdentityUser> UserManager { get; set; }
 
     private List<Device> LoadDevices() => WifiService.GetDevices();
 
@@ -117,6 +133,104 @@ namespace SvxlinkManager.Pages.Installer
         }
 
         installationStatus = value;
+      }
+    }
+
+    public void Install()
+    {
+      try
+      {
+        SeedUser();
+        InstallChannels();
+        SetDefaultChannel();
+        CreateRadioProfile();
+      }
+      catch (Exception e)
+      {
+        Logger.LogError($"Erreur lors de l'intallation. {e.Message}");
+        Telemetry.TrackException(new Exception("Erreur lors de l'installation", e));
+      }
+    }
+
+    private void CreateRadioProfile()
+    {
+      try
+      {
+        if (InstallerModel.RadioProfile.HasSa818)
+          Sa818Service.WriteRadioProfile(InstallerModel.RadioProfile);
+
+        InstallerModel.RadioProfile.Enable = true;
+        Repositories.RadioProfiles.Add(InstallerModel.RadioProfile);
+
+        OnCreateRadioProfile?.Invoke();
+      }
+      catch (Exception e)
+      {
+        throw new Exception("Impossible de créer le profil radio", e);
+      }
+    }
+
+    private void SetDefaultChannel()
+    {
+      try
+      {
+        var channel = Repositories.Channels.Get(InstallerModel.DefaultChannel.Id);
+
+        channel.IsDefault = true;
+        channel.IsTemporized = false;
+        Repositories.Channels.Update(channel);
+
+        OnSetDefaultChannel?.Invoke();
+      }
+      catch (Exception e)
+      {
+        throw new Exception("Impossible de définir le salon par défaut.", e);
+      }
+    }
+
+    private void InstallChannels()
+    {
+      try
+      {
+        foreach (var channel in InstallerModel.ChannelsToDelete)
+          Repositories.Channels.Delete(channel.Id);
+
+        foreach (var channel in Repositories.SvxlinkChannels.GetAll())
+        {
+          channel.CallSign = InstallerModel.CallSign;
+          channel.ReportCallSign = InstallerModel.AnnonceCallSign;
+
+          Repositories.Channels.Update(channel);
+        }
+
+        OnInstallChannels?.Invoke();
+      }
+      catch (Exception e)
+      {
+        throw new Exception("Impossible de définir les salons à installer", e);
+      }
+    }
+
+    private void SeedUser()
+    {
+      try
+      {
+        var user = new IdentityUser
+        {
+          UserName = InstallerModel.UserName,
+          Email = InstallerModel.UserName
+        };
+
+        var result = UserManager.CreateAsync(user, InstallerModel.Password).Result;
+
+        if (result.Succeeded)
+          UserManager.AddToRoleAsync(user, "Admin").Wait();
+
+        OnSetUser?.Invoke();
+      }
+      catch (Exception e)
+      {
+        throw new Exception("Impossible de créer l'utilisateur par défaut.", e);
       }
     }
   }

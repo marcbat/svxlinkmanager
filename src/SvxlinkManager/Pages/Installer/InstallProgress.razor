@@ -1,0 +1,63 @@
+﻿
+<div class="alert @SetUserOk" role="alert">
+  Création de l'utilisateur
+</div>
+
+<div class="alert @SetChannelsOk" role="alert">
+  Installation des salons
+</div>
+
+<div class="alert @SetDefaultChannelOk" role="alert">
+  Définition du salon principal
+</div>
+
+<div class="alert @SetRadioProfileOk" role="alert">
+  Création du profil radio
+</div>
+
+<div class="alert alert-primary" role="alert">
+  Mise à jour de SvxlinkManager.
+</div>
+
+@code {
+
+  protected override async Task OnInitializedAsync()
+  {
+    await base.OnInitializedAsync();
+
+    Home.OnSetUser += () =>
+    {
+      SetUserOk = "alert-success";
+      InvokeAsync(() => StateHasChanged());
+    };
+
+    Home.OnInstallChannels += () =>
+    {
+      SetChannelsOk = "alert-success";
+      InvokeAsync(() => StateHasChanged());
+    };
+    Home.OnSetDefaultChannel += () =>
+    {
+      SetDefaultChannelOk = "alert-success";
+      InvokeAsync(() => StateHasChanged());
+    };
+    Home.OnCreateRadioProfile += () =>
+    {
+      SetRadioProfileOk = "alert-success";
+      InvokeAsync(() => StateHasChanged());
+    };
+
+    Task.Run(() => Home.Install());
+  }
+
+  public string SetUserOk { get; set; } = "alert-primary";
+
+  public string SetChannelsOk { get; set; } = "alert-primary";
+
+  public string SetDefaultChannelOk { get; set; } = "alert-primary";
+
+  public string SetRadioProfileOk { get; set; } = "alert-primary";
+
+  [CascadingParameter]
+  Home Home { get; set; }
+}

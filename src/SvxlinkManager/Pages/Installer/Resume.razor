@@ -2,7 +2,7 @@
   Merci de vérifier les informations ci-dessous et de lancer l'installation.
 </div>
 
-<EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.DefaultChannel)">
+<EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.Progress)">
 
   <h4>Informations générales</h4>
   <ul id="channel-manage-list" class="list-group-horizontal">
@@ -70,7 +70,6 @@
     </li>
   </ul>
 
-
   @if (InstallerModel.UpdateToLastRelease)
   {
     <h4>Mise à jour</h4>
@@ -89,7 +88,6 @@
       </li>
     </ul>
 
-
   }
 
   <button class="btn btn-primary" type="button" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Security)">Modifier</button> <button class="btn btn-danger" type="submit">Installer</button>
@@ -101,4 +99,5 @@
 
   [Parameter]
   public EventCallback<InstallationStatus> OnSubmit { get; set; }
+
 }

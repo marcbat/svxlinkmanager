@@ -30,7 +30,7 @@ namespace SvxlinkManager.Pages.Installer
 
     public List<SvxlinkChannel> ChannelsToDelete { get; } = new List<SvxlinkChannel>();
 
-    public Models.RadioProfile RadioProfile { get; set; } = new Models.RadioProfile { SquelchDetection = "GPIO" };
+    public Models.RadioProfile RadioProfile { get; set; } = new Models.RadioProfile { Name = "Profil principal", SquelchDetection = "GPIO", HasSa818 = true };
 
     public List<SvxlinkChannel> ChannelsToPreserved => Channels.Where(c => !ChannelsToDelete.Any(e => c.Equals(e))).ToList();
 

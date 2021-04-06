@@ -6,7 +6,7 @@
 </div>
 
 <EditForm Model="@InstallerModel.RadioProfile" OnValidSubmit="() => OnSubmit.InvokeAsync(InstallationStatus.Wifi)">
-  @*<FluentValidator TValidator="RadioProfileValidator" />*@
+  <FluentValidator TValidator="RadioProfileValidator" />
 
   <div class="form-row">
     <div class="form-group col-md-4">

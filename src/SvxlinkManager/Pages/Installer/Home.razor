@@ -35,6 +35,14 @@
     break;
   case InstallationStatus.Resume:
     <Resume InstallerModel="@InstallerModel" OnSubmit="ChangeInstallationStatus" />
+
+    break;
+
+  case InstallationStatus.Progress:
+    <CascadingValue Value="this">
+      <InstallProgress />
+    </CascadingValue>
+
     break;
   default:
     break;
