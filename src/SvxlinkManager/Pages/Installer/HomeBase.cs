@@ -40,6 +40,14 @@ namespace SvxlinkManager.Pages.Installer
 
     public event Action OnCreateRadioProfile;
 
+    public event Action OnDownloadStart;
+
+    public event Action<int> OnDownloadProgress;
+
+    public event Action OnDownloadComplete;
+
+    public event Action OnInstall;
+
     protected override void OnInitialized()
     {
       base.OnInitialized();
@@ -144,6 +152,8 @@ namespace SvxlinkManager.Pages.Installer
         InstallChannels();
         SetDefaultChannel();
         CreateRadioProfile();
+        Update();
+        InstallUpdate();
       }
       catch (Exception e)
       {
@@ -232,6 +242,21 @@ namespace SvxlinkManager.Pages.Installer
       {
         throw new Exception("Impossible de créer l'utilisateur par défaut.", e);
       }
+    }
+
+    private void Update()
+    {
+      UpdaterService.OnDownloadStart += r => OnDownloadStart?.Invoke();
+      UpdaterService.OnDownloadProgress += x => OnDownloadProgress?.Invoke(x.progressPercentage);
+      UpdaterService.OndownloadComplete += r => OnDownloadComplete?.Invoke();
+
+      UpdaterService.Download(InstallerModel.LastRelease);
+    }
+
+    private void InstallUpdate()
+    {
+      OnInstall?.Invoke();
+      UpdaterService.Install(InstallerModel.LastRelease);
     }
   }
 }
