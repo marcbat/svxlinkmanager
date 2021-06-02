@@ -40,10 +40,15 @@ then
 
 # make a backup of the application before update
 rsync -ar /etc/SvxlinkManager/ /etc/SvxlinkManager.bak/
+
+# unzip application 
+unzip /tmp/svxlinkmanager/svxlinkmanager-__Build.BuildNumber__.zip -d /tmp/svxlinkmanager/__Build.BuildNumber__/
+
+# remove current version
 rm -rf  /etc/SvxlinkManager/
 
-# update the application
-unzip /tmp/svxlinkmanager/svxlinkmanager-__Build.BuildNumber__.zip -d /etc/
+# copy new version
+cp -R /tmp/svxlinkmanager/__Build.BuildNumber__/* /etc/SvxlinkManager/
 
 # restore the old user db
 cp /etc/SvxlinkManager.bak/SvxlinkManager.db /etc/SvxlinkManager/
