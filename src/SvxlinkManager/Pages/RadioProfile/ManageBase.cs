@@ -64,8 +64,9 @@ namespace SvxlinkManager.Pages.RadioProfile
       Repositories.RadioProfiles.Update(profile);
 
       Telemetry.TrackEvent("Apply radio profile", profile.TrackProperties);
-
-      SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
+      
+      if(SvxLinkService.ChannelId > 0)
+        SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
 
       await ShowSuccessToastAsync($"{profile.Name} appliqué.", $"Le profil radio {profile.Name} a bien été appliqué.");
 
