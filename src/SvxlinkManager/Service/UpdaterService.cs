@@ -57,7 +57,7 @@ namespace SvxlinkManager.Service
         };
 
         client.Headers.Add(HttpRequestHeader.UserAgent, "request");
-        client.DownloadStringAsync(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases"));
+        client.DownloadStringAsync(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases")); 
       }
       catch (Exception)
       {
