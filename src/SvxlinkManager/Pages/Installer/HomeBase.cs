@@ -70,6 +70,9 @@ namespace SvxlinkManager.Pages.Installer
     [Inject]
     public UserManager<IdentityUser> UserManager { get; set; }
 
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
     private List<Device> LoadDevices() => WifiService.GetDevices();
 
     private List<SvxlinkChannel> LoadChannels() => Repositories.SvxlinkChannels.GetAll().ToList();
@@ -152,7 +155,10 @@ namespace SvxlinkManager.Pages.Installer
         InstallChannels();
         SetDefaultChannel();
         CreateRadioProfile();
-        Update();
+        if (InstallerModel.UpdateToLastRelease)
+          Update();
+        else
+          NavigationManager.NavigateTo("Identity/Account/Login", true);
       }
       catch (Exception e)
       {
@@ -161,12 +167,17 @@ namespace SvxlinkManager.Pages.Installer
       }
     }
 
+    /// <summary>Crée le profil radio et programme le SA818 si necessaire</summary>
+    /// <exception cref="Exception">Impossible de créer le profil radio</exception>
     private void CreateRadioProfile()
     {
       try
       {
         if (InstallerModel.RadioProfile.HasSa818)
           Sa818Service.WriteRadioProfile(InstallerModel.RadioProfile);
+
+        foreach (var radioprofile in Repositories.RadioProfiles.GetAll())
+          Repositories.Repository<Models.RadioProfile>().Delete(radioprofile.Id);
 
         InstallerModel.RadioProfile.Enable = true;
         Repositories.RadioProfiles.Add(InstallerModel.RadioProfile);
@@ -197,6 +208,8 @@ namespace SvxlinkManager.Pages.Installer
       }
     }
 
+    /// <summary>Installe les salons</summary>
+    /// <exception cref="Exception">Impossible de définir les salons à installer</exception>
     private void InstallChannels()
     {
       try
@@ -220,6 +233,8 @@ namespace SvxlinkManager.Pages.Installer
       }
     }
 
+    /// <summary>Ajout l'utilisateur admin</summary>
+    /// <exception cref="Exception">Impossible de créer l'utilisateur par défaut.</exception>
     private void SeedUser()
     {
       try

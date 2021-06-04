@@ -338,6 +338,9 @@ namespace SvxlinkManager.Service
     /// <param name="e">The <see cref="ElapsedEventArgs"/> instance containing the event data.</param>
     protected virtual void CheckTemporized(object s, ElapsedEventArgs e)
     {
+      if (channelId == 0)
+        return;
+
       var diff = (DateTime.Now - lastTx).TotalSeconds;
       var channel = repositories.Channels.Get(channelId);
 

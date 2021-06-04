@@ -72,9 +72,9 @@ namespace SvxlinkManager.Service
         using WebClient client = new WebClient();
 
         client.Headers.Add(HttpRequestHeader.UserAgent, "request");
-        var result = client.DownloadString(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases/latest"));
+        var result = client.DownloadString(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases"));
 
-        return JsonSerializer.Deserialize<Release>(result);
+        return JsonSerializer.Deserialize<List<Release>>(result).First();
       }
       catch (Exception)
       {
