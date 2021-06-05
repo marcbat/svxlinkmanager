@@ -206,7 +206,7 @@ namespace SvxlinkManager.Service
               client.DownloadFile(new Uri(release.Updater.DownloadUrl), updaterTarget);
 
               if (UpdaterCheckSum != GetChecksum(updaterTarget))
-                throw new Exception($"Echec de la validation du fichier {release.Updater.Name}.");
+                throw new Exception($"Echec de la validation du fichier {release.Updater.Name}. ");
 
               logger.LogInformation($"Download Update file {release.Updater.DownloadUrl} complet.");
 
