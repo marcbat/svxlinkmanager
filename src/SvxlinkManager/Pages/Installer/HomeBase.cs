@@ -298,7 +298,7 @@ namespace SvxlinkManager.Pages.Installer
     /// <summary>Installation de la mise à jour</summary>
     private void InstallUpdate()
     {
-      Logger.LogInformation("Installation de la mise à jour et redemarrage.");
+      Logger.LogInformation("Installation de la mise à jour et redemarrage. ");
       Telemetry.TrackEvent("Installation de la mise à jour.");
 
       OnInstall?.Invoke();
