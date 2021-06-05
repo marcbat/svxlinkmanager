@@ -43,5 +43,27 @@ namespace SvxlinkManager.Pages.Installer
     public string CurrentVersion { get; set; }
 
     public List<Device> Devices { get; set; }
+
+    public Dictionary<string, string> TrackProperties
+    {
+      get
+      {
+        var installerModel = new Dictionary<string, string> {
+        { nameof(UserName), UserName },
+        { nameof(CallSign), CallSign },
+        { nameof(AnnonceCallSign), AnnonceCallSign },
+        { nameof(ChannelsToPreservedList), ChannelsToPreservedList },
+        { nameof(UpdateToLastRelease), UpdateToLastRelease.ToString() },
+        { nameof(LastRelease), LastRelease.Name },
+        { nameof(CurrentVersion), CurrentVersion },
+        };
+
+        RadioProfile.TrackProperties.ToList().ForEach(x => installerModel.Add($"Radio{x.Key}", x.Value));
+
+        DefaultChannel.TrackProperties.ToList().ForEach(x => installerModel.Add($"DefaultChannel{x.Key}", x.Value));
+
+        return installerModel;
+      }
+    }
   }
 }

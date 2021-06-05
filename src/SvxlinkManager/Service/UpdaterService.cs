@@ -57,7 +57,7 @@ namespace SvxlinkManager.Service
         };
 
         client.Headers.Add(HttpRequestHeader.UserAgent, "request");
-        client.DownloadStringAsync(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases")); 
+        client.DownloadStringAsync(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases"));
       }
       catch (Exception)
       {
@@ -193,6 +193,7 @@ namespace SvxlinkManager.Service
 
           client.DownloadFileCompleted += async (s, e) =>
           {
+            logger.LogInformation($"Telechargement de la release {release.Package.DownloadUrl} complet.");
             OndownloadComplete?.Invoke(release);
 
             if (packageCheckSum != GetChecksum(packageTarget))
@@ -201,6 +202,7 @@ namespace SvxlinkManager.Service
             using (var operation = telemetry.StartOperation(downloadTacker))
             {
               telemetry.TrackEvent("Download Update file", new Dictionary<string, string> { { "Name", release.Name } });
+              logger.LogInformation($"Telechargement de la release {release.Updater.DownloadUrl}");
 
               client.DownloadFile(new Uri(release.Updater.DownloadUrl), updaterTarget);
 
@@ -209,6 +211,7 @@ namespace SvxlinkManager.Service
             }
           };
 
+          logger.LogInformation($"Telechargement de la release {release.Package.DownloadUrl}");
           client.DownloadFileAsync(new Uri(release.Package.DownloadUrl), packageTarget);
           OnDownloadStart?.Invoke(release);
         }

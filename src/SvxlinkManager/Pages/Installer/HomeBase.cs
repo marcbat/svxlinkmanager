@@ -147,10 +147,16 @@ namespace SvxlinkManager.Pages.Installer
       }
     }
 
+    /// <summary>Installation de SvxlinkManager</summary>
     public void Install()
     {
       try
       {
+        Logger.LogInformation("Installation du profil radio.");
+        InstallerModel.TrackProperties.ToList().ForEach(x => Logger.LogInformation($"{x.Key}: {x.Value}"));
+
+        Telemetry.TrackEvent("Installation de SvxlinkMananger", InstallerModel.TrackProperties);
+
         SeedUser();
         InstallChannels();
         SetDefaultChannel();
@@ -173,6 +179,9 @@ namespace SvxlinkManager.Pages.Installer
     {
       try
       {
+        Logger.LogInformation("Installation du profil radio.");
+        Telemetry.TrackEvent("Installation du profil radio.");
+
         if (InstallerModel.RadioProfile.HasSa818)
           Sa818Service.WriteRadioProfile(InstallerModel.RadioProfile);
 
@@ -190,10 +199,15 @@ namespace SvxlinkManager.Pages.Installer
       }
     }
 
+    /// <summary>Définition du salon par défaut</summary>
+    /// <exception cref="Exception">Impossible de définir le salon par défaut.</exception>
     private void SetDefaultChannel()
     {
       try
       {
+        Logger.LogInformation("Configuration du salon par défaut.");
+        Telemetry.TrackEvent("Configuration du salon par défaut.");
+
         var channel = Repositories.Channels.Get(InstallerModel.DefaultChannel.Id);
 
         channel.IsDefault = true;
@@ -214,6 +228,9 @@ namespace SvxlinkManager.Pages.Installer
     {
       try
       {
+        Logger.LogInformation("Installation des salons.");
+        Telemetry.TrackEvent("Installation des salons.");
+
         foreach (var channel in InstallerModel.ChannelsToDelete)
           Repositories.Channels.Delete(channel.Id);
 
@@ -239,6 +256,9 @@ namespace SvxlinkManager.Pages.Installer
     {
       try
       {
+        Logger.LogInformation("Installation de l'utilisateur par défaut.");
+        Telemetry.TrackEvent("Installation de l'utilisateur par défaut.");
+
         var user = new IdentityUser
         {
           UserName = InstallerModel.UserName,
@@ -258,8 +278,12 @@ namespace SvxlinkManager.Pages.Installer
       }
     }
 
+    /// <summary>Telechargement de la mise à jour</summary>
     private void Update()
     {
+      Logger.LogInformation("Telechargement de la mise à jour.");
+      Telemetry.TrackEvent("Telechargement de la mise à jour.");
+
       UpdaterService.OnDownloadStart += r => OnDownloadStart?.Invoke();
       UpdaterService.OnDownloadProgress += x => OnDownloadProgress?.Invoke(x.progressPercentage);
       UpdaterService.OndownloadComplete += r =>
@@ -271,8 +295,12 @@ namespace SvxlinkManager.Pages.Installer
       UpdaterService.Download(InstallerModel.LastRelease);
     }
 
+    /// <summary>Installation de la mise à jour</summary>
     private void InstallUpdate()
     {
+      Logger.LogInformation("Installation de la mise à jour et redemarrage.");
+      Telemetry.TrackEvent("Installation de la mise à jour.");
+
       OnInstall?.Invoke();
       UpdaterService.Install(InstallerModel.LastRelease);
     }
