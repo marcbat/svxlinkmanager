@@ -194,7 +194,6 @@ namespace SvxlinkManager.Service
           client.DownloadFileCompleted += async (s, e) =>
           {
             logger.LogInformation($"Telechargement de la release {release.Package.DownloadUrl} complet.");
-            OndownloadComplete?.Invoke(release);
 
             if (packageCheckSum != GetChecksum(packageTarget))
               throw new Exception($"Echec de la validation du fichier {release.Package.Name}.");
@@ -202,12 +201,14 @@ namespace SvxlinkManager.Service
             using (var operation = telemetry.StartOperation(downloadTacker))
             {
               telemetry.TrackEvent("Download Update file", new Dictionary<string, string> { { "Name", release.Name } });
-              logger.LogInformation($"Telechargement de la release {release.Updater.DownloadUrl}");
+              logger.LogInformation($"Download Update file {release.Updater.DownloadUrl}");
 
               client.DownloadFile(new Uri(release.Updater.DownloadUrl), updaterTarget);
 
               if (UpdaterCheckSum != GetChecksum(updaterTarget))
                 throw new Exception($"Echec de la validation du fichier {release.Updater.Name}.");
+
+              OndownloadComplete?.Invoke(release);
             }
           };
 
