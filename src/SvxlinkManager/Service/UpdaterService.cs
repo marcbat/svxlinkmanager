@@ -208,6 +208,8 @@ namespace SvxlinkManager.Service
               if (UpdaterCheckSum != GetChecksum(updaterTarget))
                 throw new Exception($"Echec de la validation du fichier {release.Updater.Name}.");
 
+              logger.LogInformation($"Download Update file {release.Updater.DownloadUrl} complet.");
+
               OndownloadComplete?.Invoke(release);
             }
           };
