@@ -69,8 +69,18 @@ namespace SvxlinkManager
 #endif
 
       services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
-      //services.AddSingleton<ITelemetryInitializer, SvxlinkManagerTelemetry>();
       services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
+
+      // Password complexity
+      services.Configure<IdentityOptions>(options =>
+      {
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = 6;
+        options.Password.RequiredUniqueChars = 1;
+      });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -121,8 +131,6 @@ namespace SvxlinkManager
         endpoints.MapBlazorHub();
         endpoints.MapFallbackToPage("/_Host");
       });
-
-
 
       // ajout de l'utilisateur admin
       // ApplicationDbInitializer.SeedUsers(userManager);
