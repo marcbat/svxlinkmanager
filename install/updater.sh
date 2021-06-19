@@ -51,7 +51,7 @@ rm -rf  /etc/SvxlinkManager/
 cp -R /tmp/svxlinkmanager/__Build.BuildNumber__/* /etc/SvxlinkManager/
 
 # restore the old user db
-# cp /etc/SvxlinkManager.bak/SvxlinkManager.db /etc/SvxlinkManager/
+cp /etc/SvxlinkManager.bak/SvxlinkManager.db /etc/SvxlinkManager/
 
 # start the application
 sudo systemctl restart svxlinkmanager
