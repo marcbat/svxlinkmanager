@@ -14,13 +14,16 @@
   Création du profil radio
 </div>
 
-<div class="alert @DownloadStatus" role="alert">
-  Téléchargement de la mise à jour. @DownloadProgress %
-</div>
+@if (Home.InstallerModel.UpdateToLastRelease)
+{
+  <div class="alert @DownloadStatus" role="alert">
+    Téléchargement de la mise à jour. @DownloadProgress %
+  </div>
 
-<div class="alert @InstallStatus" role="alert">
-  Installation de la mise à jour. Vous pourrez recharger la page dans 30 secondes environs.
-</div>
+  <div class="alert @InstallStatus" role="alert">
+    Installation de la mise à jour. Vous pourrez recharger la page dans 30 secondes environs.
+  </div>
+}
 
 @code {
 
