@@ -11,8 +11,8 @@ namespace SvxlinkManager.Pages.Installer
   {
     public UserPasswordValidator()
     {
-      RuleFor(i => i.UserName).NotEmpty().EmailAddress().WithMessage("Le nom d'utilisateur doit être un email valide.");
-      RuleFor(i => i.Password).NotEmpty().WithMessage("Le mot de passe est obligatoire");
+      RuleFor(i => i.UserName).NotEmpty().WithMessage("Le nom d'utilisateur est obligatoire").EmailAddress().WithMessage("Le nom d'utilisateur doit être un email valide.");
+      RuleFor(i => i.Password).NotEmpty().WithMessage("Le mot de passe est obligatoire").Length(6,20).WithMessage("Le mot de passe doit faire en 6 et 20 caractères");
       RuleFor(i => i.Password2).Must((i, p2) => i.Password == p2).WithMessage("Les deux mot de passe ne correspondent pas.");
     }
   }

@@ -13,19 +13,15 @@ namespace SvxlinkManager.Pages.Installer
   public class InstallerModel
   {
     [Required(ErrorMessage = "Le nom d'utilisateur est obligatoire.")]
-    [EmailAddress(ErrorMessage = "Le nom d'utilisateur doit être un email.")]
     public string UserName { get; set; }
 
     [Required(ErrorMessage = "Le mot de passe est obligatoire.")]
-    [StringLength(6, ErrorMessage = "Le mot de passe doit au moins faire 6 caractères.")]
     public string Password { get; set; }
 
     public string Password2 { get; set; }
 
-    [Required(ErrorMessage = "L'indicatif est obligatoire.")]
     public string CallSign { get; set; }
 
-    [Required(ErrorMessage = "L'indicatif annoncé est obligatoire.")]
     public string AnnonceCallSign { get; set; }
 
     public SvxlinkChannel DefaultChannel { get; set; }
@@ -40,7 +36,7 @@ namespace SvxlinkManager.Pages.Installer
 
     public string ChannelsToPreservedList => String.Join(", ", ChannelsToPreserved.Select(x => x.Name));
 
-    public bool UpdateToLastRelease { get; set; } = true;
+    public bool UpdateToLastRelease { get; set; } = false;
 
     public Release LastRelease { get; set; }
 
