@@ -50,6 +50,9 @@ namespace SvxlinkManager.Pages.Installer
 
     protected override void OnInitialized()
     {
+      if (UserManager.Users.Any())
+        NavigationManager.NavigateTo("Identity/Account/Login", true);
+
       base.OnInitialized();
 
       InstallerModel = new InstallerModel
@@ -73,7 +76,10 @@ namespace SvxlinkManager.Pages.Installer
     [Inject]
     public NavigationManager NavigationManager { get; set; }
 
-    private List<Device> LoadDevices() => WifiService.GetDevices();
+    [Inject]
+    public SvxLinkService SvxLinkService { get; set; }
+
+    //private List<Device> LoadDevices() => WifiService.GetDevices();
 
     private List<SvxlinkChannel> LoadChannels() => Repositories.SvxlinkChannels.GetAll().ToList();
 
@@ -128,7 +134,7 @@ namespace SvxlinkManager.Pages.Installer
           case InstallationStatus.Wifi:
             Task.Run(async () =>
             {
-              InstallerModel.Devices = LoadDevices();
+              //InstallerModel.Devices = LoadDevices();
               await InvokeAsync(() => StateHasChanged());
             });
             break;
@@ -164,7 +170,10 @@ namespace SvxlinkManager.Pages.Installer
         if (InstallerModel.UpdateToLastRelease)
           Update();
         else
+        {
+          SvxLinkService.StartDefaultChannel();
           NavigationManager.NavigateTo("Identity/Account/Login", true);
+        }
       }
       catch (Exception e)
       {

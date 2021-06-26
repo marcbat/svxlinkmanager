@@ -105,8 +105,8 @@ namespace SvxlinkManager
         context.Database.Migrate();
 
         // start default channel
-        //var svxlinkservice = serviceScope.ServiceProvider.GetRequiredService<SvxLinkService>();
-        //svxlinkservice.StartDefaultChannel();
+        var svxlinkservice = serviceScope.ServiceProvider.GetRequiredService<SvxLinkService>();
+        svxlinkservice.StartDefaultChannel();
 
         // set telemetry global settings
         var telemetry = serviceScope.ServiceProvider.GetRequiredService<TelemetryClient>();
@@ -131,9 +131,6 @@ namespace SvxlinkManager
         endpoints.MapBlazorHub();
         endpoints.MapFallbackToPage("/_Host");
       });
-
-      // ajout de l'utilisateur admin
-      // ApplicationDbInitializer.SeedUsers(userManager);
 
       // Copy du fichier logic.tcl
       if (!Directory.Exists("/usr/share/svxlink/events.d/local"))

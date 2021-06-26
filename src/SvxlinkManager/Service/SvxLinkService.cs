@@ -136,8 +136,12 @@ namespace SvxlinkManager.Service
     public string Status { get; set; } = "Déconnecté";
 
     /// <summary>Connecte le salon par défaut.</summary>
-    public virtual void StartDefaultChannel() =>
-      ChannelId = repositories.Channels.GetDefault().Id;
+    public virtual void StartDefaultChannel()
+    {
+      var defaultId = repositories.Channels.GetDefault()?.Id;
+      if (defaultId != null)
+        ChannelId = (int)defaultId;
+    }
 
     /// <summary>Test channel type and activate</summary>
     /// <param name="channelid">Channel Id</param>
