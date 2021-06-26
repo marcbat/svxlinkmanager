@@ -1,4 +1,5 @@
 ﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Scanning
 {
+  [Authorize]
   public class ManageBase : RepositoryComponentBase
   {
     public EditContext EditContext;

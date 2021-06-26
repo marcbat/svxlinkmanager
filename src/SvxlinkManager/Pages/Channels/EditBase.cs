@@ -1,4 +1,5 @@
 ﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
 using SvxlinkManager.Models;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Channels
 {
+  [Authorize]
   public class EditBase<TChannel> : AddEditBase<TChannel> where TChannel : Channel
   {
     [Parameter]

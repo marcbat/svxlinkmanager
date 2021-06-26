@@ -1,0 +1,57 @@
+﻿@using SvxlinkManager.Pages.Wifi
+
+<div class="alert alert-primary" role="alert">
+  Si vous le souhaitez, vous pouvez connecter un ou plusieurs Wifi.
+</div>
+
+@if (InstallerModel.Devices == null)
+{
+  <div class="alert alert-primary" role="alert">
+    Recherche de réseau wifi
+  </div>
+}
+else
+{
+
+  <ul id="channel-manage-list" class="list-group-horizontal">
+    @foreach (var device in InstallerModel.Devices)
+    {
+      if (IsInUse(device.InUse))
+      {
+        <InUseDevice Device="device" OnDown="OnDown" />
+      }
+      else
+      {
+        if (device.HasConnection)
+        {
+          <ConfiguredDevice Device="device" OnUp="OnUp" />
+        }
+        else
+        {
+          <NotConfiguredDevice Device="device" OnConnect="OnConnect" />
+        }
+      }
+    }
+  </ul>
+}
+<button class="btn btn-primary" type="button" role="button" @onclick="() => OnSubmit.InvokeAsync(InstallationStatus.RadioProfile)">Précédent</button>
+<button class="btn btn-primary" type="button" @onclick="() => OnSubmit.InvokeAsync(InstallationStatus.Update)">Suivant</button>
+
+@code  {
+  [Parameter]
+  public InstallerModel InstallerModel { get; set; }
+
+  [Parameter]
+  public EventCallback<InstallationStatus> OnSubmit { get; set; }
+
+  [Parameter]
+  public EventCallback<Device> OnUp { get; set; }
+
+  [Parameter]
+  public EventCallback<Device> OnDown { get; set; }
+
+  [Parameter]
+  public EventCallback<Device> OnConnect { get; set; }
+
+  public bool IsInUse(string inUse) => inUse.Any(f => f == '*');
+}

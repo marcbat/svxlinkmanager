@@ -46,7 +46,9 @@ namespace SvxlinkManager
       services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
           .AddRoles<IdentityRole>()
           .AddEntityFrameworkStores<ApplicationDbContext>();
+
       services.AddRazorPages();
+
       services.AddServerSideBlazor();
       services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 
@@ -54,6 +56,7 @@ namespace SvxlinkManager
       services.AddSingleton<IRepositories, Repositories.Repositories>();
       services.AddSingleton<SvxLinkService>();
       services.AddSingleton<ScanService>();
+      services.AddSingleton<UpdaterService>();
 
 #if DEBUG
       services.AddSingleton<ISa818Service, Sa818ServiceMockup>();
@@ -66,12 +69,22 @@ namespace SvxlinkManager
 #endif
 
       services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
-      //services.AddSingleton<ITelemetryInitializer, SvxlinkManagerTelemetry>();
       services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
+
+      // Password complexity
+      services.Configure<IdentityOptions>(options =>
+      {
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = 6;
+        options.Password.RequiredUniqueChars = 1;
+      });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<IdentityUser> userManager)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<IdentityUser> userManager, NavigationManager navigationManager)
     {
       if (env.IsDevelopment())
       {
@@ -97,7 +110,7 @@ namespace SvxlinkManager
 
         // set telemetry global settings
         var telemetry = serviceScope.ServiceProvider.GetRequiredService<TelemetryClient>();
-        var deviceId = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString(); ;
+        var deviceId = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString();
         telemetry.Context.GlobalProperties["DeviceId"] = deviceId;
         telemetry.Context.Device.Id = deviceId;
         telemetry.Context.Device.OperatingSystem = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
@@ -118,9 +131,6 @@ namespace SvxlinkManager
         endpoints.MapBlazorHub();
         endpoints.MapFallbackToPage("/_Host");
       });
-
-      // ajout de l'utilisateur admin
-      ApplicationDbInitializer.SeedUsers(userManager);
 
       // Copy du fichier logic.tcl
       if (!Directory.Exists("/usr/share/svxlink/events.d/local"))

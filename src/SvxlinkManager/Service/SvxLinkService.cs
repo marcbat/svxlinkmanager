@@ -136,8 +136,12 @@ namespace SvxlinkManager.Service
     public string Status { get; set; } = "Déconnecté";
 
     /// <summary>Connecte le salon par défaut.</summary>
-    public virtual void StartDefaultChannel() =>
-      ChannelId = repositories.Channels.GetDefault().Id;
+    public virtual void StartDefaultChannel()
+    {
+      var defaultId = repositories.Channels.GetDefault()?.Id;
+      if (defaultId != null)
+        ChannelId = (int)defaultId;
+    }
 
     /// <summary>Test channel type and activate</summary>
     /// <param name="channelid">Channel Id</param>
@@ -338,6 +342,9 @@ namespace SvxlinkManager.Service
     /// <param name="e">The <see cref="ElapsedEventArgs"/> instance containing the event data.</param>
     protected virtual void CheckTemporized(object s, ElapsedEventArgs e)
     {
+      if (channelId == 0)
+        return;
+
       var diff = (DateTime.Now - lastTx).TotalSeconds;
       var channel = repositories.Channels.Get(channelId);
 

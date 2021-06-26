@@ -2,8 +2,6 @@
 
 @inherits SvxlinkManager.Pages.Wifi.ManageBase
 
-@attribute [Authorize]
-
 <div class="row">
   <div class="col-md-2"><h3>Connexions Wifi</h3></div>
 </div>
@@ -13,17 +11,17 @@
   {
     if (IsInUse(device.InUse))
     {
-      <InUseDevice Device="device" />
+      <InUseDevice Device="device" OnDown="Down" />
     }
     else
     {
       if (device.HasConnection)
       {
-        <ConfiguredDevice Device="device" />
+        <ConfiguredDevice Device="device" OnUp="Up" />
       }
       else
       {
-        <NotConfiguredDevice Device="device" />
+        <NotConfiguredDevice Device="device" OnConnect="Connect" />
       }
     }
   }

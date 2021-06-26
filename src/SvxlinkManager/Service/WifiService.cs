@@ -16,13 +16,13 @@ namespace SvxlinkManager.Service
 {
   public interface IWifiService
   {
+    List<Device> Devices { get; }
+
     void Connect(Device device);
 
     void Disconnect(Connection connection);
 
     void Down(Connection connection);
-
-    List<Device> GetDevices();
 
     void Up(Connection connection);
   }
@@ -32,10 +32,14 @@ namespace SvxlinkManager.Service
     private readonly ILogger<WifiService> logger;
     private readonly TelemetryClient telemetry;
 
+    public List<Device> Devices { get; } = new List<Device>();
+
     public WifiService(ILogger<WifiService> logger, TelemetryClient telemetry)
     {
       this.logger = logger;
       this.telemetry = telemetry;
+
+      GetDevices();
     }
 
     /// <summary>Create a new connection for the device</summary>
@@ -54,6 +58,8 @@ namespace SvxlinkManager.Service
       }
 
       logger.LogInformation(result);
+
+      GetDevices();
     }
 
     /// <summary>Remove the connection</summary>
@@ -72,6 +78,8 @@ namespace SvxlinkManager.Service
       }
 
       logger.LogInformation(result);
+
+      GetDevices();
     }
 
     /// <summary>Activate the connection</summary>
@@ -90,6 +98,8 @@ namespace SvxlinkManager.Service
       }
 
       logger.LogInformation(result);
+
+      GetDevices();
     }
 
     /// <summary>Deactivate the connection</summary>
@@ -108,11 +118,13 @@ namespace SvxlinkManager.Service
       }
 
       logger.LogInformation(result);
+
+      GetDevices();
     }
 
     /// <summary>Get detected wifi devices</summary>
     /// <returns>List of detected devices</returns>
-    public List<Device> GetDevices()
+    private void GetDevices()
     {
       var devices = new List<Device>();
 
@@ -140,7 +152,10 @@ namespace SvxlinkManager.Service
         telemetry.TrackException(new WifiException("Echec de la liste des devices", e));
       }
 
-      return devices;
+      Devices.Clear();
+
+      foreach (var d in devices)
+        Devices.Add(d);
     }
 
     /// <summary>Extract list of wifi devices from console output</summary>

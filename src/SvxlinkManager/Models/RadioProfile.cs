@@ -134,6 +134,12 @@ namespace SvxlinkManager.Models
         { nameof(HasSa818), HasSa818.ToString() },
         };
 
+    [NotMapped]
+    public Dictionary<string, string> TrxTypes { get; } = new Dictionary<string, string> { { "interne", "Hotspot" }, { "externe", "Externe" } };
+
+    [NotMapped]
+    public string Trx { get; set; } = "interne";
+
     public event PropertyChangedEventHandler PropertyChanged;
   }
 }
