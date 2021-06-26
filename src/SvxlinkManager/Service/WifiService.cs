@@ -161,7 +161,7 @@ namespace SvxlinkManager.Service
     /// <summary>Extract list of wifi devices from console output</summary>
     /// <param name="output">Consoel output</param>
     /// <returns>List of wifi devices</returns>
-    private List<Device> ParseDeviceConsoleOutput(string output)
+    public List<Device> ParseDeviceConsoleOutput(string output)
     {
       var devices = new List<Device>();
 
@@ -222,7 +222,7 @@ namespace SvxlinkManager.Service
       return connections.Where(c => c.Type == "wifi")?.ToList();
     }
 
-    private List<Connection> ParseConnectionConsoleOutput(string output)
+    public List<Connection> ParseConnectionConsoleOutput(string output)
     {
       var connections = new List<Connection>();
 
