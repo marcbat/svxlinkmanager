@@ -16,15 +16,13 @@ namespace SvxlinkManager.Service
 {
   public interface IWifiService
   {
+    List<Device> Devices { get; }
+
     void Connect(Device device);
 
     void Disconnect(Connection connection);
 
     void Down(Connection connection);
-
-    List<Device> GetDevices();
-
-    Task<List<Device>> GetDevicesAsync();
 
     void Up(Connection connection);
   }
@@ -34,10 +32,14 @@ namespace SvxlinkManager.Service
     private readonly ILogger<WifiService> logger;
     private readonly TelemetryClient telemetry;
 
+    public List<Device> Devices { get; } = new List<Device>();
+
     public WifiService(ILogger<WifiService> logger, TelemetryClient telemetry)
     {
       this.logger = logger;
       this.telemetry = telemetry;
+
+      GetDevices();
     }
 
     /// <summary>Create a new connection for the device</summary>
@@ -56,6 +58,8 @@ namespace SvxlinkManager.Service
       }
 
       logger.LogInformation(result);
+
+      GetDevices();
     }
 
     /// <summary>Remove the connection</summary>
@@ -74,6 +78,8 @@ namespace SvxlinkManager.Service
       }
 
       logger.LogInformation(result);
+
+      GetDevices();
     }
 
     /// <summary>Activate the connection</summary>
@@ -92,6 +98,8 @@ namespace SvxlinkManager.Service
       }
 
       logger.LogInformation(result);
+
+      GetDevices();
     }
 
     /// <summary>Deactivate the connection</summary>
@@ -110,11 +118,13 @@ namespace SvxlinkManager.Service
       }
 
       logger.LogInformation(result);
+
+      GetDevices();
     }
 
     /// <summary>Get detected wifi devices</summary>
     /// <returns>List of detected devices</returns>
-    public List<Device> GetDevices()
+    private void GetDevices()
     {
       var devices = new List<Device>();
 
@@ -142,18 +152,16 @@ namespace SvxlinkManager.Service
         telemetry.TrackException(new WifiException("Echec de la liste des devices", e));
       }
 
-      return devices;
-    }
+      Devices.Clear();
 
-    public async Task<List<Device>> GetDevicesAsync()
-    {
-      return await Task.Run(() => GetDevices());
+      foreach (var d in devices)
+        Devices.Add(d);
     }
 
     /// <summary>Extract list of wifi devices from console output</summary>
     /// <param name="output">Consoel output</param>
     /// <returns>List of wifi devices</returns>
-    public List<Device> ParseDeviceConsoleOutput(string output)
+    private List<Device> ParseDeviceConsoleOutput(string output)
     {
       var devices = new List<Device>();
 
@@ -214,7 +222,7 @@ namespace SvxlinkManager.Service
       return connections.Where(c => c.Type == "wifi")?.ToList();
     }
 
-    public List<Connection> ParseConnectionConsoleOutput(string output)
+    private List<Connection> ParseConnectionConsoleOutput(string output)
     {
       var connections = new List<Connection>();
 

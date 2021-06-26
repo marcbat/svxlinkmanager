@@ -23,13 +23,6 @@ namespace SvxlinkManager.Pages.Wifi
       Telemetry.TrackPageView(new PageViewTelemetry("Wifi Page") { Url = new Uri("/Wifi/Manage", UriKind.Relative) });
 
       base.OnInitialized();
-
-      LoadDevices();
-    }
-
-    private void LoadDevices()
-    {
-      Devices = WifiService.GetDevices();
     }
 
     [Inject]
@@ -38,17 +31,15 @@ namespace SvxlinkManager.Pages.Wifi
     [Inject]
     public NavigationManager NavigationManager { get; set; }
 
-    public List<Device> Devices { get; set; }
+    public List<Device> Devices => WifiService.Devices;
 
     public void Connect(Device device)
     {
       Logger.LogInformation($"Creation de la connection {device.Ssid}");
 
-      Telemetry.TrackEvent("Connect Wifi");
-
       WifiService.Connect(device);
 
-      NavigationManager.NavigateTo("Wifi/Manage", true);
+      Telemetry.TrackEvent("Connect Wifi");
     }
 
     public void Up(Device device)
@@ -58,8 +49,6 @@ namespace SvxlinkManager.Pages.Wifi
       WifiService.Up(device.Connection);
 
       Telemetry.TrackEvent("Activate Wifi");
-
-      NavigationManager.NavigateTo("Wifi/Manage", true);
     }
 
     public void Down(Device device)
@@ -69,8 +58,6 @@ namespace SvxlinkManager.Pages.Wifi
       WifiService.Down(device.Connection);
 
       Telemetry.TrackEvent("Deactivate Wifi");
-
-      NavigationManager.NavigateTo("Wifi/Manage", true);
     }
 
     public void Disconnect(Device device)
@@ -80,8 +67,6 @@ namespace SvxlinkManager.Pages.Wifi
       WifiService.Disconnect(device.Connection);
 
       Telemetry.TrackEvent("Deconnect Wifi");
-
-      NavigationManager.NavigateTo("Wifi/Manage", true);
     }
   }
 }

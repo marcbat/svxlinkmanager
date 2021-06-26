@@ -79,7 +79,7 @@ namespace SvxlinkManager.Pages.Installer
     [Inject]
     public SvxLinkService SvxLinkService { get; set; }
 
-    private List<Device> LoadDevices() => WifiService.GetDevices();
+    //private List<Device> LoadDevices() => WifiService.GetDevices();
 
     private List<SvxlinkChannel> LoadChannels() => Repositories.SvxlinkChannels.GetAll().ToList();
 
@@ -134,7 +134,7 @@ namespace SvxlinkManager.Pages.Installer
           case InstallationStatus.Wifi:
             Task.Run(async () =>
             {
-              InstallerModel.Devices = LoadDevices();
+              //InstallerModel.Devices = LoadDevices();
               await InvokeAsync(() => StateHasChanged());
             });
             break;
