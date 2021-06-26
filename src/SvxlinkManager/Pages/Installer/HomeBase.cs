@@ -50,6 +50,9 @@ namespace SvxlinkManager.Pages.Installer
 
     protected override void OnInitialized()
     {
+      if (UserManager.Users.Any())
+        NavigationManager.NavigateTo("Identity/Account/Login", true);
+
       base.OnInitialized();
 
       InstallerModel = new InstallerModel
