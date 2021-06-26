@@ -76,6 +76,9 @@ namespace SvxlinkManager.Pages.Installer
     [Inject]
     public NavigationManager NavigationManager { get; set; }
 
+    [Inject]
+    public SvxLinkService SvxLinkService { get; set; }
+
     private List<Device> LoadDevices() => WifiService.GetDevices();
 
     private List<SvxlinkChannel> LoadChannels() => Repositories.SvxlinkChannels.GetAll().ToList();
@@ -167,7 +170,10 @@ namespace SvxlinkManager.Pages.Installer
         if (InstallerModel.UpdateToLastRelease)
           Update();
         else
+        {
+          SvxLinkService.StartDefaultChannel();
           NavigationManager.NavigateTo("Identity/Account/Login", true);
+        }
       }
       catch (Exception e)
       {
