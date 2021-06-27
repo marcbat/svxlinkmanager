@@ -18,6 +18,24 @@ namespace SvxlinkManager.ServiceMockup
     public WifiServiceMockup(ILogger<WifiServiceMockup> logger)
     {
       this.logger = logger;
+    }
+
+    public void Connect(Device device)
+    {
+      device.Connection = new Connection();
+      device.InUse = "*";
+      logger.LogInformation($"Connect {device.Ssid} device.");
+    }
+
+    public void Disconnect(Connection connection) => logger.LogInformation($"Disconnect {connection.Name} connection.");
+
+    public void Down(Connection connection) => logger.LogInformation($"Deactivate {connection.Name} connection.");
+
+    public void Up(Connection connection) => logger.LogInformation($"Activate {connection.Name} connection.");
+
+    public void LoadDevices()
+    {
+      Devices.Clear();
 
       Devices.Add(new Device
       {
@@ -56,26 +74,6 @@ namespace SvxlinkManager.ServiceMockup
         Bars = "***_",
         Security = "WPA2"
       });
-    }
-
-    public void Connect(Device device)
-    {
-      device.Connection = new Connection();
-      device.InUse = "*";
-      logger.LogInformation($"Connect {device.Ssid} device.");
-    }
-
-    public void Disconnect(Connection connection) => logger.LogInformation($"Disconnect {connection.Name} connection.");
-
-    public void Down(Connection connection) => logger.LogInformation($"Deactivate {connection.Name} connection.");
-
-    public void Up(Connection connection) => logger.LogInformation($"Activate {connection.Name} connection.");
-
-    private List<Device> GetDevices()
-    {
-      Thread.Sleep(4000);
-
-      return Devices;
     }
 
     public List<Device> Devices { get; } = new List<Device>();

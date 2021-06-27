@@ -18,6 +18,8 @@ namespace SvxlinkManager.Service
   {
     List<Device> Devices { get; }
 
+    void LoadDevices();
+
     void Connect(Device device);
 
     void Disconnect(Connection connection);
@@ -38,8 +40,6 @@ namespace SvxlinkManager.Service
     {
       this.logger = logger;
       this.telemetry = telemetry;
-
-      GetDevices();
     }
 
     /// <summary>Create a new connection for the device</summary>
@@ -59,7 +59,7 @@ namespace SvxlinkManager.Service
 
       logger.LogInformation(result);
 
-      GetDevices();
+      LoadDevices();
     }
 
     /// <summary>Remove the connection</summary>
@@ -79,7 +79,7 @@ namespace SvxlinkManager.Service
 
       logger.LogInformation(result);
 
-      GetDevices();
+      LoadDevices();
     }
 
     /// <summary>Activate the connection</summary>
@@ -99,7 +99,7 @@ namespace SvxlinkManager.Service
 
       logger.LogInformation(result);
 
-      GetDevices();
+      LoadDevices();
     }
 
     /// <summary>Deactivate the connection</summary>
@@ -119,12 +119,12 @@ namespace SvxlinkManager.Service
 
       logger.LogInformation(result);
 
-      GetDevices();
+      LoadDevices();
     }
 
     /// <summary>Get detected wifi devices</summary>
     /// <returns>List of detected devices</returns>
-    private void GetDevices()
+    public void LoadDevices()
     {
       var devices = new List<Device>();
 

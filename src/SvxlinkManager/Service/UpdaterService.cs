@@ -74,7 +74,12 @@ namespace SvxlinkManager.Service
         client.Headers.Add(HttpRequestHeader.UserAgent, "request");
         var result = client.DownloadString(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases"));
 
-        return JsonSerializer.Deserialize<List<Release>>(result).First();
+        var releases = JsonSerializer.Deserialize<List<Release>>(result);
+
+        if (configuration.GetValue<bool>("Config:IsPreRelease"))
+          return releases.First();
+        else
+          return releases.First(r => !r.Prerelease);
       }
       catch (Exception)
       {
@@ -86,11 +91,10 @@ namespace SvxlinkManager.Service
     {
       get
       {
+        telemetry.TrackEvent("Chargement des PreRelease.");
+
         if (configuration.GetValue<bool>("Config:IsPreRelease"))
-        {
-          telemetry.TrackEvent("Chargement des PreRelease.");
           return releases;
-        }
         else
           return releases.Where(r => !r.Prerelease).ToList();
       }
