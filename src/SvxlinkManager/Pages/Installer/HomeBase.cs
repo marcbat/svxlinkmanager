@@ -79,8 +79,6 @@ namespace SvxlinkManager.Pages.Installer
     [Inject]
     public SvxLinkService SvxLinkService { get; set; }
 
-    //private List<Device> LoadDevices() => WifiService.GetDevices();
-
     private List<SvxlinkChannel> LoadChannels() => Repositories.SvxlinkChannels.GetAll().ToList();
 
     private Release LoadLastRelease() => UpdaterService.GetLastRelease();
@@ -132,11 +130,8 @@ namespace SvxlinkManager.Pages.Installer
             break;
 
           case InstallationStatus.Wifi:
-            Task.Run(async () =>
-            {
-              //InstallerModel.Devices = LoadDevices();
-              await InvokeAsync(() => StateHasChanged());
-            });
+            WifiService.LoadDevices();
+            InstallerModel.Devices = WifiService.Devices;
             break;
 
           case InstallationStatus.Update:

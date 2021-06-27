@@ -23,6 +23,8 @@ namespace SvxlinkManager.Pages.Wifi
       Telemetry.TrackPageView(new PageViewTelemetry("Wifi Page") { Url = new Uri("/Wifi/Manage", UriKind.Relative) });
 
       base.OnInitialized();
+
+      WifiService.LoadDevices();
     }
 
     [Inject]
@@ -32,6 +34,11 @@ namespace SvxlinkManager.Pages.Wifi
     public NavigationManager NavigationManager { get; set; }
 
     public List<Device> Devices => WifiService.Devices;
+
+    public void Refresh()
+    {
+      WifiService.LoadDevices();
+    }
 
     public void Connect(Device device)
     {
