@@ -34,6 +34,8 @@ namespace SvxlinkManager.Data
 
     public DbSet<EcholinkChannel> EcholinkChannels { get; set; }
 
+    public DbSet<AdvanceSvxlinkChannel> AdvanceSvxlinkChannels { get; set; }
+
     public DbSet<RadioProfile> RadioProfiles { get; set; }
 
     public DbSet<ScanProfile> ScanProfiles { get; set; }
