@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="SvxlinkManager.Models.Channel">
-    <Position X="7.25" Y="1.25" Width="1.75" />
+    <Position X="7.25" Y="4" Width="1.75" />
     <NestedTypes>
       <Class Name="SvxlinkManager.Models.Channel.FileValidationAttribute" Collapsed="true">
         <TypeIdentifier>
@@ -10,7 +10,7 @@
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAACARABAAoAAAAAhQAAAAQAAAAACAAAFAQAAAAAAAA=</HashCode>
+      <HashCode>AAAAAQABAAoAAAAABAAAAAAAAAAAAAAAFAAAAAAAAAA=</HashCode>
       <FileName>Models\Channel.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -19,7 +19,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="SvxlinkManager.Models.EcholinkChannel">
-    <Position X="8.5" Y="6" Width="1.5" />
+    <Position X="7.5" Y="7.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAgAAAAAQIAAAAAEAAAAAAiAAAAAAAAAAA=</HashCode>
       <FileName>Models\EcholinkChannel.cs</FileName>
@@ -34,15 +34,15 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="SvxlinkManager.Models.RadioProfile" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="14.5" Y="1.25" Width="1.5" />
+    <Position X="12.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACgABAgABAAAAIIQAACCUghAAAABCEAAIAAAAAACA=</HashCode>
+      <HashCode>AAACgABAgABAAAAIIQAACCUghAAAgBCEEAIAAAAAACA=</HashCode>
       <FileName>Models\RadioProfile.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="SvxlinkManager.Models.Rule" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="12.75" Y="2.25" Width="1.5" />
+    <Position X="14.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAgIAACAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Rule.cs</FileName>
@@ -50,14 +50,14 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="SvxlinkManager.Models.SvxlinkChannel">
-    <Position X="6.25" Y="6" Width="1.5" />
+    <Position X="5.25" Y="7.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAEAAAAAAABAAAAQAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\SvxlinkChannel.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Models.ScanProfile">
-    <Position X="10.25" Y="2.25" Width="1.5" />
+    <Position X="10.25" Y="4.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAACAAAAAAAQAACAQAAAAAAAAAAAAAAAAAEAA=</HashCode>
       <FileName>Models\ScanProfile.cs</FileName>
@@ -68,7 +68,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="SvxlinkManager.Models.Sound" BaseTypeListCollapsed="true">
-    <Position X="4.25" Y="2.25" Width="1.5" />
+    <Position X="4.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAhAAAAAAAAAAAAAAAAAAAAAAAIAAQAAAAAAAA=</HashCode>
       <FileName>Models\Sound.cs</FileName>
@@ -78,8 +78,19 @@
     </ShowAsAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
+  <Class Name="SvxlinkManager.Models.AdvanceSvxlinkChannel">
+    <Position X="9.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAQAABAQAAAIQAAIAAgAIAAAAAAAAAAACAABAg=</HashCode>
+      <FileName>Models\AdvanceSvxlinkChannel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SvxlinkManager.Common.Models.ChannelBase">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
   <Interface Name="SvxlinkManager.Models.IModelEntity" Collapsed="true">
-    <Position X="12.75" Y="3.5" Width="1.5" />
+    <Position X="12.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\IModelEntity.cs</FileName>
