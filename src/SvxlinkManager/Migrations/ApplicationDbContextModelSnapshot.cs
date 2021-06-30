@@ -59,8 +59,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "49d07341-2a8c-4415-a35d-91706205351e",
-                            ConcurrencyStamp = "18c53fda-42ff-495d-a021-aeb5a074bb8a",
+                            Id = "e9cd79fc-d25a-40d2-9fb9-bb81d08a7588",
+                            ConcurrencyStamp = "0eafd542-fab0-4f33-8413-b3158e9a5a26",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -234,6 +234,71 @@ namespace SvxlinkManager.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("SvxlinkManager.Models.AdvanceSvxlinkChannel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Dtmf")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsTemporized")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ModuleDtmfRepeater")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleEchoLink")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleFrn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleHelp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleMetarInfo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleParrot")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModulePropagationMonitor")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleSelCallEnc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleTclVoiceMail")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleTrx")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("SoundId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SvxlinkConf")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TimerDelay")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SoundId");
+
+                    b.ToTable("AdvanceSvxlinkChannels");
                 });
 
             modelBuilder.Entity("SvxlinkManager.Models.Channel", b =>
@@ -450,46 +515,6 @@ namespace SvxlinkManager.Migrations
                         .IsUnique();
 
                     b.ToTable("Sound");
-                });
-
-            modelBuilder.Entity("SvxlinkManager.Models.AdvanceSvxlinkChannel", b =>
-                {
-                    b.HasBaseType("SvxlinkManager.Models.Channel");
-
-                    b.Property<string>("ModuleDtmfRepeater")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleEchoLink")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleFrn")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleHelp")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleMetarInfo")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleParrot")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModulePropagationMonitor")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleSelCallEnc")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleTclVoiceMail")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleTrx")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("SvxlinkConf")
-                        .HasColumnType("TEXT");
-
-                    b.HasDiscriminator().HasValue("AdvanceSvxlinkChannel");
                 });
 
             modelBuilder.Entity("SvxlinkManager.Models.EcholinkChannel", b =>
@@ -720,6 +745,15 @@ namespace SvxlinkManager.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SvxlinkManager.Models.AdvanceSvxlinkChannel", b =>
+                {
+                    b.HasOne("SvxlinkManager.Models.Sound", "Sound")
+                        .WithMany()
+                        .HasForeignKey("SoundId");
+
+                    b.Navigation("Sound");
                 });
 
             modelBuilder.Entity("SvxlinkManager.Models.Rule", b =>

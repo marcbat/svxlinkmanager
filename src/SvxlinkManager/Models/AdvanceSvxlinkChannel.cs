@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Models
 {
-  public class AdvanceSvxlinkChannel : Channel
+  public class AdvanceSvxlinkChannel : ManagedChannel
   {
     public string SvxlinkConf { get; set; }
 
