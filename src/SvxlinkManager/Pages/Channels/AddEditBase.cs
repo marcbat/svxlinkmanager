@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Channels
 {
-  public abstract class AddEditBase<TChannel> : RepositoryComponentBase where TChannel : Channel
+  public abstract class AddEditBase<TChannel> : RepositoryComponentBase where TChannel : ManagedChannel
   {
     private CancellationTokenSource cancelation;
 

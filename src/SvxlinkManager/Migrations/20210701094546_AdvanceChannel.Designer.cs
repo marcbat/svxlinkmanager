@@ -9,7 +9,7 @@ using SvxlinkManager.Data;
 namespace SvxlinkManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210630100051_AdvanceChannel")]
+    [Migration("20210701094546_AdvanceChannel")]
     partial class AdvanceChannel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,21 +17,6 @@ namespace SvxlinkManager.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.0");
-
-            modelBuilder.Entity("ChannelScanProfile", b =>
-                {
-                    b.Property<int>("ChannelsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ScanProfilesId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ChannelsId", "ScanProfilesId");
-
-                    b.HasIndex("ScanProfilesId");
-
-                    b.ToTable("ChannelScanProfile");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -61,8 +46,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e9cd79fc-d25a-40d2-9fb9-bb81d08a7588",
-                            ConcurrencyStamp = "0eafd542-fab0-4f33-8413-b3158e9a5a26",
+                            Id = "226834ed-b459-4393-b4f4-a4b7864d8592",
+                            ConcurrencyStamp = "17a12b9d-49e4-418f-959f-e79bb8a3fc13",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -238,80 +223,11 @@ namespace SvxlinkManager.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("SvxlinkManager.Models.AdvanceSvxlinkChannel", b =>
+            modelBuilder.Entity("SvxlinkManager.Models.ManagedChannel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<int>("Dtmf")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsTemporized")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ModuleDtmfRepeater")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleEchoLink")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleFrn")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleHelp")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleMetarInfo")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleParrot")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModulePropagationMonitor")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleSelCallEnc")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleTclVoiceMail")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleTrx")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("SoundId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("SvxlinkConf")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("TimerDelay")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SoundId");
-
-                    b.ToTable("AdvanceSvxlinkChannels");
-                });
-
-            modelBuilder.Entity("SvxlinkManager.Models.Channel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("CallSign")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
@@ -320,10 +236,6 @@ namespace SvxlinkManager.Migrations
                     b.Property<int>("Dtmf")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Host")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("IsDefault")
                         .HasColumnType("INTEGER");
 
@@ -333,6 +245,9 @@ namespace SvxlinkManager.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("ScanProfileId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TimerDelay")
                         .HasColumnType("INTEGER");
@@ -342,9 +257,11 @@ namespace SvxlinkManager.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Channels");
+                    b.HasIndex("ScanProfileId");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Channel");
+                    b.ToTable("ManagedChannel");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ManagedChannel");
                 });
 
             modelBuilder.Entity("SvxlinkManager.Models.RadioProfile", b =>
@@ -472,6 +389,9 @@ namespace SvxlinkManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("ChannelId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("Enable")
                         .HasColumnType("INTEGER");
 
@@ -483,6 +403,8 @@ namespace SvxlinkManager.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChannelId");
 
                     b.ToTable("ScanProfiles");
 
@@ -517,6 +439,61 @@ namespace SvxlinkManager.Migrations
                         .IsUnique();
 
                     b.ToTable("Sound");
+                });
+
+            modelBuilder.Entity("SvxlinkManager.Models.AdvanceSvxlinkChannel", b =>
+                {
+                    b.HasBaseType("SvxlinkManager.Models.ManagedChannel");
+
+                    b.Property<string>("ModuleDtmfRepeater")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleEchoLink")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleFrn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleHelp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleMetarInfo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleParrot")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModulePropagationMonitor")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleSelCallEnc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleTclVoiceMail")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleTrx")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SvxlinkConf")
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("AdvanceSvxlinkChannel");
+                });
+
+            modelBuilder.Entity("SvxlinkManager.Models.Channel", b =>
+                {
+                    b.HasBaseType("SvxlinkManager.Models.ManagedChannel");
+
+                    b.Property<string>("CallSign")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Host")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("Channel");
                 });
 
             modelBuilder.Entity("SvxlinkManager.Models.EcholinkChannel", b =>
@@ -565,14 +542,14 @@ namespace SvxlinkManager.Migrations
                         new
                         {
                             Id = 1,
-                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 96,
-                            Host = "rrf2.f5nlg.ovh",
                             IsDefault = false,
                             IsTemporized = false,
                             Name = "Réseau des Répéteurs Francophones",
                             TimerDelay = 180,
                             TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
+                            CallSign = "(CH) SVX4LINK H",
+                            Host = "rrf2.f5nlg.ovh",
                             AuthKey = "Magnifique123456789!",
                             Port = 5300,
                             ReportCallSign = "SVX4LINK"
@@ -580,13 +557,13 @@ namespace SvxlinkManager.Migrations
                         new
                         {
                             Id = 2,
-                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 104,
-                            Host = "salonsuisseromand.northeurope.cloudapp.azure.com",
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Suisse Romand",
                             TimerDelay = 180,
+                            CallSign = "(CH) SVX4LINK H",
+                            Host = "salonsuisseromand.northeurope.cloudapp.azure.com",
                             AuthKey = "xD9wW5gO7yD9hN5o",
                             Port = 5300,
                             ReportCallSign = "SVX4LINK"
@@ -594,14 +571,14 @@ namespace SvxlinkManager.Migrations
                         new
                         {
                             Id = 3,
-                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 97,
-                            Host = "serveur.f1tzo.com",
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "French Open Network",
                             TimerDelay = 180,
                             TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json",
+                            CallSign = "(CH) SVX4LINK H",
+                            Host = "serveur.f1tzo.com",
                             AuthKey = "FON-F1TZO",
                             Port = 5300,
                             ReportCallSign = "SVX4LINK"
@@ -609,14 +586,14 @@ namespace SvxlinkManager.Migrations
                         new
                         {
                             Id = 4,
-                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 98,
-                            Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Technique",
                             TimerDelay = 180,
                             TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
+                            CallSign = "(CH) SVX4LINK H",
+                            Host = "rrf3.f5nlg.ovh",
                             AuthKey = "Magnifique123456789!",
                             Port = 5301,
                             ReportCallSign = "SVX4LINK"
@@ -624,14 +601,14 @@ namespace SvxlinkManager.Migrations
                         new
                         {
                             Id = 5,
-                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 99,
-                            Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon International",
                             TimerDelay = 180,
                             TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
+                            CallSign = "(CH) SVX4LINK H",
+                            Host = "rrf3.f5nlg.ovh",
                             AuthKey = "Magnifique123456789!",
                             Port = 5302,
                             ReportCallSign = "SVX4LINK"
@@ -639,14 +616,14 @@ namespace SvxlinkManager.Migrations
                         new
                         {
                             Id = 6,
-                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 100,
-                            Host = "serveur.f1tzo.com",
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Bavardage",
                             TimerDelay = 180,
                             TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
+                            CallSign = "(CH) SVX4LINK H",
+                            Host = "serveur.f1tzo.com",
                             AuthKey = "FON-F1TZO",
                             Port = 5301,
                             ReportCallSign = "SVX4LINK"
@@ -654,14 +631,14 @@ namespace SvxlinkManager.Migrations
                         new
                         {
                             Id = 7,
-                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 101,
-                            Host = "serveur.f1tzo.com",
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Local",
                             TimerDelay = 180,
                             TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
+                            CallSign = "(CH) SVX4LINK H",
+                            Host = "serveur.f1tzo.com",
                             AuthKey = "FON-F1TZO",
                             Port = 5302,
                             ReportCallSign = "SVX4LINK"
@@ -669,33 +646,18 @@ namespace SvxlinkManager.Migrations
                         new
                         {
                             Id = 8,
-                            CallSign = "(CH) SVX4LINK H",
                             Dtmf = 102,
-                            Host = "rrf3.f5nlg.ovh",
                             IsDefault = false,
                             IsTemporized = true,
                             Name = "Salon Expérimental",
                             TimerDelay = 180,
                             TrackerUrl = "",
+                            CallSign = "(CH) SVX4LINK H",
+                            Host = "rrf3.f5nlg.ovh",
                             AuthKey = "Magnifique123456789!",
                             Port = 5303,
                             ReportCallSign = "SVX4LINK"
                         });
-                });
-
-            modelBuilder.Entity("ChannelScanProfile", b =>
-                {
-                    b.HasOne("SvxlinkManager.Models.Channel", null)
-                        .WithMany()
-                        .HasForeignKey("ChannelsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SvxlinkManager.Models.ScanProfile", null)
-                        .WithMany()
-                        .HasForeignKey("ScanProfilesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -749,13 +711,11 @@ namespace SvxlinkManager.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SvxlinkManager.Models.AdvanceSvxlinkChannel", b =>
+            modelBuilder.Entity("SvxlinkManager.Models.ManagedChannel", b =>
                 {
-                    b.HasOne("SvxlinkManager.Models.Sound", "Sound")
-                        .WithMany()
-                        .HasForeignKey("SoundId");
-
-                    b.Navigation("Sound");
+                    b.HasOne("SvxlinkManager.Models.ScanProfile", null)
+                        .WithMany("Channels")
+                        .HasForeignKey("ScanProfileId");
                 });
 
             modelBuilder.Entity("SvxlinkManager.Models.Rule", b =>
@@ -767,9 +727,16 @@ namespace SvxlinkManager.Migrations
                     b.Navigation("Channel");
                 });
 
+            modelBuilder.Entity("SvxlinkManager.Models.ScanProfile", b =>
+                {
+                    b.HasOne("SvxlinkManager.Models.Channel", null)
+                        .WithMany("ScanProfiles")
+                        .HasForeignKey("ChannelId");
+                });
+
             modelBuilder.Entity("SvxlinkManager.Models.Sound", b =>
                 {
-                    b.HasOne("SvxlinkManager.Models.Channel", "Channel")
+                    b.HasOne("SvxlinkManager.Models.ManagedChannel", "Channel")
                         .WithOne("Sound")
                         .HasForeignKey("SvxlinkManager.Models.Sound", "ChannelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -778,9 +745,19 @@ namespace SvxlinkManager.Migrations
                     b.Navigation("Channel");
                 });
 
-            modelBuilder.Entity("SvxlinkManager.Models.Channel", b =>
+            modelBuilder.Entity("SvxlinkManager.Models.ManagedChannel", b =>
                 {
                     b.Navigation("Sound");
+                });
+
+            modelBuilder.Entity("SvxlinkManager.Models.ScanProfile", b =>
+                {
+                    b.Navigation("Channels");
+                });
+
+            modelBuilder.Entity("SvxlinkManager.Models.Channel", b =>
+                {
+                    b.Navigation("ScanProfiles");
                 });
 #pragma warning restore 612, 618
         }

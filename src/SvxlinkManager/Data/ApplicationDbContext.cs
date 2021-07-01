@@ -59,7 +59,7 @@ namespace SvxlinkManager.Data
     {
       base.OnModelCreating(builder);
 
-      builder.Entity<Channel>()
+      builder.Entity<ManagedChannel>()
         .HasOne(c => c.Sound)
         .WithOne(s => s.Channel)
         .HasForeignKey<Sound>(s => s.ChannelId)

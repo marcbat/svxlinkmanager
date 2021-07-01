@@ -3,7 +3,7 @@
   <Class Name="SvxlinkManager.Models.Channel">
     <Position X="8.25" Y="7.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAAAAACAAAEAQAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAEAQAAAAAAAA=</HashCode>
       <FileName>Models\Channel.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -54,13 +54,10 @@
       <HashCode>AAACAAAAACAAAAAAAQAACAQAAAAAAAAAAAAAAAAAEAA=</HashCode>
       <FileName>Models\ScanProfile.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="Channels" />
-    </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="SvxlinkManager.Models.Sound" BaseTypeListCollapsed="true">
-    <Position X="3" Y="8" Width="1.5" />
+    <Position X="2.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAhAAAAAAAAAAAAAAAAAAAAAAAIAAQAAAAAAAA=</HashCode>
       <FileName>Models\Sound.cs</FileName>
@@ -91,7 +88,7 @@
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAARABAAgAAAAABAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAARABAAoAAAAABAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
       <FileName>Models\ManagedChannel.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />

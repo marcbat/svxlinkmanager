@@ -1,0 +1,110 @@
+﻿<EditForm Model="@Channel" OnValidSubmit="@HandleValidSubmit">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label data-toggle="tooltip" title="Le nom du salon s'affichera dans le menu déroulant de la page d'accueil.<br /> Choisissez un nom unique.">Nom du salon</label>
+      <InputText @bind-Value="Channel.Name" type="text" class="form-control" id="inputName" placeholder="Nom du salon" />
+    </div>
+    <div class="form-group col-md-4">
+      <label data-toggle="tooltip" title="Un fichier .wav qui sera joué lors de l'activation du salon.">Annonce vocal @CurrentSoundName</label>
+      <InputFile OnChange="@OnInputFileChange" class="form-control" id="inputName" />
+    </div>
+    <div class="form-group col-md-4">
+      <label data-toggle="tooltip" title="Le DTMF à composer pour activer le salon.">DTMF</label>
+      <InputNumber @bind-Value="Channel.Dtmf" type="number" class="form-control" id="inputDtmf" placeholder="100" />
+    </div>
+  </div>
+
+  @if (CanEditType)
+  {
+    <div class="form-row">
+      <div class="form-group col-md-2">
+        <div class="form-check form-check-inline">
+          <div class="pretty p-default p-curve p-bigger">
+            <InputCheckbox @bind-Value="IsDefault" type="checkbox" id="inputIsDefault" />
+            <div class="state">
+              <label data-toggle="tooltip" title="Si choché, c'est ce salon qui sera séléctionné au terme du délai des salons temporisés. <br /> Un salon ne peut être à la fois salon par défaut et salon temporisé.">Salon par défaut</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-md-3">
+        <div class="form-check form-check-inline">
+          <div class="pretty p-default p-curve p-bigger">
+            <InputCheckbox @bind-Value="IsTemporized" type="checkbox" id="inputIsTemporized" />
+            <div class="state">
+              <label data-toggle="tooltip" title="Un salon temporisé retournera automatiquement sur le salon par défaut après un délai de 3 minutes d'inactivité.">Temporisé</label>
+            </div>
+          </div>
+          @if (Channel.IsTemporized)
+          {
+            <InputNumber @bind-Value="Channel.TimerDelay" type="number" class="form-control" id="inputTimerDelay" />
+          }
+        </div>
+      </div>
+    </div>
+
+  }
+
+  <button type="submit" class="btn btn-success">@SubmitTitle</button> <a class="btn btn-primary" href="Channel/Manage" role="button">Annuler</a>
+</EditForm>
+
+@code{
+  [Parameter]
+  public Models.AdvanceSvxlinkChannel Channel { get; set; }
+
+  [Parameter]
+  public string SubmitTitle { get; set; }
+
+  [Parameter]
+  public bool CanEditType { get; set; }
+
+  [Parameter]
+  public EventCallback<EditContext> HandleValidSubmit { get; set; }
+
+  protected bool IsDefault
+  {
+    get => Channel.IsDefault;
+    set
+    {
+      Channel.IsDefault = value;
+      if (value)
+        IsTemporized = false;
+    }
+  }
+
+  protected bool IsTemporized
+  {
+    get => Channel.IsTemporized;
+    set
+    {
+      Channel.IsTemporized = value;
+      if (value)
+        IsDefault = false;
+
+    }
+  }
+
+  protected string DelayVisibility { get; set; }
+
+  private void OnInputFileChange(InputFileChangeEventArgs eventArgs)
+  {
+    Channel.SoundBrowserFile = eventArgs.File;
+  }
+
+  public string CurrentSoundName
+  {
+    get
+    {
+      if (!string.IsNullOrEmpty(Channel.Sound.SoundName))
+      {
+        return $"({Channel.Sound.SoundName})";
+      }
+      else
+        return string.Empty;
+    }
+  }
+
+}

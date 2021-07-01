@@ -25,6 +25,8 @@ namespace SvxlinkManager.Models
     [Required]
     public int TimerDelay { get; set; } = 180;
 
+    public string TrackerUrl { get; set; }
+
     [NotMapped]
     [FileValidation(new[] { ".wav" })]
     public IBrowserFile SoundBrowserFile { get; set; }

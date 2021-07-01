@@ -17,7 +17,7 @@ namespace SvxlinkManager.Models
     [Required]
     public int ScanDelay { get; set; }
 
-    public List<Channel> Channels { get; set; } = new List<Channel>();
+    public List<ManagedChannel> Channels { get; set; } = new List<ManagedChannel>();
 
     public bool Enable { get; set; }
 

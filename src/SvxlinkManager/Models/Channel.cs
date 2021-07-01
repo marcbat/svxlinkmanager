@@ -21,8 +21,6 @@ namespace SvxlinkManager.Models
     [Required]
     public string CallSign { get; set; }
 
-    public string TrackerUrl { get; set; }
-
     public List<ScanProfile> ScanProfiles { get; set; }
   }
 }
