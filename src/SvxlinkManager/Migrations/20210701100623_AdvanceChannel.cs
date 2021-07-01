@@ -6,24 +6,8 @@ namespace SvxlinkManager.Migrations
   {
     protected override void Up(MigrationBuilder migrationBuilder)
     {
-      migrationBuilder.DropForeignKey(
-          name: "FK_Rules_Channels_ChannelId",
-          table: "Rules");
-
-      migrationBuilder.DropForeignKey(
-          name: "FK_Sound_Channels_ChannelId",
-          table: "Sound");
-
       migrationBuilder.DropTable(
           name: "ChannelScanProfile");
-
-      migrationBuilder.DropPrimaryKey(
-          name: "PK_Channels",
-          table: "Channels");
-
-      migrationBuilder.RenameTable(
-          name: "Channels",
-          newName: "ManagedChannel");
 
       migrationBuilder.AddColumn<int>(
           name: "ChannelId",
@@ -33,7 +17,7 @@ namespace SvxlinkManager.Migrations
 
       migrationBuilder.AlterColumn<string>(
           name: "Host",
-          table: "ManagedChannel",
+          table: "Channels",
           type: "TEXT",
           nullable: true,
           oldClrType: typeof(string),
@@ -41,7 +25,7 @@ namespace SvxlinkManager.Migrations
 
       migrationBuilder.AlterColumn<string>(
           name: "CallSign",
-          table: "ManagedChannel",
+          table: "Channels",
           type: "TEXT",
           nullable: true,
           oldClrType: typeof(string),
@@ -49,80 +33,75 @@ namespace SvxlinkManager.Migrations
 
       migrationBuilder.AddColumn<string>(
           name: "ModuleDtmfRepeater",
-          table: "ManagedChannel",
+          table: "Channels",
           type: "TEXT",
           nullable: true);
 
       migrationBuilder.AddColumn<string>(
           name: "ModuleEchoLink",
-          table: "ManagedChannel",
+          table: "Channels",
           type: "TEXT",
           nullable: true);
 
       migrationBuilder.AddColumn<string>(
           name: "ModuleFrn",
-          table: "ManagedChannel",
+          table: "Channels",
           type: "TEXT",
           nullable: true);
 
       migrationBuilder.AddColumn<string>(
           name: "ModuleHelp",
-          table: "ManagedChannel",
+          table: "Channels",
           type: "TEXT",
           nullable: true);
 
       migrationBuilder.AddColumn<string>(
           name: "ModuleMetarInfo",
-          table: "ManagedChannel",
+          table: "Channels",
           type: "TEXT",
           nullable: true);
 
       migrationBuilder.AddColumn<string>(
           name: "ModuleParrot",
-          table: "ManagedChannel",
+          table: "Channels",
           type: "TEXT",
           nullable: true);
 
       migrationBuilder.AddColumn<string>(
           name: "ModulePropagationMonitor",
-          table: "ManagedChannel",
+          table: "Channels",
           type: "TEXT",
           nullable: true);
 
       migrationBuilder.AddColumn<string>(
           name: "ModuleSelCallEnc",
-          table: "ManagedChannel",
+          table: "Channels",
           type: "TEXT",
           nullable: true);
 
       migrationBuilder.AddColumn<string>(
           name: "ModuleTclVoiceMail",
-          table: "ManagedChannel",
+          table: "Channels",
           type: "TEXT",
           nullable: true);
 
       migrationBuilder.AddColumn<string>(
           name: "ModuleTrx",
-          table: "ManagedChannel",
+          table: "Channels",
           type: "TEXT",
           nullable: true);
 
       migrationBuilder.AddColumn<int>(
           name: "ScanProfileId",
-          table: "ManagedChannel",
+          table: "Channels",
           type: "INTEGER",
           nullable: true);
 
       migrationBuilder.AddColumn<string>(
           name: "SvxlinkConf",
-          table: "ManagedChannel",
+          table: "Channels",
           type: "TEXT",
           nullable: true);
-
-      migrationBuilder.AddPrimaryKey(
-          name: "PK_ManagedChannel",
-          table: "ManagedChannel",
-          column: "Id");
 
       migrationBuilder.CreateIndex(
           name: "IX_ScanProfiles_ChannelId",
@@ -130,72 +109,44 @@ namespace SvxlinkManager.Migrations
           column: "ChannelId");
 
       migrationBuilder.CreateIndex(
-          name: "IX_ManagedChannel_ScanProfileId",
-          table: "ManagedChannel",
+          name: "IX_Channels_ScanProfileId",
+          table: "Channels",
           column: "ScanProfileId");
 
       migrationBuilder.AddForeignKey(
-          name: "FK_ManagedChannel_ScanProfiles_ScanProfileId",
-          table: "ManagedChannel",
+          name: "FK_Channels_ScanProfiles_ScanProfileId",
+          table: "Channels",
           column: "ScanProfileId",
           principalTable: "ScanProfiles",
           principalColumn: "Id",
           onDelete: ReferentialAction.Restrict);
 
       migrationBuilder.AddForeignKey(
-          name: "FK_Rules_ManagedChannel_ChannelId",
-          table: "Rules",
-          column: "ChannelId",
-          principalTable: "ManagedChannel",
-          principalColumn: "Id",
-          onDelete: ReferentialAction.Restrict);
-
-      migrationBuilder.AddForeignKey(
-          name: "FK_ScanProfiles_ManagedChannel_ChannelId",
+          name: "FK_ScanProfiles_Channels_ChannelId",
           table: "ScanProfiles",
           column: "ChannelId",
-          principalTable: "ManagedChannel",
+          principalTable: "Channels",
           principalColumn: "Id",
           onDelete: ReferentialAction.Restrict);
-
-      migrationBuilder.AddForeignKey(
-          name: "FK_Sound_ManagedChannel_ChannelId",
-          table: "Sound",
-          column: "ChannelId",
-          principalTable: "ManagedChannel",
-          principalColumn: "Id",
-          onDelete: ReferentialAction.Cascade);
     }
 
     protected override void Down(MigrationBuilder migrationBuilder)
     {
       migrationBuilder.DropForeignKey(
-          name: "FK_ManagedChannel_ScanProfiles_ScanProfileId",
-          table: "ManagedChannel");
+          name: "FK_Channels_ScanProfiles_ScanProfileId",
+          table: "Channels");
 
       migrationBuilder.DropForeignKey(
-          name: "FK_Rules_ManagedChannel_ChannelId",
-          table: "Rules");
-
-      migrationBuilder.DropForeignKey(
-          name: "FK_ScanProfiles_ManagedChannel_ChannelId",
+          name: "FK_ScanProfiles_Channels_ChannelId",
           table: "ScanProfiles");
-
-      migrationBuilder.DropForeignKey(
-          name: "FK_Sound_ManagedChannel_ChannelId",
-          table: "Sound");
 
       migrationBuilder.DropIndex(
           name: "IX_ScanProfiles_ChannelId",
           table: "ScanProfiles");
 
-      migrationBuilder.DropPrimaryKey(
-          name: "PK_ManagedChannel",
-          table: "ManagedChannel");
-
       migrationBuilder.DropIndex(
-          name: "IX_ManagedChannel_ScanProfileId",
-          table: "ManagedChannel");
+          name: "IX_Channels_ScanProfileId",
+          table: "Channels");
 
       migrationBuilder.DropColumn(
           name: "ChannelId",
@@ -203,55 +154,51 @@ namespace SvxlinkManager.Migrations
 
       migrationBuilder.DropColumn(
           name: "ModuleDtmfRepeater",
-          table: "ManagedChannel");
+          table: "Channels");
 
       migrationBuilder.DropColumn(
           name: "ModuleEchoLink",
-          table: "ManagedChannel");
+          table: "Channels");
 
       migrationBuilder.DropColumn(
           name: "ModuleFrn",
-          table: "ManagedChannel");
+          table: "Channels");
 
       migrationBuilder.DropColumn(
           name: "ModuleHelp",
-          table: "ManagedChannel");
+          table: "Channels");
 
       migrationBuilder.DropColumn(
           name: "ModuleMetarInfo",
-          table: "ManagedChannel");
+          table: "Channels");
 
       migrationBuilder.DropColumn(
           name: "ModuleParrot",
-          table: "ManagedChannel");
+          table: "Channels");
 
       migrationBuilder.DropColumn(
           name: "ModulePropagationMonitor",
-          table: "ManagedChannel");
+          table: "Channels");
 
       migrationBuilder.DropColumn(
           name: "ModuleSelCallEnc",
-          table: "ManagedChannel");
+          table: "Channels");
 
       migrationBuilder.DropColumn(
           name: "ModuleTclVoiceMail",
-          table: "ManagedChannel");
+          table: "Channels");
 
       migrationBuilder.DropColumn(
           name: "ModuleTrx",
-          table: "ManagedChannel");
+          table: "Channels");
 
       migrationBuilder.DropColumn(
           name: "ScanProfileId",
-          table: "ManagedChannel");
+          table: "Channels");
 
       migrationBuilder.DropColumn(
           name: "SvxlinkConf",
-          table: "ManagedChannel");
-
-      migrationBuilder.RenameTable(
-          name: "ManagedChannel",
-          newName: "Channels");
+          table: "Channels");
 
       migrationBuilder.AlterColumn<string>(
           name: "Host",
@@ -272,11 +219,6 @@ namespace SvxlinkManager.Migrations
           oldClrType: typeof(string),
           oldType: "TEXT",
           oldNullable: true);
-
-      migrationBuilder.AddPrimaryKey(
-          name: "PK_Channels",
-          table: "Channels",
-          column: "Id");
 
       migrationBuilder.CreateTable(
           name: "ChannelScanProfile",
@@ -306,22 +248,6 @@ namespace SvxlinkManager.Migrations
           name: "IX_ChannelScanProfile_ScanProfilesId",
           table: "ChannelScanProfile",
           column: "ScanProfilesId");
-
-      migrationBuilder.AddForeignKey(
-          name: "FK_Rules_Channels_ChannelId",
-          table: "Rules",
-          column: "ChannelId",
-          principalTable: "Channels",
-          principalColumn: "Id",
-          onDelete: ReferentialAction.Restrict);
-
-      migrationBuilder.AddForeignKey(
-          name: "FK_Sound_Channels_ChannelId",
-          table: "Sound",
-          column: "ChannelId",
-          principalTable: "Channels",
-          principalColumn: "Id",
-          onDelete: ReferentialAction.Cascade);
     }
   }
 }

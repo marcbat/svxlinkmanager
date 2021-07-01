@@ -9,7 +9,7 @@ using SvxlinkManager.Data;
 namespace SvxlinkManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210701094546_AdvanceChannel")]
+    [Migration("20210701100623_AdvanceChannel")]
     partial class AdvanceChannel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,8 +46,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "226834ed-b459-4393-b4f4-a4b7864d8592",
-                            ConcurrencyStamp = "17a12b9d-49e4-418f-959f-e79bb8a3fc13",
+                            Id = "bebbff77-f0f7-460a-b592-85c41e967d6b",
+                            ConcurrencyStamp = "26fe628a-9e79-4fc6-af32-d22653d2ae22",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -259,7 +259,7 @@ namespace SvxlinkManager.Migrations
 
                     b.HasIndex("ScanProfileId");
 
-                    b.ToTable("ManagedChannel");
+                    b.ToTable("Channels");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("ManagedChannel");
                 });

@@ -28,7 +28,7 @@ namespace SvxlinkManager.Data
 
     #region Properties
 
-    public DbSet<Channel> Channels { get; set; }
+    public DbSet<ManagedChannel> Channels { get; set; }
 
     public DbSet<SvxlinkChannel> svxlinkChannels { get; set; }
 
