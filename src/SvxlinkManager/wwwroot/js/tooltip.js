@@ -37,14 +37,3 @@ function UpdateInstallStatus(id, texte) {
   $('#install-' + id).prop("disabled", true);
   $('#install-' + id).text(texte)
 }
-
-function SetEditor() {
-  var editor;
-  $('.editor').each(function (index) {
-    var id = $(this).attr('id')
-
-    editor = ace.edit(this);
-    editor.setTheme("ace/theme/textmate");
-    editor.session.setMode("ace/mode/ini");
-  });
-}

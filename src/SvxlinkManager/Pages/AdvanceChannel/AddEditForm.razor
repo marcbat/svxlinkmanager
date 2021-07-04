@@ -86,8 +86,7 @@
 
       <div class="form-group col-md-12">
         <small id="svxlinkconfHelp" class="form-text text-muted">La documentation du fichier svxlink.conf est disponible <a href="http://www.svxlink.org/doc/man/man5/svxlink.conf.5.html" target="_blank">ici</a></small>
-        <pre id="SvxlinkConf" class="editor"></pre>
-        <InputTextArea @bind-Value="Channel.SvxlinkConf" type="text" class="form-control fileEditor" id="inputSvxlinkConf" />
+        <pre id="SvxlinkConfEditor" class="editor" @onchange="Synchro"></pre>
       </div>
     </div>
     <div class="tab-pane" id="ModuleEchoLink" role="tabpanel" aria-labelledby="ModuleEchoLink-tab">
@@ -203,6 +202,11 @@
       else
         return string.Empty;
     }
+  }
+
+  private void Synchro(ChangeEventArgs args)
+  {
+    var toto = string.Empty;
   }
 
 }

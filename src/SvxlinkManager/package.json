@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@types/ace": "^0.0.46",
+    "@types/jquery": "^3.5.1"
+  }
+}

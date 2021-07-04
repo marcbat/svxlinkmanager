@@ -26,7 +26,7 @@ namespace SvxlinkManager.Pages.Channels
     /// <summary>
     /// Handles the form submit.
     /// </summary>
-    public async Task HandleValidSubmit(string redirect)
+    public virtual async Task HandleValidSubmit(string redirect)
     {
       await base.HandleValidSubmit();
 
