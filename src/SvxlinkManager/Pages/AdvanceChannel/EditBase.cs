@@ -13,9 +13,11 @@ namespace SvxlinkManager.Pages.AdvanceChannel
   {
     public override async Task HandleValidSubmit(string redirect)
     {
+      StateHasChanged();
+
       //var toto = await Js.InvokeAsync<string>("GetEditorValue", new object[] { "SvxlinkConfEditor" });
 
-      await Js.InvokeVoidAsync("Test");
+      //await Js.InvokeVoidAsync("EditorToTextArea");
 
       await base.HandleValidSubmit(redirect);
     }

@@ -1,14 +1,4 @@
-﻿function SetToolTips() {
-  $('[data-toggle="tooltip"]').tooltip({
-    html: true
-  })
-}
-
-function SetPopOver() {
-  $('[data-toggle="popover"]').popover()
-}
-
-function addToast(id, title, body, type, hour, autohide, delay) {
+﻿function addToast(id, title, body, type, hour, autohide, delay) {
   var toast = $([
     "<div id='toast-" + id + "' class='toast toast-" + type + "' data-autohide='" + autohide + "' data-delay='" + delay + "'>",
     "    <div class='toast-header'>",
@@ -23,17 +13,4 @@ function addToast(id, title, body, type, hour, autohide, delay) {
   $("#toasts").append(toast);
 
   $('#toast-' + id).toast('show');
-};
-
-function DownloadUpdate(id) {
-  $('#download-' + id).prop("disabled", true);
-};
-
-function UpdateDownloadStatus(id, percent) {
-  $('#download-' + id).text("En cours " + percent + "%")
-}
-
-function UpdateInstallStatus(id, texte) {
-  $('#install-' + id).prop("disabled", true);
-  $('#install-' + id).text(texte)
 }

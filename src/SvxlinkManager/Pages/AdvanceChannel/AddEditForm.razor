@@ -86,61 +86,71 @@
 
       <div class="form-group col-md-12">
         <small id="svxlinkconfHelp" class="form-text text-muted">La documentation du fichier svxlink.conf est disponible <a href="http://www.svxlink.org/doc/man/man5/svxlink.conf.5.html" target="_blank">ici</a></small>
-        <pre id="SvxlinkConfEditor" class="editor" @onchange="Synchro"></pre>
+        <pre id="svxlinkconf" class="editor">@Channel.SvxlinkConf</pre>
+        <InputTextArea @bind-Value="Channel.SvxlinkConf" type="text" class="form-control fileEditor" id="svxlinkconf-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleEchoLink" role="tabpanel" aria-labelledby="ModuleEchoLink-tab">
       <div class="form-group col-md-12">
         <small id="svxlinkconfHelp" class="form-text text-muted">La documentation du fichier ModuleEchoLink.conf est disponible <a href="http://www.svxlink.org/doc/man/man5/ModuleEchoLink.conf.5.html" target="_blank">ici</a></small>
-        <InputTextArea @bind-Value="Channel.ModuleEchoLink" type="text" class="form-control fileEditor" id="inputModuleEchoLink" />
+        <pre id="echolink" class="editor"></pre>
+        <InputTextArea @bind-Value="Channel.ModuleEchoLink" type="text" class="form-control fileEditor" id="echolink-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleDtmfRepeater" role="tabpanel" aria-labelledby="ModuleDtmfRepeater-tab">
       <div class="form-group col-md-12">
         <small id="svxlinkconfHelp" class="form-text text-muted">La documentation du fichier ModuleDtmfRepeater.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleDtmfRepeater.conf.5.html" target="_blank">ici</a></small>
-        <InputTextArea @bind-Value="Channel.ModuleDtmfRepeater" type="text" class="form-control fileEditor" id="inputModuleDtmfRepeater" />
+        <pre id="dtmfrepeater" class="editor"></pre>
+        <InputTextArea @bind-Value="Channel.ModuleDtmfRepeater" type="text" class="form-control fileEditor" id="dtmfrepeater-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleFrn" role="tabpanel" aria-labelledby="ModuleFrn-tab">
       <div class="form-group col-md-12">
         <small id="ModuleFrnHelp" class="form-text text-muted">La documentation du fichier ModuleFrn.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleFrn.conf.5.html" target="_blank">ici</a></small>
-        <InputTextArea @bind-Value="Channel.ModuleFrn" type="text" class="form-control fileEditor" id="inputModuleFrn" />
+        <pre id="frn" class="editor"></pre>
+        <InputTextArea @bind-Value="Channel.ModuleFrn" type="text" class="form-control fileEditor" id="frn-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleHelp" role="tabpanel" aria-labelledby="ModuleHelp-tab">
       <div class="form-group col-md-12">
         <small id="ModuleFrnHelp" class="form-text text-muted">La documentation du fichier ModuleHelp.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleHelp.conf.5.html" target="_blank">ici</a></small>
-        <InputTextArea @bind-Value="Channel.ModuleHelp" type="text" class="form-control fileEditor" id="inpuModuleHelp" />
+        <pre id="help" class="editor"></pre>
+        <InputTextArea @bind-Value="Channel.ModuleHelp" type="text" class="form-control fileEditor" id="help-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleMetarInfo" role="tabpanel" aria-labelledby="ModuleMetarInfo-tab">
       <div class="form-group col-md-12">
         <small id="ModuleMetarInfoHelp" class="form-text text-muted">La documentation du fichier ModuleMetarInfo.conf est disponible <a href="https://github.com/sm0svx/svxlink/blob/master/src/svxlink/modules/metarinfo/ModuleMetarInfo.conf.5" target="_blank">ici</a></small>
-        <InputTextArea @bind-Value="Channel.ModuleMetarInfo" type="text" class="form-control fileEditor" id="inputModuleMetarInfo" />
+        <pre id="metarinfo" class="editor"></pre>
+        <InputTextArea @bind-Value="Channel.ModuleMetarInfo" type="text" class="form-control fileEditor" id="metarinfo-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleParrot" role="tabpanel" aria-labelledby="ModuleParrot-tab">
       <div class="form-group col-md-12">
         <small id="ModuleParrotHelp" class="form-text text-muted">La documentation du fichier ModuleParrot.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleParrot.conf.5.html" target="_blank">ici</a></small>
-        <InputTextArea @bind-Value="Channel.ModuleParrot" type="text" class="form-control fileEditor" id="inputModuleParrot" />
+        <pre id="metarinfo" class="editor"></pre>
+        <InputTextArea @bind-Value="Channel.ModuleParrot" type="text" class="form-control fileEditor" id="metarinfo-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModulePropagationMonitor" role="tabpanel" aria-labelledby="ModulePropagationMonitor-tab">
       <div class="form-group col-md-12">
         <small id="ModulePropagationMonitorHelp" class="form-text text-muted">La documentation du fichier ModulePropagationMonitor.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModulePropagationMonitor.conf.5.html" target="_blank">ici</a></small>
-        <InputTextArea @bind-Value="Channel.ModulePropagationMonitor" type="text" class="form-control fileEditor" id="inputModulePropagationMonitor" />
+        <pre id="propagationmonitor" class="editor"></pre>
+        <InputTextArea @bind-Value="Channel.ModulePropagationMonitor" type="text" class="form-control fileEditor" id="propagationmonitor-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleSelCallEnc" role="tabpanel" aria-labelledby="ModuleSelCallEnc-tab">
       <div class="form-group col-md-12">
         <small id="ModuleSelCallEncHelp" class="form-text text-muted">La documentation du fichier ModuleSelCallEnc.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleSelCallEnc.conf.5.html" target="_blank">ici</a></small>
-        <InputTextArea @bind-Value="Channel.ModuleSelCallEnc" type="text" class="form-control fileEditor" id="inputModuleSelCallEnc" />
+        <pre id="selcallenc" class="editor"></pre>
+        <InputTextArea @bind-Value="Channel.ModuleSelCallEnc" type="text" class="form-control fileEditor" id="selcallenc-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleTclVoiceMail" role="tabpanel" aria-labelledby="ModuleTclVoiceMail-tab">
       <div class="form-group col-md-12">
         <small id="ModuleTclVoiceMailHelp" class="form-text text-muted">La documentation du fichier ModuleTclVoiceMail.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleTclVoiceMail.conf.5.html" target="_blank">ici</a></small>
-        <InputTextArea @bind-Value="Channel.ModuleTclVoiceMail" type="text" class="form-control fileEditor" id="inputModuleSelCallEnc" />
+        <pre id="tclvoicemail" class="editor"></pre>
+        <InputTextArea @bind-Value="Channel.ModuleTclVoiceMail" type="text" class="form-control fileEditor" id="tclvoicemail-textarea" />
       </div>
     </div>
   </div>
@@ -204,9 +214,6 @@
     }
   }
 
-  private void Synchro(ChangeEventArgs args)
-  {
-    var toto = string.Empty;
-  }
+  private string Toto { get; set; }
 
 }
