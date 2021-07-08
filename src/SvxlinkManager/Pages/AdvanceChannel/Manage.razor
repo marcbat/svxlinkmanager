@@ -22,7 +22,7 @@
           {<span class="oi oi-clock" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Le salon @channel.Name est temporisé."></span>}
           &nbsp;@channel.Name
         </div>
-        <div class="col-xl-3">@channel.Dtmf</div>
+        <div class="col-xl-3">DTMF: @channel.Dtmf</div>
         <div class="col-xl-2">
           <a class="btn btn-outline-primary" href="AdvanceChannel/Edit/@channel.Id" role="button">Editer</a> &nbsp; @if (!channel.IsDefault)
           {<button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(channel))">Supprimer</button>}
