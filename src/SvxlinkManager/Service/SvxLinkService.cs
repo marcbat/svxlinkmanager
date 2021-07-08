@@ -160,6 +160,10 @@ namespace SvxlinkManager.Service
           ActivateEcholink(c);
           break;
 
+        case AdvanceSvxlinkChannel c:
+          ActivateAdvanceSvxlinkChannel(c);
+          break;
+
         default:
           throw new Exception($"Impossible de trouver le type de channel. {channel.GetType()} ");
       }
@@ -249,9 +253,35 @@ namespace SvxlinkManager.Service
       }
     }
 
+    private void ActivateAdvanceSvxlinkChannel(AdvanceSvxlinkChannel channel)
+    {
+      logger.LogInformation("restart advance salon.");
+
+      // Stop svxlink
+      StopSvxlink();
+      logger.LogInformation("Salon déconnecté");
+
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.current", channel.SvxlinkConf);
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleDtmfRepeater.conf", channel.ModuleDtmfRepeater);
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", channel.ModuleEchoLink);
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleFrn.conf", channel.ModuleFrn);
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleHelp.conf", channel.ModuleHelp);
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleMetarInfo.conf", channel.ModuleMetarInfo);
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleParrot.conf", channel.ModuleParrot);
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModulePropagationMonitor.conf", channel.ModulePropagationMonitor);
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleSelCallEnc.conf", channel.ModuleSelCallEnc);
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleTclVoiceMail.conf", channel.ModuleTclVoiceMail);
+
+      ReplaceSoundFile(channel);
+
+      // Lance svxlink
+      StartSvxLink(channel);
+      logger.LogInformation($"Le channel {channel.Name} est connecté.");
+    }
+
     /// <summary>Replaces the sound file for the channel</summary>
     /// <param name="channel">The channel.</param>
-    protected virtual void ReplaceSoundFile(Channel channel = null)
+    protected virtual void ReplaceSoundFile(ManagedChannel channel = null)
     {
       logger.LogInformation("Remplacement du fichier wav d'annonce.");
 
@@ -562,7 +592,7 @@ namespace SvxlinkManager.Service
     /// <summary>
     /// Starts the SVXlink application with svxlink.current configuration
     /// </summary>
-    public virtual void StartSvxLink(Channel channel)
+    public virtual void StartSvxLink(ManagedChannel channel)
     {
       telemetry.TrackEvent("Channel Connection", channel.TrackProperties);
 
