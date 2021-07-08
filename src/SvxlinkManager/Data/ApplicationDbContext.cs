@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
+using SvxlinkManager.Data.Configurations;
 using SvxlinkManager.Models;
 
 namespace SvxlinkManager.Data
@@ -41,6 +42,8 @@ namespace SvxlinkManager.Data
     public DbSet<ScanProfile> ScanProfiles { get; set; }
 
     public DbSet<Rule> Rules { get; set; }
+
+    public DbSet<SvxlinkManagerParameter> Parameters { get; set; }
 
     #endregion Properties
 
@@ -80,6 +83,8 @@ namespace SvxlinkManager.Data
       builder.Entity<RadioProfile>().HasData(new RadioProfile { Id = 2, Name = "UHF défaut", TxFrequ = "436.375", RxFequ = "436.375", Squelch = "2", RxCtcss = "0005", SquelchDetection = "GPIO", HasSa818 = true, Enable = false });
 
       builder.Entity<ScanProfile>().HasData(new ScanProfile { Id = 1, Name = "default", ScanDelay = 60, Enable = false });
+
+      builder.ApplyConfiguration(new SvxlinkManagerParametersConfiguration());
     }
 
     #endregion Methods

@@ -205,8 +205,8 @@ namespace SvxlinkManager.Service
 
         var radioProfile = repositories.RadioProfiles.GetCurrent();
 
-        // Remplacement de la config
-        CreateNewCurrentConfig();
+        Directory.CreateDirectory($"{applicationPath}/SvxlinkConfig/svxlink.d");
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", repositories.Parameters.GetStringValue("default.svxlink.conf"));
 
         var global = new Dictionary<string, string>
       {
@@ -242,8 +242,8 @@ namespace SvxlinkManager.Service
         {"ReflectorLogic" , ReflectorLogic}
       };
 
-        ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);
-        logger.LogInformation("Remplacement du contenu svxlink.current");
+        ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.conf", parameters);
+        logger.LogInformation("Remplacement du contenu svxlink.conf");
 
         ReplaceSoundFile(channel);
 
@@ -261,7 +261,9 @@ namespace SvxlinkManager.Service
       StopSvxlink();
       logger.LogInformation("Salon déconnecté");
 
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.current", channel.SvxlinkConf);
+      Directory.CreateDirectory($"{applicationPath}/SvxlinkConfig/svxlink.d");
+
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", channel.SvxlinkConf);
       File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleDtmfRepeater.conf", channel.ModuleDtmfRepeater);
       File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", channel.ModuleEchoLink);
       File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleFrn.conf", channel.ModuleFrn);
@@ -333,8 +335,8 @@ namespace SvxlinkManager.Service
         {"SimplexLogic", simplexlogic }
       };
 
-      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);
-      logger.LogInformation("Remplacement du contenu svxlink.current");
+      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.conf", parameters);
+      logger.LogInformation("Remplacement du contenu svxlink.conf");
 
       var moduleEcholink = new Dictionary<string, string>
       {
@@ -447,8 +449,8 @@ namespace SvxlinkManager.Service
       };
 
       // Remplace le contenu de svxlink.conf avec le informations du channel
-      logger.LogInformation("Remplacement du contenu svxlink.current");
-      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.current", parameters);
+      logger.LogInformation("Remplacement du contenu svxlink.conf");
+      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.conf", parameters);
 
       // suppression du fichier d'annonce
       ReplaceSoundFile();
@@ -466,7 +468,7 @@ namespace SvxlinkManager.Service
     /// Copy svxlink.conf vers svxlink.current
     /// </summary>
     protected virtual void CreateNewCurrentConfig() =>
-      File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.current", true);
+      File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.conf", true);
 
     /// <summary>
     /// Replace parameters int svxlink.current ini file
@@ -598,7 +600,7 @@ namespace SvxlinkManager.Service
 
       logger.LogInformation("Connection au channel {ChannelName}.", channel.Name);
 
-      base.StartSvxlink(channel, pidFile: "/var/run/svxlink.pid", runAs: "root", configFile: $"{applicationPath}/SvxlinkConfig/svxlink.current");
+      base.StartSvxlink(channel, pidFile: "/var/run/svxlink.pid", runAs: "root", configFile: $"{applicationPath}/SvxlinkConfig/svxlink.conf");
 
       var scanProfil = repositories.ScanProfiles.Get(1);
 

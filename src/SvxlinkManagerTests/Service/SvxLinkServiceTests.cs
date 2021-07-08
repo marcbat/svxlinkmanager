@@ -373,7 +373,7 @@ namespace SvxlinkManager.Service.Tests
       {
       }
 
-      protected override void ReplaceSoundFile(Channel channel = null)
+      protected override void ReplaceSoundFile(ManagedChannel channel = null)
       {
       }
     }
