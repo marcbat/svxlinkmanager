@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.Channels
 {
   [Authorize]
-  public class CreateBase<TChannel> : AddEditBase<TChannel> where TChannel : Channel, new()
+  public class CreateBase<TChannel> : AddEditBase<TChannel> where TChannel : ManagedChannel, new()
   {
     protected override string SubmitTitle => "Créer";
 

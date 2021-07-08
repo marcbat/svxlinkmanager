@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.Channels
 {
   [Authorize]
-  public class ManageBase<TChannel> : RepositoryComponentBase where TChannel : Channel
+  public class ManageBase<TChannel> : RepositoryComponentBase where TChannel : ManagedChannel
   {
     [Inject]
     public NavigationManager NavigationManager { get; set; }

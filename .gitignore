@@ -343,3 +343,5 @@ ASALocalRun/
 healthchecksdb
 /src/SvxlinkManager/Sounds/echolink.wav
 /gitversion.exe
+/src/SvxlinkManager/SvxlinkConfig/svxlink.d
+/src/SvxlinkManager/SvxlinkConfig/svxlink.conf

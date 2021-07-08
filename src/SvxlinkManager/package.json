@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@types/ace": "^0.0.46",
+    "@types/jquery": "^3.5.1",
+    "@types/popper.js": "^1.11.0",
+    "@types/bootstrap": "^4.6.0"
+  }
+}

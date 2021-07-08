@@ -11,7 +11,7 @@ namespace SvxlinkManager.Models
 
     public int ChannelId { get; set; }
 
-    public Channel Channel { get; set; }
+    public ManagedChannel Channel { get; set; }
 
     public string SoundName { get; set; }
 

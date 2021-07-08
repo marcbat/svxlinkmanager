@@ -10,12 +10,20 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.JSInterop;
 
 namespace SvxlinkManager.Pages.Channels
 {
-  public abstract class AddEditBase<TChannel> : RepositoryComponentBase where TChannel : Channel
+  public abstract class AddEditBase<TChannel> : RepositoryComponentBase where TChannel : ManagedChannel
   {
     private CancellationTokenSource cancelation;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+      await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
+
+      await Js.InvokeVoidAsync("SetEditor");
+    }
 
     [Inject]
     public NavigationManager NavigationManager { get; set; }

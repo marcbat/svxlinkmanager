@@ -24,7 +24,7 @@ namespace SvxlinkManager.Service
       this.telemetry = telemetry;
     }
 
-    public virtual Channel GetActiveChannel(ScanProfile scanProfile)
+    public virtual ManagedChannel GetActiveChannel(ScanProfile scanProfile)
     {
       foreach (var channel in scanProfile.Channels)
       {

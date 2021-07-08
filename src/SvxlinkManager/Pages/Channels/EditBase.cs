@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.Channels
 {
   [Authorize]
-  public class EditBase<TChannel> : AddEditBase<TChannel> where TChannel : Channel
+  public class EditBase<TChannel> : AddEditBase<TChannel> where TChannel : ManagedChannel
   {
     [Parameter]
     public string Id { get; set; }
@@ -26,7 +26,7 @@ namespace SvxlinkManager.Pages.Channels
     /// <summary>
     /// Handles the form submit.
     /// </summary>
-    public async Task HandleValidSubmit(string redirect)
+    public virtual async Task HandleValidSubmit(string redirect)
     {
       await base.HandleValidSubmit();
 
