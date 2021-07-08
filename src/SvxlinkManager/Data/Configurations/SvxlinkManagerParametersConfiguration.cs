@@ -110,6 +110,30 @@ namespace SvxlinkManager.Data.Configurations
         Key = "default.svxlink.conf",
         Value = sb.ToString()
       });
+
+      sb = new StringBuilder();
+
+      sb.AppendLine("[ModuleEchoLink]");
+      sb.AppendLine("NAME=EchoLink");
+      sb.AppendLine("ID=2");
+      sb.AppendLine("SERVERS=europe.echolink.org");
+      sb.AppendLine("CALLSIGN=CALLSIGN");
+      sb.AppendLine("PASSWORD=PASSWORD");
+      sb.AppendLine("SYSOPNAME=SYSOPNAME");
+      sb.AppendLine("LOCATION=LOCATION");
+      sb.AppendLine("MAX_QSOS=4");
+      sb.AppendLine("MAX_CONNECTIONS=5");
+      sb.AppendLine("LINK_IDLE_TIMEOUT=300");
+      sb.AppendLine("USE_GSM_ONLY=0");
+      sb.AppendLine("DESCRIPTION=DESCRIPTION");
+      sb.AppendLine("DEFAULT_LANG=fr_FR");
+
+      builder.HasData(new SvxlinkManagerParameter
+      {
+        Id = 2,
+        Key = "default.echolink.conf",
+        Value = sb.ToString()
+      });
     }
   }
 }

@@ -317,8 +317,9 @@ namespace SvxlinkManager.Service
 
       var radioProfile = repositories.RadioProfiles.GetCurrent();
 
-      // Remplacement de la config
-      CreateNewCurrentConfig();
+      Directory.CreateDirectory($"{applicationPath}/SvxlinkConfig/svxlink.d");
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", repositories.Parameters.GetStringValue("default.svxlink.conf"));
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", repositories.Parameters.GetStringValue("default.echolink.conf"));
 
       var global = new Dictionary<string, string>
       {
@@ -433,7 +434,8 @@ namespace SvxlinkManager.Service
       StopSvxlink();
       logger.LogInformation("Salon déconnecté");
 
-      CreateNewCurrentConfig();
+      Directory.CreateDirectory($"{applicationPath}/SvxlinkConfig/svxlink.d");
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", repositories.Parameters.GetStringValue("default.svxlink.conf"));
 
       var global = new Dictionary<string, string>
       {
@@ -463,12 +465,6 @@ namespace SvxlinkManager.Service
       logger.LogInformation("Séléction du salon perroquet.");
       ExecuteCommand("echo '1#'> /tmp/dtmf_uhf");
     }
-
-    /// <summary>
-    /// Copy svxlink.conf vers svxlink.current
-    /// </summary>
-    protected virtual void CreateNewCurrentConfig() =>
-      File.Copy($"{applicationPath}/SvxlinkConfig/svxlink.conf", $"{applicationPath}/SvxlinkConfig/svxlink.conf", true);
 
     /// <summary>
     /// Replace parameters int svxlink.current ini file
