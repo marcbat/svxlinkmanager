@@ -69,8 +69,10 @@ namespace SvxlinkManager.Data.Configurations
       sb.AppendLine("CTCSS_CLOSE_THRESH = 9");
       sb.AppendLine("CTCSS_BPF_LOW = 60");
       sb.AppendLine("CTCSS_BPF_HIGH = 260");
-      sb.AppendLine("#GPIO_PATH=/sys/class/gpio");
-      sb.AppendLine("#GPIO_SQL_PIN=gpio10");
+#if !DEBUG
+      sb.AppendLine("GPIO_PATH=/sys/class/gpio");
+      sb.AppendLine("GPIO_SQL_PIN=gpio10");
+#endif
       sb.AppendLine("DEEMPHASIS = 0");
       sb.AppendLine("SQL_TAIL_ELIM = 0");
       sb.AppendLine("PREAMP = -4");
@@ -84,8 +86,10 @@ namespace SvxlinkManager.Data.Configurations
       sb.AppendLine("AUDIO_DEV = udp:127.0.0.1:10000");
       sb.AppendLine("AUDIO_CHANNEL = 0");
       sb.AppendLine("PTT_TYPE = Dummy");
-      sb.AppendLine("#GPIO_PATH=/sys/class/gpio");
-      sb.AppendLine("#PTT_PIN=gpio7");
+#if !DEBUG
+      sb.AppendLine("GPIO_PATH=/sys/class/gpio");
+      sb.AppendLine("PTT_PIN=gpio7");
+#endif
       sb.AppendLine("TIMEOUT = 300");
       sb.AppendLine("TX_DELAY = 900");
       sb.AppendLine("PREAMP = 0");
