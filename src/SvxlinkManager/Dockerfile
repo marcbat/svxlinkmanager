@@ -22,6 +22,7 @@ COPY ["src/SvxlinkManager/SvxlinkManager.csproj", "src/SvxlinkManager/"]
 RUN dotnet restore "src/SvxlinkManager/SvxlinkManager.csproj"
 COPY . .
 WORKDIR "/src/src/SvxlinkManager"
+RUN npm install
 RUN dotnet build "SvxlinkManager.csproj" -c Release -o /app/build
 
 FROM build AS publish
