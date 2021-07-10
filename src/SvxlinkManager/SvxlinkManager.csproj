@@ -64,6 +64,12 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <TypeScriptCompile Update="node_modules\%40types\ace\index.d.ts">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </TypeScriptCompile>
+  </ItemGroup>
+
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
