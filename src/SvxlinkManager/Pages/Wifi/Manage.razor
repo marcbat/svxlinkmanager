@@ -20,7 +20,7 @@
     {
       if (device.HasConnection)
       {
-        <ConfiguredDevice Device="device" OnUp="Up" />
+        <ConfiguredDevice Device="device" OnUp="Up" OnDisconnect="Disconnect"/>
       }
       else
       {

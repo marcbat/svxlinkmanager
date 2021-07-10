@@ -10,7 +10,12 @@
     <Authors>HB9GXP</Authors>
     <StartupObject></StartupObject>
     <ApplicationInsightsResourceId>/subscriptions/db6983fb-b1b7-4a94-9bf0-1556179d2d27/resourceGroups/Reseau-repeteur-romand/providers/microsoft.insights/components/SvxlinkManager-Insights</ApplicationInsightsResourceId>
+    <TypeScriptToolsVersion>4.0</TypeScriptToolsVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Scripts\Editor.ts" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="DeviceId" Version="5.2.0" />
@@ -27,6 +32,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.0" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.3.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.0" />
     <PackageReference Include="System.IO.Ports" Version="5.0.0" />
@@ -34,6 +43,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\submodules\SvxlinkManager.Common\src\SvxlinkManager.Common\SvxlinkManager.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\Editor.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,45 +59,31 @@
     <None Update="SvxlinkConfig\Logic.tcl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SvxlinkConfig\svxlink.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SvxlinkConfig\svxlink-prod.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SvxlinkConfig\svxlink.d\ModuleDtmfRepeater.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SvxlinkConfig\svxlink.d\ModuleEchoLink.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SvxlinkConfig\svxlink.d\ModuleFrn.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SvxlinkConfig\svxlink.d\ModuleHelp.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SvxlinkConfig\svxlink.d\ModuleMetarInfo.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SvxlinkConfig\svxlink.d\ModuleParrot.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SvxlinkConfig\svxlink.d\ModulePropagationMonitor.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SvxlinkConfig\svxlink.d\ModuleSelCallEnc.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SvxlinkConfig\svxlink.d\ModuleTclVoiceMail.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SvxlinkConfig\svxreflector.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="svxlinkmanager.service">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Update="node_modules\%40types\ace\index.d.ts">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </TypeScriptCompile>
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptModuleKind />
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
 
 </Project>

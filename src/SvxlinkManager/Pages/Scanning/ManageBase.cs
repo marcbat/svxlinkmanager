@@ -47,7 +47,7 @@ namespace SvxlinkManager.Pages.Scanning
 
     public bool IsChanged { get; set; }
 
-    protected bool IsChecked(Channel channel) => ScanProfile.Channels.Contains(channel);
+    protected bool IsChecked(ManagedChannel channel) => ScanProfile.Channels.Contains(channel);
 
     public ScanProfile ScanProfile { get; set; }
 
@@ -77,7 +77,7 @@ namespace SvxlinkManager.Pages.Scanning
       await ShowSuccessToastAsync("Désactivé", $"le scan a bien été désactivé.");
     }
 
-    protected void AddRemoveChannel(Channel channel, ChangeEventArgs e)
+    protected void AddRemoveChannel(ManagedChannel channel, ChangeEventArgs e)
     {
       if ((bool)e.Value)
         ScanProfile.Channels.Add(channel);
@@ -87,7 +87,7 @@ namespace SvxlinkManager.Pages.Scanning
       IsChanged = true;
     }
 
-    public List<Channel> Channels { get; protected set; }
+    public List<ManagedChannel> Channels { get; protected set; }
 
     protected async Task HandleValidSubmitAsync()
     {

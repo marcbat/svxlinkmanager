@@ -152,24 +152,6 @@ namespace SvxlinkManager.Service.Tests
       Assert.AreEqual(message, $"Impossible de se connecter au salon {channel.Name}. <br/> Accès refusé.");
     }
 
-    [Test(Description = "Test le log Host not found")]
-    public void ParseLogHostNotFoundTest()
-    {
-      // arrange
-      var channel = new SvxlinkChannel { Name = "Default", Host = "Default Host" };
-      string message = null;
-
-      var service = Substitute.ForPartsOf<SvxLinkService>(logger, repositories, scanService, telemetry);
-      service.Nodes.Add(new Node { Name = " (CH) HB9GXP H" });
-      service.Error += (t, m) => message = m;
-
-      // act
-      service.ParseLog(channel, "Host not found");
-
-      // assert
-      Assert.AreEqual(message, $"Impossible de se connecter au salon {channel.Name}. <br/> Server {channel.Host} introuvable.");
-    }
-
     [Test(Description = "Test le changement de salon parrot")]
     public void SetChannelIdParrot()
     {
@@ -226,7 +208,6 @@ namespace SvxlinkManager.Service.Tests
 
       // assert
       service.Received(1).StopSvxlink();
-      service.Received(1).Protected("CreateNewCurrentConfig");
       service.Received(1).Protected("ReplaceConfig", Arg.Any<string>(), Arg.Is<Dictionary<string, Dictionary<string, string>>>(x => isParametersOk(x)));
       service.Received(1).Protected("ReplaceSoundFile", Arg.Is<Channel>(x => x == null));
       service.Received(1).StartSvxLink(Arg.Any<SvxlinkChannel>());
@@ -246,7 +227,6 @@ namespace SvxlinkManager.Service.Tests
 
       // assert
       service.Received(1).StopSvxlink();
-      service.DidNotReceive().Protected("CreateNewCurrentConfig");
     }
 
     [Test(Description = "Test de l'activation d'un channel Svxlink")]
@@ -279,8 +259,7 @@ namespace SvxlinkManager.Service.Tests
 
       // assert
       service.Received(1).StopSvxlink();
-      service.Received(1).Protected("CreateNewCurrentConfig");
-      service.Received(1).Protected("ReplaceConfig", $"{service.applicationPath}/SvxlinkConfig/svxlink.current", Arg.Is<Dictionary<string, Dictionary<string, string>>>(x => isParametersOk(x)));
+      service.Received(1).Protected("ReplaceConfig", $"{service.applicationPath}/SvxlinkConfig/svxlink.conf", Arg.Is<Dictionary<string, Dictionary<string, string>>>(x => isParametersOk(x)));
       service.Received(1).Protected("ReplaceSoundFile", channel);
       service.Received(1).StartSvxLink(channel);
     }
@@ -321,8 +300,7 @@ namespace SvxlinkManager.Service.Tests
 
       // assert
       service.Received(1).StopSvxlink();
-      service.Received(1).Protected("CreateNewCurrentConfig");
-      service.Received(1).Protected("ReplaceConfig", $"{service.applicationPath}/SvxlinkConfig/svxlink.current", Arg.Is<Dictionary<string, Dictionary<string, string>>>(x => isParametersOk(x)));
+      service.Received(1).Protected("ReplaceConfig", $"{service.applicationPath}/SvxlinkConfig/svxlink.conf", Arg.Is<Dictionary<string, Dictionary<string, string>>>(x => isParametersOk(x)));
       service.Received(1).Protected("ReplaceConfig", $"{service.applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", Arg.Is<Dictionary<string, Dictionary<string, string>>>(x => isEcholinkParametersOk(x)));
       service.Received(1).Protected("ReplaceSoundFile", channel);
       service.Received(1).StartSvxLink(channel);
@@ -365,15 +343,11 @@ namespace SvxlinkManager.Service.Tests
         return string.Empty;
       }
 
-      protected override void CreateNewCurrentConfig()
-      {
-      }
-
       protected override void SetDtmfWatcher()
       {
       }
 
-      protected override void ReplaceSoundFile(Channel channel = null)
+      protected override void ReplaceSoundFile(ManagedChannel channel = null)
       {
       }
     }

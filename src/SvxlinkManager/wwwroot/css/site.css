@@ -266,3 +266,8 @@ app {
   -webkit-animation-timing-function: ease-in-out;
   -webkit-animation-direction: alternate;
 }
+
+.editor {
+  top: 10px;
+  height: 400px;
+}

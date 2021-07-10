@@ -10,20 +10,20 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Repositories
 {
-  public interface IChannelRepository : IRepository<Channel>
+  public interface IChannelRepository : IRepository<ManagedChannel>
   {
-    Channel GetDefault();
+    ManagedChannel GetDefault();
 
-    Channel GetWithSound(int id);
+    ManagedChannel GetWithSound(int id);
   }
 
-  public class ChannelRepository : Repository<Channel>, IChannelRepository
+  public class ChannelRepository : Repository<ManagedChannel>, IChannelRepository
   {
     public ChannelRepository(Data.IDbContextFactory<ApplicationDbContext> contextFactory) : base(contextFactory)
     {
     }
 
-    public override Channel Add(Channel channel)
+    public override ManagedChannel Add(ManagedChannel channel)
     {
       if (channel.IsDefault)
       {
@@ -37,7 +37,7 @@ namespace SvxlinkManager.Repositories
       return base.Add(channel);
     }
 
-    public override void Update(Channel channel)
+    public override void Update(ManagedChannel channel)
     {
       base.Update(channel);
 
@@ -61,13 +61,13 @@ namespace SvxlinkManager.Repositories
       base.Delete(id);
     }
 
-    public Channel GetDefault()
+    public ManagedChannel GetDefault()
     {
       using var dbcontext = contextFactory.CreateDbContext();
       return dbcontext.Channels.SingleOrDefault(c => c.IsDefault);
     }
 
-    public Channel GetWithSound(int id)
+    public ManagedChannel GetWithSound(int id)
     {
       using var dbcontext = contextFactory.CreateDbContext();
       return dbcontext.Channels.Include(c => c.Sound).Single(e => e.Id == id);

@@ -11,8 +11,12 @@ RUN apt-get update && apt-get install -qq -y  svxlink-server procps network-mana
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
+RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
+RUN apt-get install -y nodejs
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
+RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
+RUN apt-get install -y nodejs
 WORKDIR /src
 COPY ["src/SvxlinkManager/SvxlinkManager.csproj", "src/SvxlinkManager/"]
 RUN dotnet restore "src/SvxlinkManager/SvxlinkManager.csproj"

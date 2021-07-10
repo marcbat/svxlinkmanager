@@ -1,0 +1,219 @@
+﻿<EditForm Model="@Channel" OnValidSubmit="@HandleValidSubmit">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label data-toggle="tooltip" title="Le nom du salon s'affichera dans le menu déroulant de la page d'accueil.<br /> Choisissez un nom unique.">Nom du salon</label>
+      <InputText @bind-Value="Channel.Name" type="text" class="form-control" id="inputName" placeholder="Nom du salon" />
+    </div>
+    <div class="form-group col-md-4">
+      <label data-toggle="tooltip" title="Un fichier .wav qui sera joué lors de l'activation du salon.">Annonce vocal @CurrentSoundName</label>
+      <InputFile OnChange="@OnInputFileChange" class="form-control" id="inputName" />
+    </div>
+    <div class="form-group col-md-4">
+      <label data-toggle="tooltip" title="Le DTMF à composer pour activer le salon.">DTMF</label>
+      <InputNumber @bind-Value="Channel.Dtmf" type="number" class="form-control" id="inputDtmf" placeholder="100" />
+    </div>
+  </div>
+
+  @if (CanEditType)
+  {
+    <div class="form-row">
+      <div class="form-group col-md-2">
+        <div class="form-check form-check-inline">
+          <div class="pretty p-default p-curve p-bigger">
+            <InputCheckbox @bind-Value="IsDefault" type="checkbox" id="inputIsDefault" />
+            <div class="state">
+              <label data-toggle="tooltip" title="Si choché, c'est ce salon qui sera séléctionné au terme du délai des salons temporisés. <br /> Un salon ne peut être à la fois salon par défaut et salon temporisé.">Salon par défaut</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-md-3">
+        <div class="form-check form-check-inline">
+          <div class="pretty p-default p-curve p-bigger">
+            <InputCheckbox @bind-Value="IsTemporized" type="checkbox" id="inputIsTemporized" />
+            <div class="state">
+              <label data-toggle="tooltip" title="Un salon temporisé retournera automatiquement sur le salon par défaut après un délai de 3 minutes d'inactivité.">Temporisé</label>
+            </div>
+          </div>
+          @if (Channel.IsTemporized)
+          {
+            <InputNumber @bind-Value="Channel.TimerDelay" type="number" class="form-control" id="inputTimerDelay" />
+          }
+        </div>
+      </div>
+    </div>
+
+  }
+
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="Svxlink-tab" data-toggle="tab" href="#Svxlink" role="tab" aria-controls="Svxlink" aria-selected="true">Svxlink</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="ModuleEchoLink-tab" data-toggle="tab" href="#ModuleEchoLink" role="tab" aria-controls="ModuleEchoLink" aria-selected="false">ModuleEchoLink</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="ModuleDtmfRepeater-tab" data-toggle="tab" href="#ModuleDtmfRepeater" role="tab" aria-controls="ModuleDtmfRepeater" aria-selected="false">ModuleDtmfRepeater</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="ModuleFrn-tab" data-toggle="tab" href="#ModuleFrn" role="tab" aria-controls="ModuleFrn" aria-selected="false">ModuleFrn</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="ModuleHelp-tab" data-toggle="tab" href="#ModuleHelp" role="tab" aria-controls="ModuleHelp" aria-selected="false">ModuleHelp</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="ModuleMetarInfo-tab" data-toggle="tab" href="#ModuleMetarInfo" role="tab" aria-controls="ModuleMetarInfo" aria-selected="false">ModuleMetarInfo</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="ModuleParrot-tab" data-toggle="tab" href="#ModuleParrot" role="tab" aria-controls="ModuleParrot" aria-selected="false">ModuleParrot</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="ModulePropagationMonitor-tab" data-toggle="tab" href="#ModulePropagationMonitor" role="tab" aria-controls="ModulePropagationMonitor" aria-selected="false">ModulePropagationMonitor</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="ModuleSelCallEnc-tab" data-toggle="tab" href="#ModuleSelCallEnc" role="tab" aria-controls="ModuleSelCallEnc" aria-selected="false">ModuleSelCallEnc</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="ModuleTclVoiceMail-tab" data-toggle="tab" href="#ModuleTclVoiceMail" role="tab" aria-controls="ModuleTclVoiceMail" aria-selected="false">ModuleTclVoiceMail</a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane active" id="Svxlink" role="tabpanel" aria-labelledby="Svxlink-tab">
+
+      <div class="form-group col-md-12">
+        <small id="svxlinkconfHelp" class="form-text text-muted">La documentation du fichier svxlink.conf est disponible <a href="http://www.svxlink.org/doc/man/man5/svxlink.conf.5.html" target="_blank">ici</a></small>
+        <pre id="svxlinkconf" class="editor">@Channel.SvxlinkConf</pre>
+        <InputTextArea @bind-Value="Channel.SvxlinkConf" type="text" class="form-control fileEditor" id="svxlinkconf-textarea" />
+      </div>
+    </div>
+    <div class="tab-pane" id="ModuleEchoLink" role="tabpanel" aria-labelledby="ModuleEchoLink-tab">
+      <div class="form-group col-md-12">
+        <small id="svxlinkconfHelp" class="form-text text-muted">La documentation du fichier ModuleEchoLink.conf est disponible <a href="http://www.svxlink.org/doc/man/man5/ModuleEchoLink.conf.5.html" target="_blank">ici</a></small>
+        <pre id="echolink" class="editor">@Channel.ModuleEchoLink</pre>
+        <InputTextArea @bind-Value="Channel.ModuleEchoLink" type="text" class="form-control fileEditor" id="echolink-textarea" />
+      </div>
+    </div>
+    <div class="tab-pane" id="ModuleDtmfRepeater" role="tabpanel" aria-labelledby="ModuleDtmfRepeater-tab">
+      <div class="form-group col-md-12">
+        <small id="svxlinkconfHelp" class="form-text text-muted">La documentation du fichier ModuleDtmfRepeater.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleDtmfRepeater.conf.5.html" target="_blank">ici</a></small>
+        <pre id="dtmfrepeater" class="editor">@Channel.ModuleDtmfRepeater</pre>
+        <InputTextArea @bind-Value="Channel.ModuleDtmfRepeater" type="text" class="form-control fileEditor" id="dtmfrepeater-textarea" />
+      </div>
+    </div>
+    <div class="tab-pane" id="ModuleFrn" role="tabpanel" aria-labelledby="ModuleFrn-tab">
+      <div class="form-group col-md-12">
+        <small id="ModuleFrnHelp" class="form-text text-muted">La documentation du fichier ModuleFrn.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleFrn.conf.5.html" target="_blank">ici</a></small>
+        <pre id="frn" class="editor">@Channel.ModuleFrn</pre>
+        <InputTextArea @bind-Value="Channel.ModuleFrn" type="text" class="form-control fileEditor" id="frn-textarea" />
+      </div>
+    </div>
+    <div class="tab-pane" id="ModuleHelp" role="tabpanel" aria-labelledby="ModuleHelp-tab">
+      <div class="form-group col-md-12">
+        <small id="ModuleFrnHelp" class="form-text text-muted">La documentation du fichier ModuleHelp.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleHelp.conf.5.html" target="_blank">ici</a></small>
+        <pre id="help" class="editor">@Channel.ModuleHelp</pre>
+        <InputTextArea @bind-Value="Channel.ModuleHelp" type="text" class="form-control fileEditor" id="help-textarea" />
+      </div>
+    </div>
+    <div class="tab-pane" id="ModuleMetarInfo" role="tabpanel" aria-labelledby="ModuleMetarInfo-tab">
+      <div class="form-group col-md-12">
+        <small id="ModuleMetarInfoHelp" class="form-text text-muted">La documentation du fichier ModuleMetarInfo.conf est disponible <a href="https://github.com/sm0svx/svxlink/blob/master/src/svxlink/modules/metarinfo/ModuleMetarInfo.conf.5" target="_blank">ici</a></small>
+        <pre id="metarinfo" class="editor">@Channel.ModuleMetarInfo</pre>
+        <InputTextArea @bind-Value="Channel.ModuleMetarInfo" type="text" class="form-control fileEditor" id="metarinfo-textarea" />
+      </div>
+    </div>
+    <div class="tab-pane" id="ModuleParrot" role="tabpanel" aria-labelledby="ModuleParrot-tab">
+      <div class="form-group col-md-12">
+        <small id="ModuleParrotHelp" class="form-text text-muted">La documentation du fichier ModuleParrot.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleParrot.conf.5.html" target="_blank">ici</a></small>
+        <pre id="metarinfo" class="editor">@Channel.ModuleParrot</pre>
+        <InputTextArea @bind-Value="Channel.ModuleParrot" type="text" class="form-control fileEditor" id="metarinfo-textarea" />
+      </div>
+    </div>
+    <div class="tab-pane" id="ModulePropagationMonitor" role="tabpanel" aria-labelledby="ModulePropagationMonitor-tab">
+      <div class="form-group col-md-12">
+        <small id="ModulePropagationMonitorHelp" class="form-text text-muted">La documentation du fichier ModulePropagationMonitor.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModulePropagationMonitor.conf.5.html" target="_blank">ici</a></small>
+        <pre id="propagationmonitor" class="editor">@Channel.ModulePropagationMonitor</pre>
+        <InputTextArea @bind-Value="Channel.ModulePropagationMonitor" type="text" class="form-control fileEditor" id="propagationmonitor-textarea" />
+      </div>
+    </div>
+    <div class="tab-pane" id="ModuleSelCallEnc" role="tabpanel" aria-labelledby="ModuleSelCallEnc-tab">
+      <div class="form-group col-md-12">
+        <small id="ModuleSelCallEncHelp" class="form-text text-muted">La documentation du fichier ModuleSelCallEnc.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleSelCallEnc.conf.5.html" target="_blank">ici</a></small>
+        <pre id="selcallenc" class="editor">@Channel.ModuleSelCallEnc</pre>
+        <InputTextArea @bind-Value="Channel.ModuleSelCallEnc" type="text" class="form-control fileEditor" id="selcallenc-textarea" />
+      </div>
+    </div>
+    <div class="tab-pane" id="ModuleTclVoiceMail" role="tabpanel" aria-labelledby="ModuleTclVoiceMail-tab">
+      <div class="form-group col-md-12">
+        <small id="ModuleTclVoiceMailHelp" class="form-text text-muted">La documentation du fichier ModuleTclVoiceMail.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleTclVoiceMail.conf.5.html" target="_blank">ici</a></small>
+        <pre id="tclvoicemail" class="editor">@Channel.ModuleTclVoiceMail</pre>
+        <InputTextArea @bind-Value="Channel.ModuleTclVoiceMail" type="text" class="form-control fileEditor" id="tclvoicemail-textarea" />
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-success">@SubmitTitle</button> <a class="btn btn-primary" href="AdvanceChannel/Manage" role="button">Annuler</a>
+</EditForm>
+
+@code{
+  [Parameter]
+  public Models.AdvanceSvxlinkChannel Channel { get; set; }
+
+  [Parameter]
+  public string SubmitTitle { get; set; }
+
+  [Parameter]
+  public bool CanEditType { get; set; }
+
+  [Parameter]
+  public EventCallback<EditContext> HandleValidSubmit { get; set; }
+
+  protected bool IsDefault
+  {
+    get => Channel.IsDefault;
+    set
+    {
+      Channel.IsDefault = value;
+      if (value)
+        IsTemporized = false;
+    }
+  }
+
+  protected bool IsTemporized
+  {
+    get => Channel.IsTemporized;
+    set
+    {
+      Channel.IsTemporized = value;
+      if (value)
+        IsDefault = false;
+
+    }
+  }
+
+  protected string DelayVisibility { get; set; }
+
+  private void OnInputFileChange(InputFileChangeEventArgs eventArgs)
+  {
+    Channel.SoundBrowserFile = eventArgs.File;
+  }
+
+  public string CurrentSoundName
+  {
+    get
+    {
+      if (!string.IsNullOrEmpty(Channel.Sound.SoundName))
+      {
+        return $"({Channel.Sound.SoundName})";
+      }
+      else
+        return string.Empty;
+    }
+  }
+
+  private string Toto { get; set; }
+
+}

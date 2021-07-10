@@ -177,7 +177,7 @@ namespace SvxlinkManager.Pages
       }
     }
 
-    public List<Channel> Channels { get; set; }
+    public List<ManagedChannel> Channels { get; set; }
 
     private void LoadChannels() => Channels = Repositories.Channels.GetAll().ToList();
 
