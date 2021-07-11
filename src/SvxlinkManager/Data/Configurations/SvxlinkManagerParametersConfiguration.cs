@@ -33,7 +33,7 @@ namespace SvxlinkManager.Data.Configurations
       sb.AppendLine("LONG_IDENT_INTERVAL = 60");
       sb.AppendLine("IDENT_ONLY_AFTER_TX = 10");
       sb.AppendLine("EXEC_CMD_ON_SQL_CLOSE = 500");
-      sb.AppendLine("EVENT_HANDLER =/ usr / share / svxlink / events.tcl");
+      sb.AppendLine("EVENT_HANDLER =/usr/share/svxlink/events.tcl");
       sb.AppendLine("DEFAULT_LANG = fr_FR");
       sb.AppendLine("RGR_SOUND_ALWAYS = 1");
       sb.AppendLine("RGR_SOUND_DELAY = 0");
@@ -44,14 +44,15 @@ namespace SvxlinkManager.Data.Configurations
       sb.AppendLine("FX_GAIN_LOW = -12");
       sb.AppendLine("ACTIVATE_MODULE_ON_LONG_CMD = 10:PropagationMonitor");
       sb.AppendLine("MUTE_RX_ON_TX = 1");
-      sb.AppendLine("DTMF_CTRL_PTY =/ tmp / dtmf_uhf");
+      sb.AppendLine("DTMF_CTRL_PTY =/tmp/dtmf_uhf");
       sb.AppendLine("[ALLlink]");
       sb.AppendLine("CONNECT_LOGICS = SimplexLogic:434MHZ:945, ReflectorLogic");
       sb.AppendLine("DEFAULT_ACTIVE = 1");
       sb.AppendLine("TIMEOUT = 0");
+      sb.AppendLine();
       sb.AppendLine("[Rx1]");
       sb.AppendLine("TYPE = Local");
-      sb.AppendLine("AUDIO_DEV = udp:127.0.0.1:10000");
+      sb.AppendLine("AUDIO_DEV = alsa:plughw:0");
       sb.AppendLine("AUDIO_CHANNEL = 0");
       sb.AppendLine("SQL_DET = CTCSS");
       sb.AppendLine("SQL_START_DELAY = 500");
@@ -69,10 +70,8 @@ namespace SvxlinkManager.Data.Configurations
       sb.AppendLine("CTCSS_CLOSE_THRESH = 9");
       sb.AppendLine("CTCSS_BPF_LOW = 60");
       sb.AppendLine("CTCSS_BPF_HIGH = 260");
-#if !DEBUG
       sb.AppendLine("GPIO_PATH=/sys/class/gpio");
       sb.AppendLine("GPIO_SQL_PIN=gpio10");
-#endif
       sb.AppendLine("DEEMPHASIS = 0");
       sb.AppendLine("SQL_TAIL_ELIM = 0");
       sb.AppendLine("PREAMP = -4");
@@ -81,15 +80,14 @@ namespace SvxlinkManager.Data.Configurations
       sb.AppendLine("DTMF_MUTING = 1");
       sb.AppendLine("DTMF_HANGTIME = 40");
       sb.AppendLine("1750_MUTING = 1");
+      sb.AppendLine();
       sb.AppendLine("[Tx1]");
       sb.AppendLine("TYPE = Local");
-      sb.AppendLine("AUDIO_DEV = udp:127.0.0.1:10000");
+      sb.AppendLine("AUDIO_DEV = alsa:plughw:0");
       sb.AppendLine("AUDIO_CHANNEL = 0");
       sb.AppendLine("PTT_TYPE = Dummy");
-#if !DEBUG
       sb.AppendLine("GPIO_PATH=/sys/class/gpio");
       sb.AppendLine("PTT_PIN=gpio7");
-#endif
       sb.AppendLine("TIMEOUT = 300");
       sb.AppendLine("TX_DELAY = 900");
       sb.AppendLine("PREAMP = 0");
@@ -99,6 +97,7 @@ namespace SvxlinkManager.Data.Configurations
       sb.AppendLine("DTMF_TONE_LENGTH = 100");
       sb.AppendLine("DTMF_TONE_SPACING = 50");
       sb.AppendLine("DTMF_DIGIT_PWR = -15");
+      sb.AppendLine();
       sb.AppendLine("[ReflectorLogic]");
       sb.AppendLine("TYPE = Reflector");
       sb.AppendLine("AUDIO_CODEC = OPUS");
