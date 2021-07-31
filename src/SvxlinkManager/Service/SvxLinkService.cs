@@ -41,7 +41,18 @@ namespace SvxlinkManager.Service
     private Timer scanTimer;
 
     private FileSystemWatcher watcher;
+
+    internal void StopReflector()
+    {
+      throw new NotImplementedException();
+    }
+
     private Process shell;
+
+    internal void RunReflector()
+    {
+      throw new NotImplementedException();
+    }
 
     public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories, ScanService scanService, TelemetryClient telemetry) : base(logger, telemetry)
     {
