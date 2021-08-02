@@ -1,12 +1,16 @@
 ﻿using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Pages.Shared;
 using SvxlinkManager.Service;
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Reflector
@@ -14,47 +18,53 @@ namespace SvxlinkManager.Pages.Reflector
   [Authorize]
   public class ManageBase : RepositoryComponentBase
   {
-    public EditContext EditContext;
-
     protected override async Task OnInitializedAsync()
     {
-      Telemetry.TrackPageView(new PageViewTelemetry("Scan page") { Url = new Uri("/Reflector/Manage", UriKind.Relative) });
+      Telemetry.TrackPageView(new PageViewTelemetry("Reflector Manage Page") { Url = new Uri("/Reflector/Manage", UriKind.Relative) });
 
       await base.OnInitializedAsync().ConfigureAwait(false);
+
+      LoadReflectors();
     }
+
+    private void LoadReflectors() => Reflectors = Repositories.Repository<Models.Reflector>().GetAll().ToList();
 
     [Inject]
     public SvxLinkService SvxLinkService { get; set; }
 
-    public bool IsChanged { get; set; }
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
 
-    public bool IsReflectorRunning { get; set; }
+    [Inject]
+    public ISa818Service Sa818Service { get; set; }
 
-    public string ReflectorConfig { get; set; }
+    public List<Models.Reflector> Reflectors { get; set; }
 
-    protected async Task Run()
+    public async Task DeleteAsync(int id)
     {
-      Telemetry.TrackEvent("Enable Reflector");
+      Repositories.Repository<Models.Reflector>().Delete(id);
 
-      SvxLinkService.RunReflector();
+      Telemetry.TrackEvent("Delete reflector profile", Reflectors.Single(c => c.Id == id).TrackProperties);
 
-      await ShowSuccessToastAsync("Activé", $"le scan a bien été activé.");
+      Reflectors.Remove(Reflectors.Single(c => c.Id == id));
+
+      await ShowSuccessToastAsync("Supprimé", "le reflecteur a bien été supprimé.");
+
+      StateHasChanged();
     }
 
-    protected async Task Stop()
+    public async Task Start(int id)
     {
-      SvxLinkService.StopReflector();
+      var reflector = Repositories.Repository<Models.Reflector>().Get(id);
 
-      await ShowSuccessToastAsync("Désactivé", $"le scan a bien été désactivé.");
-    }
+      reflector.Enable = true;
+      Repositories.Repository<Models.Reflector>().Update(reflector);
 
-    protected async Task HandleValidSubmitAsync()
-    {
-      Telemetry.TrackEvent("Update reflector");
+      Telemetry.TrackEvent("Apply radio profile", reflector.TrackProperties);
 
-      SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
+      await ShowSuccessToastAsync($"{reflector.Name} démarré.", $"Le reflecteur {reflector.Name} a bien été démarré.");
 
-      await ShowSuccessToastAsync("Modifié", $"La configuration du reflector a bien été modifié.");
+      NavigationManager.NavigateTo("/Reflector/Manage", true);
     }
   }
 }

@@ -1,45 +1,29 @@
 ﻿@page "/Reflector/Manage"
-
 @inherits SvxlinkManager.Pages.Reflector.ManageBase
 
-<div class="d-inline-block">
-  <h3>Scan</h3>
+<div class="row">
+  <div class="col-xl-2"><h3>Profils Radio</h3></div>
+  <div class="col-xl-2 offset-xl-8">
+    <a class="btn btn-outline-success" href="RadioProfile/Create" role="button">Créer un nouveau profil radio</a>
+  </div>
 </div>
 
-@if (IsReflectorRunning)
-{<div class="blink d-inline-block" style="margin-left:5px;">
-    <span class="badge badge-danger">activé</span>
-  </div>}
-else
-{ <div class="d-inline-block" style="margin-left:5px;">
-    <span class="badge badge-info">désactivé</span>
-  </div>}
-
-<EditForm OnValidSubmit="@HandleValidSubmitAsync">
-  <DataAnnotationsValidator />
-  <ValidationSummary />
-  <div class="form-row">
-    <div class="form-group col-md-12">
-      <small id="svxlinkconfHelp" class="form-text text-muted">La documentation du fichier svxlink.conf est disponible <a href="http://www.svxlink.org/doc/man/man5/svxlink.conf.5.html" target="_blank">ici</a></small>
-        <pre id="svxlinkconf" class="editor">@ReflectorConfig</pre>
-        <InputTextArea @bind-Value="@ReflectorConfig" type="text" class="form-control fileEditor" id="svxlinkconf-textarea" />
-    </div>
-  </div>
-  <div class="btn-toolbar">
-    @if (IsChanged)
-    {
-      <button type="submit" class="btn btn-success">Sauver</button>
-    }
-    else
-    {
-      @if (IsReflectorRunning)
-      {
-        <button type="button" class="btn btn-outline-danger" @onclick="@(() => Stop())">Désactiver</button>
-      }
-      else
-      {
-        <button type="button" class="btn btn-outline-success" @onclick="@(() => Run())">Activer</button>
-      }
-    }
-  </div>
-</EditForm>
+<ul id="channel-manage-list" class="list-group-horizontal">
+  @foreach (var rp in Reflectors)
+  {
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-xl-9 text-nowrap">
+          @if (rp.Enable)
+          {<span class="oi oi-home" aria-hidden="true"></span>}
+          &nbsp;@rp.Name
+        </div>
+        <div class="col-xl-3 offset-md-1">
+          <button type="button" class="btn btn-outline-success" @onclick="@(() => Start(rp.Id))">Appliquer</button> <a class="btn btn-outline-primary" href="Reflector/Edit/@rp.Id" role="button">Editer</a> &nbsp; @if (!rp.Enable)
+          {
+            <button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(rp.Id))">Supprimer</button>}
+        </div>
+      </div>
+    </li>
+  }
+</ul>
