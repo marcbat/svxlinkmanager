@@ -2,9 +2,9 @@
 @inherits SvxlinkManager.Pages.Reflector.ManageBase
 
 <div class="row">
-  <div class="col-xl-2"><h3>Profils Radio</h3></div>
+  <div class="col-xl-2"><h3>Reflecteurs</h3></div>
   <div class="col-xl-2 offset-xl-8">
-    <a class="btn btn-outline-success" href="RadioProfile/Create" role="button">Créer un nouveau profil radio</a>
+    <a class="btn btn-outline-success" href="Reflector/Create" role="button">Créer un nouveau reflecteur</a>
   </div>
 </div>
 
@@ -18,10 +18,17 @@
           {<span class="oi oi-home" aria-hidden="true"></span>}
           &nbsp;@rp.Name
         </div>
-        <div class="col-xl-3 offset-md-1">
-          <button type="button" class="btn btn-outline-success" @onclick="@(() => Start(rp.Id))">Appliquer</button> <a class="btn btn-outline-primary" href="Reflector/Edit/@rp.Id" role="button">Editer</a> &nbsp; @if (!rp.Enable)
+        <div class="col-xl-3">
+
+          @if (!rp.Enable)
           {
-            <button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(rp.Id))">Supprimer</button>}
+            <button type="button" class="btn btn-outline-success" @onclick="@(() => Start(rp.Id))">Démarrer</button>
+          }
+          else
+          {
+            <button type="button" class="btn btn-outline-success" @onclick="@(() => Stop(rp.Id))">Arrêter</button>
+          }
+          &nbsp;<a class="btn btn-outline-primary" href="Reflector/Edit/@rp.Id" role="button">Editer</a>&nbsp;<button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(rp.Id))">Supprimer</button>
         </div>
       </div>
     </li>

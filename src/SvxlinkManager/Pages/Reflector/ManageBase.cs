@@ -60,9 +60,23 @@ namespace SvxlinkManager.Pages.Reflector
       reflector.Enable = true;
       Repositories.Repository<Models.Reflector>().Update(reflector);
 
-      Telemetry.TrackEvent("Apply radio profile", reflector.TrackProperties);
+      Telemetry.TrackEvent("Start reflector", reflector.TrackProperties);
 
       await ShowSuccessToastAsync($"{reflector.Name} démarré.", $"Le reflecteur {reflector.Name} a bien été démarré.");
+
+      NavigationManager.NavigateTo("/Reflector/Manage", true);
+    }
+
+    public async Task Stop(int id)
+    {
+      var reflector = Repositories.Repository<Models.Reflector>().Get(id);
+
+      reflector.Enable = false;
+      Repositories.Repository<Models.Reflector>().Update(reflector);
+
+      Telemetry.TrackEvent("Stop reflector", reflector.TrackProperties);
+
+      await ShowSuccessToastAsync($"{reflector.Name} démarré.", $"Le reflecteur {reflector.Name} a bien été arreté.");
 
       NavigationManager.NavigateTo("/Reflector/Manage", true);
     }

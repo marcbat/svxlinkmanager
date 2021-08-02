@@ -1,0 +1,29 @@
+﻿<EditForm Model="@Reflector" OnValidSubmit="@HandleValidSubmit">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <div class="form-row">
+    <div class="form-group">
+      <label data-toggle="tooltip" title="Le nom du reflecteur <br /> Choisissez un nom unique.">Nom du reflecteur</label>
+      <InputText @bind-Value="Reflector.Name" type="text" class="form-control" id="inputName" placeholder="Mon reflecteur perso" />
+    </div>
+    <div class="form-group col-md-12">
+      <small id="svxlinkconfHelp" class="form-text text-muted">La documentation du fichier svxreflector.conf est disponible <a href="http://www.svxlink.org/doc/man/man5/svxreflector.conf.5.html" target="_blank">ici</a></small>
+      <pre id="reflectorconf" class="editor">@Reflector.Config</pre>
+      <InputTextArea @bind-Value="@Reflector.Config" type="text" class="form-control fileEditor" id="reflectorconf-textarea" />
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-success">Sauver</button> <a class="btn btn-primary" href="Reflector/Manage" role="button">Annuler</a>
+</EditForm>
+
+@code{
+  [Parameter]
+  public Models.Reflector Reflector { get; set; }
+
+  [Parameter]
+  public string SubmitTitle { get; set; }
+
+  [Parameter]
+  public EventCallback<EditContext> HandleValidSubmit { get; set; }
+}
