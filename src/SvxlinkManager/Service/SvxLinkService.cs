@@ -61,6 +61,8 @@ namespace SvxlinkManager.Service
       this.scanService = scanService;
       this.telemetry = telemetry;
 
+      lastTx = DateTime.Now;
+
       tempoTimer = new Timer(1000)
       {
         Enabled = false
