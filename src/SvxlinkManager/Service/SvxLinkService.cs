@@ -42,11 +42,6 @@ namespace SvxlinkManager.Service
 
     private FileSystemWatcher watcher;
 
-    internal void StopReflector()
-    {
-      throw new NotImplementedException();
-    }
-
     private Process shell;
 
     internal void RunReflector()
@@ -648,6 +643,32 @@ namespace SvxlinkManager.Service
       watcher?.Dispose();
 
       base.StopSvxlink();
+    }
+
+    public void ActivateReflector(Reflector reflector)
+    {
+      telemetry.TrackEvent("Reflector start", reflector.TrackProperties);
+
+      logger.LogInformation($"Activation du reflector {reflector.Name}");
+
+      StopReflector();
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxreflector.conf", reflector.Config);
+
+      // Lance svxlink
+      StartReflector(reflector);
+      logger.LogInformation($"Le reflecteur {reflector.Name} est activé.");
+    }
+
+    /// <summary>
+    /// Start a svxreflector
+    /// </summary>
+    /// <param name="reflector">The reflector.</param>
+    public virtual void StartReflector(Reflector reflector)
+    {
+    }
+
+    public virtual void StopReflector()
+    {
     }
   }
 }

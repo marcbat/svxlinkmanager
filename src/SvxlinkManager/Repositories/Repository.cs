@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
+using SvxlinkManager.Common.Models;
 using SvxlinkManager.Data;
 using SvxlinkManager.Models;
 
@@ -98,6 +100,6 @@ namespace SvxlinkManager.Repositories
 
     }
 
-   
+
   }
 }

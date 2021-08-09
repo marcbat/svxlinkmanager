@@ -1,4 +1,5 @@
-﻿using SvxlinkManager.Data;
+﻿using SvxlinkManager.Common.Models;
+using SvxlinkManager.Data;
 using SvxlinkManager.Models;
 
 using System;

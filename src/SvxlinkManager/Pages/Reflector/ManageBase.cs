@@ -27,7 +27,7 @@ namespace SvxlinkManager.Pages.Reflector
       LoadReflectors();
     }
 
-    private void LoadReflectors() => Reflectors = Repositories.Repository<Models.Reflector>().GetAll().ToList();
+    private void LoadReflectors() => Reflectors = Repositories.Repository<Common.Models.Reflector>().GetAll().ToList();
 
     [Inject]
     public SvxLinkService SvxLinkService { get; set; }
@@ -38,11 +38,11 @@ namespace SvxlinkManager.Pages.Reflector
     [Inject]
     public ISa818Service Sa818Service { get; set; }
 
-    public List<Models.Reflector> Reflectors { get; set; }
+    public List<Common.Models.Reflector> Reflectors { get; set; }
 
     public async Task DeleteAsync(int id)
     {
-      Repositories.Repository<Models.Reflector>().Delete(id);
+      Repositories.Repository<Common.Models.Reflector>().Delete(id);
 
       Telemetry.TrackEvent("Delete reflector profile", Reflectors.Single(c => c.Id == id).TrackProperties);
 
@@ -55,10 +55,10 @@ namespace SvxlinkManager.Pages.Reflector
 
     public async Task Start(int id)
     {
-      var reflector = Repositories.Repository<Models.Reflector>().Get(id);
+      var reflector = Repositories.Repository<Common.Models.Reflector>().Get(id);
 
       reflector.Enable = true;
-      Repositories.Repository<Models.Reflector>().Update(reflector);
+      Repositories.Repository<Common.Models.Reflector>().Update(reflector);
 
       Telemetry.TrackEvent("Start reflector", reflector.TrackProperties);
 
@@ -69,10 +69,10 @@ namespace SvxlinkManager.Pages.Reflector
 
     public async Task Stop(int id)
     {
-      var reflector = Repositories.Repository<Models.Reflector>().Get(id);
+      var reflector = Repositories.Repository<Common.Models.Reflector>().Get(id);
 
       reflector.Enable = false;
-      Repositories.Repository<Models.Reflector>().Update(reflector);
+      Repositories.Repository<Common.Models.Reflector>().Update(reflector);
 
       Telemetry.TrackEvent("Stop reflector", reflector.TrackProperties);
 

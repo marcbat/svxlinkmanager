@@ -9,7 +9,7 @@ using SvxlinkManager.Data;
 namespace SvxlinkManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210802194639_AddReflector")]
+    [Migration("20210808194310_AddReflector")]
     partial class AddReflector
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,8 +46,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "028e9b5a-5a30-46b4-94f6-aa78ac8508b2",
-                            ConcurrencyStamp = "d184b41a-726d-4600-aa9e-ec8f79a149f0",
+                            Id = "c0624983-425d-4502-adc5-32a962d43612",
+                            ConcurrencyStamp = "5ff02bfb-3988-40b2-a414-f4201da864e5",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -365,12 +365,14 @@ namespace SvxlinkManager.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Config")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Enable")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

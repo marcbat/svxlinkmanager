@@ -45,7 +45,7 @@ namespace SvxlinkManager.Data
 
     public DbSet<SvxlinkManagerParameter> Parameters { get; set; }
 
-    public DbSet<Reflector> Reflectors { get; set; }
+    public DbSet<Common.Models.Reflector> Reflectors { get; set; }
 
     #endregion Properties
 
