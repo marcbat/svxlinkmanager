@@ -7,6 +7,21 @@
     <a class="btn btn-outline-success" href="Reflector/Create" role="button">Créer un nouveau reflecteur</a>
   </div>
 </div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="alert alert-primary" role="alert">
+      <p>Pour pouvoir utiliser les reflecteurs, vous devez ouvrir le port indiqué dans la configuration de votre reflecteur à la ligne <strong>LISTEN_PORT</strong> à la fois en TCP et UDP.</p>
+      <p>Vous pouvez créer un salon qui pointe vers votre reflecteur en utilisant le paramètres suivants:
+      <ul>
+        <li>Adresse du reflector: localhost</li>
+        <li>Port: La valeur du paramètre <strong>LISTEN_PORT</strong></li>
+        <li>Utilisateur svxreflector: L'un des utilisateurs renseigné dans la section <strong>[USERS]</strong></li>
+        <li>Mot de passe: le mot de passe associé à l'utilisateur et renseigné dans la partie <strong>[PASSWORDS]</strong></li>
+      </ul>
+      </p>
+    </div>
+  </div>
+</div>
 
 <ul id="channel-manage-list" class="list-group-horizontal">
   @foreach (var rp in Reflectors)
