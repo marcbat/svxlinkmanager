@@ -27,7 +27,7 @@ namespace SvxlinkManager.Pages.Reflector
       LoadReflectors();
     }
 
-    private void LoadReflectors() => Reflectors = Repositories.Repository<Common.Models.Reflector>().GetAll().ToList();
+    private void LoadReflectors() => Reflectors = Repositories.Reflectors.GetAll().ToList();
 
     [Inject]
     public SvxLinkService SvxLinkService { get; set; }
@@ -42,43 +42,43 @@ namespace SvxlinkManager.Pages.Reflector
 
     public async Task DeleteAsync(int id)
     {
-      Repositories.Repository<Common.Models.Reflector>().Delete(id);
+      Repositories.Reflectors.Delete(id);
 
       Telemetry.TrackEvent("Delete reflector profile", Reflectors.Single(c => c.Id == id).TrackProperties);
 
       Reflectors.Remove(Reflectors.Single(c => c.Id == id));
 
       await ShowSuccessToastAsync("Supprimé", "le reflecteur a bien été supprimé.");
-
-      StateHasChanged();
     }
 
-    public async Task Start(int id)
+    public async Task StartAsync(int id)
     {
-      var reflector = Repositories.Repository<Common.Models.Reflector>().Get(id);
+      var reflector = Repositories.Reflectors.Get(id);
 
       reflector.Enable = true;
-      Repositories.Repository<Common.Models.Reflector>().Update(reflector);
+      Repositories.Reflectors.Update(reflector);
 
       Telemetry.TrackEvent("Start reflector", reflector.TrackProperties);
+      SvxLinkService.ActivateReflector(reflector);
 
       await ShowSuccessToastAsync($"{reflector.Name} démarré.", $"Le reflecteur {reflector.Name} a bien été démarré.");
 
-      NavigationManager.NavigateTo("/Reflector/Manage", true);
+      Replace(Reflectors, reflector);
     }
 
-    public async Task Stop(int id)
+    public async Task StopAsync(int id)
     {
-      var reflector = Repositories.Repository<Common.Models.Reflector>().Get(id);
+      var reflector = Repositories.Reflectors.Get(id);
 
       reflector.Enable = false;
-      Repositories.Repository<Common.Models.Reflector>().Update(reflector);
+      Repositories.Reflectors.Update(reflector);
 
       Telemetry.TrackEvent("Stop reflector", reflector.TrackProperties);
+      SvxLinkService.StopReflector();
 
-      await ShowSuccessToastAsync($"{reflector.Name} démarré.", $"Le reflecteur {reflector.Name} a bien été arreté.");
+      await ShowSuccessToastAsync($"{reflector.Name} arreté.", $"Le reflecteur {reflector.Name} a bien été arreté.");
 
-      NavigationManager.NavigateTo("/Reflector/Manage", true);
+      Replace(Reflectors, reflector);
     }
   }
 }

@@ -14,21 +14,29 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col-xl-9 text-nowrap">
+          @rp.Name
           @if (rp.Enable)
-          {<span class="oi oi-home" aria-hidden="true"></span>}
-          &nbsp;@rp.Name
+          {
+            <div class="blink d-inline-block" style="margin-left:10px;">
+              <span class="badge badge-danger">ON AIR</span>
+            </div>
+          }
         </div>
         <div class="col-xl-3">
 
           @if (!rp.Enable)
           {
-            <button type="button" class="btn btn-outline-success" @onclick="@(() => Start(rp.Id))">Démarrer</button>
+            <button type="button" class="btn btn-outline-success" @onclick="@(() => StartAsync(rp.Id))">Démarrer</button>
           }
           else
           {
-            <button type="button" class="btn btn-outline-success" @onclick="@(() => Stop(rp.Id))">Arrêter</button>
+            <button type="button" class="btn btn-outline-success" @onclick="@(() => StopAsync(rp.Id))">Arrêter</button>
           }
-          &nbsp;<a class="btn btn-outline-primary" href="Reflector/Edit/@rp.Id" role="button">Editer</a>&nbsp;<button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(rp.Id))">Supprimer</button>
+          &nbsp;<a class="btn btn-outline-primary" href="Reflector/Edit/@rp.Id" role="button">Editer</a>&nbsp;
+          @if (!rp.Enable)
+          {
+            <button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(rp.Id))">Supprimer</button>
+          }
         </div>
       </div>
     </li>

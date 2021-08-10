@@ -645,6 +645,13 @@ namespace SvxlinkManager.Service
       base.StopSvxlink();
     }
 
+    public void StartEnableReflector()
+    {
+      var reflector = repositories.Reflectors.FindBy(r => r.Enable);
+      if (reflector != null)
+        ActivateReflector(reflector);
+    }
+
     public void ActivateReflector(Reflector reflector)
     {
       telemetry.TrackEvent("Reflector start", reflector.TrackProperties);
@@ -665,10 +672,14 @@ namespace SvxlinkManager.Service
     /// <param name="reflector">The reflector.</param>
     public virtual void StartReflector(Reflector reflector)
     {
+      base.StartReflector(reflector, pidFile: "/var/run/reflector.pid", runAs: "root", configFile: $"{applicationPath}/SvxlinkConfig/svxreflector.conf");
     }
 
-    public virtual void StopReflector()
+    public override void StopReflector()
     {
+      logger.LogInformation("Arret du reflecteur.");
+
+      base.StopReflector();
     }
   }
 }
