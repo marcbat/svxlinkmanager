@@ -23,6 +23,8 @@ namespace SvxlinkManager.Repositories
 
     IEnumerable<TEntity> GetAll();
 
+    IEnumerable<TEntity> GetAllBy(Func<TEntity, bool> predicate);
+
     TEntity Add(TEntity entity);
 
     void Update(TEntity entity);
@@ -43,6 +45,12 @@ namespace SvxlinkManager.Repositories
     {
       using var dbcontext = contextFactory.CreateDbContext();
       return dbcontext.Set<TEntity>().ToList();
+    }
+
+    public IEnumerable<TEntity> GetAllBy(Func<TEntity, bool> predicate)
+    {
+      using var dbcontext = contextFactory.CreateDbContext();
+      return dbcontext.Set<TEntity>().Where(predicate).ToList();
     }
 
     public virtual TEntity Get(int id)
@@ -97,9 +105,6 @@ namespace SvxlinkManager.Repositories
       dbcontext.Set<TEntity>().Remove(entity);
 
       dbcontext.SaveChanges();
-
     }
-
-
   }
 }

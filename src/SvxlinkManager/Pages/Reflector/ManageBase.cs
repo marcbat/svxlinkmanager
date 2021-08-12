@@ -74,7 +74,7 @@ namespace SvxlinkManager.Pages.Reflector
       Repositories.Reflectors.Update(reflector);
 
       Telemetry.TrackEvent("Stop reflector", reflector.TrackProperties);
-      SvxLinkService.StopReflector();
+      SvxLinkService.StopReflector(reflector);
 
       await ShowSuccessToastAsync($"{reflector.Name} arreté.", $"Le reflecteur {reflector.Name} a bien été arreté.");
 
