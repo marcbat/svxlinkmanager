@@ -13,16 +13,16 @@
       <label>Type de TRX</label>
       <InputSelect @bind-Value="InstallerModel.RadioProfile.Trx" class="form-control">
         @foreach (var trx in InstallerModel.RadioProfile.TrxTypes)
-{
-@if (InstallerModel.RadioProfile.Trx == trx.Key)
-{
-<option selected value="@trx.Key">@trx.Value</option>
-}
-else
-{
-<option value="@trx.Key">@trx.Value</option>
-}
-}
+        {
+          @if (InstallerModel.RadioProfile.Trx == trx.Key)
+          {
+          <option selected value="@trx.Key">@trx.Value</option>
+          }
+          else
+          {
+          <option value="@trx.Key">@trx.Value</option>
+          }
+        }
       </InputSelect>
     </div>
     <div class="form-group col-md-4">

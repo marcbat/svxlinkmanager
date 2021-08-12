@@ -11,9 +11,11 @@ namespace SvxlinkManager.Models
   public class RadioProfile : IModelEntity, INotifyPropertyChanged
   {
     private bool enable;
+    private string trx = "interne";
 
     public int Id { get; set; }
 
+    [Required]
     public string Name { get; set; }
 
     public bool Enable
@@ -60,9 +62,9 @@ namespace SvxlinkManager.Models
     public string LowPass { get; set; } = "0";
 
     [Required]
-    public string SquelchDetection { get; set; } = "CTCSS";
+    public string SquelchDetection { get; set; } = "GPIO";
 
-    public bool HasSa818 { get; set; }
+    public bool HasSa818 { get; set; } = true;
 
     /// <summary>CTCSS au format classique</summary>
     /// <value>The rx tone.</value>
@@ -138,7 +140,33 @@ namespace SvxlinkManager.Models
     public Dictionary<string, string> TrxTypes { get; } = new Dictionary<string, string> { { "interne", "Hotspot" }, { "externe", "Externe" } };
 
     [NotMapped]
-    public string Trx { get; set; } = "interne";
+    public string Trx
+    {
+      get
+      {
+        if (HasSa818)
+          return "interne";
+        else
+          return "externe";
+      }
+      set
+      {
+        switch (value)
+        {
+          case "interne":
+            SquelchDetection = "GPIO";
+            HasSa818 = true;
+            break;
+
+          default:
+            SquelchDetection = "CTCSS";
+            HasSa818 = false;
+            break;
+        }
+
+        trx = value;
+      }
+    }
 
     public event PropertyChangedEventHandler PropertyChanged;
   }
