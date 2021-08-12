@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SvxlinkManager.Common.Models;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -20,6 +22,6 @@ namespace SvxlinkManager.Models
 
     [Required]
     public Channel Channel { get; set; }
-    
+
   }
 }

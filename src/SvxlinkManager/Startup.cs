@@ -108,6 +108,9 @@ namespace SvxlinkManager
         var svxlinkservice = serviceScope.ServiceProvider.GetRequiredService<SvxLinkService>();
         svxlinkservice.StartDefaultChannel();
 
+        // start enable reflector
+        svxlinkservice.StartEnableReflector();
+
         // set telemetry global settings
         var telemetry = serviceScope.ServiceProvider.GetRequiredService<TelemetryClient>();
         var deviceId = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString();

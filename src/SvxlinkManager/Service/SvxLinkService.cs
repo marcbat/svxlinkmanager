@@ -41,7 +41,13 @@ namespace SvxlinkManager.Service
     private Timer scanTimer;
 
     private FileSystemWatcher watcher;
+
     private Process shell;
+
+    internal void RunReflector()
+    {
+      throw new NotImplementedException();
+    }
 
     public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories, ScanService scanService, TelemetryClient telemetry) : base(logger, telemetry)
     {
@@ -637,6 +643,42 @@ namespace SvxlinkManager.Service
       watcher?.Dispose();
 
       base.StopSvxlink();
+    }
+
+    public void StartEnableReflector()
+    {
+      var reflectors = repositories.Reflectors.GetAllBy(r => r.Enable);
+      foreach (var r in reflectors)
+        ActivateReflector(r);
+    }
+
+    public void ActivateReflector(Reflector reflector)
+    {
+      telemetry.TrackEvent("Reflector start", reflector.TrackProperties);
+
+      logger.LogInformation($"Activation du reflector {reflector.Name}");
+
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxreflector-{reflector.Id}.conf", reflector.Config);
+
+      // Lance svxlink
+      StartReflector(reflector);
+      logger.LogInformation($"Le reflecteur {reflector.Name} est activé.");
+    }
+
+    /// <summary>
+    /// Start a svxreflector
+    /// </summary>
+    /// <param name="reflector">The reflector.</param>
+    public virtual void StartReflector(Reflector reflector)
+    {
+      base.StartReflector(reflector, pidFile: $"/var/run/reflector-{reflector.Id}.pid", runAs: "root", configFile: $"{applicationPath}/SvxlinkConfig/svxreflector-{reflector.Id}.conf");
+    }
+
+    public override void StopReflector(Reflector reflector)
+    {
+      logger.LogInformation("Arret du reflecteur.");
+
+      base.StopReflector(reflector);
     }
   }
 }
