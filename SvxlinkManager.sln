@@ -7,10 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManager", "src\Svxli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManagerTests", "src\SvxlinkManagerTests\SvxlinkManagerTests.csproj", "{8FC4201A-16DB-43DC-BC6D-A800651A260C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "submodules", "submodules", "{3E531831-7B1C-4F5C-8369-90B11F8E08BB}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManager.Common", "submodules\SvxlinkManager.Common\src\SvxlinkManager.Common\SvxlinkManager.Common.csproj", "{6998DCEE-8526-4950-9B79-5F81A694980D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,16 +21,9 @@ Global
 		{8FC4201A-16DB-43DC-BC6D-A800651A260C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FC4201A-16DB-43DC-BC6D-A800651A260C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FC4201A-16DB-43DC-BC6D-A800651A260C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6998DCEE-8526-4950-9B79-5F81A694980D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6998DCEE-8526-4950-9B79-5F81A694980D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6998DCEE-8526-4950-9B79-5F81A694980D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6998DCEE-8526-4950-9B79-5F81A694980D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{6998DCEE-8526-4950-9B79-5F81A694980D} = {3E531831-7B1C-4F5C-8369-90B11F8E08BB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2D8D7F27-D1EF-4289-B71C-B7298E510A89}

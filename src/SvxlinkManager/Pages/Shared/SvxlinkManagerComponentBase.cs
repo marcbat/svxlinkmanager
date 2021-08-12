@@ -8,7 +8,7 @@ using Microsoft.JSInterop;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using Microsoft.ApplicationInsights;
-using SvxlinkManager.Common.Models;
+using SvxlinkManager.Models;
 
 namespace SvxlinkManager.Pages.Shared
 {

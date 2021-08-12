@@ -42,10 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\submodules\SvxlinkManager.Common\src\SvxlinkManager.Common\SvxlinkManager.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <TypeScriptCompile Include="Scripts\Editor.ts" />
   </ItemGroup>
 

@@ -16,7 +16,7 @@ namespace SvxlinkManager.Pages.Reflector
     {
       Telemetry.TrackPageView(new PageViewTelemetry("Reflector Edit Page") { Url = new Uri("/Reflector/Edit", UriKind.Relative) });
 
-      Reflector = Repositories.Repository<Common.Models.Reflector>().Get(int.Parse(Id));
+      Reflector = Repositories.Repository<Models.Reflector>().Get(int.Parse(Id));
     }
 
     [Parameter]
@@ -24,7 +24,7 @@ namespace SvxlinkManager.Pages.Reflector
 
     override protected async Task HandleValidSubmitAsync()
     {
-      Repositories.Repository<Common.Models.Reflector>().Update(Reflector);
+      Repositories.Repository<Models.Reflector>().Update(Reflector);
 
       Telemetry.TrackEvent("Update reflector", Reflector.TrackProperties);
 

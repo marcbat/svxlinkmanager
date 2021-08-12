@@ -5,12 +5,8 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Models
 {
-  public class SvxlinkManagerParameter : IModelEntity
+  public interface IModelEntity
   {
     public int Id { get; set; }
-
-    public string Key { get; set; }
-
-    public string Value { get; set; }
   }
 }

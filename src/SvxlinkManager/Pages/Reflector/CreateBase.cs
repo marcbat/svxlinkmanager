@@ -17,7 +17,7 @@ namespace SvxlinkManager.Pages.Reflector
     {
       Telemetry.TrackPageView(new PageViewTelemetry("Radio Profile Create Page") { Url = new Uri("/Reflector/Create", UriKind.Relative) });
 
-      Reflector = new Common.Models.Reflector();
+      Reflector = new Models.Reflector();
 
       var sb = new StringBuilder();
       sb.AppendLine("[GLOBAL]");
@@ -43,7 +43,7 @@ namespace SvxlinkManager.Pages.Reflector
 
     protected override async Task HandleValidSubmitAsync()
     {
-      Repositories.Repository<Common.Models.Reflector>().Add(Reflector);
+      Repositories.Repository<Models.Reflector>().Add(Reflector);
 
       Telemetry.TrackEvent("Create radio profile", Reflector.TrackProperties);
 

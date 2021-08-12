@@ -6,7 +6,6 @@ using NSubstitute.Extensions;
 
 using NUnit.Framework;
 
-using SvxlinkManager.Common.Models;
 using SvxlinkManager.Models;
 using SvxlinkManager.Repositories;
 using SvxlinkManager.Service;

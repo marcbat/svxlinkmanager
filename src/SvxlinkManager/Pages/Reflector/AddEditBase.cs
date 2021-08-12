@@ -22,7 +22,7 @@ namespace SvxlinkManager.Pages.Reflector
     [Inject]
     public NavigationManager NavigationManager { get; set; }
 
-    protected Common.Models.Reflector Reflector { get; set; }
+    protected Models.Reflector Reflector { get; set; }
 
     protected abstract Task HandleValidSubmitAsync();
 
