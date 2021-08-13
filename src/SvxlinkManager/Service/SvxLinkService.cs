@@ -674,9 +674,18 @@ namespace SvxlinkManager.Service
 
     public override void StopReflector(Reflector reflector)
     {
-      logger.LogInformation("Arret du reflecteur.");
+      logger.LogInformation($"Arret du reflecteur {reflector.Name}.");
 
       base.StopReflector(reflector);
+    }
+
+    public void RestartReflector(Reflector reflector)
+    {
+      logger.LogInformation($"Redémarrage du reflecteur {reflector.Name}.");
+
+      StopReflector(reflector);
+
+      ActivateReflector(reflector);
     }
   }
 }
