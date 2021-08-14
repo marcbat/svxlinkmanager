@@ -27,8 +27,6 @@ namespace SvxlinkManager.Pages.Updater
   ///[Authorize]
   public class ManageBase : SvxlinkManagerComponentBase, IDisposable
   {
-    private List<Release> releases;
-
     protected override async Task OnInitializedAsync()
     {
       Telemetry.TrackPageView(new PageViewTelemetry("Updater page") { Url = new Uri("/Updater/Manage", UriKind.Relative) });
@@ -82,11 +80,7 @@ namespace SvxlinkManager.Pages.Updater
     [Inject]
     public UpdaterService UpdaterService { get; set; }
 
-    public bool IsExist(Release release) => UpdaterService.IsExist(release);
-
-    public bool IsCurrent(Release release) => UpdaterService.IsCurrent(release);
-
-    public List<Release> Releases => UpdaterService.Releases;
+    public bool IsUpToDate() => UpdaterService.IsUpToDate();
 
     public async Task InstallAsync(Release release)
     {
