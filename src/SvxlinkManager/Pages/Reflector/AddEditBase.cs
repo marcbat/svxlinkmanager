@@ -26,6 +26,9 @@ namespace SvxlinkManager.Pages.Reflector
     [Inject]
     public SvxLinkService SvxLinkService { get; set; }
 
+    [Inject]
+    public IIniService IniService { get; set; }
+
     protected Models.Reflector Reflector { get; set; }
 
     protected abstract Task HandleValidSubmitAsync();

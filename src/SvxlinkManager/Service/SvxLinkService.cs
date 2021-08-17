@@ -28,6 +28,7 @@ namespace SvxlinkManager.Service
     private readonly IRepositories repositories;
     private readonly ScanService scanService;
     private readonly TelemetryClient telemetry;
+    private readonly IIniService iniService;
     private int channelId;
 
     /// <summary>
@@ -47,13 +48,13 @@ namespace SvxlinkManager.Service
       throw new NotImplementedException();
     }
 
-    public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories, ScanService scanService, TelemetryClient telemetry) : base(logger, telemetry)
+    public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories, ScanService scanService, TelemetryClient telemetry, IIniService iniService) : base(logger, telemetry)
     {
       this.logger = logger;
       this.repositories = repositories;
       this.scanService = scanService;
       this.telemetry = telemetry;
-
+      this.iniService = iniService;
       lastTx = DateTime.Now;
 
       tempoTimer = new Timer(1000)
@@ -248,7 +249,7 @@ namespace SvxlinkManager.Service
         {"ReflectorLogic" , ReflectorLogic}
       };
 
-        ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.conf", parameters);
+        iniService.ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.conf", parameters);
         logger.LogInformation("Remplacement du contenu svxlink.conf");
 
         ReplaceSoundFile(channel);
@@ -342,7 +343,7 @@ namespace SvxlinkManager.Service
         {"SimplexLogic", simplexlogic }
       };
 
-      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.conf", parameters);
+      iniService.ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.conf", parameters);
       logger.LogInformation("Remplacement du contenu svxlink.conf");
 
       var moduleEcholink = new Dictionary<string, string>
@@ -360,7 +361,7 @@ namespace SvxlinkManager.Service
       {
         {"ModuleEchoLink", moduleEcholink },
       };
-      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", parameters);
+      iniService.ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", parameters);
       logger.LogInformation("Remplacement du contenu de ModuleEcholink.conf");
 
       // Remplacement du son de l'annonce
@@ -458,7 +459,7 @@ namespace SvxlinkManager.Service
 
       // Remplace le contenu de svxlink.conf avec le informations du channel
       logger.LogInformation("Remplacement du contenu svxlink.conf");
-      ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.conf", parameters);
+      iniService.ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.conf", parameters);
 
       // suppression du fichier d'annonce
       ReplaceSoundFile();
@@ -470,44 +471,6 @@ namespace SvxlinkManager.Service
 
       logger.LogInformation("Séléction du salon perroquet.");
       ExecuteCommand("echo '1#'> /tmp/dtmf_uhf");
-    }
-
-    /// <summary>
-    /// Replace parameters int svxlink.current ini file
-    /// </summary>
-    /// <param name="parameters">Dictionnary of parameters</param>
-    /// <example>
-    /// <para>
-    /// var global = new Dictionary&lt;string, string&gt; <br/> { <br/> { "LOGICS",
-    /// "SimplexLogic,ReflectorLogic" } <br/> }; <br/> var simplexlogic = new Dictionary&lt;string,
-    /// string&gt; { <br/> { "MODULES", "ModuleHelp,ModuleMetarInfo,ModulePropagationMonitor"},
-    /// <br/> { "CALLSIGN", channel.ReportCallSign}, <br/> { "REPORT_CTCSS", radioProfile.RxTone}
-    /// <br/> }; <br/> var ReflectorLogic = new Dictionary&lt;string, string&gt; <br/> { <br/>
-    /// {"CALLSIGN", channel.CallSign }, <br/> {"HOST", channel.Host }, <br/>
-    /// {"AUTH_KEY",channel.AuthKey }, <br/> {"PORT" ,channel.Port.ToString()}
-    /// </para>
-    /// <para>
-    /// }; <br/> var parameters = new Dictionary&lt;string, Dictionary&lt;string, string&gt;&gt;
-    /// <br/> { <br/> {"GLOBAL", global }, <br/> {"SimplexLogic", simplexlogic }, <br/>
-    /// {"ReflectorLogic" , ReflectorLogic} <br/> }; <br/>
-    /// </para>
-    /// <code></code>
-    /// </example>
-    protected virtual void ReplaceConfig(string filePath, Dictionary<string, Dictionary<string, string>> parameters)
-    {
-      var parser = new FileIniDataParser();
-      parser.Parser.Configuration.NewLineStr = "\r\n";
-      parser.Parser.Configuration.AssigmentSpacer = string.Empty;
-
-      var utf8WithoutBom = new UTF8Encoding(false);
-
-      var data = parser.ReadFile(filePath, utf8WithoutBom);
-
-      foreach (var section in parameters)
-        foreach (var parameter in section.Value)
-          data[section.Key][parameter.Key] = parameter.Value;
-
-      parser.WriteFile(filePath, data, utf8WithoutBom);
     }
 
     /// <summary>
