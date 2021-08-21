@@ -30,6 +30,12 @@ namespace SvxlinkManager.Pages.Reflector
 
       await ShowSuccessToastAsync("Modifié", $"le reflecteur {Reflector.Name} a bien été modifié.");
 
+      if (Reflector.Enable)
+      {
+        SvxLinkService.RestartReflector(Reflector);
+        await ShowSuccessToastAsync("Redémarrage", $"le reflecteur {Reflector.Name} a bien été redémarré.");
+      }
+
       NavigationManager.NavigateTo("Reflector/Manage");
     }
 

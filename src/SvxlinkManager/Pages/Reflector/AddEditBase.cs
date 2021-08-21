@@ -2,6 +2,7 @@
 using Microsoft.JSInterop;
 
 using SvxlinkManager.Pages.Shared;
+using SvxlinkManager.Service;
 
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,12 @@ namespace SvxlinkManager.Pages.Reflector
 
     [Inject]
     public NavigationManager NavigationManager { get; set; }
+
+    [Inject]
+    public SvxLinkService SvxLinkService { get; set; }
+
+    [Inject]
+    public IIniService IniService { get; set; }
 
     protected Models.Reflector Reflector { get; set; }
 

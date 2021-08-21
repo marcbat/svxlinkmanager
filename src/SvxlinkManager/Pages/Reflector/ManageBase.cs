@@ -38,6 +38,9 @@ namespace SvxlinkManager.Pages.Reflector
     [Inject]
     public ISa818Service Sa818Service { get; set; }
 
+    [Inject]
+    public IIniService IniService { get; set; }
+
     public List<Models.Reflector> Reflectors { get; set; }
 
     public async Task DeleteAsync(int id)
