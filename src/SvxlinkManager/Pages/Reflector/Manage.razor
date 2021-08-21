@@ -1,0 +1,70 @@
+﻿@page "/Reflector/Manage"
+@inherits SvxlinkManager.Pages.Reflector.ManageBase
+
+<div class="row">
+  <div class="col-xl-2"><h3>Réflecteurs</h3></div>
+  <div class="col-xl-2 offset-xl-8">
+    <a class="btn btn-outline-success" href="Reflector/Create" role="button">Créer un nouveau reflecteur</a>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="alert alert-primary" role="alert">
+      <p>Pour pouvoir utiliser les reflecteurs, vous devez ouvrir le port indiqué dans la configuration de votre reflecteur à la ligne <strong>LISTEN_PORT</strong> à la fois en TCP et UDP.</p>
+      <p>
+        Vous pouvez créer un salon qui pointe vers votre reflecteur en utilisant le paramètres suivants:
+        <ul>
+          <li>Adresse du reflector: localhost</li>
+          <li>Port: La valeur du paramètre <strong>LISTEN_PORT</strong></li>
+          <li>Utilisateur svxreflector: L'un des utilisateurs renseigné dans la section <strong>[USERS]</strong></li>
+          <li>Mot de passe: le mot de passe associé à l'utilisateur et renseigné dans la partie <strong>[PASSWORDS]</strong></li>
+        </ul>
+      </p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="alert alert-danger" role="alert">
+      <p>Vous ne pouvez pas activer deux reflecteurs sur le même port en même temps.</p>
+    </div>
+  </div>
+</div>
+
+<ul id="channel-manage-list" class="list-group-horizontal">
+  @foreach (var rp in Reflectors)
+  {
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-xl-3 text-nowrap">
+          @rp.Name
+          @if (rp.Enable)
+          {
+            <div class="blink d-inline-block" style="margin-left:10px;">
+              <span class="badge badge-danger">ON AIR</span>
+            </div>
+          }
+        </div>
+        <div class="col-xl-6 text-nowrap">
+          Port: @IniService.FindConfigValueInString(rp.Config, "GLOBAL.LISTEN_PORT")
+        </div>
+        <div class="col-xl-3">
+
+          @if (!rp.Enable)
+          {
+            <button type="button" class="btn btn-outline-success" @onclick="@(() => StartAsync(rp.Id))">Démarrer</button>
+          }
+          else
+          {
+            <button type="button" class="btn btn-outline-success" @onclick="@(() => StopAsync(rp.Id))">Arrêter</button>
+          }
+          &nbsp;<a class="btn btn-outline-primary" href="Reflector/Edit/@rp.Id" role="button">Editer</a>&nbsp;
+          @if (!rp.Enable)
+          {
+            <button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(rp.Id))">Supprimer</button>
+          }
+        </div>
+      </div>
+    </li>
+  }
+</ul>

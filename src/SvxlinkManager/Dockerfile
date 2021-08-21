@@ -6,7 +6,7 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS base
 ENV TZ=Europe/Kiev
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update && apt-get install -qq -y  svxlink-server procps network-manager && apt-get clean 
+RUN apt-get update && apt-get install -qq -y  svxlink-server svxreflector procps network-manager && apt-get clean 
 
 WORKDIR /app
 EXPOSE 80
@@ -22,6 +22,7 @@ COPY ["src/SvxlinkManager/SvxlinkManager.csproj", "src/SvxlinkManager/"]
 RUN dotnet restore "src/SvxlinkManager/SvxlinkManager.csproj"
 COPY . .
 WORKDIR "/src/src/SvxlinkManager"
+RUN npm install
 RUN dotnet build "SvxlinkManager.csproj" -c Release -o /app/build
 
 FROM build AS publish

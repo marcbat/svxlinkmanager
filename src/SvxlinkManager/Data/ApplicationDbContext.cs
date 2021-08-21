@@ -45,6 +45,8 @@ namespace SvxlinkManager.Data
 
     public DbSet<SvxlinkManagerParameter> Parameters { get; set; }
 
+    public DbSet<Models.Reflector> Reflectors { get; set; }
+
     #endregion Properties
 
     #region Methods
@@ -71,7 +73,7 @@ namespace SvxlinkManager.Data
       builder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Admin", NormalizedName = "Admin".ToUpper() });
 
       builder.Entity<SvxlinkChannel>().HasData(new SvxlinkChannel { Id = 1, Name = "Réseau des Répéteurs Francophones", CallSign = "(CH) SVX4LINK H", ReportCallSign = "SVX4LINK", Host = "rrf2.f5nlg.ovh", Port = 5300, AuthKey = "Magnifique123456789!", IsTemporized = false, TimerDelay = 180, TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json", Dtmf = 96 });
-      builder.Entity<SvxlinkChannel>().HasData(new SvxlinkChannel { Id = 2, Name = "Salon Suisse Romand", CallSign = "(CH) SVX4LINK H", ReportCallSign = "SVX4LINK", Host = "salonsuisseromand.northeurope.cloudapp.azure.com", Port = 5300, AuthKey = "xD9wW5gO7yD9hN5o", IsTemporized = true, TimerDelay = 180, Dtmf = 104 });
+      builder.Entity<SvxlinkChannel>().HasData(new SvxlinkChannel { Id = 2, Name = "Salon Suisse Romand", CallSign = "(CH) SVX4LINK H", ReportCallSign = "SVX4LINK", Host = "salonsuisseromand.hbspot.ch", Port = 5300, AuthKey = "xD9wW5gO7yD9hN5o", IsTemporized = true, TimerDelay = 180, Dtmf = 104 });
       builder.Entity<SvxlinkChannel>().HasData(new SvxlinkChannel { Id = 3, Name = "French Open Network", CallSign = "(CH) SVX4LINK H", ReportCallSign = "SVX4LINK", Host = "serveur.f1tzo.com", Port = 5300, AuthKey = "FON-F1TZO", IsTemporized = true, TimerDelay = 180, TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json", Dtmf = 97 });
       builder.Entity<SvxlinkChannel>().HasData(new SvxlinkChannel { Id = 4, Name = "Salon Technique", CallSign = "(CH) SVX4LINK H", ReportCallSign = "SVX4LINK", Host = "rrf3.f5nlg.ovh", Port = 5301, AuthKey = "Magnifique123456789!", IsTemporized = true, TimerDelay = 180, TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json", Dtmf = 98 });
       builder.Entity<SvxlinkChannel>().HasData(new SvxlinkChannel { Id = 5, Name = "Salon International", CallSign = "(CH) SVX4LINK H", ReportCallSign = "SVX4LINK", Host = "rrf3.f5nlg.ovh", Port = 5302, AuthKey = "Magnifique123456789!", IsTemporized = true, TimerDelay = 180, TrackerUrl = "http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json", Dtmf = 99 }); ;

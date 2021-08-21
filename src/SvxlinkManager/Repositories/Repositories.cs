@@ -20,6 +20,8 @@ namespace SvxlinkManager.Repositories
 
     IRepository<ScanProfile> ScanProfiles { get; set; }
 
+    IRepository<Reflector> Reflectors { get; set; }
+
     IParameterRepository Parameters { get; set; }
 
     Repository<TEntity> Repository<TEntity>() where TEntity : class, IModelEntity;
@@ -36,6 +38,7 @@ namespace SvxlinkManager.Repositories
       SvxlinkChannels = new Repository<SvxlinkChannel>(contextFactory);
       EcholinkChannels = new Repository<EcholinkChannel>(contextFactory);
       ScanProfiles = new ScanProfileRepository(contextFactory);
+      Reflectors = new ReflectorRepository(contextFactory);
       Parameters = new ParameterRepository(contextFactory);
       this.contextFactory = contextFactory;
     }
@@ -51,6 +54,8 @@ namespace SvxlinkManager.Repositories
     public IRepository<ScanProfile> ScanProfiles { get; set; }
 
     public IParameterRepository Parameters { get; set; }
+
+    public IRepository<Reflector> Reflectors { get; set; }
 
     public Repository<TEntity> Repository<TEntity>() where TEntity : class, IModelEntity => new Repository<TEntity>(contextFactory);
   }

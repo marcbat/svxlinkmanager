@@ -57,6 +57,7 @@ namespace SvxlinkManager
       services.AddSingleton<SvxLinkService>();
       services.AddSingleton<ScanService>();
       services.AddSingleton<UpdaterService>();
+      services.AddSingleton<IIniService, IniService>();
 
 #if DEBUG
       services.AddSingleton<ISa818Service, Sa818ServiceMockup>();
@@ -107,6 +108,9 @@ namespace SvxlinkManager
         // start default channel
         var svxlinkservice = serviceScope.ServiceProvider.GetRequiredService<SvxLinkService>();
         svxlinkservice.StartDefaultChannel();
+
+        // start enable reflector
+        svxlinkservice.StartEnableReflector();
 
         // set telemetry global settings
         var telemetry = serviceScope.ServiceProvider.GetRequiredService<TelemetryClient>();

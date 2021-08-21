@@ -42,10 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\submodules\SvxlinkManager.Common\src\SvxlinkManager.Common\SvxlinkManager.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <TypeScriptCompile Include="Scripts\Editor.ts" />
   </ItemGroup>
 
@@ -62,12 +58,6 @@
     <None Update="svxlinkmanager.service">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Update="node_modules\%40types\ace\index.d.ts">
-      <CopyToOutputDirectory></CopyToOutputDirectory>
-    </TypeScriptCompile>
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

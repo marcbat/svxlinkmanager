@@ -8,6 +8,7 @@ using Microsoft.JSInterop;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using Microsoft.ApplicationInsights;
+using SvxlinkManager.Models;
 
 namespace SvxlinkManager.Pages.Shared
 {
@@ -73,6 +74,15 @@ namespace SvxlinkManager.Pages.Shared
       process.WaitForExit();
 
       return (result?.Trim(), error?.Trim());
+    }
+
+    public virtual void Replace<TEntity>(List<TEntity> collection, TEntity entity) where TEntity : IModelEntity
+    {
+      int index = collection.FindIndex(r => r.Id == entity.Id);
+
+      collection.RemoveAt(index);
+
+      collection.Insert(index, entity);
     }
   }
 }

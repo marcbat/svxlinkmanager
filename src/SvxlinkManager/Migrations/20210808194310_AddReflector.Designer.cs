@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SvxlinkManager.Data;
 
 namespace SvxlinkManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210808194310_AddReflector")]
+    partial class AddReflector
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,8 +46,8 @@ namespace SvxlinkManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4533a338-68cd-4366-915d-5ba594bd27ef",
-                            ConcurrencyStamp = "72fccea0-184c-4b93-95e5-79165d1451c3",
+                            Id = "c0624983-425d-4502-adc5-32a962d43612",
+                            ConcurrencyStamp = "5ff02bfb-3988-40b2-a414-f4201da864e5",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -614,7 +616,7 @@ namespace SvxlinkManager.Migrations
                             Name = "Salon Suisse Romand",
                             TimerDelay = 180,
                             CallSign = "(CH) SVX4LINK H",
-                            Host = "salonsuisseromand.hbspot.ch",
+                            Host = "salonsuisseromand.northeurope.cloudapp.azure.com",
                             AuthKey = "xD9wW5gO7yD9hN5o",
                             Port = 5300,
                             ReportCallSign = "SVX4LINK"

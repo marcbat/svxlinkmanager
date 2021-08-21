@@ -20,6 +20,5 @@ namespace SvxlinkManager.Models
 
     [Required]
     public Channel Channel { get; set; }
-    
   }
 }
