@@ -49,9 +49,6 @@
     <None Update="SvxlinkConfig\dtmf.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SvxlinkConfig\getIP">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="SvxlinkConfig\Locale.tcl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
