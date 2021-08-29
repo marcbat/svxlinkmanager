@@ -498,7 +498,7 @@ if {$cmd != "10"} {
   #}
   
   proc sayIP {} {
-    set result [exec /etc/SvxlinkManager/getIP]
+    set result [exec /etc/SvxlinkManager/SvxlinkConfig/getIP]
     puts "$result"
 
     regexp "(\[0-9]{1,3})\.(\[0-9]{1,3})\.(\[0-9]{1,3})\.(\[0-9]{1,3})" $result all first second third fourth
