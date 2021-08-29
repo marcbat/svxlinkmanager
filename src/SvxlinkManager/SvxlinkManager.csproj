@@ -60,6 +60,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SvxlinkConfig\svxlink.d\" />
+  </ItemGroup>
+
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>

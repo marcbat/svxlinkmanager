@@ -443,6 +443,7 @@ namespace SvxlinkManager.Service
 
       Directory.CreateDirectory($"{applicationPath}/SvxlinkConfig/svxlink.d");
       File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", repositories.Parameters.GetStringValue("default.svxlink.conf"));
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleParrot.conf", repositories.Parameters.GetStringValue("default.parrot.conf"));
 
       var global = new Dictionary<string, string>
       {

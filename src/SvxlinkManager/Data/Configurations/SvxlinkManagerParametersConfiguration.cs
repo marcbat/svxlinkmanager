@@ -139,6 +139,22 @@ namespace SvxlinkManager.Data.Configurations
         Key = "default.echolink.conf",
         Value = sb.ToString()
       });
+
+      sb = new StringBuilder();
+
+      sb.AppendLine("[ModuleParrot]");
+      sb.AppendLine("NAME=Parrot");
+      sb.AppendLine("ID=1");
+      sb.AppendLine("TIMEOUT=600");
+      sb.AppendLine("FIFO_LEN=60");
+      sb.AppendLine("REPEAT_DELAY=1000");
+
+      builder.HasData(new SvxlinkManagerParameter
+      {
+        Id = 3,
+        Key = "default.parrot.conf",
+        Value = sb.ToString()
+      });
     }
   }
 }
