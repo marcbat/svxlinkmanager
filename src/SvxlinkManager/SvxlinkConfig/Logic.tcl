@@ -498,7 +498,7 @@ if {$cmd != "10"} {
   #}
   
   proc sayIP {} {
-    set result [exec /etc/spotnik/getIP]
+    set result [exec /etc/SvxlinkManager/getIP]
     puts "$result"
 
     regexp "(\[0-9]{1,3})\.(\[0-9]{1,3})\.(\[0-9]{1,3})\.(\[0-9]{1,3})" $result all first second third fourth
