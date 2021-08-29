@@ -53,6 +53,9 @@ cp -R /tmp/svxlinkmanager/__Build.BuildNumber__/* /etc/SvxlinkManager/
 # restore the old user db
 cp /etc/SvxlinkManager.bak/SvxlinkManager.db /etc/SvxlinkManager/
 
+# change permission on getIP
+chmod 755 /etc/SvxlinkManager/SvxlinkConfig/getIP
+
 # start the application
 sudo systemctl restart svxlinkmanager
 fi
