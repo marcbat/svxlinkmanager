@@ -82,6 +82,8 @@
   {
     UpdaterService.OnReleasesDownloadCompleted += SetUpToDate;
 
+    UpdaterService.LoadReleases();
+
     updaterTimer = new Timer(3600000);
     updaterTimer.Elapsed += (s, e) => UpdaterService.LoadReleases();
     updaterTimer.Start();
