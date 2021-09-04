@@ -11,6 +11,9 @@
     <StartupObject></StartupObject>
     <ApplicationInsightsResourceId>/subscriptions/db6983fb-b1b7-4a94-9bf0-1556179d2d27/resourceGroups/Reseau-repeteur-romand/providers/microsoft.insights/components/SvxlinkManager-Insights</ApplicationInsightsResourceId>
     <TypeScriptToolsVersion>4.0</TypeScriptToolsVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -82,5 +85,4 @@
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
   </PropertyGroup>
-
 </Project>

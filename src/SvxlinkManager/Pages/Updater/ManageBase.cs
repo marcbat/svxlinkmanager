@@ -50,7 +50,7 @@ namespace SvxlinkManager.Pages.Updater
         Logger.LogError("Impossible de charger la liste des releases.", e);
         Telemetry.TrackException(e);
 
-        await ShowErrorToastAsync("Release", $"Impossible d'otenir la liste des release.");
+        await ShowErrorToastAsync("Release", $"Impossible d'obtenir la liste des release.");
       }
     }
 
@@ -79,8 +79,6 @@ namespace SvxlinkManager.Pages.Updater
 
     [Inject]
     public UpdaterService UpdaterService { get; set; }
-
-    public bool IsUpToDate() => UpdaterService.IsUpToDate();
 
     public async Task InstallAsync(Release release)
     {

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -25,8 +26,6 @@ namespace SvxlinkManager.Service
     private readonly TelemetryClient telemetry;
     private readonly ILogger<UpdaterService> logger;
 
-    private List<Release> releases;
-
     public event Action OnReleasesDownloadCompleted;
 
     public event Action<Release> OnDownloadStart;
@@ -40,6 +39,8 @@ namespace SvxlinkManager.Service
       this.configuration = configuration;
       this.telemetry = telemetry;
       this.logger = logger;
+
+      Releases = new List<Release>();
     }
 
     public void LoadReleases()
@@ -52,10 +53,19 @@ namespace SvxlinkManager.Service
 
         client.DownloadStringCompleted += (s, e) =>
         {
-          releases = JsonSerializer.Deserialize<List<Release>>(e.Result);
+          var query = JsonSerializer.Deserialize<List<Release>>(e.Result).AsQueryable();
+          if (!IsPreRelease)
+          {
+            Expression<Func<Release, bool>> IsSameMajor = r => r.Major == CurrentMajor;
+            Expression<Func<Release, bool>> IsStable = r => !r.Prerelease;
+            query = query.Where(IsSameMajor).Where(IsStable);
+          }
+
+          Releases.AddRange(query.ToList());
           OnReleasesDownloadCompleted?.Invoke();
         };
 
+        Releases.Clear();
         client.Headers.Add(HttpRequestHeader.UserAgent, "request");
         client.DownloadStringAsync(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases"));
       }
@@ -65,50 +75,21 @@ namespace SvxlinkManager.Service
       }
     }
 
-    public Release GetLastRelease()
-    {
-      try
-      {
-        using WebClient client = new WebClient();
+    public Release GetLastRelease() => Releases.First();
 
-        client.Headers.Add(HttpRequestHeader.UserAgent, "request");
-        var result = client.DownloadString(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases"));
+    public List<Release> Releases { get; private set; }
 
-        var releases = JsonSerializer.Deserialize<List<Release>>(result);
-
-        if (configuration.GetValue<bool>("Config:IsPreRelease"))
-          return releases.First();
-        else
-          return releases.First(r => !r.Prerelease);
-      }
-      catch (Exception)
-      {
-        throw;
-      }
-    }
-
-    public List<Release> Releases
-    {
-      get
-      {
-        telemetry.TrackEvent("Chargement des PreRelease.");
-
-        if (configuration.GetValue<bool>("Config:IsPreRelease"))
-          return releases;
-        else
-          return releases.Where(r => !r.Prerelease).ToList();
-      }
-    }
+    public bool IsPreRelease => configuration.GetValue<bool>("Config:IsPreRelease");
 
     public string CurrentVersion => Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+
+    public int CurrentMajor => int.Parse(CurrentVersion.Split('.').First());
 
     public bool IsExist(Release release) => File.Exists($"/tmp/svxlinkmanager/{release.Updater?.Name}");
 
     public bool IsCurrent(Release release) => release.TagName == CurrentVersion;
 
     public bool IsUpToDate() => IsCurrent(Releases.First());
-
-    public Release LastRelease => Releases.First();
 
     public void Install(Release release)
     {

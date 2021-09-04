@@ -1,0 +1,52 @@
+﻿@using SvxlinkManager.Service
+
+<ul id="channel-manage-list" class="list-group-horizontal">
+  @foreach (var release in Releases)
+  {
+    if (release.IsValid())
+    {
+
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-xl-3 text-nowrap">
+            @release.Name
+          </div>
+          <div class="col-xl-2 text-nowrap">@release.Created</div>
+          <div class="col-xl-3 text-truncate"><a href="@release.HtmlUrl" target="_blank">Détails de la release</a></div>
+          <div class="col-xl-2 text-nowrap">@release.Package.DownloadCount téléchargements</div>
+          <div class="col-xl-2">
+            @if (!UpdaterService.IsCurrent(release))
+            {
+              @if (UpdaterService.IsExist(@release))
+              {
+                <button id="install-@release.Id" data-toggle="tooltip" title="L'installation peut prendre un certain temps. <br /> Vous devrez recharger la page dans 30 secondes environ." type="button" class="btn btn-danger" @onclick="@(() => OnInstall.InvokeAsync(release))">Installer</button>
+              }
+              else
+              {
+                <button id="download-@release.Id" type="button" class="btn btn-outline-success" @onclick="() => OnDownload.InvokeAsync(release)">Obtenir</button>
+              }
+            }
+            else
+            {
+              <a class="btn btn-primary" href="Channel/Manage" role="button">Version courante</a>
+            }
+          </div>
+        </div>
+      </li>
+    }
+  }
+</ul>
+
+@code {
+  [Parameter]
+  public List<Release> Releases { get; set; }
+
+  [Parameter]
+  public EventCallback<Release> OnDownload { get; set; }
+
+  [Parameter]
+  public EventCallback<Release> OnInstall { get; set; }
+
+  [Inject]
+  public UpdaterService UpdaterService { get; set; }
+}

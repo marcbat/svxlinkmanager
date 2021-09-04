@@ -60,6 +60,9 @@ namespace SvxlinkManager.Pages.Updater
 
     [JsonIgnore]
     public Asset UpdaterCheckSum => Assets.SingleOrDefault(a => a.Name.StartsWith("updater-") && a.Name.EndsWith(".sh.sha"));
+
+    [JsonIgnore]
+    public int Major => int.Parse(TagName.Split('.').First());
   }
 
   public class Asset
