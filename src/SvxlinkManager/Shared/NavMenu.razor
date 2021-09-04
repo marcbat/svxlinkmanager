@@ -1,4 +1,6 @@
 ﻿@using System.Reflection;
+@using SvxlinkManager.Service
+@using System.Timers;
 
 <div class="top-row pl-4 navbar navbar-dark">
   <a class="navbar-brand" href="">Svxlink Manager @InformationalVersion</a>
@@ -61,12 +63,39 @@
     <li class="nav-item px-3">
       <NavLink class="nav-link" href="/Updater/Manage" Match="NavLinkMatch.Prefix">
         <span class="oi oi-cloud-download" aria-hidden="true"></span> Mise à jour
+        @if (!IsUpToDate)
+        {
+          <div class="blink d-inline-block" style="margin-left:5px;">
+            <span class="badge badge-danger">New!</span>
+          </div>
+        }
       </NavLink>
     </li>
   </ul>
 </div>
 
 @code {
+
+  private Timer updaterTimer;
+
+  protected override void OnInitialized()
+  {
+    UpdaterService.OnReleasesDownloadCompleted += SetUpToDate;
+
+    updaterTimer = new Timer(3600000);
+    updaterTimer.Elapsed += (s, e) => UpdaterService.LoadReleases();
+    updaterTimer.Start();
+
+    base.OnInitialized();
+  }
+
+  private void SetUpToDate()
+  {
+    IsUpToDate = UpdaterService.IsUpToDate();
+    InvokeAsync(() => StateHasChanged());
+  }
+
+  public bool IsUpToDate { get; set; } = true;
 
   private bool collapseNavMenu = true;
 
@@ -78,4 +107,12 @@
   }
 
   public string InformationalVersion => Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+
+  public void Dispose()
+  {
+    UpdaterService.OnReleasesDownloadCompleted -= SetUpToDate;
+  }
+
+  [Inject]
+  public UpdaterService UpdaterService { get; set; }
 }
