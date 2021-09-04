@@ -57,7 +57,7 @@ namespace SvxlinkManager.Pages.Updater
     private async void UpdaterService_OnReleasesDownloadCompleted()
     {
       await ShowSuccessToastAsync("Release", $"Les releases ont bien été téléchargée.");
-      StateHasChanged();
+      await InvokeAsync(() => StateHasChanged());
     }
 
     private async void UpdaterService_OndownloadComplete(Release release)
