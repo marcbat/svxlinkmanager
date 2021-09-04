@@ -192,7 +192,7 @@ namespace SvxlinkManager.Service
       var downloadTacker = new DependencyTelemetry()
       {
         Id = Guid.NewGuid().ToString(),
-        Name = "DownloadRelease",
+        Name = "Download Release",
         Data = releaseUrl.AbsolutePath,
         Target = releaseUrl.Authority,
         Type = "http"
@@ -203,8 +203,7 @@ namespace SvxlinkManager.Service
       var downloadUpdaterTacker = new DependencyTelemetry
       {
         Id = Guid.NewGuid().ToString(),
-
-        Name = "DownloadUpdate",
+        Name = "Download Update file",
         Data = updaterUrl.AbsolutePath,
         Target = updaterUrl.Authority,
         Type = "http"
@@ -241,7 +240,7 @@ namespace SvxlinkManager.Service
             if (packageCheckSum != GetChecksum(packageTarget))
               throw new Exception($"Echec de la validation du fichier {release.Package.Name}.");
 
-            using (var operation = telemetry.StartOperation(downloadTacker))
+            using (var operation = telemetry.StartOperation(downloadUpdaterTacker))
             {
               telemetry.TrackEvent("Download Update file", new Dictionary<string, string> { { "Name", release.Name } });
               logger.LogInformation($"Download Update file {release.Updater.DownloadUrl}");
