@@ -43,25 +43,20 @@ namespace SvxlinkManager.Service
       Releases = new List<Release>();
     }
 
+    /// <summary>
+    /// Load all releases from github
+    /// </summary>
     public void LoadReleases()
     {
       logger.LogInformation("Chargement de la list des release.");
 
       try
       {
-        using WebClient client = new WebClient();
+        using var client = new WebClient();
 
         client.DownloadStringCompleted += (s, e) =>
         {
-          var query = JsonSerializer.Deserialize<List<Release>>(e.Result).AsQueryable();
-          if (!IsPreRelease)
-          {
-            Expression<Func<Release, bool>> IsSameMajor = r => r.Major == CurrentMajor;
-            Expression<Func<Release, bool>> IsStable = r => !r.Prerelease;
-            query = query.Where(IsSameMajor).Where(IsStable);
-          }
-
-          Releases.AddRange(query.ToList());
+          Releases.AddRange(JsonSerializer.Deserialize<List<Release>>(e.Result).ToList());
           OnReleasesDownloadCompleted?.Invoke();
         };
 
@@ -69,28 +64,82 @@ namespace SvxlinkManager.Service
         client.Headers.Add(HttpRequestHeader.UserAgent, "request");
         client.DownloadStringAsync(new Uri("https://api.github.com/repos/marcbat/svxlinkmanager/releases"));
       }
-      catch (Exception)
+      catch (Exception e)
       {
-        throw;
+        telemetry.TrackException(new Exception("Impossible de charger les releases", e));
       }
     }
 
-    public Release GetLastRelease() => Releases.First();
-
+    /// <summary>
+    /// List of release
+    /// </summary>
     public List<Release> Releases { get; private set; }
 
+    /// <summary>
+    /// True if appsetting config parameter IsPreRelease equal true
+    /// </summary>
     public bool IsPreRelease => configuration.GetValue<bool>("Config:IsPreRelease");
 
+    /// <summary>
+    /// Return current value from the assembly
+    /// </summary>
     public string CurrentVersion => Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
+    /// <summary>
+    /// Get the major of the current version
+    /// </summary>
     public int CurrentMajor => int.Parse(CurrentVersion.Split('.').First());
 
+    /// <summary>
+    /// Return last release
+    /// </summary>
+    /// <returns></returns>
+    public Release GetLastRelease() => IsPreRelease ? Releases.First() : Releases.Where(IsStable).Where(IsSameMajor).First();
+
+    /// <summary>
+    /// Return last image not in the same major
+    /// </summary>
+    /// <returns>Return last image or null</returns>
+    public Release GetLastImage() => Releases.Where(r => !IsSameMajor(r)).FirstOrDefault(r => r.Image != null);
+
+    /// <summary>
+    /// check if release is prerelease
+    /// </summary>
+    /// <param name="release">the release</param>
+    /// <returns>true if is a prerelease</returns>
+    public bool IsStable(Release release) => !release.Prerelease;
+
+    /// <summary>
+    /// Check if release is in current major range
+    /// </summary>
+    /// <param name="release">the release</param>
+    /// <returns>true if release is in current major release</returns>
+    public bool IsSameMajor(Release release) => release.Major == CurrentMajor;
+
+    /// <summary>
+    /// Check if a release is already downloaded
+    /// </summary>
+    /// <param name="release">the release</param>
+    /// <returns>true if is dowloaded</returns>
     public bool IsExist(Release release) => File.Exists($"/tmp/svxlinkmanager/{release.Updater?.Name}");
 
+    /// <summary>
+    /// Check if the release is the durrent installed release
+    /// </summary>
+    /// <param name="release">the release</param>
+    /// <returns>True if the release is the durrent installed release</returns>
     public bool IsCurrent(Release release) => release.TagName == CurrentVersion;
 
-    public bool IsUpToDate() => IsCurrent(Releases.First());
+    /// <summary>
+    /// Check if svxlinkmanager is up to date
+    /// </summary>
+    /// <returns>True if svxlinkmanager is up to date</returns>
+    public bool IsUpToDate() => IsCurrent(GetLastRelease());
 
+    /// <summary>
+    /// Run the updater sh script
+    /// </summary>
+    /// <param name="release">the release to install</param>
     public void Install(Release release)
     {
       ExecuteCommand($"chmod 755 /tmp/svxlinkmanager/{release.Updater.Name}");
@@ -101,6 +150,11 @@ namespace SvxlinkManager.Service
         throw (new UpdateException($"Echec de l'installation de la release. {error}"));
     }
 
+    /// <summary>
+    /// Run a bash command
+    /// </summary>
+    /// <param name="cmd">the command to execute</param>
+    /// <returns>result and errors</returns>
     protected virtual (string, string) ExecuteCommand(string cmd)
     {
       var escapedArgs = cmd.Replace("\"", "\\\"");
@@ -127,6 +181,10 @@ namespace SvxlinkManager.Service
       return (result?.Trim(), error?.Trim());
     }
 
+    /// <summary>
+    /// Download the selected release and updated sh script
+    /// </summary>
+    /// <param name="release">the release</param>
     public void Download(Release release)
     {
       var releaseUrl = new Uri(release.Package.DownloadUrl);
@@ -212,6 +270,11 @@ namespace SvxlinkManager.Service
       }
     }
 
+    /// <summary>
+    /// Get checksum for a specific file
+    /// </summary>
+    /// <param name="file">the file</param>
+    /// <returns>a checksum for file</returns>
     private static string GetChecksum(string file)
     {
       using (var stream = File.OpenRead(file))

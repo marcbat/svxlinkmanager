@@ -15,6 +15,6 @@ else
   }
   else
   {
-    <ManageStable IsUpToDate="UpdaterService.IsUpToDate()" CurrentVersion="@UpdaterService.CurrentVersion" Release="@UpdaterService.GetLastRelease()" OnDownload="DownloadAsync" OnInstall="InstallAsync" />
+    <ManageStable IsUpToDate="UpdaterService.IsUpToDate()" CurrentVersion="@UpdaterService.CurrentVersion" Release="@UpdaterService.GetLastRelease()" ReleaseImage="@UpdaterService.GetLastImage()" OnDownload="DownloadAsync" OnInstall="InstallAsync" />
   }
 }
