@@ -186,7 +186,6 @@ namespace SvxlinkManager.Service
 
       var dependencyTracker = new DependencyTelemetry
       {
-        Id = Guid.NewGuid().ToString(),
         Name = "ActivateSvxlinkChannel",
         Data = url.AbsolutePath,
         Target = url.Authority,
@@ -262,30 +261,33 @@ namespace SvxlinkManager.Service
 
     private void ActivateAdvanceSvxlinkChannel(AdvanceSvxlinkChannel channel)
     {
-      logger.LogInformation("restart advance salon.");
+      using (var operation = telemetry.StartOperation<DependencyTelemetry>("ActivateAdvanceSvxlinkChannel"))
+      {
+        logger.LogInformation("restart advance salon.");
 
-      // Stop svxlink
-      StopSvxlink();
-      logger.LogInformation("Salon déconnecté");
+        // Stop svxlink
+        StopSvxlink();
+        logger.LogInformation("Salon déconnecté");
 
-      Directory.CreateDirectory($"{applicationPath}/SvxlinkConfig/svxlink.d");
+        Directory.CreateDirectory($"{applicationPath}/SvxlinkConfig/svxlink.d");
 
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", channel.SvxlinkConf);
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleDtmfRepeater.conf", channel.ModuleDtmfRepeater);
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", channel.ModuleEchoLink);
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleFrn.conf", channel.ModuleFrn);
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleHelp.conf", channel.ModuleHelp);
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleMetarInfo.conf", channel.ModuleMetarInfo);
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleParrot.conf", channel.ModuleParrot);
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModulePropagationMonitor.conf", channel.ModulePropagationMonitor);
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleSelCallEnc.conf", channel.ModuleSelCallEnc);
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleTclVoiceMail.conf", channel.ModuleTclVoiceMail);
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", channel.SvxlinkConf);
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleDtmfRepeater.conf", channel.ModuleDtmfRepeater);
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", channel.ModuleEchoLink);
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleFrn.conf", channel.ModuleFrn);
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleHelp.conf", channel.ModuleHelp);
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleMetarInfo.conf", channel.ModuleMetarInfo);
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleParrot.conf", channel.ModuleParrot);
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModulePropagationMonitor.conf", channel.ModulePropagationMonitor);
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleSelCallEnc.conf", channel.ModuleSelCallEnc);
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleTclVoiceMail.conf", channel.ModuleTclVoiceMail);
 
-      ReplaceSoundFile(channel);
+        ReplaceSoundFile(channel);
 
-      // Lance svxlink
-      StartSvxLink(channel);
-      logger.LogInformation($"Le channel {channel.Name} est connecté.");
+        // Lance svxlink
+        StartSvxLink(channel);
+        logger.LogInformation($"Le channel {channel.Name} est connecté.");
+      }
     }
 
     /// <summary>Replaces the sound file for the channel</summary>
@@ -316,37 +318,39 @@ namespace SvxlinkManager.Service
     {
       telemetry.TrackEvent("Start echolink", new Dictionary<string, string> { { "linkName", channel.Name } });
 
-      logger.LogInformation("Restart link echolink.");
+      using (var operation = telemetry.StartOperation<DependencyTelemetry>("ActivateEcholink"))
+      {
+        logger.LogInformation("Restart link echolink.");
 
-      // Stop svxlink
-      StopSvxlink();
-      logger.LogInformation("Salon déconnecté");
+        // Stop svxlink
+        StopSvxlink();
+        logger.LogInformation("Salon déconnecté");
 
-      var radioProfile = repositories.RadioProfiles.GetCurrent();
+        var radioProfile = repositories.RadioProfiles.GetCurrent();
 
-      Directory.CreateDirectory($"{applicationPath}/SvxlinkConfig/svxlink.d");
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", repositories.Parameters.GetStringValue("default.svxlink.conf"));
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", repositories.Parameters.GetStringValue("default.echolink.conf"));
+        Directory.CreateDirectory($"{applicationPath}/SvxlinkConfig/svxlink.d");
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", repositories.Parameters.GetStringValue("default.svxlink.conf"));
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", repositories.Parameters.GetStringValue("default.echolink.conf"));
 
-      var global = new Dictionary<string, string>
+        var global = new Dictionary<string, string>
       {
         { "LOGICS", "SimplexLogic" }
       };
-      var simplexlogic = new Dictionary<string, string> {
+        var simplexlogic = new Dictionary<string, string> {
         { "MODULES", "ModuleHelp,ModuleMetarInfo,ModulePropagationMonitor,ModuleEchoLink,ModuleParrot"},
         { "CALLSIGN", channel.CallSign},
         { "REPORT_CTCSS", radioProfile.RxTone}
       };
-      var parameters = new Dictionary<string, Dictionary<string, string>>
+        var parameters = new Dictionary<string, Dictionary<string, string>>
       {
         {"GLOBAL", global },
         {"SimplexLogic", simplexlogic }
       };
 
-      iniService.ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.conf", parameters);
-      logger.LogInformation("Remplacement du contenu svxlink.conf");
+        iniService.ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.conf", parameters);
+        logger.LogInformation("Remplacement du contenu svxlink.conf");
 
-      var moduleEcholink = new Dictionary<string, string>
+        var moduleEcholink = new Dictionary<string, string>
       {
         {"SERVERS", channel.Host },
         {"CALLSIGN", channel.CallSign },
@@ -357,22 +361,23 @@ namespace SvxlinkManager.Service
         {"MAX_CONNECTIONS", (channel.MaxQso + 1).ToString() },
         {"DESCRIPTION", channel.Description },
       };
-      parameters = new Dictionary<string, Dictionary<string, string>>
+        parameters = new Dictionary<string, Dictionary<string, string>>
       {
         {"ModuleEchoLink", moduleEcholink },
       };
-      iniService.ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", parameters);
-      logger.LogInformation("Remplacement du contenu de ModuleEcholink.conf");
+        iniService.ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", parameters);
+        logger.LogInformation("Remplacement du contenu de ModuleEcholink.conf");
 
-      // Remplacement du son de l'annonce
-      ReplaceSoundFile(channel);
+        // Remplacement du son de l'annonce
+        ReplaceSoundFile(channel);
 
-      // Ajout du link en tant que Node
-      Nodes.Add(new Node { Name = channel.CallSign });
+        // Ajout du link en tant que Node
+        Nodes.Add(new Node { Name = channel.CallSign });
 
-      // Lance svxlink
-      StartSvxLink(channel);
-      logger.LogInformation($"Le channel {channel.Name} est connecté.");
+        // Lance svxlink
+        StartSvxLink(channel);
+        logger.LogInformation($"Le channel {channel.Name} est connecté.");
+      }
     }
 
     /// <summary>
@@ -592,6 +597,8 @@ namespace SvxlinkManager.Service
     /// </summary>
     public override void StopSvxlink()
     {
+      telemetry.TrackEvent("Stop svxlink");
+
       logger.LogInformation("Kill de svxlink.");
 
       StopTemporization();
@@ -616,15 +623,16 @@ namespace SvxlinkManager.Service
 
     public void ActivateReflector(Reflector reflector)
     {
-      telemetry.TrackEvent("Reflector start", reflector.TrackProperties);
+      using (var operation = telemetry.StartOperation<DependencyTelemetry>("ActivateReflector"))
+      {
+        logger.LogInformation($"Activation du reflector {reflector.Name}");
 
-      logger.LogInformation($"Activation du reflector {reflector.Name}");
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxreflector-{reflector.Id}.conf", reflector.Config);
 
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxreflector-{reflector.Id}.conf", reflector.Config);
-
-      // Lance svxlink
-      StartReflector(reflector);
-      logger.LogInformation($"Le reflecteur {reflector.Name} est activé.");
+        // Lance svxlink
+        StartReflector(reflector);
+        logger.LogInformation($"Le reflecteur {reflector.Name} est activé.");
+      }
     }
 
     /// <summary>
@@ -633,11 +641,15 @@ namespace SvxlinkManager.Service
     /// <param name="reflector">The reflector.</param>
     public virtual void StartReflector(Reflector reflector)
     {
+      telemetry.TrackEvent("Reflector start", reflector.TrackProperties);
+
       base.StartReflector(reflector, pidFile: $"/var/run/reflector-{reflector.Id}.pid", runAs: "root", configFile: $"{applicationPath}/SvxlinkConfig/svxreflector-{reflector.Id}.conf");
     }
 
     public override void StopReflector(Reflector reflector)
     {
+      telemetry.TrackEvent("Reflector stop", reflector.TrackProperties);
+
       logger.LogInformation($"Arret du reflecteur {reflector.Name}.");
 
       base.StopReflector(reflector);
@@ -645,6 +657,8 @@ namespace SvxlinkManager.Service
 
     public void RestartReflector(Reflector reflector)
     {
+      telemetry.TrackEvent("Reflector restart", reflector.TrackProperties);
+
       logger.LogInformation($"Redémarrage du reflecteur {reflector.Name}.");
 
       StopReflector(reflector);
