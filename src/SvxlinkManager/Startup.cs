@@ -72,14 +72,7 @@ namespace SvxlinkManager
 #endif
 
       services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
-      var aioptions = new ApplicationInsightsServiceOptions();
-
-#if DEBUG
-      aioptions.ConnectionString = Configuration["APPINSIGHTS_CONNECTIONSTRING"];
-      aioptions.DeveloperMode = true;
-#endif
-
-      services.AddApplicationInsightsTelemetry(aioptions);
+      services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
 
       services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
       services.AddSingleton<ITelemetryInitializer, SvxlinkManagerTelemetry>();
