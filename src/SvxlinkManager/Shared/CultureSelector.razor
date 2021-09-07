@@ -1,0 +1,48 @@
+﻿@using  System.Globalization
+@inject NavigationManager Nav
+
+<form>
+  <div class="form-row">
+    <div form-group col-md-4>
+      <select class="form-control" @bind="Culture">
+        @foreach (var culture in supportedCultures)
+        {
+          <option value="@culture">@culture.DisplayName</option>
+        }
+      </select>
+    </div>
+  </div>
+</form>
+
+@code
+{
+  private CultureInfo[] supportedCultures = new[]
+  {
+        new CultureInfo("en-US"),
+        new CultureInfo("fr-FR"),
+    };
+
+  protected override void OnInitialized()
+  {
+    Culture = CultureInfo.CurrentCulture;
+  }
+
+  private CultureInfo Culture
+  {
+    get => CultureInfo.CurrentCulture;
+    set
+    {
+      if (CultureInfo.CurrentCulture != value)
+      {
+        var uri = new Uri(Nav.Uri)
+            .GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
+        var cultureEscaped = Uri.EscapeDataString(value.Name);
+        var uriEscaped = Uri.EscapeDataString(uri);
+
+        Nav.NavigateTo(
+            $"Culture/Set?culture={cultureEscaped}&redirectUri={uriEscaped}",
+            forceLoad: true);
+      }
+    }
+  }
+}

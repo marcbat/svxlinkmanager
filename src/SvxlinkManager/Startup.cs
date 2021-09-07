@@ -50,6 +50,7 @@ namespace SvxlinkManager
           .AddEntityFrameworkStores<ApplicationDbContext>();
 
       services.AddRazorPages();
+      services.AddControllers();
 
       services.AddServerSideBlazor();
       services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
@@ -87,6 +88,8 @@ namespace SvxlinkManager
         options.Password.RequiredLength = 6;
         options.Password.RequiredUniqueChars = 1;
       });
+
+      services.AddLocalization();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -122,6 +125,14 @@ namespace SvxlinkManager
       app.UseStaticFiles();
 
       app.UseRouting();
+
+      var supportedCultures = new[] { "en-US", "fr-FR" };
+      var localizationOptions = new RequestLocalizationOptions()
+          .SetDefaultCulture(supportedCultures[0])
+          .AddSupportedCultures(supportedCultures)
+          .AddSupportedUICultures(supportedCultures);
+
+      app.UseRequestLocalization(localizationOptions);
 
       app.UseAuthentication();
       app.UseAuthorization();

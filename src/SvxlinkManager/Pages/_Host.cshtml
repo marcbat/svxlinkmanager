@@ -1,4 +1,8 @@
 ﻿@page "/"
+
+@using System.Globalization
+@using Microsoft.AspNetCore.Localization
+
 @namespace SvxlinkManager.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
@@ -28,6 +32,15 @@
   <script src="~/js/dist/Toaster.js"></script>
 </head>
 <body>
+  @{
+    this.HttpContext.Response.Cookies.Append(
+        CookieRequestCultureProvider.DefaultCookieName,
+        CookieRequestCultureProvider.MakeCookieValue(
+            new RequestCulture(
+                CultureInfo.CurrentCulture,
+                CultureInfo.CurrentUICulture)));
+  }
+
   <app>
     <component type="typeof(App)" render-mode="Server" />
   </app>
