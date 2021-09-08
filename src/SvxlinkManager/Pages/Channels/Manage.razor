@@ -1,12 +1,16 @@
 ﻿@using SvxlinkManager.Models
+@using System.Globalization
+@using Microsoft.Extensions.Localization
 
 @page "/Channel/Manage"
 @inherits SvxlinkManager.Pages.Channels.ManageBase<SvxlinkChannel>
 
+@inject IStringLocalizer<Manage> Loc
+
 <div class="row">
-  <div class="col-xl-2"><h3>Salons</h3></div>
+  <div class="col-xl-2"><h3>@Loc["Rooms"]</h3></div>
   <div class="col-xl-2 offset-xl-8">
-    <a class="btn btn-outline-success" href="Channel/Create" role="button">Créer un nouveau salon</a>
+    <a class="btn btn-outline-success" href="Channel/Create" role="button">@Loc["CreateRoom"]</a>
   </div>
 </div>
 
@@ -17,7 +21,7 @@
       <div class="row">
         <div class="col-xl-3 text-nowrap">
           @if (channel.IsDefault)
-          {<span class="oi oi-home" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Le salon @channel.Name est actuellement le salon par défaut."></span>}
+          {<span class="oi oi-home" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="@string.Format(Loc["DefaultTooltip"],channel.Name)"></span>}
           @if (channel.IsTemporized)
           {<span class="oi oi-clock" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Le salon @channel.Name est temporisé."></span>}
           &nbsp;@channel.Name
@@ -27,8 +31,8 @@
         <div class="col-xl-1">@channel.Port</div>
         <div class="col-xl-1">@channel.Dtmf</div>
         <div class="col-xl-2">
-          <a class="btn btn-outline-primary" href="Channel/Edit/@channel.Id" role="button">Editer</a> &nbsp; @if (!channel.IsDefault)
-          {<button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(channel))">Supprimer</button>}
+          <a class="btn btn-outline-primary" href="Channel/Edit/@channel.Id" role="button">@Loc["EditRoom"]</a> &nbsp; @if (!channel.IsDefault)
+          {<button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(channel))">@Loc["DeleteRoom"]</button>}
         </div>
       </div>
     </li>
