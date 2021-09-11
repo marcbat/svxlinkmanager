@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Shared
 {
-  public class RepositoryComponentBase : SvxlinkManagerComponentBase
+  public abstract class RepositoryComponentBase<TLocalizer> : SvxlinkManagerComponentBase<TLocalizer>
   {
     [Inject]
     public IRepositories Repositories { get; set; }

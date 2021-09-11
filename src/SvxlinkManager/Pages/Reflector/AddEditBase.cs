@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Reflector
 {
-  public abstract class AddEditBase : RepositoryComponentBase
+  public abstract class AddEditBase<TLocalizer> : RepositoryComponentBase<TLocalizer>
   {
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

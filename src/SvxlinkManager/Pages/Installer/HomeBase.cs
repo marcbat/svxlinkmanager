@@ -28,7 +28,7 @@ namespace SvxlinkManager.Pages.Installer
     Progress
   }
 
-  public class HomeBase : RepositoryComponentBase
+  public class HomeBase : RepositoryComponentBase<HomeBase>
   {
     private InstallationStatus installationStatus = InstallationStatus.Security;
 

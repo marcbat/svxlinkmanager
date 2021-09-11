@@ -26,7 +26,7 @@ using System.Xml.Linq;
 namespace SvxlinkManager.Pages
 {
   [Authorize]
-  public class HomeBase : RepositoryComponentBase, IDisposable
+  public class HomeBase : RepositoryComponentBase<HomeBase>, IDisposable
   {
     protected override async Task OnInitializedAsync()
     {

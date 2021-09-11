@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.Updater
 {
   ///[Authorize]
-  public class ManageBase : SvxlinkManagerComponentBase, IDisposable
+  public class ManageBase : SvxlinkManagerComponentBase<ManageBase>, IDisposable
   {
     protected override async Task OnInitializedAsync()
     {

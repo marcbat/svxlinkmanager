@@ -1,8 +1,12 @@
 ﻿@using SvxlinkManager.Models
+@using System.Globalization
+@using Microsoft.Extensions.Localization
 
 @page "/Channel/Create"
 @inherits SvxlinkManager.Pages.Channels.CreateBase<SvxlinkChannel>
 
-<h3>Ajouter un salon</h3>
+@inject IStringLocalizer<Manage> Loc
+
+<h3>@Loc["AddNewRoom"]</h3>
 
 <AddEditForm Channel="@Channel" HandleValidSubmit="@(()=>HandleValidSubmit("Channel"))" SubmitTitle="@SubmitTitle" CanEditType="@CanEditType" />

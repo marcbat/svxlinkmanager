@@ -14,7 +14,7 @@ using Microsoft.JSInterop;
 
 namespace SvxlinkManager.Pages.Channels
 {
-  public abstract class AddEditBase<TChannel> : RepositoryComponentBase where TChannel : ManagedChannel
+  public abstract class AddEditBase<TChannel, TLocalizer> : RepositoryComponentBase<TLocalizer> where TChannel : ManagedChannel
   {
     private CancellationTokenSource cancelation;
 

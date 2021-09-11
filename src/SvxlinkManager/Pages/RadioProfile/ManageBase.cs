@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.RadioProfile
 {
   [Authorize]
-  public class ManageBase : RepositoryComponentBase
+  public class ManageBase : RepositoryComponentBase<ManageBase>
   {
     protected override async Task OnInitializedAsync()
     {
@@ -64,8 +64,8 @@ namespace SvxlinkManager.Pages.RadioProfile
       Repositories.RadioProfiles.Update(profile);
 
       Telemetry.TrackEvent("Apply radio profile", profile.TrackProperties);
-      
-      if(SvxLinkService.ChannelId > 0)
+
+      if (SvxLinkService.ChannelId > 0)
         SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
 
       await ShowSuccessToastAsync($"{profile.Name} appliqué.", $"Le profil radio {profile.Name} a bien été appliqué.");

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.RadioProfile
 {
   [Authorize]
-  public class EditBase : AddEditBase
+  public class EditBase : AddEditBase<EditBase>
   {
     protected override void OnInitialized()
     {

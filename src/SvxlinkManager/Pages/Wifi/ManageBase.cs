@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.Wifi
 {
   [Authorize]
-  public class ManageBase : RepositoryComponentBase
+  public class ManageBase : RepositoryComponentBase<ManageBase>
   {
     protected override void OnInitialized()
     {

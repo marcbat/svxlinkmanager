@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.Reflector
 {
   [Authorize]
-  public class CreateBase : AddEditBase
+  public class CreateBase : AddEditBase<CreateBase>
   {
     protected override void OnInitialized()
     {

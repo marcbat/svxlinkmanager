@@ -1,11 +1,7 @@
 ﻿@using SvxlinkManager.Models
-@using System.Globalization
-@using Microsoft.Extensions.Localization
 
 @page "/Channel/Manage"
 @inherits SvxlinkManager.Pages.Channels.ManageBase<SvxlinkChannel>
-
-@inject IStringLocalizer<Manage> Loc
 
 <div class="row">
   <div class="col-xl-2"><h3>@Loc["Rooms"]</h3></div>
@@ -23,7 +19,7 @@
           @if (channel.IsDefault)
           {<span class="oi oi-home" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="@string.Format(Loc["DefaultTooltip"],channel.Name)"></span>}
           @if (channel.IsTemporized)
-          {<span class="oi oi-clock" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Le salon @channel.Name est temporisé."></span>}
+          {<span class="oi oi-clock" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="@string.Format(Loc["TemporizedTooltip"],channel.Name)"></span>}
           &nbsp;@channel.Name
         </div>
         <div class="col-xl-2 text-nowrap">@channel.CallSign</div>

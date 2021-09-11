@@ -1,7 +1,11 @@
 ﻿@using SvxlinkManager.Models
+@using System.Globalization
+@using Microsoft.Extensions.Localization
 
 @page "/Channel/Edit/{Id}"
 @inherits SvxlinkManager.Pages.Channels.EditBase<SvxlinkChannel>
+
+@inject IStringLocalizer<Manage> Loc
 
 <h3>
   @if (Channel.IsDefault)
