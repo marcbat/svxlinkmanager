@@ -28,6 +28,11 @@ Interface web protégée par authentification sécurisée.
 *	Configuration de plusieurs profils Echolink
 *	Connexion à Echolink et suivi en temps réel de l’activité
 
+### Hébergement de reflecteur
+* Vous pouvez configurer autant de reflecteur vous voulez
+* Les reflecteurs peuvent être lancé en parallèle
+* Vous géreu les froits d'accès indépendamment pour chaque reflector 
+
 ### Gestion radio
 *	Configuration de multiples profils radio, fréquence, tone, etc…
 *	Activation en 1 click de la configuration souhaitée
