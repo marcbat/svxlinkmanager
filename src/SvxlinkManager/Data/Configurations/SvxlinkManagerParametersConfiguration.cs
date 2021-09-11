@@ -58,7 +58,7 @@ namespace SvxlinkManager.Data.Configurations
       sb.AppendLine("AUDIO_CHANNEL=0");
       sb.AppendLine("SQL_DET=GPIO");
       sb.AppendLine("SQL_START_DELAY=500");
-      sb.AppendLine("SQL_DELAY=100");
+      sb.AppendLine("SQL_DELAY=150");
       sb.AppendLine("SQL_HANGTIME=20");
       sb.AppendLine("SQL_EXTENDED_HANGTIME=1000");
       sb.AppendLine("SQL_EXTENDED_HANGTIME_THRESH=13");
@@ -137,6 +137,22 @@ namespace SvxlinkManager.Data.Configurations
       {
         Id = 2,
         Key = "default.echolink.conf",
+        Value = sb.ToString()
+      });
+
+      sb = new StringBuilder();
+
+      sb.AppendLine("[ModuleParrot]");
+      sb.AppendLine("NAME=Parrot");
+      sb.AppendLine("ID=1");
+      sb.AppendLine("TIMEOUT=600");
+      sb.AppendLine("FIFO_LEN=60");
+      sb.AppendLine("REPEAT_DELAY=1000");
+
+      builder.HasData(new SvxlinkManagerParameter
+      {
+        Id = 3,
+        Key = "default.parrot.conf",
         Value = sb.ToString()
       });
     }

@@ -1,0 +1,91 @@
+﻿@using SvxlinkManager.Service
+
+@if (IsUpToDate)
+{
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-success" role="alert">
+        <h2>Svxlink Manager est à jour.</h2>
+        <h3>Version actuelle @CurrentVersion</h3>
+      </div>
+    </div>
+  </div>
+}
+else
+{
+
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Une nouvelle version est disponible.</h2>
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-xl-3 text-nowrap">
+            @Release.Name
+          </div>
+          <div class="col-xl-2 text-nowrap">@Release.Created</div>
+          <div class="col-xl-3 text-truncate"><a href="@Release.HtmlUrl" target="_blank">Détails de la release</a></div>
+          <div class="col-xl-2 text-nowrap">@Release.Package.DownloadCount téléchargements</div>
+          <div class="col-xl-2">
+
+            @if (UpdaterService.IsExist(@Release))
+            {
+              <button id="install-@Release.Id" data-toggle="tooltip" title="L'installation peut prendre un certain temps. <br /> Vous devrez recharger la page dans 30 secondes environ." type="button" class="btn btn-danger" @onclick="@(() => OnInstall.InvokeAsync(Release))">Installer</button>
+            }
+            else
+            {
+              <button id="download-@Release.Id" type="button" class="btn btn-outline-success" @onclick="() => OnDownload.InvokeAsync(Release)">Obtenir</button>
+            }
+          </div>
+        </div>
+      </li>
+    </div>
+  </div>
+
+}
+
+@if (ReleaseImage is not null)
+{
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Une nouvelle image est disponible.</h2>
+      <p>Une nouvelle image est disponible, vous devez impérativement l'utiliser pour passer aux versions supérieures à la version @UpdaterService.CurrentMajor. </p>
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-xl-3 text-nowrap">
+            @ReleaseImage.Image.Name
+          </div>
+          <div class="col-xl-2 text-nowrap">@ReleaseImage.Created</div>
+
+          <div class="col-xl-2 offset-xl-5">
+            <a class="btn btn-success" href="@ReleaseImage.Image.DownloadUrl" role="button">Télécharger</a>
+          </div>
+        </div>
+      </li>
+    </div>
+  </div>
+
+}
+
+@code {
+  [Parameter]
+  public bool IsUpToDate { get; set; }
+
+  [Parameter]
+  public string CurrentVersion { get; set; }
+
+  [Parameter]
+  public Release Release { get; set; }
+
+  [Parameter]
+  public Release ReleaseImage { get; set; }
+
+  [Parameter]
+  public EventCallback<Release> OnDownload { get; set; }
+
+  [Parameter]
+  public EventCallback<Release> OnInstall { get; set; }
+
+  [Inject]
+  public UpdaterService UpdaterService { get; set; }
+
+}

@@ -1,50 +1,33 @@
 ﻿using DeviceId;
 
+using Microsoft.ApplicationInsights.AspNetCore.TelemetryInitializers;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
-using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.AspNetCore.Http;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace SvxlinkManager.Telemetry
 {
-  public class SvxlinkManagerTelemetry : ITelemetryInitializer
+  public class SvxlinkManagerTelemetry : TelemetryInitializerBase
   {
-    private string informationalVersion => Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+    private readonly string deviceId;
+    private readonly string version;
 
-    private string deviceId = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString();
-
-    public void Initialize(ITelemetry telemetry)
+    public SvxlinkManagerTelemetry(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
     {
-      telemetry.Context.Device.Id = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString();
+      deviceId = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString();
+      version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+    }
+
+    protected override void OnInitializeTelemetry(HttpContext platformContext, RequestTelemetry requestTelemetry, ITelemetry telemetry)
+    {
+      telemetry.Context.Device.Id = deviceId;
       telemetry.Context.Device.OperatingSystem = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
-      telemetry.Context.Component.Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-
-      switch (telemetry)
-      {
-        case RequestTelemetry requestTelemetry:
-          requestTelemetry.Properties["DeviceId"] = deviceId;
-          break;
-
-        case TraceTelemetry traceTelemetry:
-          traceTelemetry.Properties["DeviceId"] = deviceId;
-          break;
-
-        case EventTelemetry eventTelementry:
-          eventTelementry.Properties["DeviceId"] = deviceId;
-          break;
-
-        case PageViewTelemetry pageViewTelemetry:
-          pageViewTelemetry.Properties["DeviceId"] = deviceId;
-          break;
-
-        default:
-          break;
-      }
+      telemetry.Context.Component.Version = version;
+      telemetry.Context.User.AuthenticatedUserId = platformContext.User?.Identity.Name ?? string.Empty;
+      telemetry.Context.Cloud.RoleName = $"SvxlinkManager-{version}";
+      telemetry.Context.Cloud.RoleInstance = $"SvxlinkManager-{deviceId}";
     }
   }
 }

@@ -9,17 +9,34 @@
     </div>
   </div>
   <div class="form-row">
-    <div class="form-group col-md-6">
-      <label data-toggle="tooltip" title="La fréquence d'émission du module SA818.">Fréquence d'émission</label>
-      <InputText @bind-Value="RadioProfile.TxFrequ" type="text" class="form-control" id="inputHost" placeholder="145.450 ou 434.400" />
+    <div class="form-group col-md-4">
+      <label>Type de TRX</label>
+      <InputSelect @bind-Value="RadioProfile.Trx" class="form-control">
+        @foreach (var trx in RadioProfile.TrxTypes)
+{
+@if (RadioProfile.Trx == trx.Key)
+{
+<option selected value="@trx.Key">@trx.Value</option>
+}
+else
+{
+<option value="@trx.Key">@trx.Value</option>
+}
+}
+      </InputSelect>
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-4">
+      <label data-toggle="tooltip" title="La fréquence d'émission du module SA818.">Fréquence d'émission</label>
+      <InputText @bind-Value="RadioProfile.TxFrequ" type="text" class="form-control" id="inputHost" placeholder="145.450 ou 434.400 par exemple" />
+    </div>
+    <div class="form-group col-md-4">
       <label data-toggle="tooltip" title="La fréquence de récéption du module SA818.">Fréquence de récéption</label>
-      <InputText @bind-Value="RadioProfile.RxFequ" type="text" class="form-control" id="inputPort" placeholder="145.450 ou 434.400" />
+      <InputText @bind-Value="RadioProfile.RxFequ" type="text" class="form-control" id="inputPort" placeholder="145.450 ou 434.400 par exemple" />
     </div>
   </div>
+
   <div class="form-row">
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-4">
       <label>Tone CTCSS en émission</label>
       <InputSelect @bind-Value="RadioProfile.TxCtcss" class="form-control">
         @foreach (var ct in RadioProfile.Ctcss)
@@ -27,8 +44,9 @@
 <option value="@ct.Key">@ct.Value</option>
 }
       </InputSelect>
+      <ValidationMessage For="@(() => RadioProfile.TxCtcss)" />
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-4">
       <label>Tone CTCSS en récéption</label>
       <InputSelect @bind-Value="RadioProfile.RxCtcss" class="form-control">
         @foreach (var ct in RadioProfile.Ctcss)
@@ -36,8 +54,9 @@
 <option value="@ct.Key">@ct.Value</option>
 }
       </InputSelect>
+      <ValidationMessage For="@(() => RadioProfile.RxCtcss)" />
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-4">
       <label>Squelch</label>
       <InputSelect @bind-Value="RadioProfile.Squelch" class="form-control">
         <option value="0">0</option>
@@ -50,63 +69,7 @@
         <option value="7">7</option>
         <option value="8">8</option>
       </InputSelect>
-    </div>
-    <div class="form-group col-md-3">
-      <label>Squelch détection</label>
-      <InputSelect @bind-Value="RadioProfile.SquelchDetection" class="form-control">
-        <option value="CTCSS">CTCSS</option>
-        <option value="GPIO">GPIO</option>
-        <option value="VOX">VOX</option>
-      </InputSelect>
-    </div>
-  </div>
-  <div class="form-row">
-    <div class="form-group col-md-3">
-      <label>Volume</label>
-      <InputSelect @bind-Value="RadioProfile.Volume" class="form-control">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-      </InputSelect>
-    </div>
-    <div class="form-group col-md-3">
-      <label>Pre Emphasis</label>
-      <InputSelect @bind-Value="RadioProfile.PreEmph" class="form-control">
-        <option value="0">Désactivé</option>
-        <option value="1">Activé</option>
-      </InputSelect>
-    </div>
-    <div class="form-group col-md-3">
-      <label>Passe haut</label>
-      <InputSelect @bind-Value="RadioProfile.HightPass" class="form-control">
-        <option value="0">Désactivé</option>
-        <option value="1">Activé</option>
-      </InputSelect>
-    </div>
-    <div class="form-group col-md-3">
-      <label>Passe bas</label>
-      <InputSelect @bind-Value="RadioProfile.LowPass" class="form-control">
-        <option value="0">Désactivé</option>
-        <option value="1">Activé</option>
-      </InputSelect>
-    </div>
-  </div>
-  <div class="form-row">
-    <div class="form-group col-md-2">
-      <div class="form-check form-check-inline">
-        <div class="pretty p-default p-curve p-bigger">
-          <InputCheckbox @bind-Value="RadioProfile.HasSa818" type="checkbox" id="HasSa818" />
-          <div class="state">
-            <label data-toggle="tooltip" title="Indiquez si un module SA818 est présent.">SA818</label>
-          </div>
-        </div>
-      </div>
+      <ValidationMessage For="@(() => RadioProfile.Squelch)" />
     </div>
   </div>
   <button type="submit" class="btn btn-success">Sauver</button> <a class="btn btn-primary" href="RadioProfile/Manage" role="button">Annuler</a>
@@ -121,4 +84,5 @@
 
   [Parameter]
   public EventCallback<EditContext> HandleValidSubmit { get; set; }
+
 }

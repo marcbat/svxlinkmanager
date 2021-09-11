@@ -24,6 +24,8 @@ using SvxlinkManager.Telemetry;
 using Microsoft.ApplicationInsights;
 using DeviceId;
 using System.Reflection;
+using Microsoft.AspNetCore.Http;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 
 namespace SvxlinkManager
 {
@@ -72,6 +74,9 @@ namespace SvxlinkManager
       services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
       services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
 
+      services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+      services.AddSingleton<ITelemetryInitializer, SvxlinkManagerTelemetry>();
+
       // Password complexity
       services.Configure<IdentityOptions>(options =>
       {
@@ -111,14 +116,6 @@ namespace SvxlinkManager
 
         // start enable reflector
         svxlinkservice.StartEnableReflector();
-
-        // set telemetry global settings
-        var telemetry = serviceScope.ServiceProvider.GetRequiredService<TelemetryClient>();
-        var deviceId = new DeviceIdBuilder().AddMachineName().AddMacAddress().ToString();
-        telemetry.Context.GlobalProperties["DeviceId"] = deviceId;
-        telemetry.Context.Device.Id = deviceId;
-        telemetry.Context.Device.OperatingSystem = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
-        telemetry.Context.Component.Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
       }
 
       app.UseHttpsRedirection();
