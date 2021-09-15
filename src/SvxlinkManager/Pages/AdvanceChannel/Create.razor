@@ -1,8 +1,8 @@
 ﻿@using SvxlinkManager.Models
 
 @page "/AdvanceChannel/Create"
-@inherits SvxlinkManager.Pages.Channels.CreateBase<AdvanceSvxlinkChannel>
+@inherits SvxlinkManager.Pages.Channels.CreateBase<AdvanceSvxlinkChannel, Create>
 
-<h3>Ajouter un salon avancé</h3>
+<h3>@Loc["AddChannel"]</h3>
 
 <AddEditForm Channel="@Channel" HandleValidSubmit="@(()=>HandleValidSubmit("AdvanceChannel"))" SubmitTitle="@SubmitTitle" CanEditType="@CanEditType" />

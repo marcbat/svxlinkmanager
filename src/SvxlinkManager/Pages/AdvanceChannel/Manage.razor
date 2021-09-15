@@ -1,12 +1,12 @@
 ﻿@using SvxlinkManager.Models
 
 @page "/AdvanceChannel/Manage"
-@inherits SvxlinkManager.Pages.Channels.ManageBase<AdvanceSvxlinkChannel>
+@inherits SvxlinkManager.Pages.Channels.ManageBase<AdvanceSvxlinkChannel, Manage>
 
 <div class="row">
-  <div class="col-xl-2"><h3>Salons avancés</h3></div>
+  <div class="col-xl-2"><h3>@Loc["AvanceRoom"]</h3></div>
   <div class="col-xl-3 offset-xl-7">
-    <a class="btn btn-outline-success" href="AdvanceChannel/Create" role="button">Créer un nouveau salon avancé</a>
+    <a class="btn btn-outline-success" href="AdvanceChannel/Create" role="button">@Loc["BtnCreate"]</a>
   </div>
 </div>
 
@@ -17,15 +17,15 @@
       <div class="row">
         <div class="col-xl-7 text-nowrap">
           @if (channel.IsDefault)
-          {<span class="oi oi-home" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Le salon @channel.Name est actuellement le salon par défaut."></span>}
+          {<span class="oi oi-home" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="@string.Format(Loc["IsDefaultRoomToolTip"], channel.Name) "></span>}
           @if (channel.IsTemporized)
-          {<span class="oi oi-clock" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Le salon @channel.Name est temporisé."></span>}
+          {<span class="oi oi-clock" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="@string.Format(Loc["IsTemporizedRoomToolTip"], channel.Name)"></span>}
           &nbsp;@channel.Name
         </div>
         <div class="col-xl-3">DTMF: @channel.Dtmf</div>
         <div class="col-xl-2">
-          <a class="btn btn-outline-primary" href="AdvanceChannel/Edit/@channel.Id" role="button">Editer</a> &nbsp; @if (!channel.IsDefault)
-          {<button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(channel))">Supprimer</button>}
+          <a class="btn btn-outline-primary" href="AdvanceChannel/Edit/@channel.Id" role="button">@Loc["BtnEdit"]</a> &nbsp; @if (!channel.IsDefault)
+          {<button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(channel))">@Loc["BtnDelete"]</button>}
         </div>
       </div>
     </li>

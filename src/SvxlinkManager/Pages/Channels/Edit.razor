@@ -1,16 +1,12 @@
 ﻿@using SvxlinkManager.Models
-@using System.Globalization
-@using Microsoft.Extensions.Localization
 
 @page "/Channel/Edit/{Id}"
-@inherits SvxlinkManager.Pages.Channels.EditBase<SvxlinkChannel>
-
-@inject IStringLocalizer<Manage> Loc
+@inherits SvxlinkManager.Pages.Channels.EditBase<SvxlinkChannel, Edit>
 
 <h3>
   @if (Channel.IsDefault)
-  {<span class="oi oi-home" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Le salon @Channel.Name est actuellement le salon par défaut."></span>}
-  Editer @Channel.Name
+  {<span class="oi oi-home" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="@string.Format(Loc["RoomIsDefault"], Channel.Name)"></span>}
+  @string.Format(Loc["EditRoom"], Channel.Name)
 </h3>
 
 <AddEditForm Channel="@Channel" HandleValidSubmit="@(()=>HandleValidSubmit("Channel"))" SubmitTitle="@SubmitTitle" CanEditType="@CanEditType" />

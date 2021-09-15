@@ -117,10 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EditRoom" xml:space="preserve">
-    <value>Editer {0}</value>
-  </data>
-  <data name="RoomIsDefault" xml:space="preserve">
-    <value>Le salon {0} est actuellement le salon par défaut.</value>
+  <data name="AddChannel" xml:space="preserve">
+    <value>Ajouter un salon avancé</value>
   </data>
 </root>

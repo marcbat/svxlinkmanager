@@ -1,11 +1,7 @@
 ﻿@using SvxlinkManager.Models
-@using System.Globalization
-@using Microsoft.Extensions.Localization
 
 @page "/Channel/Create"
-@inherits SvxlinkManager.Pages.Channels.CreateBase<SvxlinkChannel>
-
-@inject IStringLocalizer<Manage> Loc
+@inherits SvxlinkManager.Pages.Channels.CreateBase<SvxlinkChannel, Create>
 
 <h3>@Loc["AddNewRoom"]</h3>
 

@@ -6,7 +6,7 @@
 <h3>
   @if (Channel.IsDefault)
   {<span class="oi oi-home" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Le salon @Channel.Name est actuellement le salon par défaut."></span>}
-  Editer @Channel.Name
+  @string.Format(Loc["EditChannel"], Channel.Name)
 </h3>
 
 <AddEditForm Channel="@Channel" HandleValidSubmit="@(()=>HandleValidSubmit("AdvanceChannel"))" SubmitTitle="@SubmitTitle" CanEditType="@CanEditType" />
