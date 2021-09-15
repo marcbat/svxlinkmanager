@@ -4,20 +4,21 @@
 @inherits SvxlinkManager.Pages.Channels.ManageBase<EcholinkChannel, Manage>
 
 <div class="row">
-  <div class="col-xl-2"><h3>Echolink</h3></div>
+  <div class="col-xl-2"><h3>@Loc["Echolink"]</h3></div>
   <div class="col-xl-3 offset-xl-7">
-    <a class="btn btn-outline-success" href="Echolink/Create" role="button">Créer une nouvelle configuration Echolink</a>
+    <a class="btn btn-outline-success" href="Echolink/Create" role="button">@Loc["CreateEcholinkRoom"]</a>
   </div>
 </div>
 <div class="row">
   <div class="col-md-12">
     <div class="alert alert-primary" role="alert">
-      Pour pouvoir utiliser les salons Echolink, vous devez ouvrir les ports suivant en entrée.<br />
+
+      @Loc["Documentation1"]<br />
       <ul>
-        <li>5198 et 5199 en UDP</li>
-        <li>5200 en TCP</li>
+        <li> @Loc["Documentation2"]</li>
+        <li> @Loc["Documentation3"]</li>
       </ul>
-      Lorsque vous sélectionnez un salon Echolink, il faut attendre au moins une dizaine de seconde avant qu'une connexion entrante puisse être établie.
+      @Loc["Documentation4"]
     </div>
   </div>
 </div>
@@ -29,16 +30,16 @@
       <div class="row">
         <div class="col-xl-3 text-nowrap">
           @if (channel.IsDefault)
-          {<span class="oi oi-home" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Le salon @channel.Name est actuellement le salon par défaut."></span>}
+          {<span class="oi oi-home" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="@string.Format(Loc["DefaultTooltip"], channel.Name)"></span>}
           @if (channel.IsTemporized)
-          {<span class="oi oi-clock" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Le salon @channel.Name est temporisé."></span>}
+          {<span class="oi oi-clock" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="@string.Format(Loc["TemporizedTooltip"], channel.Name)"></span>}
           &nbsp;@channel.Name
         </div>
         <div class="col-xl-2 text-nowrap">@channel.CallSign</div>
         <div class="col-xl-5 text-truncate">@channel.Host</div>
         <div class="col-xl-2">
-          <a class="btn btn-outline-primary" href="Echolink/Edit/@channel.Id" role="button">Editer</a> &nbsp; @if (!channel.IsDefault)
-          {<button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(channel))">Supprimer</button>}
+          <a class="btn btn-outline-primary" href="Echolink/Edit/@channel.Id" role="button">@Loc["BtnEdit"]</a> &nbsp; @if (!channel.IsDefault)
+          {<button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(channel))">@Loc["BtnDelete"]</button>}
         </div>
       </div>
     </li>
