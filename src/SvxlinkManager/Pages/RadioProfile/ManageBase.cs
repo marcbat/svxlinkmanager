@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.RadioProfile
 {
   [Authorize]
-  public class ManageBase : RepositoryComponentBase<ManageBase>
+  public class ManageBase : RepositoryComponentBase<Manage>
   {
     protected override async Task OnInitializedAsync()
     {

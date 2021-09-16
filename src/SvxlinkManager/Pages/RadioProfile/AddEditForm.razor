@@ -1,16 +1,21 @@
-﻿<EditForm Model="@RadioProfile" OnValidSubmit="@HandleValidSubmit">
+﻿@using System.Globalization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<AddEditForm> Loc
+
+<EditForm Model="@RadioProfile" OnValidSubmit="@HandleValidSubmit">
   <DataAnnotationsValidator />
   <ValidationSummary />
 
   <div class="form-row">
     <div class="form-group">
-      <label data-toggle="tooltip" title="Le nom du profil radio. <br /> Choisissez un nom unique.">Nom du profil</label>
-      <InputText @bind-Value="RadioProfile.Name" type="text" class="form-control" id="inputName" placeholder="Mon profil au QRA" />
+      <label data-toggle="tooltip" title="@Loc["InputNameToolTip"]">@Loc["InputNameLabel"]</label>
+      <InputText @bind-Value="RadioProfile.Name" type="text" class="form-control" id="inputName" placeholder="@Loc["InputNameplaceHolder"]" />
     </div>
   </div>
   <div class="form-row">
     <div class="form-group col-md-4">
-      <label>Type de TRX</label>
+      <label>@Loc["InputTrxTypeLabel"]</label>
       <InputSelect @bind-Value="RadioProfile.Trx" class="form-control">
         @foreach (var trx in RadioProfile.TrxTypes)
 {
@@ -26,18 +31,18 @@ else
       </InputSelect>
     </div>
     <div class="form-group col-md-4">
-      <label data-toggle="tooltip" title="La fréquence d'émission du module SA818.">Fréquence d'émission</label>
-      <InputText @bind-Value="RadioProfile.TxFrequ" type="text" class="form-control" id="inputHost" placeholder="145.450 ou 434.400 par exemple" />
+      <label data-toggle="tooltip" title="@Loc["La fréquence d'émission du module SA818."]">@Loc["Fréquence d'émission"]</label>
+      <InputText @bind-Value="RadioProfile.TxFrequ" type="text" class="form-control" id="inputTx" placeholder="@Loc["145.450 ou 434.400 par exemple"]" />
     </div>
     <div class="form-group col-md-4">
-      <label data-toggle="tooltip" title="La fréquence de récéption du module SA818.">Fréquence de récéption</label>
-      <InputText @bind-Value="RadioProfile.RxFequ" type="text" class="form-control" id="inputPort" placeholder="145.450 ou 434.400 par exemple" />
+      <label data-toggle="tooltip" title="@Loc["InputRxToolTip"]">@Loc["InputRxLabel"]</label>
+      <InputText @bind-Value="RadioProfile.RxFequ" type="text" class="form-control" id="inputRx" placeholder="@Loc["InputRxPlaceHolder"]" />
     </div>
   </div>
 
   <div class="form-row">
     <div class="form-group col-md-4">
-      <label>Tone CTCSS en émission</label>
+      <label>@Loc["InputTxCtcssLabel"]</label>
       <InputSelect @bind-Value="RadioProfile.TxCtcss" class="form-control">
         @foreach (var ct in RadioProfile.Ctcss)
 {
@@ -47,7 +52,7 @@ else
       <ValidationMessage For="@(() => RadioProfile.TxCtcss)" />
     </div>
     <div class="form-group col-md-4">
-      <label>Tone CTCSS en récéption</label>
+      <label>@Loc["InputRxCtcssLabel"]</label>
       <InputSelect @bind-Value="RadioProfile.RxCtcss" class="form-control">
         @foreach (var ct in RadioProfile.Ctcss)
 {
@@ -57,7 +62,7 @@ else
       <ValidationMessage For="@(() => RadioProfile.RxCtcss)" />
     </div>
     <div class="form-group col-md-4">
-      <label>Squelch</label>
+      <label>@Loc["InputSquelchLabel"]</label>
       <InputSelect @bind-Value="RadioProfile.Squelch" class="form-control">
         <option value="0">0</option>
         <option value="1">1</option>
@@ -72,7 +77,7 @@ else
       <ValidationMessage For="@(() => RadioProfile.Squelch)" />
     </div>
   </div>
-  <button type="submit" class="btn btn-success">Sauver</button> <a class="btn btn-primary" href="RadioProfile/Manage" role="button">Annuler</a>
+  <button type="submit" class="btn btn-success">Sauver</button> <a class="btn btn-primary" href="RadioProfile/Manage" role="button">@Loc["BtnCancel"]</a>
 </EditForm>
 
 @code{
