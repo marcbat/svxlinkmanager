@@ -1,3 +1,6 @@
 files:
   - source: /src/SvxlinkManager/Resources
+    ignore:
+      - /src/SvxlinkManager/Resources/**/*.en.resx
+      - /src/SvxlinkManager/Resources/**/*.it.resx
     translation: /%original_path%/%file_name%.%two_letters_code%.%file_extension%
