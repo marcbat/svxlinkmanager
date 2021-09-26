@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BtnCancel" xml:space="preserve">
-    <value>Annuler</value>
+    <value>Cancel</value>
   </data>
   <data name="Here" xml:space="preserve">
-    <value>ici</value>
+    <value>here</value>
   </data>
   <data name="InputDtmfLabel" xml:space="preserve">
     <value>DTMF</value>
@@ -130,7 +130,7 @@
     <value>100</value>
   </data>
   <data name="InputDtmfToolTip" xml:space="preserve">
-    <value>Le DTMF à composer pour activer le salon.</value>
+    <value>The DTMF will dial to activate the room.</value>
   </data>
   <data name="InputIsDefaultLabel" xml:space="preserve">
     <value>Salon par défaut</value>
