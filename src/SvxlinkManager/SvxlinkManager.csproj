@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="Resources\Pages\Reflector\Create.fr.resx" />
+    <EmbeddedResource Remove="Resources\Pages\Reflector\Create.resx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -76,11 +76,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Resources\Pages\Reflector\Create.fr.resx" />
+    <None Include="Resources\Pages\Reflector\Create.resx" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Pages\Installer\Resume.fr.resx">
+    <EmbeddedResource Update="Resources\Pages\Installer\Resume.resx">
       <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>
