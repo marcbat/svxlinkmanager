@@ -1,27 +1,32 @@
-﻿<div class="alert @UserStatus" role="alert">
-  Création de l'utilisateur
+﻿@using System.Globalization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<InstallProgress> Loc
+
+<div class="alert @UserStatus" role="alert">
+  @Loc["UserCreate"]
 </div>
 
 <div class="alert @ChannelsStatus" role="alert">
-  Installation des salons
+  @Loc["ChannelsInstall"]
 </div>
 
 <div class="alert @DefaultChannelStatus" role="alert">
-  Définition du salon principal
+  @Loc["SetDefaultChannel"]
 </div>
 
 <div class="alert @RadioProfileStatus" role="alert">
-  Création du profil radio
+  @Loc["RadioProfileCreate"]
 </div>
 
 @if (Home.InstallerModel.UpdateToLastRelease)
 {
   <div class="alert @DownloadStatus" role="alert">
-    Téléchargement de la mise à jour. @DownloadProgress %
+    @Loc["DownloadRelease"] @DownloadProgress %
   </div>
 
   <div class="alert @InstallStatus" role="alert">
-    Installation de la mise à jour. Vous pourrez recharger la page dans 30 secondes environs.
+    @Loc["InstallRelease"]
   </div>
 }
 

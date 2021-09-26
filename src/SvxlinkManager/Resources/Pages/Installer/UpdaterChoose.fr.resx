@@ -118,29 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AlertHeader" xml:space="preserve">
-    <value>Pour pouvoir utiliser les salons Echolink, vous devez ouvrir les ports suivant en entrée.&lt;br /&gt;
-      &lt;ul&gt;
-        &lt;li&gt; 5198 et 5199 en UDP&lt;/li&gt;
-        &lt;li&gt; 5200 en TCP&lt;/li&gt;
-      &lt;/ul&gt;
-      Lorsque vous sélectionnez un salon Echolink, il faut attendre au moins une dizaine de seconde avant qu'une connexion entrante puisse être établie.</value>
+    <value>Une mise à jour est disponible. Voulez vous l'installer?</value>
   </data>
-  <data name="BtnDelete" xml:space="preserve">
-    <value>Supprimer</value>
+  <data name="AvailbleVersion" xml:space="preserve">
+    <value>Version disponible</value>
   </data>
-  <data name="BtnEdit" xml:space="preserve">
-    <value>Editer</value>
+  <data name="BtnNext" xml:space="preserve">
+    <value>Suivant</value>
   </data>
-  <data name="CreateEcholinkRoom" xml:space="preserve">
-    <value>Créer une nouvelle configuration Echolink</value>
+  <data name="BtnPreview" xml:space="preserve">
+    <value>Précédent</value>
   </data>
-  <data name="DefaultTooltip" xml:space="preserve">
-    <value>Le salon {0} est actuellement le salon par défaut.</value>
+  <data name="CurrentVersion" xml:space="preserve">
+    <value>Version actuelle</value>
   </data>
-  <data name="Echolink" xml:space="preserve">
-    <value>Echolink</value>
-  </data>
-  <data name="TemporizedTooltip" xml:space="preserve">
-    <value>Le salon @channel.Name est temporisé.</value>
+  <data name="Update" xml:space="preserve">
+    <value>Mettre à jour</value>
   </data>
 </root>

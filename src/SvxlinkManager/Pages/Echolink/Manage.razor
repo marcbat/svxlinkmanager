@@ -12,13 +12,7 @@
 <div class="row">
   <div class="col-md-12">
     <div class="alert alert-primary" role="alert">
-
-      @Loc["Documentation1"]<br />
-      <ul>
-        <li> @Loc["Documentation2"]</li>
-        <li> @Loc["Documentation3"]</li>
-      </ul>
-      @Loc["Documentation4"]
+      @AlertHeader
     </div>
   </div>
 </div>
@@ -45,3 +39,9 @@
     </li>
   }
 </ul>
+
+@code {
+
+  public MarkupString AlertHeader => new MarkupString(Loc["AlertHeader"]);
+
+}

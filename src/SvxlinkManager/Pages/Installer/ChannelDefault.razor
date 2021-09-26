@@ -1,8 +1,11 @@
 ﻿@using SvxlinkManager.Models;
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<ChannelDefault> Loc
 
 <div class="alert alert-primary" role="alert">
-  Ok, maintenant, merci de choisir, parmis les salons que vous allez concerver, lequel sera le <strong>salon par défaut</strong>.<br />
-  Ce salon sera celui vers lequel retourneront les salons en fin de temporisation ou le scanner au terme d'une période d'inactivité.
+  @AlertHeader
 </div>
 
 <EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.RadioProfile)">
@@ -33,7 +36,7 @@
     </div>
   </div>
 
-  <button class="btn btn-primary" type="button" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Channel)">Précédent</button> <button class="btn btn-primary" type="submit">Suivant</button>
+  <button class="btn btn-primary" type="button" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Channel)">@Loc["BtnPreview"]</button> <button class="btn btn-primary" type="submit">@Loc["BtnNext"]</button>
 </EditForm>
 
 @code {
@@ -49,4 +52,7 @@
       InstallerModel.DefaultChannel = channel;
 
   }
+
+  public MarkupString AlertHeader => new MarkupString(Loc["AlertHeader"]);
+
 }

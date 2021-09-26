@@ -1,16 +1,21 @@
-﻿<div class="alert alert-primary" role="alert">
-  Merci de vérifier les informations ci-dessous et de lancer l'installation.
+﻿@using System.Globalization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<Resume> Loc
+
+<div class="alert alert-primary" role="alert">
+  @Loc["AlertHeader"]
 </div>
 
 <EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.Progress)">
 
-  <h4>Informations générales</h4>
+  <h4>@Loc["GeneralInfos"]</h4>
   <ul id="channel-manage-list" class="list-group-horizontal">
 
     <li class="list-group-item">
       <div class="row">
         <div class="col-xl-2  text-nowrap font-weight-bold">
-          Utilisateur
+          @Loc["UserLabel"]
         </div>
         <div class="col-xl-10">@InstallerModel.UserName</div>
       </div>
@@ -18,7 +23,7 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col-xl-2  text-nowrap font-weight-bold">
-          Indicatif
+          @Loc["CallLabel"]
         </div>
         <div class="col-xl-10">@InstallerModel.CallSign</div>
       </div>
@@ -26,7 +31,7 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col-xl-2  text-nowrap font-weight-bold">
-          Indicatif annoncé
+          @Loc["AnnoncedCallLabel"]
         </div>
         <div class="col-xl-10">@InstallerModel.AnnonceCallSign</div>
       </div>
@@ -34,7 +39,7 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col-xl-2  text-nowrap font-weight-bold">
-          Salons à installer
+          @Loc["ChannelsToInstall"]
         </div>
         <div class="col-xl-10">@InstallerModel.ChannelsToPreservedList</div>
       </div>
@@ -42,7 +47,7 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col-xl-2  text-nowrap font-weight-bold">
-          Salons principal
+          @Loc["DefaultChannel"]
         </div>
         <div class="col-xl-10">@InstallerModel.DefaultChannel.Name</div>
       </div>
@@ -55,7 +60,7 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col-xl-2  text-nowrap font-weight-bold">
-          Fréquence RX
+          @Loc["RxFrequencyLabel"]
         </div>
         <div class="col-xl-10">@InstallerModel.RadioProfile.RxFequ CTCSS: @InstallerModel.RadioProfile.RxTone</div>
       </div>
@@ -63,7 +68,7 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col-xl-2  text-nowrap font-weight-bold">
-          Fréquence TX
+          @Loc["TxFrequencyLabel"]
         </div>
         <div class="col-xl-10">@InstallerModel.RadioProfile.TxFrequ CTCSS: @InstallerModel.RadioProfile.TxTone</div>
       </div>
@@ -72,16 +77,16 @@
 
   @if (InstallerModel.UpdateToLastRelease)
   {
-    <h4>Mise à jour</h4>
+    <h4>@Loc["UpdateTitle"]</h4>
     <div class="alert alert-warning" role="alert">
-      Attention, la mise à jour redémarre automatiquement l'application. Vous devrez recharger la page dans 30 seconde environ.
+      @Loc["AlertInstall"]
     </div>
     <ul id="channel-manage-list" class="list-group-horizontal">
 
       <li class="list-group-item">
         <div class="row">
           <div class="col-xl-2  text-nowrap font-weight-bold">
-            Mise à jour à installer
+            @Loc["ReleaseToInstall"]
           </div>
           <div class="col-xl-10">@InstallerModel.LastRelease.TagName</div>
         </div>
@@ -90,7 +95,7 @@
 
   }
 
-  <button class="btn btn-primary" type="button" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Security)">Modifier</button> <button class="btn btn-danger" type="submit">Installer</button>
+  <button class="btn btn-primary" type="button" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Security)">@Loc["BtnUpdate"]</button> <button class="btn btn-danger" type="submit">@Loc["BtnInstall"]</button>
 </EditForm>
 
 @code {

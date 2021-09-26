@@ -1,8 +1,11 @@
 ﻿@using SvxlinkManager.Models;
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<RadioProfileDefault> Loc
 
 <div class="alert alert-primary" role="alert">
-  Il est maintenant temps de configurer le profil radio par défaut.<br />
-  Choisis une fréquence d'émission et de récéption ainsi que les tones CTCSS.
+  @AlertHeader
 </div>
 
 <EditForm Model="@InstallerModel.RadioProfile" OnValidSubmit="() => OnSubmit.InvokeAsync(InstallationStatus.Wifi)">
@@ -10,35 +13,35 @@
 
   <div class="form-row">
     <div class="form-group col-md-4">
-      <label>Type de TRX</label>
+      <label>@Loc["InputTrxTypeLabel"]</label>
       <InputSelect @bind-Value="InstallerModel.RadioProfile.Trx" class="form-control">
         @foreach (var trx in InstallerModel.RadioProfile.TrxTypes)
-        {
-          @if (InstallerModel.RadioProfile.Trx == trx.Key)
-          {
-          <option selected value="@trx.Key">@trx.Value</option>
-          }
-          else
-          {
-          <option value="@trx.Key">@trx.Value</option>
-          }
-        }
+{
+@if (InstallerModel.RadioProfile.Trx == trx.Key)
+{
+<option selected value="@trx.Key">@trx.Value</option>
+}
+else
+{
+<option value="@trx.Key">@trx.Value</option>
+}
+}
       </InputSelect>
     </div>
     <div class="form-group col-md-4">
-      <label data-toggle="tooltip" title="La fréquence d'émission du module SA818.">Fréquence d'émission</label>
-      <InputText @bind-Value="InstallerModel.RadioProfile.TxFrequ" type="text" class="form-control" id="inputHost" placeholder="145.450 ou 434.400 par exemple" />
+      <label data-toggle="tooltip" title="@Loc["InputTxToolTip"]">@Loc["InputTxLabel"]</label>
+      <InputText @bind-Value="InstallerModel.RadioProfile.TxFrequ" type="text" class="form-control" id="inputTx" placeholder="@Loc["InputTxPlaceHolder"]" />
       <ValidationMessage For="@(() => InstallerModel.RadioProfile.TxFrequ)" />
     </div>
     <div class="form-group col-md-4">
-      <label data-toggle="tooltip" title="La fréquence de récéption du module SA818.">Fréquence de récéption</label>
-      <InputText @bind-Value="InstallerModel.RadioProfile.RxFequ" type="text" class="form-control" id="inputPort" placeholder="145.450 ou 434.400 par exemple" />
+      <label data-toggle="tooltip" title="@Loc["InputRxToolTip"]">@Loc["InputRxLabel"]</label>
+      <InputText @bind-Value="InstallerModel.RadioProfile.RxFequ" type="text" class="form-control" id="inputRx" placeholder="@Loc["InputRxPlaceHolder"]" />
       <ValidationMessage For="@(() => InstallerModel.RadioProfile.RxFequ)" />
     </div>
   </div>
   <div class="form-row">
     <div class="form-group col-md-4">
-      <label>Tone CTCSS en émission</label>
+      <label>@Loc["InputTxCtcssLabel"]</label>
       <InputSelect @bind-Value="InstallerModel.RadioProfile.TxCtcss" class="form-control">
         @foreach (var ct in InstallerModel.RadioProfile.Ctcss)
 {
@@ -48,7 +51,7 @@
       <ValidationMessage For="@(() => InstallerModel.RadioProfile.TxCtcss)" />
     </div>
     <div class="form-group col-md-4">
-      <label>Tone CTCSS en récéption</label>
+      <label>@Loc["InputRxCtcssLabel"]</label>
       <InputSelect @bind-Value="InstallerModel.RadioProfile.RxCtcss" class="form-control">
         @foreach (var ct in InstallerModel.RadioProfile.Ctcss)
 {
@@ -74,7 +77,7 @@
     </div>
   </div>
 
-  <button class="btn btn-primary" type="button" role="button" @onclick="() => OnSubmit.InvokeAsync(InstallationStatus.DefaultChannel)">Précédent</button> <button class="btn btn-primary" type="submit">Suivant</button>
+  <button class="btn btn-primary" type="button" role="button" @onclick="() => OnSubmit.InvokeAsync(InstallationStatus.DefaultChannel)">@Loc["BtnPreview"]</button> <button class="btn btn-primary" type="submit">@Loc["BtnNext"]</button>
 </EditForm>
 
 @code {
@@ -100,4 +103,6 @@
     }
 
   }
+
+  public MarkupString AlertHeader => new MarkupString(Loc["AlertHeader"]);
 }

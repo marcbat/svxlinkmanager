@@ -1,13 +1,17 @@
 ﻿@using SvxlinkManager.Pages.Wifi
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<WifiChoose> Loc
 
 <div class="alert alert-primary" role="alert">
-  Si vous le souhaitez, vous pouvez connecter un ou plusieurs Wifi.
+  @Loc["AlertHeader"]
 </div>
 
 @if (InstallerModel.Devices == null)
 {
   <div class="alert alert-primary" role="alert">
-    Recherche de réseau wifi
+    @Loc["SearchForWifi"]
   </div>
 }
 else
@@ -34,8 +38,8 @@ else
     }
   </ul>
 }
-<button class="btn btn-primary" type="button" role="button" @onclick="() => OnSubmit.InvokeAsync(InstallationStatus.RadioProfile)">Précédent</button>
-<button class="btn btn-primary" type="button" @onclick="() => OnSubmit.InvokeAsync(InstallationStatus.Update)">Suivant</button>
+<button class="btn btn-primary" type="button" role="button" @onclick="() => OnSubmit.InvokeAsync(InstallationStatus.RadioProfile)">@Loc["BtnPreview"]</button>
+<button class="btn btn-primary" type="button" @onclick="() => OnSubmit.InvokeAsync(InstallationStatus.Update)">@Loc["BtnNext"]</button>
 
 @code  {
   [Parameter]

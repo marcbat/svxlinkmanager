@@ -118,29 +118,45 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AlertHeader" xml:space="preserve">
-    <value>Pour pouvoir utiliser les salons Echolink, vous devez ouvrir les ports suivant en entrée.&lt;br /&gt;
-      &lt;ul&gt;
-        &lt;li&gt; 5198 et 5199 en UDP&lt;/li&gt;
-        &lt;li&gt; 5200 en TCP&lt;/li&gt;
-      &lt;/ul&gt;
-      Lorsque vous sélectionnez un salon Echolink, il faut attendre au moins une dizaine de seconde avant qu'une connexion entrante puisse être établie.</value>
+    <value>Merci de vérifier les informations ci-dessous et de lancer l'installation.</value>
   </data>
-  <data name="BtnDelete" xml:space="preserve">
-    <value>Supprimer</value>
+  <data name="AlertInstall" xml:space="preserve">
+    <value>Attention, la mise à jour redémarre automatiquement l'application. Vous devrez recharger la page dans 30 seconde environ.</value>
   </data>
-  <data name="BtnEdit" xml:space="preserve">
-    <value>Editer</value>
+  <data name="AnnoncedCallLabel" xml:space="preserve">
+    <value>Indicatif annoncé</value>
   </data>
-  <data name="CreateEcholinkRoom" xml:space="preserve">
-    <value>Créer une nouvelle configuration Echolink</value>
+  <data name="BtnInstall" xml:space="preserve">
+    <value>Installer</value>
   </data>
-  <data name="DefaultTooltip" xml:space="preserve">
-    <value>Le salon {0} est actuellement le salon par défaut.</value>
+  <data name="BtnUpdate" xml:space="preserve">
+    <value>Modifier</value>
   </data>
-  <data name="Echolink" xml:space="preserve">
-    <value>Echolink</value>
+  <data name="CallLabel" xml:space="preserve">
+    <value>Indicatif</value>
   </data>
-  <data name="TemporizedTooltip" xml:space="preserve">
-    <value>Le salon @channel.Name est temporisé.</value>
+  <data name="ChannelsToInstall" xml:space="preserve">
+    <value>Salons à installer</value>
+  </data>
+  <data name="DefaultChannel" xml:space="preserve">
+    <value>Salons principal</value>
+  </data>
+  <data name="GeneralInfos" xml:space="preserve">
+    <value>Informations générales</value>
+  </data>
+  <data name="ReleaseToInstall" xml:space="preserve">
+    <value>Mise à jour à installer</value>
+  </data>
+  <data name="RxFrequencyLabel" xml:space="preserve">
+    <value>Fréquence RX</value>
+  </data>
+  <data name="TxFrequencyLabel" xml:space="preserve">
+    <value>Fréquence TX</value>
+  </data>
+  <data name="UpdateTitle" xml:space="preserve">
+    <value>Mise à jour</value>
+  </data>
+  <data name="UserLabel" xml:space="preserve">
+    <value>Utilisateur</value>
   </data>
 </root>

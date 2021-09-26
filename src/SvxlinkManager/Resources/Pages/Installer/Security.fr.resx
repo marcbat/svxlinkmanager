@@ -118,29 +118,37 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AlertHeader" xml:space="preserve">
-    <value>Pour pouvoir utiliser les salons Echolink, vous devez ouvrir les ports suivant en entrée.&lt;br /&gt;
-      &lt;ul&gt;
-        &lt;li&gt; 5198 et 5199 en UDP&lt;/li&gt;
-        &lt;li&gt; 5200 en TCP&lt;/li&gt;
-      &lt;/ul&gt;
-      Lorsque vous sélectionnez un salon Echolink, il faut attendre au moins une dizaine de seconde avant qu'une connexion entrante puisse être établie.</value>
+    <value>Nous allons installer &lt;strong&gt;Svxlink Manager&lt;/strong&gt; ensemble.&lt;br /&gt;
+  Commençons par vous choisir un nom d'utilisateur et un mot de passe pour vos prochaines connexions.</value>
   </data>
-  <data name="BtnDelete" xml:space="preserve">
-    <value>Supprimer</value>
+  <data name="BtnNext" xml:space="preserve">
+    <value>Suivant</value>
   </data>
-  <data name="BtnEdit" xml:space="preserve">
-    <value>Editer</value>
+  <data name="Password2Label" xml:space="preserve">
+    <value>Saisissez à nouveau votre mot de passe</value>
   </data>
-  <data name="CreateEcholinkRoom" xml:space="preserve">
-    <value>Créer une nouvelle configuration Echolink</value>
+  <data name="Password2PlaceHolder" xml:space="preserve">
+    <value>Mot de passe pour vérification</value>
   </data>
-  <data name="DefaultTooltip" xml:space="preserve">
-    <value>Le salon {0} est actuellement le salon par défaut.</value>
+  <data name="Password2ToolTip" xml:space="preserve">
+    <value>Saisissez à nouveau le mot de passe qui vous servira à acceder à SvxlinkManager.</value>
   </data>
-  <data name="Echolink" xml:space="preserve">
-    <value>Echolink</value>
+  <data name="PasswordLabel" xml:space="preserve">
+    <value>Mot de passe</value>
   </data>
-  <data name="TemporizedTooltip" xml:space="preserve">
-    <value>Le salon @channel.Name est temporisé.</value>
+  <data name="PasswordPlaceHolder" xml:space="preserve">
+    <value>Mot de passe</value>
+  </data>
+  <data name="PasswordToolTip" xml:space="preserve">
+    <value>Le mot de passe qui vous servira à acceder à SvxlinkManager.</value>
+  </data>
+  <data name="UserNameLabel" xml:space="preserve">
+    <value>Nom d'utilisateur</value>
+  </data>
+  <data name="UserNamePlaceHolder" xml:space="preserve">
+    <value>Votre nom d'utilisateur doit être un email valide</value>
+  </data>
+  <data name="UserNameToolTip" xml:space="preserve">
+    <value>Le nom d'utilisateur qui vous servira à vous connecter à SvxlinkManager.</value>
   </data>
 </root>

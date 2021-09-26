@@ -118,29 +118,40 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AlertHeader" xml:space="preserve">
-    <value>Pour pouvoir utiliser les salons Echolink, vous devez ouvrir les ports suivant en entrée.&lt;br /&gt;
-      &lt;ul&gt;
-        &lt;li&gt; 5198 et 5199 en UDP&lt;/li&gt;
-        &lt;li&gt; 5200 en TCP&lt;/li&gt;
-      &lt;/ul&gt;
-      Lorsque vous sélectionnez un salon Echolink, il faut attendre au moins une dizaine de seconde avant qu'une connexion entrante puisse être établie.</value>
+    <value>Il est maintenant temps de configurer le profil radio par défaut.&lt;br /&gt;
+  Choisis une fréquence d'émission et de récéption ainsi que les tones CTCSS.</value>
   </data>
-  <data name="BtnDelete" xml:space="preserve">
-    <value>Supprimer</value>
+  <data name="BtnNext" xml:space="preserve">
+    <value>Suivant</value>
   </data>
-  <data name="BtnEdit" xml:space="preserve">
-    <value>Editer</value>
+  <data name="BtnPreview" xml:space="preserve">
+    <value>Précédent</value>
   </data>
-  <data name="CreateEcholinkRoom" xml:space="preserve">
-    <value>Créer une nouvelle configuration Echolink</value>
+  <data name="InputRxCtcssLabel" xml:space="preserve">
+    <value>Tone CTCSS en récéption</value>
   </data>
-  <data name="DefaultTooltip" xml:space="preserve">
-    <value>Le salon {0} est actuellement le salon par défaut.</value>
+  <data name="InputRxLabel" xml:space="preserve">
+    <value>Fréquence de récéption</value>
   </data>
-  <data name="Echolink" xml:space="preserve">
-    <value>Echolink</value>
+  <data name="InputRxPlaceHolder" xml:space="preserve">
+    <value>145.450 ou 434.400 par exemple</value>
   </data>
-  <data name="TemporizedTooltip" xml:space="preserve">
-    <value>Le salon @channel.Name est temporisé.</value>
+  <data name="InputRxToolTip" xml:space="preserve">
+    <value>La fréquence de récéption du module SA818.</value>
+  </data>
+  <data name="InputTrxTypeLabel" xml:space="preserve">
+    <value>Type de TRX</value>
+  </data>
+  <data name="InputTxCtcssLabel" xml:space="preserve">
+    <value>Tone CTCSS en émission</value>
+  </data>
+  <data name="InputTxLabel" xml:space="preserve">
+    <value>Fréquence d'émission</value>
+  </data>
+  <data name="InputTxPlaceHolder" xml:space="preserve">
+    <value>145.450 ou 434.400 par exemple</value>
+  </data>
+  <data name="InputTxToolTip" xml:space="preserve">
+    <value>La fréquence d'émission du module SA818.</value>
   </data>
 </root>
