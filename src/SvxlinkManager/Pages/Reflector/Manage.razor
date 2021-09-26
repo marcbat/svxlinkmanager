@@ -1,32 +1,25 @@
-﻿@page "/Reflector/Manage"
+﻿@using Microsoft.AspNetCore.Html
+
+@page "/Reflector/Manage"
 @inherits SvxlinkManager.Pages.Reflector.ManageBase
 
 <div class="row">
-  <div class="col-xl-2"><h3>Réflecteurs</h3></div>
+  <div class="col-xl-2"><h3>@Loc["Title"]</h3></div>
   <div class="col-xl-2 offset-xl-8">
-    <a class="btn btn-outline-success" href="Reflector/Create" role="button">Créer un nouveau reflecteur</a>
+    <a class="btn btn-outline-success" href="Reflector/Create" role="button">@Loc["BtnCreate"]</a>
   </div>
 </div>
 <div class="row">
   <div class="col-md-12">
     <div class="alert alert-primary" role="alert">
-      <p>Pour pouvoir utiliser les reflecteurs, vous devez ouvrir le port indiqué dans la configuration de votre reflecteur à la ligne <strong>LISTEN_PORT</strong> à la fois en TCP et UDP.</p>
-      <p>
-        Vous pouvez créer un salon qui pointe vers votre reflecteur en utilisant le paramètres suivants:
-        <ul>
-          <li>Adresse du reflector: localhost</li>
-          <li>Port: La valeur du paramètre <strong>LISTEN_PORT</strong></li>
-          <li>Utilisateur svxreflector: L'un des utilisateurs renseigné dans la section <strong>[USERS]</strong></li>
-          <li>Mot de passe: le mot de passe associé à l'utilisateur et renseigné dans la partie <strong>[PASSWORDS]</strong></li>
-        </ul>
-      </p>
+      @AlertHeader
     </div>
   </div>
 </div>
 <div class="row">
   <div class="col-md-12">
     <div class="alert alert-danger" role="alert">
-      <p>Vous ne pouvez pas activer deux reflecteurs sur le même port en même temps.</p>
+      <p>@Loc["DangerSamePort"]</p>
     </div>
   </div>
 </div>
@@ -41,7 +34,7 @@
           @if (rp.Enable)
           {
             <div class="blink d-inline-block" style="margin-left:10px;">
-              <span class="badge badge-danger">ON AIR</span>
+              <span class="badge badge-danger">@Loc["OnAir"]</span>
             </div>
           }
         </div>
@@ -52,19 +45,25 @@
 
           @if (!rp.Enable)
           {
-            <button type="button" class="btn btn-outline-success" @onclick="@(() => StartAsync(rp.Id))">Démarrer</button>
+            <button type="button" class="btn btn-outline-success" @onclick="@(() => StartAsync(rp.Id))">@Loc["BtnRun"]</button>
           }
           else
           {
-            <button type="button" class="btn btn-outline-success" @onclick="@(() => StopAsync(rp.Id))">Arrêter</button>
+            <button type="button" class="btn btn-outline-success" @onclick="@(() => StopAsync(rp.Id))">@Loc["BtnStop"]</button>
           }
-          &nbsp;<a class="btn btn-outline-primary" href="Reflector/Edit/@rp.Id" role="button">Editer</a>&nbsp;
+          &nbsp;<a class="btn btn-outline-primary" href="Reflector/Edit/@rp.Id" role="button">@Loc["BtnEdit"]</a>&nbsp;
           @if (!rp.Enable)
           {
-            <button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(rp.Id))">Supprimer</button>
+            <button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(rp.Id))">@Loc["BtnDelete"]</button>
           }
         </div>
       </div>
     </li>
   }
 </ul>
+
+@code{
+
+  public MarkupString AlertHeader => new MarkupString(Loc["AlertHeader"]);
+
+}

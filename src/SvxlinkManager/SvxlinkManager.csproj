@@ -17,6 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Remove="Resources\Pages\Reflector\Create.fr.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Scripts\Editor.ts" />
   </ItemGroup>
 
@@ -24,6 +28,7 @@
     <PackageReference Include="DeviceId" Version="5.2.0" />
     <PackageReference Include="FluentValidation" Version="9.5.3" />
     <PackageReference Include="ini-parser-netstandard" Version="2.5.2" />
+    <PackageReference Include="Markdig" Version="0.26.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
@@ -68,6 +73,10 @@
 
   <ItemGroup>
     <Folder Include="SvxlinkConfig\svxlink.d\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Resources\Pages\Reflector\Create.fr.resx" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

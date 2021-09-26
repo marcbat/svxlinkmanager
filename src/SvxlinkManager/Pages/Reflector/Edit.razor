@@ -1,6 +1,6 @@
 ﻿@page "/Reflector/Edit/{Id}"
 @inherits SvxlinkManager.Pages.Reflector.EditBase
 
-<h3>Editer @Reflector.Name</h3>
+<h3>@Loc["Title", @Reflector.Name] </h3>
 
 <AddEditForm Reflector="@Reflector" HandleValidSubmit="@HandleValidSubmitAsync" SubmitTitle="@SubmitTitle" />
