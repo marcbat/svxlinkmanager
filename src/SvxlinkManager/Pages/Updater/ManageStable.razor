@@ -1,12 +1,16 @@
 ﻿@using SvxlinkManager.Service
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<Manage> Loc
 
 @if (IsUpToDate)
 {
   <div class="row">
     <div class="col-md-12">
       <div class="alert alert-success" role="alert">
-        <h2>Svxlink Manager est à jour.</h2>
-        <h3>Version actuelle @CurrentVersion</h3>
+        <h2>@Loc["IsUpToDate"]</h2>
+        <h3>@Loc["CurrentVersion", @CurrentVersion]</h3>
       </div>
     </div>
   </div>
@@ -16,24 +20,24 @@ else
 
   <div class="row">
     <div class="col-md-12">
-      <h2>Une nouvelle version est disponible.</h2>
+      <h2>@Loc["NewVersionAvailable"]</h2>
       <li class="list-group-item">
         <div class="row">
           <div class="col-xl-3 text-nowrap">
             @Release.Name
           </div>
           <div class="col-xl-2 text-nowrap">@Release.Created</div>
-          <div class="col-xl-3 text-truncate"><a href="@Release.HtmlUrl" target="_blank">Détails de la release</a></div>
-          <div class="col-xl-2 text-nowrap">@Release.Package.DownloadCount téléchargements</div>
+          <div class="col-xl-3 text-truncate"><a href="@Release.HtmlUrl" target="_blank">@Loc["ReleaseDetails"]</a></div>
+          <div class="col-xl-2 text-nowrap"> @Loc["Downloads", @Release.Package.DownloadCount]</div>
           <div class="col-xl-2">
 
             @if (UpdaterService.IsExist(@Release))
             {
-              <button id="install-@Release.Id" data-toggle="tooltip" title="L'installation peut prendre un certain temps. <br /> Vous devrez recharger la page dans 30 secondes environ." type="button" class="btn btn-danger" @onclick="@(() => OnInstall.InvokeAsync(Release))">Installer</button>
+              <button id="install-@Release.Id" data-toggle="tooltip" title="@Loc["BtnInstallerToolTip"]" type="button" class="btn btn-danger" @onclick="@(() => OnInstall.InvokeAsync(Release))">@Loc["BtnInstaller"]</button>
             }
             else
             {
-              <button id="download-@Release.Id" type="button" class="btn btn-outline-success" @onclick="() => OnDownload.InvokeAsync(Release)">Obtenir</button>
+              <button id="download-@Release.Id" type="button" class="btn btn-outline-success" @onclick="() => OnDownload.InvokeAsync(Release)">@Loc["BtnDownload"]</button>
             }
           </div>
         </div>
@@ -47,8 +51,8 @@ else
 {
   <div class="row">
     <div class="col-md-12">
-      <h2>Une nouvelle image est disponible.</h2>
-      <p>Une nouvelle image est disponible, vous devez impérativement l'utiliser pour passer aux versions supérieures à la version @UpdaterService.CurrentMajor. </p>
+      <h2>@Loc["NewImageAvailable"]</h2>
+      <p>@Loc["NewImageAvailableToolTip", @UpdaterService.CurrentMajor]</p>
       <li class="list-group-item">
         <div class="row">
           <div class="col-xl-3 text-nowrap">
@@ -57,7 +61,7 @@ else
           <div class="col-xl-2 text-nowrap">@ReleaseImage.Created</div>
 
           <div class="col-xl-2 offset-xl-5">
-            <a class="btn btn-success" href="@ReleaseImage.Image.DownloadUrl" role="button">Télécharger</a>
+            <a class="btn btn-success" href="@ReleaseImage.Image.DownloadUrl" role="button">@Loc["BtnDownloadImg"]</a>
           </div>
         </div>
       </li>
