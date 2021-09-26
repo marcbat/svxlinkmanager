@@ -3,16 +3,16 @@
 @inherits SvxlinkManager.Pages.Scanning.ManageBase
 
 <div class="d-inline-block">
-  <h3>Scan</h3>
+  <h3>@Loc["Title"]</h3>
 </div>
 
 @if (ScanProfile.Enable)
 {<div class="blink d-inline-block" style="margin-left:5px;">
-    <span class="badge badge-danger">activé</span>
+    <span class="badge badge-danger">@Loc["LabelActivated"]</span>
   </div>}
 else
 { <div class="d-inline-block" style="margin-left:5px;">
-    <span class="badge badge-info">désactivé</span>
+    <span class="badge badge-info">@Loc["LabelDeactivated"]</span>
   </div>}
 
 <EditForm EditContext="@EditContext" OnValidSubmit="@HandleValidSubmitAsync">
@@ -20,11 +20,11 @@ else
   <ValidationSummary />
   <div class="form-row">
     <div class="form-group">
-      <label data-toggle="tooltip" title="Délai d'inactivité en secondes avant que le scan soit lancé.">Délai d'inactivité avant lancement</label>
+      <label data-toggle="tooltip" title="@Loc["InputScanToolTip"]">@Loc["InputScanDelayLabel"]</label>
       <InputNumber @bind-Value="ScanProfile.ScanDelay" type="number" class="form-control" id="inputScanDelay" />
     </div>
   </div>
-  <label data-toggle="tooltip" title="Liste des salons scannés lors de l'activation du scan.  <br /> Seul les salons du RRF peuvent être scannés pour l'instant.">Liste des salons scannés</label>
+  <label data-toggle="tooltip" title="@Loc["ChannelsToolTip"]">@Loc["ChannelsLabel"]</label>
   <div class="form-row">
 
     <div class="form-group">
@@ -51,17 +51,17 @@ else
   <div class="btn-toolbar">
     @if (IsChanged)
     {
-      <button type="submit" class="btn btn-success">Sauver</button>
+      <button type="submit" class="btn btn-success">@Loc["BtnSave"]</button>
     }
     else
     {
       @if (ScanProfile.Enable)
       {
-        <button type="button" class="btn btn-outline-danger" @onclick="@(() => DisableScan())">Désactiver</button>
+        <button type="button" class="btn btn-outline-danger" @onclick="@(() => DisableScan())">@Loc["BtnDeactivate"]</button>
       }
       else
       {
-        <button type="button" class="btn btn-outline-success" @onclick="@(() => EnableScan())">Activer</button>
+        <button type="button" class="btn btn-outline-success" @onclick="@(() => EnableScan())">@Loc["BtnActivate"]</button>
       }
     }
   </div>

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.Scanning
 {
   [Authorize]
-  public class ManageBase : RepositoryComponentBase<ManageBase>
+  public class ManageBase : RepositoryComponentBase<Manage>
   {
     public EditContext EditContext;
 
