@@ -117,34 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AdvancedRooms" xml:space="preserve">
-    <value>Advanced Channels</value>
-  </data>
-  <data name="Echolink" xml:space="preserve">
-    <value>Echolink</value>
-  </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
-  </data>
-  <data name="New" xml:space="preserve">
-    <value>New!</value>
-  </data>
-  <data name="RadioProfile" xml:space="preserve">
-    <value>Radio Profils</value>
-  </data>
-  <data name="Reflectors" xml:space="preserve">
-    <value>Reflectors</value>
-  </data>
-  <data name="Rooms" xml:space="preserve">
-    <value>Channels</value>
-  </data>
-  <data name="Scanner" xml:space="preserve">
-    <value>Scanner</value>
-  </data>
-  <data name="Updates" xml:space="preserve">
-    <value>Updates</value>
-  </data>
-  <data name="Wifi" xml:space="preserve">
-    <value>Wifi</value>
+  <data name="EditTitle" xml:space="preserve">
+    <value>Editer {0}</value>
   </data>
 </root>

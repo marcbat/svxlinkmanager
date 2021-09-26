@@ -117,34 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AdvancedRooms" xml:space="preserve">
-    <value>Advanced Channels</value>
+  <data name="CreateRoom" xml:space="preserve">
+    <value>Créer un nouveau salon</value>
   </data>
-  <data name="Echolink" xml:space="preserve">
-    <value>Echolink</value>
+  <data name="DefaultTooltip" xml:space="preserve">
+    <value>Le salon {0} est actuellement le salon par défaut.</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="DeleteRoom" xml:space="preserve">
+    <value>Supprimer</value>
   </data>
-  <data name="New" xml:space="preserve">
-    <value>New!</value>
-  </data>
-  <data name="RadioProfile" xml:space="preserve">
-    <value>Radio Profils</value>
-  </data>
-  <data name="Reflectors" xml:space="preserve">
-    <value>Reflectors</value>
+  <data name="EditRoom" xml:space="preserve">
+    <value>Editer</value>
   </data>
   <data name="Rooms" xml:space="preserve">
-    <value>Channels</value>
+    <value>Salons</value>
   </data>
-  <data name="Scanner" xml:space="preserve">
-    <value>Scanner</value>
-  </data>
-  <data name="Updates" xml:space="preserve">
-    <value>Updates</value>
-  </data>
-  <data name="Wifi" xml:space="preserve">
-    <value>Wifi</value>
+  <data name="TemporizedTooltip" xml:space="preserve">
+    <value>Le salon @channel.Name est temporisé.</value>
   </data>
 </root>

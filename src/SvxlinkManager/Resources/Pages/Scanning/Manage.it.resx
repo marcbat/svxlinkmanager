@@ -117,34 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AdvancedRooms" xml:space="preserve">
-    <value>Advanced Channels</value>
+  <data name="BtnActivate" xml:space="preserve">
+    <value>Activer</value>
   </data>
-  <data name="Echolink" xml:space="preserve">
-    <value>Echolink</value>
+  <data name="BtnDeactivate" xml:space="preserve">
+    <value>Désactiver</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="BtnSave" xml:space="preserve">
+    <value>Sauver</value>
   </data>
-  <data name="New" xml:space="preserve">
-    <value>New!</value>
+  <data name="ChannelsLabel" xml:space="preserve">
+    <value>Liste des salons scannés</value>
   </data>
-  <data name="RadioProfile" xml:space="preserve">
-    <value>Radio Profils</value>
+  <data name="ChannelsToolTip" xml:space="preserve">
+    <value>Liste des salons scannés lors de l'activation du scan.  &lt;br /&gt; Seul les salons du RRF peuvent être scannés pour l'instant.</value>
   </data>
-  <data name="Reflectors" xml:space="preserve">
-    <value>Reflectors</value>
+  <data name="InputScanDelayLabel" xml:space="preserve">
+    <value>Délai d'inactivité avant lancement</value>
   </data>
-  <data name="Rooms" xml:space="preserve">
-    <value>Channels</value>
+  <data name="InputScanToolTip" xml:space="preserve">
+    <value>Délai d'inactivité en secondes avant que le scan soit lancé.</value>
   </data>
-  <data name="Scanner" xml:space="preserve">
-    <value>Scanner</value>
+  <data name="LabelActivated" xml:space="preserve">
+    <value>activé</value>
   </data>
-  <data name="Updates" xml:space="preserve">
-    <value>Updates</value>
+  <data name="LabelDeactivated" xml:space="preserve">
+    <value>désactivé</value>
   </data>
-  <data name="Wifi" xml:space="preserve">
-    <value>Wifi</value>
+  <data name="Title" xml:space="preserve">
+    <value>Scan</value>
   </data>
 </root>

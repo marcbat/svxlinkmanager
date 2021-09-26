@@ -117,34 +117,41 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AdvancedRooms" xml:space="preserve">
-    <value>Advanced Channels</value>
+  <data name="AlertHeader" xml:space="preserve">
+    <value>Il est maintenant temps de configurer le profil radio par défaut.&lt;br /&gt;
+  Choisis une fréquence d'émission et de récéption ainsi que les tones CTCSS.</value>
   </data>
-  <data name="Echolink" xml:space="preserve">
-    <value>Echolink</value>
+  <data name="BtnNext" xml:space="preserve">
+    <value>Suivant</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="BtnPreview" xml:space="preserve">
+    <value>Précédent</value>
   </data>
-  <data name="New" xml:space="preserve">
-    <value>New!</value>
+  <data name="InputRxCtcssLabel" xml:space="preserve">
+    <value>Tone CTCSS en récéption</value>
   </data>
-  <data name="RadioProfile" xml:space="preserve">
-    <value>Radio Profils</value>
+  <data name="InputRxLabel" xml:space="preserve">
+    <value>Fréquence de récéption</value>
   </data>
-  <data name="Reflectors" xml:space="preserve">
-    <value>Reflectors</value>
+  <data name="InputRxPlaceHolder" xml:space="preserve">
+    <value>145.450 ou 434.400 par exemple</value>
   </data>
-  <data name="Rooms" xml:space="preserve">
-    <value>Channels</value>
+  <data name="InputRxToolTip" xml:space="preserve">
+    <value>La fréquence de récéption du module SA818.</value>
   </data>
-  <data name="Scanner" xml:space="preserve">
-    <value>Scanner</value>
+  <data name="InputTrxTypeLabel" xml:space="preserve">
+    <value>Type de TRX</value>
   </data>
-  <data name="Updates" xml:space="preserve">
-    <value>Updates</value>
+  <data name="InputTxCtcssLabel" xml:space="preserve">
+    <value>Tone CTCSS en émission</value>
   </data>
-  <data name="Wifi" xml:space="preserve">
-    <value>Wifi</value>
+  <data name="InputTxLabel" xml:space="preserve">
+    <value>Fréquence d'émission</value>
+  </data>
+  <data name="InputTxPlaceHolder" xml:space="preserve">
+    <value>145.450 ou 434.400 par exemple</value>
+  </data>
+  <data name="InputTxToolTip" xml:space="preserve">
+    <value>La fréquence d'émission du module SA818.</value>
   </data>
 </root>

@@ -117,34 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AdvancedRooms" xml:space="preserve">
-    <value>Advanced Channels</value>
+  <data name="BtnCurrentVersion" xml:space="preserve">
+    <value>Version courante</value>
   </data>
-  <data name="Echolink" xml:space="preserve">
-    <value>Echolink</value>
+  <data name="BtnDownload" xml:space="preserve">
+    <value>Obtenir</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="BtnDownloadImg" xml:space="preserve">
+    <value>Télécharger</value>
   </data>
-  <data name="New" xml:space="preserve">
-    <value>New!</value>
+  <data name="BtnInstaller" xml:space="preserve">
+    <value>Installer</value>
   </data>
-  <data name="RadioProfile" xml:space="preserve">
-    <value>Radio Profils</value>
+  <data name="BtnInstallerToolTip" xml:space="preserve">
+    <value>L'installation peut prendre un certain temps. &lt;br /&gt; Vous devrez recharger la page dans 30 secondes environ.</value>
   </data>
-  <data name="Reflectors" xml:space="preserve">
-    <value>Reflectors</value>
+  <data name="CurrentVersion" xml:space="preserve">
+    <value>Version actuelle {0}</value>
   </data>
-  <data name="Rooms" xml:space="preserve">
-    <value>Channels</value>
+  <data name="Downloads" xml:space="preserve">
+    <value>{0} téléchargements</value>
   </data>
-  <data name="Scanner" xml:space="preserve">
-    <value>Scanner</value>
+  <data name="IsUpToDate" xml:space="preserve">
+    <value>Svxlink Manager est à jour.</value>
   </data>
-  <data name="Updates" xml:space="preserve">
-    <value>Updates</value>
+  <data name="NewImageAvailable" xml:space="preserve">
+    <value>Une nouvelle image est disponible.</value>
   </data>
-  <data name="Wifi" xml:space="preserve">
-    <value>Wifi</value>
+  <data name="NewImageAvailableToolTip" xml:space="preserve">
+    <value>Une nouvelle image est disponible, vous devez impérativement l'utiliser pour passer aux versions supérieures à la version {0}.</value>
+  </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>Une nouvelle version est disponible.</value>
+  </data>
+  <data name="ReleaseDetails" xml:space="preserve">
+    <value>Détails de la release</value>
+  </data>
+  <data name="SearchForRelease" xml:space="preserve">
+    <value>Recherche de mise à jour.</value>
   </data>
 </root>

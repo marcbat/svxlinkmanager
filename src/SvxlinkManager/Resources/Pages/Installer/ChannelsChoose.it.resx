@@ -117,34 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AdvancedRooms" xml:space="preserve">
-    <value>Advanced Channels</value>
+  <data name="AlertHeader" xml:space="preserve">
+    <value>A présent, choisissez les &lt;strong&gt;salons&lt;/strong&gt; qui seront installés par défaut. &lt;br /&gt;
+  Les mots de passe de ces salons sont déjà renseignés pour vous. Indiquez simplement votre indicatif et décochez les salons que vous ne voulez pas.</value>
   </data>
-  <data name="Echolink" xml:space="preserve">
-    <value>Echolink</value>
+  <data name="AnnonceCallSignLabel" xml:space="preserve">
+    <value>Indicatif annoncé</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="AnnonceCallSignPlaceHolder" xml:space="preserve">
+    <value>Utilisez également votre indicatif, mais sous sa forme simple, par exemple HB9ABC</value>
   </data>
-  <data name="New" xml:space="preserve">
-    <value>New!</value>
+  <data name="AnnonceCallSignToolTip" xml:space="preserve">
+    <value>L'indicatif annoncé sera utilisé par Svxlink pour annoncer le point d'accès à interval régulier.</value>
   </data>
-  <data name="RadioProfile" xml:space="preserve">
-    <value>Radio Profils</value>
+  <data name="BtnNext" xml:space="preserve">
+    <value>Suivant</value>
   </data>
-  <data name="Reflectors" xml:space="preserve">
-    <value>Reflectors</value>
+  <data name="BtnPreview" xml:space="preserve">
+    <value>Précédent</value>
   </data>
-  <data name="Rooms" xml:space="preserve">
-    <value>Channels</value>
+  <data name="CallSignLabel" xml:space="preserve">
+    <value>Votre indicatif</value>
   </data>
-  <data name="Scanner" xml:space="preserve">
-    <value>Scanner</value>
+  <data name="CallSignPlaceHolder" xml:space="preserve">
+    <value>Votre indicatif, par exemple (CH) HB9ABC H</value>
   </data>
-  <data name="Updates" xml:space="preserve">
-    <value>Updates</value>
-  </data>
-  <data name="Wifi" xml:space="preserve">
-    <value>Wifi</value>
+  <data name="CallSignToolTip" xml:space="preserve">
+    <value>Votre indicatif. Il servira également à vous identifier sur les salons</value>
   </data>
 </root>

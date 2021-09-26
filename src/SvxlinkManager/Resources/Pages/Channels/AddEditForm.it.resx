@@ -117,34 +117,85 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AdvancedRooms" xml:space="preserve">
-    <value>Advanced Channels</value>
+  <data name="BtnCancel" xml:space="preserve">
+    <value>Annuler</value>
   </data>
-  <data name="Echolink" xml:space="preserve">
-    <value>Echolink</value>
+  <data name="InputAuthKeyLabel" xml:space="preserve">
+    <value>Mot de passe</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="InputAuthKeyToolTip" xml:space="preserve">
+    <value>Le mot de passe qui sera utilisé pour vous connecter au svxlinkreflector.</value>
   </data>
-  <data name="New" xml:space="preserve">
-    <value>New!</value>
+  <data name="InputCallSignLabel" xml:space="preserve">
+    <value>Utilisateur svxreflector</value>
   </data>
-  <data name="RadioProfile" xml:space="preserve">
-    <value>Radio Profils</value>
+  <data name="InputCallSignPlaceHolder" xml:space="preserve">
+    <value>(CH) AB9CE H</value>
   </data>
-  <data name="Reflectors" xml:space="preserve">
-    <value>Reflectors</value>
+  <data name="InputCallSignToolTip" xml:space="preserve">
+    <value>Le nom d'utilisateur qui sera utilisé pour vous connecter au svxlinkreflector. &lt;br /&gt; En général, votre indicatif.</value>
   </data>
-  <data name="Rooms" xml:space="preserve">
-    <value>Channels</value>
+  <data name="InputDtmfLabel" xml:space="preserve">
+    <value>DTMF</value>
   </data>
-  <data name="Scanner" xml:space="preserve">
-    <value>Scanner</value>
+  <data name="InputDtmfPlaceHolder" xml:space="preserve">
+    <value>100</value>
   </data>
-  <data name="Updates" xml:space="preserve">
-    <value>Updates</value>
+  <data name="InputDtmfToolTip" xml:space="preserve">
+    <value>Le DTMF à composer pour activer le salon.</value>
   </data>
-  <data name="Wifi" xml:space="preserve">
-    <value>Wifi</value>
+  <data name="InputHostLabel" xml:space="preserve">
+    <value>Adresse du reflector</value>
+  </data>
+  <data name="InputHostPlaceHolder" xml:space="preserve">
+    <value>rrf2.f5nlg.ovh ou 137.74.192.234</value>
+  </data>
+  <data name="InputHostToolTip" xml:space="preserve">
+    <value>L'adresse internet du reflector svxlink.</value>
+  </data>
+  <data name="InputIsDefaultLabel" xml:space="preserve">
+    <value>Salon par défaut</value>
+  </data>
+  <data name="InputIsDefaultToolTip" xml:space="preserve">
+    <value>Si choché, c'est ce salon qui sera séléctionné au terme du délai des salons temporisés. &lt;br /&gt; Un salon ne peut être à la fois salon par défaut et salon temporisé.</value>
+  </data>
+  <data name="InputIsTemporizedLabel" xml:space="preserve">
+    <value>Temporisé</value>
+  </data>
+  <data name="InputIsTemporizedToolTip" xml:space="preserve">
+    <value>Un salon temporisé retournera automatiquement sur le salon par défaut après un délai de 3 minutes d'inactivité.</value>
+  </data>
+  <data name="InputNameLabel" xml:space="preserve">
+    <value>Nom du salon</value>
+  </data>
+  <data name="InputNamePlaceHolder" xml:space="preserve">
+    <value>Nom du salon</value>
+  </data>
+  <data name="InputNameToolTip" xml:space="preserve">
+    <value>Le nom du salon s'affichera dans le menu déroulant de la page d'accueil.&lt;br /&gt; Choisissez un nom unique.</value>
+  </data>
+  <data name="InputPortLabel" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="InputPortPort" xml:space="preserve">
+    <value>5300</value>
+  </data>
+  <data name="InputPortToolTip" xml:space="preserve">
+    <value>Le port sur lequel est exposé le svxlink reflector. &lt;br&gt; En général, il s'agit du port 5300.</value>
+  </data>
+  <data name="InputReportCallSignLabel" xml:space="preserve">
+    <value>Indicatif annoncé</value>
+  </data>
+  <data name="InputReportCallSignPlaceHolder" xml:space="preserve">
+    <value>HB9ABC</value>
+  </data>
+  <data name="InputReportCallSignToolTip" xml:space="preserve">
+    <value>Il s'agit de l'indicatif qui sera annoncé vocalement par svxlink.</value>
+  </data>
+  <data name="InputSoundToolLabel" xml:space="preserve">
+    <value>Annonce vocal</value>
+  </data>
+  <data name="InputSoundToolTip" xml:space="preserve">
+    <value>Un fichier .wav qui sera joué lors de l'activation du salon.</value>
   </data>
 </root>

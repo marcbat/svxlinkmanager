@@ -117,34 +117,76 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AdvancedRooms" xml:space="preserve">
-    <value>Advanced Channels</value>
+  <data name="BtnCancel" xml:space="preserve">
+    <value>Annuler</value>
   </data>
-  <data name="Echolink" xml:space="preserve">
-    <value>Echolink</value>
+  <data name="Here" xml:space="preserve">
+    <value>ici</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="InputDtmfLabel" xml:space="preserve">
+    <value>DTMF</value>
   </data>
-  <data name="New" xml:space="preserve">
-    <value>New!</value>
+  <data name="InputDtmfPlaceHolder" xml:space="preserve">
+    <value>100</value>
   </data>
-  <data name="RadioProfile" xml:space="preserve">
-    <value>Radio Profils</value>
+  <data name="InputDtmfToolTip" xml:space="preserve">
+    <value>Le DTMF à composer pour activer le salon.</value>
   </data>
-  <data name="Reflectors" xml:space="preserve">
-    <value>Reflectors</value>
+  <data name="InputIsDefaultLabel" xml:space="preserve">
+    <value>Salon par défaut</value>
   </data>
-  <data name="Rooms" xml:space="preserve">
-    <value>Channels</value>
+  <data name="InputIsDefaultToolTip" xml:space="preserve">
+    <value>Si choché, c'est ce salon qui sera séléctionné au terme du délai des salons temporisés. &lt;br /&gt; Un salon ne peut être à la fois salon par défaut et salon temporisé.</value>
   </data>
-  <data name="Scanner" xml:space="preserve">
-    <value>Scanner</value>
+  <data name="InputIsDefaultToolTip1" xml:space="preserve">
+    <value>Si choché, c'est ce salon qui sera séléctionné au terme du délai des salons temporisés. &lt;br /&gt; Un salon ne peut être à la fois salon par défaut et salon temporisé.</value>
   </data>
-  <data name="Updates" xml:space="preserve">
-    <value>Updates</value>
+  <data name="InputIsTemporizedLabel" xml:space="preserve">
+    <value>Temporisé</value>
   </data>
-  <data name="Wifi" xml:space="preserve">
-    <value>Wifi</value>
+  <data name="InputNameLabel" xml:space="preserve">
+    <value>Nom du salon</value>
+  </data>
+  <data name="InputNamePlaceHolder" xml:space="preserve">
+    <value>Nom du salon</value>
+  </data>
+  <data name="InputNameToolTip" xml:space="preserve">
+    <value>Le nom du salon s'affichera dans le menu déroulant de la page d'accueil.&lt;br /&gt; Choisissez un nom unique.</value>
+  </data>
+  <data name="InputSoundToolLabel" xml:space="preserve">
+    <value>Annonce vocal</value>
+  </data>
+  <data name="InputSoundToolTip" xml:space="preserve">
+    <value>Un fichier .wav qui sera joué lors de l'activation du salon.</value>
+  </data>
+  <data name="ModuleDtmfRepeaterConfDocLink" xml:space="preserve">
+    <value>La documentation du fichier ModuleDtmfRepeater.conf est disponible</value>
+  </data>
+  <data name="ModuleEcholinkConfDocLink" xml:space="preserve">
+    <value>La documentation du fichier ModuleEchoLink.conf est disponible </value>
+  </data>
+  <data name="ModuleFrnConfDocLink" xml:space="preserve">
+    <value>La documentation du fichier ModuleFrn.conf est disponible </value>
+  </data>
+  <data name="ModuleHelpConfDocLink" xml:space="preserve">
+    <value>La documentation du fichier ModuleHelp.conf est disponible </value>
+  </data>
+  <data name="ModuleMetarInfoConfDocLink" xml:space="preserve">
+    <value>La documentation du fichier ModuleMetarInfo.conf est disponible</value>
+  </data>
+  <data name="ModuleParrotConfDocLink" xml:space="preserve">
+    <value>La documentation du fichier ModuleParrot.conf est disponible</value>
+  </data>
+  <data name="ModulePropagationMonitorConfDocLink" xml:space="preserve">
+    <value>La documentation du fichier ModulePropagationMonitor.conf est disponible</value>
+  </data>
+  <data name="ModuleSelCallEncConfDocLink" xml:space="preserve">
+    <value>La documentation du fichier ModuleSelCallEnc.conf est disponible</value>
+  </data>
+  <data name="ModuleTclVoiceMailConfDocLink" xml:space="preserve">
+    <value>La documentation du fichier ModuleTclVoiceMail.conf est disponible</value>
+  </data>
+  <data name="SvxlinkConfDocLink" xml:space="preserve">
+    <value>La documentation du fichier svxlink.conf est disponible</value>
   </data>
 </root>

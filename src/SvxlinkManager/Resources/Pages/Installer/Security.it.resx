@@ -117,34 +117,38 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AdvancedRooms" xml:space="preserve">
-    <value>Advanced Channels</value>
+  <data name="AlertHeader" xml:space="preserve">
+    <value>Nous allons installer &lt;strong&gt;Svxlink Manager&lt;/strong&gt; ensemble.&lt;br /&gt;
+  Commençons par vous choisir un nom d'utilisateur et un mot de passe pour vos prochaines connexions.</value>
   </data>
-  <data name="Echolink" xml:space="preserve">
-    <value>Echolink</value>
+  <data name="BtnNext" xml:space="preserve">
+    <value>Suivant</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="Password2Label" xml:space="preserve">
+    <value>Saisissez à nouveau votre mot de passe</value>
   </data>
-  <data name="New" xml:space="preserve">
-    <value>New!</value>
+  <data name="Password2PlaceHolder" xml:space="preserve">
+    <value>Mot de passe pour vérification</value>
   </data>
-  <data name="RadioProfile" xml:space="preserve">
-    <value>Radio Profils</value>
+  <data name="Password2ToolTip" xml:space="preserve">
+    <value>Saisissez à nouveau le mot de passe qui vous servira à acceder à SvxlinkManager.</value>
   </data>
-  <data name="Reflectors" xml:space="preserve">
-    <value>Reflectors</value>
+  <data name="PasswordLabel" xml:space="preserve">
+    <value>Mot de passe</value>
   </data>
-  <data name="Rooms" xml:space="preserve">
-    <value>Channels</value>
+  <data name="PasswordPlaceHolder" xml:space="preserve">
+    <value>Mot de passe</value>
   </data>
-  <data name="Scanner" xml:space="preserve">
-    <value>Scanner</value>
+  <data name="PasswordToolTip" xml:space="preserve">
+    <value>Le mot de passe qui vous servira à acceder à SvxlinkManager.</value>
   </data>
-  <data name="Updates" xml:space="preserve">
-    <value>Updates</value>
+  <data name="UserNameLabel" xml:space="preserve">
+    <value>Nom d'utilisateur</value>
   </data>
-  <data name="Wifi" xml:space="preserve">
-    <value>Wifi</value>
+  <data name="UserNamePlaceHolder" xml:space="preserve">
+    <value>Votre nom d'utilisateur doit être un email valide</value>
+  </data>
+  <data name="UserNameToolTip" xml:space="preserve">
+    <value>Le nom d'utilisateur qui vous servira à vous connecter à SvxlinkManager.</value>
   </data>
 </root>
