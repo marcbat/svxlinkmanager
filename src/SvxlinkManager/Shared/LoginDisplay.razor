@@ -1,14 +1,19 @@
-﻿<AuthorizeView>
+﻿@using System.Globalization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<LoginDisplay> Loc
+
+<AuthorizeView>
   <Authorized>
 
     <CultureSelector />
 
-    <a href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
+    <a href="Identity/Account/Manage">@Loc["Hello", @context.User.Identity.Name]</a>
     <form method="post" action="Identity/Account/LogOut">
-      <button type="submit" class="nav-link btn btn-link">Log out</button>
+      <button type="submit" class="nav-link btn btn-link">@Loc["LogOut"]</button>
     </form>
   </Authorized>
   <NotAuthorized>
-    <a href="Identity/Account/Login">Log in</a>
+    <a href="Identity/Account/Login">@Loc["LogIn"]</a>
   </NotAuthorized>
 </AuthorizeView>

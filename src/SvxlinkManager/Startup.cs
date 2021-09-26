@@ -26,6 +26,7 @@ using DeviceId;
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using SvxlinkManager.Areas.Identity;
 
 namespace SvxlinkManager
 {
