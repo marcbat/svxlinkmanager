@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.Reflector
 {
   [Authorize]
-  public class ManageBase : RepositoryComponentBase
+  public class ManageBase : RepositoryComponentBase<Manage>
   {
     protected override async Task OnInitializedAsync()
     {

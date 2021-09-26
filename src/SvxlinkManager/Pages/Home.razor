@@ -4,7 +4,7 @@
 
 <div class="d-inline-block">
   <h3>
-    Salons
+    @Loc["Channels"]
   </h3>
 </div>
 @if (TemporizationIsActive)
@@ -17,7 +17,7 @@
 @if (Scanning)
 {
   <div class="blink d-inline-block" style="margin-left:5px;">
-    <span class="badge badge-danger">Scan</span>
+    <span class="badge badge-danger">@Loc["Scan"]</span>
   </div>
 }
 
@@ -25,8 +25,8 @@
   <div class="col-5">
     <div class="d-inline-block">
       <select class="form-control" @bind="@Channel" style="width:auto;">
-        <option value="0">Déconnecter</option>
-        <option value="1000">Perroquet</option>
+        <option value="0">@Loc["Disconnect"]</option>
+        <option value="1000">@Loc["Parrot"]</option>
         @foreach (var channel in Channels)
         {
           <option value="@channel.Id">@channel.Name</option>

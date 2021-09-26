@@ -1,19 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Spotnik.Gui.Areas.Identity;
 using SvxlinkManager.Data;
 using SvxlinkManager.Repositories;
 using SvxlinkManager.Service;
@@ -21,11 +14,8 @@ using System.IO;
 using SvxlinkManager.ServiceMockup;
 using Microsoft.ApplicationInsights.Extensibility;
 using SvxlinkManager.Telemetry;
-using Microsoft.ApplicationInsights;
-using DeviceId;
-using System.Reflection;
 using Microsoft.AspNetCore.Http;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using SvxlinkManager.Areas.Identity;
 
 namespace SvxlinkManager
 {
@@ -50,6 +40,7 @@ namespace SvxlinkManager
           .AddEntityFrameworkStores<ApplicationDbContext>();
 
       services.AddRazorPages();
+      services.AddControllers();
 
       services.AddServerSideBlazor();
       services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
@@ -87,6 +78,8 @@ namespace SvxlinkManager
         options.Password.RequiredLength = 6;
         options.Password.RequiredUniqueChars = 1;
       });
+
+      services.AddLocalization(options => options.ResourcesPath = "Resources");
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -122,6 +115,14 @@ namespace SvxlinkManager
       app.UseStaticFiles();
 
       app.UseRouting();
+
+      var supportedCultures = new[] { "en-US", "fr-FR" };
+      var localizationOptions = new RequestLocalizationOptions()
+          .SetDefaultCulture(supportedCultures[0])
+          .AddSupportedCultures(supportedCultures)
+          .AddSupportedUICultures(supportedCultures);
+
+      app.UseRequestLocalization(localizationOptions);
 
       app.UseAuthentication();
       app.UseAuthorization();

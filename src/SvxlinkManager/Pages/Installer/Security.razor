@@ -1,6 +1,10 @@
-﻿<div class="alert alert-primary" role="alert">
-  Nous allons installer <strong>Svxlink Manager</strong> ensemble.<br />
-  Commençons par vous choisir un nom d'utilisateur et un mot de passe pour vos prochaines connexions.
+﻿@using System.Globalization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<Security> Loc
+
+<div class="alert alert-primary" role="alert">
+  @AlertHeader
 </div>
 
 <EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.Channel)">
@@ -8,26 +12,26 @@
 
   <div class="form-row">
     <div class="form-group col-md-6">
-      <label data-toggle="tooltip" title="Le nom d'utilisateur qui vous servira à vous connecter à SvxlinkManager.">Nom d'utilisateur</label>
-      <InputText @bind-Value="InstallerModel.UserName" type="text" class="form-control" id="UserName" placeholder="Votre nom d'utilisateur doit être un email valide" />
+      <label data-toggle="tooltip" title="@Loc["UserNameToolTip"]">@Loc["UserNameLabel"]</label>
+      <InputText @bind-Value="InstallerModel.UserName" type="text" class="form-control" id="UserName" placeholder="@Loc["UserNamePlaceHolder"]" />
       <ValidationMessage For="@(() => InstallerModel.UserName)" />
     </div>
   </div>
   <div class="form-row">
 
     <div class="form-group col-md-6">
-      <label data-toggle="tooltip" title="Le mot de passe qui vous servira à acceder à SvxlinkManager.">Mot de passe</label>
-      <InputText @bind-Value="InstallerModel.Password" type="password" class="form-control" id="Password" placeholder="Mot de passe" />
+      <label data-toggle="tooltip" title="@Loc["PasswordToolTip"]">@Loc["PasswordLabel"]</label>
+      <InputText @bind-Value="InstallerModel.Password" type="password" class="form-control" id="Password" placeholder="@Loc["PasswordPlaceHolder"]" />
       <ValidationMessage For="@(() => InstallerModel.Password)" />
     </div>
     <div class="form-group col-md-6">
-      <label data-toggle="tooltip" title="Saisissez à nouveau le mot de passe qui vous servira à acceder à SvxlinkManager.">Saisissez à nouveau votre mot de passe</label>
-      <InputText @bind-Value="InstallerModel.Password2" type="password" class="form-control" id="Password2" placeholder="Mot de passe pour vérification" />
+      <label data-toggle="tooltip" title="@Loc["Password2ToolTip"]">@Loc["Password2Label"]</label>
+      <InputText @bind-Value="InstallerModel.Password2" type="password" class="form-control" id="Password2" placeholder="@Loc["Password2PlaceHolder"]" />
       <ValidationMessage For="@(() => InstallerModel.Password2)" />
     </div>
   </div>
 
-  <button class="btn btn-primary" type="submit">Suivant</button>
+  <button class="btn btn-primary" type="submit">@Loc["BtnNext"]</button>
 </EditForm>
 
 @code {
@@ -36,5 +40,7 @@
 
   [Parameter]
   public EventCallback<InstallationStatus> OnSubmit { get; set; }
+
+  public MarkupString AlertHeader => new MarkupString(Loc["AlertHeader"]);
 
 }

@@ -2,9 +2,9 @@
 @inherits SvxlinkManager.Pages.RadioProfile.ManageBase
 
 <div class="row">
-  <div class="col-xl-2"><h3>Profils Radio</h3></div>
+  <div class="col-xl-2"><h3>@Loc["RadioProfileTitle"]</h3></div>
   <div class="col-xl-2 offset-xl-8">
-    <a class="btn btn-outline-success" href="RadioProfile/Create" role="button">Créer un nouveau profil radio</a>
+    <a class="btn btn-outline-success" href="RadioProfile/Create" role="button">@Loc["CreateNewRadioProfile"]</a>
   </div>
 </div>
 
@@ -23,9 +23,9 @@
         <div class="col-xl-2">TX Ctcss: @rp.TxTone</div>
         <div class="col-xl-2">RX Ctcss: @rp.RxTone</div>
         <div class="col-xl-3 offset-md-1">
-          <button type="button" class="btn btn-outline-success" @onclick="@(() => ApplyAsync(rp.Id))">Appliquer</button> <a class="btn btn-outline-primary" href="RadioProfile/Edit/@rp.Id" role="button">Editer</a> &nbsp; @if (!rp.Enable)
+          <button type="button" class="btn btn-outline-success" @onclick="@(() => ApplyAsync(rp.Id))">@Loc["BtnApply"]</button> <a class="btn btn-outline-primary" href="RadioProfile/Edit/@rp.Id" role="button">@Loc["BtnEdit"]</a> &nbsp; @if (!rp.Enable)
           {
-            <button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(rp.Id))">Supprimer</button>}
+            <button type="button" class="btn btn-danger" @onclick="@(() => DeleteAsync(rp.Id))">@Loc["BtnDelete"]</button>}
         </div>
       </div>
     </li>

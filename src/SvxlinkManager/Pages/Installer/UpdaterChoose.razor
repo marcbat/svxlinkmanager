@@ -1,25 +1,30 @@
-﻿<div class="alert alert-primary" role="alert">
-  Une mise à jour est disponible. Voulez vous l'installer?
+﻿@using System.Globalization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<UpdaterChoose> Loc
+
+<div class="alert alert-primary" role="alert">
+  @Loc["AlertHeader"]
 </div>
 
 <EditForm Model="@InstallerModel" OnValidSubmit="()=>OnSubmit.InvokeAsync(InstallationStatus.Resume)">
 
   <table>
     <tr>
-      <td>Version actuelle: </td>
+      <td>@Loc["CurrentVersion"]: </td>
       <td>@InstallerModel.CurrentVersion</td>
     </tr>
     <tr>
-      <td>Version disponible: </td>
+      <td>@Loc["AvailbleVersion"]: </td>
       <td>@InstallerModel.LastRelease.TagName</td>
     </tr>
     <tr>
-      <td>Mettre à jour</td>
+      <td>@Loc["Update"]</td>
       <td><InputCheckbox @bind-Value="InstallerModel.UpdateToLastRelease" /></td>
     </tr>
   </table>
 
-  <button class="btn btn-primary" type="button" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Wifi)">Précédent</button> <button class="btn btn-primary" type="submit">Suivant</button>
+  <button class="btn btn-primary" type="button" role="button" @onclick="()=>OnSubmit.InvokeAsync(InstallationStatus.Wifi)">@Loc["BtnPreview"]</button> <button class="btn btn-primary" type="submit">@Loc["BtnNext"]</button>
 </EditForm>
 
 @code {

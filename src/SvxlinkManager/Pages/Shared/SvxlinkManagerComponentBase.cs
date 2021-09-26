@@ -9,19 +9,24 @@ using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using Microsoft.ApplicationInsights;
 using SvxlinkManager.Models;
+using System.Globalization;
+using Microsoft.Extensions.Localization;
 
 namespace SvxlinkManager.Pages.Shared
 {
-  public class SvxlinkManagerComponentBase : ComponentBase
+  public abstract class SvxlinkManagerComponentBase<TLocalizer> : ComponentBase
   {
     [Inject]
-    public ILogger<SvxlinkManagerComponentBase> Logger { get; set; }
+    public ILogger<SvxlinkManagerComponentBase<TLocalizer>> Logger { get; set; }
 
     [Inject]
     public TelemetryClient Telemetry { get; set; }
 
     [Inject]
     public IJSRuntime Js { get; set; }
+
+    [Inject]
+    public IStringLocalizer<TLocalizer> Loc { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

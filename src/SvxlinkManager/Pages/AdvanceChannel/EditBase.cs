@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.AdvanceChannel
 {
-  public class EditBase : EditBase<Models.AdvanceSvxlinkChannel>
+  public class EditBase : EditBase<Models.AdvanceSvxlinkChannel, Edit>
   {
     public override async Task HandleValidSubmit(string redirect)
     {

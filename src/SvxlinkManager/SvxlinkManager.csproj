@@ -17,6 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Remove="Resources\Pages\Reflector\Create.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Scripts\Editor.ts" />
   </ItemGroup>
 
@@ -24,6 +28,7 @@
     <PackageReference Include="DeviceId" Version="5.2.0" />
     <PackageReference Include="FluentValidation" Version="9.5.3" />
     <PackageReference Include="ini-parser-netstandard" Version="2.5.2" />
+    <PackageReference Include="Markdig" Version="0.26.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
@@ -40,7 +45,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="System.IO.Ports" Version="5.0.0" />
   </ItemGroup>
 
@@ -68,6 +73,16 @@
 
   <ItemGroup>
     <Folder Include="SvxlinkConfig\svxlink.d\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Resources\Pages\Reflector\Create.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Pages\Installer\Resume.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

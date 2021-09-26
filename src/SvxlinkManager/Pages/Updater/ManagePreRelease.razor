@@ -1,4 +1,8 @@
 ﻿@using SvxlinkManager.Service
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<Manage> Loc
 
 <ul id="channel-manage-list" class="list-group-horizontal">
   @foreach (var release in Releases)
@@ -12,23 +16,23 @@
             @release.Name
           </div>
           <div class="col-xl-2 text-nowrap">@release.Created</div>
-          <div class="col-xl-3 text-truncate"><a href="@release.HtmlUrl" target="_blank">Détails de la release</a></div>
-          <div class="col-xl-2 text-nowrap">@release.Package.DownloadCount téléchargements</div>
+          <div class="col-xl-3 text-truncate"><a href="@release.HtmlUrl" target="_blank">@Loc["ReleaseDetails"]</a></div>
+          <div class="col-xl-2 text-nowrap">@Loc["Downloads", release.Package.DownloadCount]</div>
           <div class="col-xl-2">
             @if (!UpdaterService.IsCurrent(release))
             {
               @if (UpdaterService.IsExist(@release))
               {
-                <button id="install-@release.Id" data-toggle="tooltip" title="L'installation peut prendre un certain temps. <br /> Vous devrez recharger la page dans 30 secondes environ." type="button" class="btn btn-danger" @onclick="@(() => OnInstall.InvokeAsync(release))">Installer</button>
+                <button id="install-@release.Id" data-toggle="tooltip" title="@Loc["BtnInstallerToolTip"]" type="button" class="btn btn-danger" @onclick="@(() => OnInstall.InvokeAsync(release))">@Loc["BtnInstaller"]</button>
               }
               else
               {
-                <button id="download-@release.Id" type="button" class="btn btn-outline-success" @onclick="() => OnDownload.InvokeAsync(release)">Obtenir</button>
+                <button id="download-@release.Id" type="button" class="btn btn-outline-success" @onclick="() => OnDownload.InvokeAsync(release)">@Loc["BtnDownload"]</button>
               }
             }
             else
             {
-              <a class="btn btn-primary" href="Channel/Manage" role="button">Version courante</a>
+              <a class="btn btn-primary" href="Channel/Manage" role="button">@Loc["BtnCurrentVersion"]</a>
             }
           </div>
         </div>

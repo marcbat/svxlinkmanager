@@ -1,51 +1,56 @@
 ﻿@using System.IO;
 
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<AddEditForm> Loc
+
 <EditForm Model="@Channel" OnValidSubmit="@HandleValidSubmit">
   <DataAnnotationsValidator />
   <ValidationSummary />
 
   <div class="form-row">
     <div class="form-group col-md-6">
-      <label data-toggle="tooltip" title="Le nom du link s'affichera dans le menu déroulant de la page d'accueil.<br /> Choisissez un nom unique.">Nom du link</label>
-      <InputText @bind-Value="Channel.Name" type="text" class="form-control" id="inputName" placeholder="Nom du link" />
+      <label data-toggle="tooltip" title="@Loc["InputNameToolTip"]">@Loc["InputNameLabel"]</label>
+      <InputText @bind-Value="Channel.Name" type="text" class="form-control" id="inputName" placeholder="@Loc["InputNamePlaceHolder"]" />
     </div>
     <div class="form-group col-md-6">
-      <label data-toggle="tooltip" title="Un fichier .wav qui sera joué lors de l'activation du link.">Annonce vocal @CurrentSoundName</label>
-      <InputFile OnChange="@OnInputFileChange" class="form-control" id="inputName" />
+      <label data-toggle="tooltip" title="@Loc["InputSoundToolTip"]">@Loc["InputSoundLabel"] @CurrentSoundName</label>
+      <InputFile OnChange="@OnInputFileChange" class="form-control" id="inputSound" />
     </div>
   </div>
   <div class="form-row">
     <div class="form-group col-md-6">
-      <label data-toggle="tooltip" title="L'adresse internet du serveur Echolink.">Adresse du serveur</label>
-      <InputText @bind-Value="Channel.Host" type="text" class="form-control" id="inputHost" placeholder="europe.echolink.org" />
+      <label data-toggle="tooltip" title="@Loc["InputHostToolTip"]">@Loc["InputHostLabel"]</label>
+      <InputText @bind-Value="Channel.Host" type="text" class="form-control" id="inputHost" placeholder="@Loc["InputHostPlaceHolder"]" />
     </div>
     <div class="form-group col-md-6">
-      <label data-toggle="tooltip" title="Le nombre maximum de link pouvant de connecter simultanément.">Nombre de connexion maximum</label>
+      <label data-toggle="tooltip" title="@Loc["InputMaxQsoToolTip"]">@Loc["InputMaxQsoLabel"]</label>
       <InputNumber @bind-Value="Channel.MaxQso" type="text" class="form-control" id="inputMaxQso" />
     </div>
   </div>
   <div class="form-row">
     <div class="form-group col-md-4">
-      <label data-toggle="tooltip" title="Le call du link Echolink.">Indicatif</label>
-      <InputText @bind-Value="Channel.CallSign" type="text" class="form-control" id="inputCallSign" placeholder="AB9CDE-L" />
+      <label data-toggle="tooltip" title="@Loc["InputCallSignToolTip"]">@Loc["InputCallSignLabel"]</label>
+      <InputText @bind-Value="Channel.CallSign" type="text" class="form-control" id="inputCallSign" placeholder="@Loc["InputCallSignPlaceHolder"]" />
     </div>
     <div class="form-group col-md-4">
-      <label data-toggle="tooltip" title="Mot de passe associé au Call">Mot de passe</label>
+      <label data-toggle="tooltip" title="@Loc["InputPasswordToolTip"]">@Loc["InputPasswordLabel"]</label>
       <InputText @bind-Value="Channel.Password" type="password" class="form-control" id="inputPassword" />
     </div>
     <div class="form-group col-md-4">
-      <label data-toggle="tooltip" title="Nom du responsable technique du link.">Nom du Sysop</label>
+      <label data-toggle="tooltip" title="@Loc["InputSysopToolTip"]">@Loc["InputSysopLabel"]</label>
       <InputText @bind-Value="Channel.SysopName" type="text" class="form-control" id="inputSysop" />
     </div>
   </div>
 
   <div class="form-row">
     <div class="form-group col-md-6">
-      <label data-toggle="tooltip" title="L'emplacement géographique du link.">Emplacement géographique</label>
-      <InputText @bind-Value="Channel.Location" type="text" class="form-control" id="inputLocation" placeholder="[Svx] 144.700, Ma Ville" />
+      <label data-toggle="tooltip" title="@Loc["InputLocationToolTip"]">@Loc["InputLocationLabel"]</label>
+      <InputText @bind-Value="Channel.Location" type="text" class="form-control" id="inputLocation" placeholder="@Loc["InputLocationPlaceHolder"]" />
     </div>
     <div class="form-group col-md-6">
-      <label data-toggle="tooltip" title="Un description du link.">Description</label>
+      <label data-toggle="tooltip" title="@Loc["InputDescriptionToolTip"]">@Loc["InputDescriptionLabel"]</label>
       <InputText @bind-Value="Channel.Description" type="text" class="form-control" id="inputDescription" />
     </div>
   </div>
@@ -58,7 +63,7 @@
           <div class="pretty p-default p-curve p-bigger">
             <InputCheckbox @bind-Value="IsDefault" type="checkbox" id="inputIsDefault" />
             <div class="state">
-              <label data-toggle="tooltip" title="Si choché, c'est ce salon qui sera séléctionné au terme du délai des salons temporisés. <br /> Un salon ne peut être à la fois salon par défaut et salon temporisé.">Salon par défaut</label>
+              <label data-toggle="tooltip" title="@Loc["InputIsDefaultToolTip"]">@Loc["InputIsDefaultLabel"]</label>
             </div>
           </div>
         </div>
@@ -68,7 +73,7 @@
           <div class="pretty p-default p-curve p-bigger">
             <InputCheckbox @bind-Value="IsTemporized" type="checkbox" id="inputIsTemporized" />
             <div class="state">
-              <label data-toggle="tooltip" title="Un salon temporisé retournera automatiquement sur le salon par défaut après un délai de 3 minutes d'inactivité.">Temporisé</label>
+              <label data-toggle="tooltip" title="@Loc["InputIsTemporizedToolTip"]">@Loc["InputIsTemporizedLabel"]</label>
             </div>
           </div>
         </div>
@@ -76,7 +81,7 @@
     </div>
   }
 
-  <button type="submit" class="btn btn-success">@SubmitTitle</button> <a class="btn btn-primary" href="Echolink/Manage" role="button">Annuler</a>
+  <button type="submit" class="btn btn-success">@SubmitTitle</button> <a class="btn btn-primary" href="Echolink/Manage" role="button">@Loc["BtnCancel"]</a>
 </EditForm>
 
 @code{

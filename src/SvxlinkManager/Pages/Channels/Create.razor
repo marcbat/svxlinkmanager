@@ -1,8 +1,8 @@
 ﻿@using SvxlinkManager.Models
 
 @page "/Channel/Create"
-@inherits SvxlinkManager.Pages.Channels.CreateBase<SvxlinkChannel>
+@inherits SvxlinkManager.Pages.Channels.CreateBase<SvxlinkChannel, Create>
 
-<h3>Ajouter un salon</h3>
+<h3>@Loc["AddNewRoom"]</h3>
 
 <AddEditForm Channel="@Channel" HandleValidSubmit="@(()=>HandleValidSubmit("Channel"))" SubmitTitle="@SubmitTitle" CanEditType="@CanEditType" />

@@ -12,8 +12,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
+using Microsoft.Extensions.Localization;
 
-namespace Spotnik.Gui.Areas.Identity.Pages.Account
+namespace SvxlinkManager.Areas.Identity.Pages.Account
 {
   [AllowAnonymous]
   public class LoginModel : PageModel

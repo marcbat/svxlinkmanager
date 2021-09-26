@@ -1,19 +1,24 @@
-﻿<EditForm Model="@Channel" OnValidSubmit="@HandleValidSubmit">
+﻿@using System.Globalization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<AddEditForm> Loc
+
+<EditForm Model="@Channel" OnValidSubmit="@HandleValidSubmit">
   <DataAnnotationsValidator />
   <ValidationSummary />
 
   <div class="form-row">
     <div class="form-group col-md-4">
-      <label data-toggle="tooltip" title="Le nom du salon s'affichera dans le menu déroulant de la page d'accueil.<br /> Choisissez un nom unique.">Nom du salon</label>
-      <InputText @bind-Value="Channel.Name" type="text" class="form-control" id="inputName" placeholder="Nom du salon" />
+      <label data-toggle="tooltip" title="@Loc["InputNameToolTip"]">@Loc["InputNameLabel"]</label>
+      <InputText @bind-Value="Channel.Name" type="text" class="form-control" id="inputName" placeholder="@Loc["InputNamePlaceHolder"]" />
     </div>
     <div class="form-group col-md-4">
-      <label data-toggle="tooltip" title="Un fichier .wav qui sera joué lors de l'activation du salon.">Annonce vocal @CurrentSoundName</label>
-      <InputFile OnChange="@OnInputFileChange" class="form-control" id="inputName" />
+      <label data-toggle="tooltip" title="@Loc["InputSoundToolTip"]">@Loc["InputSoundToolLabel"] @CurrentSoundName</label>
+      <InputFile OnChange="@OnInputFileChange" class="form-control" id="inputSound" />
     </div>
     <div class="form-group col-md-4">
-      <label data-toggle="tooltip" title="Le DTMF à composer pour activer le salon.">DTMF</label>
-      <InputNumber @bind-Value="Channel.Dtmf" type="number" class="form-control" id="inputDtmf" placeholder="100" />
+      <label data-toggle="tooltip" title="@Loc["InputDtmfToolTip"]">@Loc["InputDtmfLabel"]</label>
+      <InputNumber @bind-Value="Channel.Dtmf" type="number" class="form-control" id="inputDtmf" placeholder="@Loc["InputDtmfPlaceHolder"]" />
     </div>
   </div>
 
@@ -25,7 +30,7 @@
           <div class="pretty p-default p-curve p-bigger">
             <InputCheckbox @bind-Value="IsDefault" type="checkbox" id="inputIsDefault" />
             <div class="state">
-              <label data-toggle="tooltip" title="Si choché, c'est ce salon qui sera séléctionné au terme du délai des salons temporisés. <br /> Un salon ne peut être à la fois salon par défaut et salon temporisé.">Salon par défaut</label>
+              <label data-toggle="tooltip" title="@Loc["InputIsDefaultToolTip"]">@Loc["InputIsDefaultLabel"]</label>
             </div>
           </div>
         </div>
@@ -35,7 +40,7 @@
           <div class="pretty p-default p-curve p-bigger">
             <InputCheckbox @bind-Value="IsTemporized" type="checkbox" id="inputIsTemporized" />
             <div class="state">
-              <label data-toggle="tooltip" title="Un salon temporisé retournera automatiquement sur le salon par défaut après un délai de 3 minutes d'inactivité.">Temporisé</label>
+              <label data-toggle="tooltip" title="@Loc["InputIsTemporizedToolTip"]">@Loc["InputIsTemporizedLabel"]</label>
             </div>
           </div>
           @if (Channel.IsTemporized)
@@ -85,77 +90,77 @@
     <div class="tab-pane active" id="Svxlink" role="tabpanel" aria-labelledby="Svxlink-tab">
 
       <div class="form-group col-md-12">
-        <small id="svxlinkconfHelp" class="form-text text-muted">La documentation du fichier svxlink.conf est disponible <a href="http://www.svxlink.org/doc/man/man5/svxlink.conf.5.html" target="_blank">ici</a></small>
+        <small id="svxlinkconfHelp" class="form-text text-muted">@Loc["SvxlinkConfDocLink"] <a href="http://www.svxlink.org/doc/man/man5/svxlink.conf.5.html" target="_blank">@Loc["Here"]</a></small>
         <pre id="svxlinkconf" class="editor">@Channel.SvxlinkConf</pre>
         <InputTextArea @bind-Value="Channel.SvxlinkConf" type="text" class="form-control fileEditor" id="svxlinkconf-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleEchoLink" role="tabpanel" aria-labelledby="ModuleEchoLink-tab">
       <div class="form-group col-md-12">
-        <small id="svxlinkconfHelp" class="form-text text-muted">La documentation du fichier ModuleEchoLink.conf est disponible <a href="http://www.svxlink.org/doc/man/man5/ModuleEchoLink.conf.5.html" target="_blank">ici</a></small>
+        <small id="svxlinkconfHelp" class="form-text text-muted">@Loc["ModuleEcholinkConfDocLink"] <a href="http://www.svxlink.org/doc/man/man5/ModuleEchoLink.conf.5.html" target="_blank">@Loc["Here"]</a></small>
         <pre id="echolink" class="editor">@Channel.ModuleEchoLink</pre>
         <InputTextArea @bind-Value="Channel.ModuleEchoLink" type="text" class="form-control fileEditor" id="echolink-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleDtmfRepeater" role="tabpanel" aria-labelledby="ModuleDtmfRepeater-tab">
       <div class="form-group col-md-12">
-        <small id="svxlinkconfHelp" class="form-text text-muted">La documentation du fichier ModuleDtmfRepeater.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleDtmfRepeater.conf.5.html" target="_blank">ici</a></small>
+        <small id="svxlinkconfHelp" class="form-text text-muted">@Loc["ModuleDtmfRepeaterConfDocLink"] <a href="https://www.svxlink.org/doc/man/man5/ModuleDtmfRepeater.conf.5.html" target="_blank">@Loc["Here"]</a></small>
         <pre id="dtmfrepeater" class="editor">@Channel.ModuleDtmfRepeater</pre>
         <InputTextArea @bind-Value="Channel.ModuleDtmfRepeater" type="text" class="form-control fileEditor" id="dtmfrepeater-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleFrn" role="tabpanel" aria-labelledby="ModuleFrn-tab">
       <div class="form-group col-md-12">
-        <small id="ModuleFrnHelp" class="form-text text-muted">La documentation du fichier ModuleFrn.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleFrn.conf.5.html" target="_blank">ici</a></small>
+        <small id="ModuleFrnHelp" class="form-text text-muted">@Loc["ModuleFrnConfDocLink"] <a href="https://www.svxlink.org/doc/man/man5/ModuleFrn.conf.5.html" target="_blank">@Loc["Here"]</a></small>
         <pre id="frn" class="editor">@Channel.ModuleFrn</pre>
         <InputTextArea @bind-Value="Channel.ModuleFrn" type="text" class="form-control fileEditor" id="frn-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleHelp" role="tabpanel" aria-labelledby="ModuleHelp-tab">
       <div class="form-group col-md-12">
-        <small id="ModuleFrnHelp" class="form-text text-muted">La documentation du fichier ModuleHelp.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleHelp.conf.5.html" target="_blank">ici</a></small>
+        <small id="ModuleFrnHelp" class="form-text text-muted">@Loc["ModuleHelpConfDocLink"] <a href="https://www.svxlink.org/doc/man/man5/ModuleHelp.conf.5.html" target="_blank">@Loc["Here"]</a></small>
         <pre id="help" class="editor">@Channel.ModuleHelp</pre>
         <InputTextArea @bind-Value="Channel.ModuleHelp" type="text" class="form-control fileEditor" id="help-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleMetarInfo" role="tabpanel" aria-labelledby="ModuleMetarInfo-tab">
       <div class="form-group col-md-12">
-        <small id="ModuleMetarInfoHelp" class="form-text text-muted">La documentation du fichier ModuleMetarInfo.conf est disponible <a href="https://github.com/sm0svx/svxlink/blob/master/src/svxlink/modules/metarinfo/ModuleMetarInfo.conf.5" target="_blank">ici</a></small>
+        <small id="ModuleMetarInfoHelp" class="form-text text-muted">@Loc["ModuleMetarInfoConfDocLink"] <a href="https://github.com/sm0svx/svxlink/blob/master/src/svxlink/modules/metarinfo/ModuleMetarInfo.conf.5" target="_blank">@Loc["Here"]</a></small>
         <pre id="metarinfo" class="editor">@Channel.ModuleMetarInfo</pre>
         <InputTextArea @bind-Value="Channel.ModuleMetarInfo" type="text" class="form-control fileEditor" id="metarinfo-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleParrot" role="tabpanel" aria-labelledby="ModuleParrot-tab">
       <div class="form-group col-md-12">
-        <small id="ModuleParrotHelp" class="form-text text-muted">La documentation du fichier ModuleParrot.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleParrot.conf.5.html" target="_blank">ici</a></small>
+        <small id="ModuleParrotHelp" class="form-text text-muted">@Loc["ModuleParrotConfDocLink"] <a href="https://www.svxlink.org/doc/man/man5/ModuleParrot.conf.5.html" target="_blank">@Loc["Here"]</a></small>
         <pre id="metarinfo" class="editor">@Channel.ModuleParrot</pre>
         <InputTextArea @bind-Value="Channel.ModuleParrot" type="text" class="form-control fileEditor" id="metarinfo-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModulePropagationMonitor" role="tabpanel" aria-labelledby="ModulePropagationMonitor-tab">
       <div class="form-group col-md-12">
-        <small id="ModulePropagationMonitorHelp" class="form-text text-muted">La documentation du fichier ModulePropagationMonitor.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModulePropagationMonitor.conf.5.html" target="_blank">ici</a></small>
+        <small id="ModulePropagationMonitorHelp" class="form-text text-muted">@Loc["ModulePropagationMonitorConfDocLink"] <a href="https://www.svxlink.org/doc/man/man5/ModulePropagationMonitor.conf.5.html" target="_blank">@Loc["Here"]</a></small>
         <pre id="propagationmonitor" class="editor">@Channel.ModulePropagationMonitor</pre>
         <InputTextArea @bind-Value="Channel.ModulePropagationMonitor" type="text" class="form-control fileEditor" id="propagationmonitor-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleSelCallEnc" role="tabpanel" aria-labelledby="ModuleSelCallEnc-tab">
       <div class="form-group col-md-12">
-        <small id="ModuleSelCallEncHelp" class="form-text text-muted">La documentation du fichier ModuleSelCallEnc.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleSelCallEnc.conf.5.html" target="_blank">ici</a></small>
+        <small id="ModuleSelCallEncHelp" class="form-text text-muted">@Loc["ModuleSelCallEncConfDocLink"] <a href="https://www.svxlink.org/doc/man/man5/ModuleSelCallEnc.conf.5.html" target="_blank">@Loc["Here"]</a></small>
         <pre id="selcallenc" class="editor">@Channel.ModuleSelCallEnc</pre>
         <InputTextArea @bind-Value="Channel.ModuleSelCallEnc" type="text" class="form-control fileEditor" id="selcallenc-textarea" />
       </div>
     </div>
     <div class="tab-pane" id="ModuleTclVoiceMail" role="tabpanel" aria-labelledby="ModuleTclVoiceMail-tab">
       <div class="form-group col-md-12">
-        <small id="ModuleTclVoiceMailHelp" class="form-text text-muted">La documentation du fichier ModuleTclVoiceMail.conf est disponible <a href="https://www.svxlink.org/doc/man/man5/ModuleTclVoiceMail.conf.5.html" target="_blank">ici</a></small>
+        <small id="ModuleTclVoiceMailHelp" class="form-text text-muted">@Loc["ModuleTclVoiceMailConfDocLink"] <a href="https://www.svxlink.org/doc/man/man5/ModuleTclVoiceMail.conf.5.html" target="_blank">@Loc["Here"]</a></small>
         <pre id="tclvoicemail" class="editor">@Channel.ModuleTclVoiceMail</pre>
         <InputTextArea @bind-Value="Channel.ModuleTclVoiceMail" type="text" class="form-control fileEditor" id="tclvoicemail-textarea" />
       </div>
     </div>
   </div>
 
-  <button type="submit" class="btn btn-success">@SubmitTitle</button> <a class="btn btn-primary" href="AdvanceChannel/Manage" role="button">Annuler</a>
+  <button type="submit" class="btn btn-success">@SubmitTitle</button> <a class="btn btn-primary" href="AdvanceChannel/Manage" role="button">@Loc["BtnCancel"]</a>
 </EditForm>
 
 @code{

@@ -1,6 +1,10 @@
 ﻿@using System.Reflection;
 @using SvxlinkManager.Service
 @using System.Timers;
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<NavMenu> Loc
 
 <div class="top-row pl-4 navbar navbar-dark">
   <a class="navbar-brand" href="">Svxlink Manager @InformationalVersion</a>
@@ -14,59 +18,59 @@
 
     <li class="nav-item px-3">
       <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-        <span class="oi oi-home" aria-hidden="true"></span> Accueil
+        <span class="oi oi-home" aria-hidden="true"></span> @Loc["Home"]
       </NavLink>
     </li>
 
     <li class="nav-item px-3">
       <NavLink class="nav-link" href="Channel/Manage" Match="NavLinkMatch.Prefix">
-        <span class="oi oi-globe" aria-hidden="true"></span> Salons
+        <span class="oi oi-globe" aria-hidden="true"></span> @Loc["Rooms"]
       </NavLink>
     </li>
 
     <li class="nav-item px-3">
       <NavLink class="nav-link" href="AdvanceChannel/Manage" Match="NavLinkMatch.Prefix">
-        <span class="oi oi-globe" aria-hidden="true"></span> Salons avancés
+        <span class="oi oi-globe" aria-hidden="true"></span> @Loc["AdvancedRooms"]
       </NavLink>
     </li>
 
     <li class="nav-item px-3">
       <NavLink class="nav-link" href="Echolink/Manage" Match="NavLinkMatch.Prefix">
-        <span class="oi oi-audio" aria-hidden="true"></span> Echolink
+        <span class="oi oi-audio" aria-hidden="true"></span> @Loc["Echolink"]
       </NavLink>
     </li>
 
     <li class="nav-item px-3">
       <NavLink class="nav-link" href="Reflector/Manage" Match="NavLinkMatch.Prefix">
-        <span class="oi oi-hard-drive" aria-hidden="true"></span> Reflector
+        <span class="oi oi-hard-drive" aria-hidden="true"></span> @Loc["Reflectors"]
       </NavLink>
     </li>
 
     <li class="nav-item px-3">
       <NavLink class="nav-link" href="/RadioProfile/Manage" Match="NavLinkMatch.Prefix">
-        <span class="oi oi-rss" aria-hidden="true"></span> Profil Radio
+        <span class="oi oi-rss" aria-hidden="true"></span> @Loc["RadioProfile"]
       </NavLink>
     </li>
 
     <li class="nav-item px-3">
       <NavLink class="nav-link" href="/Scanning/Manage" Match="NavLinkMatch.Prefix">
-        <span class="oi oi-eye" aria-hidden="true"></span> Scanner
+        <span class="oi oi-eye" aria-hidden="true"></span> @Loc["Scanner"]
       </NavLink>
     </li>
 
     <li class="nav-item px-3">
       <NavLink class="nav-link" href="/Wifi/Manage" Match="NavLinkMatch.Prefix">
-        <span class="oi oi-wifi" aria-hidden="true"></span> Wifi
+        <span class="oi oi-wifi" aria-hidden="true"></span> @Loc["Wifi"]
       </NavLink>
     </li>
 
     <li class="nav-item px-3">
       <NavLink class="nav-link" href="/Updater/Manage" Match="NavLinkMatch.Prefix">
-        <span class="oi oi-cloud-download" aria-hidden="true"></span> Mise à jour
+        <span class="oi oi-cloud-download" aria-hidden="true"></span> @Loc["Updates"]
         @if (!IsUpToDate)
         {
           <div class="blink d-inline-block" style="margin-left:5px;">
-            <span class="badge badge-danger">New!</span>
+            <span class="badge badge-danger">@Loc["New"]</span>
           </div>
         }
       </NavLink>
