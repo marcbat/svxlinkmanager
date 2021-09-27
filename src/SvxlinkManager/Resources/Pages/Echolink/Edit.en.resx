@@ -118,9 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EditIsDefault" xml:space="preserve">
-    <value>Le salon {0} est actuellement le salon par défaut.</value>
+    <value>Room {0} is currently the default room.</value>
   </data>
   <data name="EditTitle" xml:space="preserve">
-    <value>Editer</value>
+    <value>Edit</value>
   </data>
 </root>
