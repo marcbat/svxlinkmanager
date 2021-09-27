@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CreateRoom" xml:space="preserve">
-    <value>Créer un nouveau salon</value>
+    <value>Create a new room</value>
   </data>
   <data name="DefaultTooltip" xml:space="preserve">
-    <value>Le salon {0} est actuellement le salon par défaut.</value>
+    <value>Room {0} is currently the default room.</value>
   </data>
   <data name="DeleteRoom" xml:space="preserve">
-    <value>Supprimer</value>
+    <value>Delete</value>
   </data>
   <data name="EditRoom" xml:space="preserve">
-    <value>Editer</value>
+    <value>Edit</value>
   </data>
   <data name="Rooms" xml:space="preserve">
-    <value>Salons</value>
+    <value>Rooms</value>
   </data>
   <data name="TemporizedTooltip" xml:space="preserve">
-    <value>Le salon @channel.Name est temporisé.</value>
+    <value>The @channel.Name channel is timed.</value>
   </data>
 </root>

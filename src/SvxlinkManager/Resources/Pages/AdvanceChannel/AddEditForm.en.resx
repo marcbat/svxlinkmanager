@@ -133,60 +133,60 @@
     <value>The DTMF will dial to activate the room.</value>
   </data>
   <data name="InputIsDefaultLabel" xml:space="preserve">
-    <value>Salon par défaut</value>
+    <value>Default room</value>
   </data>
   <data name="InputIsDefaultToolTip" xml:space="preserve">
-    <value>Si choché, c'est ce salon qui sera séléctionné au terme du délai des salons temporisés. &lt;br /&gt; Un salon ne peut être à la fois salon par défaut et salon temporisé.</value>
+    <value>If checked, this room will be selected at the end of the timeout period. &lt;br /&gt; One room cannot be both default and timed room.</value>
   </data>
   <data name="InputIsDefaultToolTip1" xml:space="preserve">
-    <value>Si choché, c'est ce salon qui sera séléctionné au terme du délai des salons temporisés. &lt;br /&gt; Un salon ne peut être à la fois salon par défaut et salon temporisé.</value>
+    <value>If checked, this room will be selected at the end of the timeout period. &lt;br /&gt; One room cannot be both default and timed room.</value>
   </data>
   <data name="InputIsTemporizedLabel" xml:space="preserve">
-    <value>Temporisé</value>
+    <value>Timed</value>
   </data>
   <data name="InputNameLabel" xml:space="preserve">
-    <value>Nom du salon</value>
+    <value>Room name</value>
   </data>
   <data name="InputNamePlaceHolder" xml:space="preserve">
-    <value>Nom du salon</value>
+    <value>Room name</value>
   </data>
   <data name="InputNameToolTip" xml:space="preserve">
-    <value>Le nom du salon s'affichera dans le menu déroulant de la page d'accueil.&lt;br /&gt; Choisissez un nom unique.</value>
+    <value>The room name will be displayed in the home page roll menu.&lt;br /&gt; Choose a unique name.</value>
   </data>
   <data name="InputSoundToolLabel" xml:space="preserve">
-    <value>Annonce vocal</value>
+    <value>Voice Announcement</value>
   </data>
   <data name="InputSoundToolTip" xml:space="preserve">
-    <value>Un fichier .wav qui sera joué lors de l'activation du salon.</value>
+    <value>A .wav file that will be played when activating the room.</value>
   </data>
   <data name="ModuleDtmfRepeaterConfDocLink" xml:space="preserve">
-    <value>La documentation du fichier ModuleDtmfRepeater.conf est disponible</value>
+    <value>ModuleDtmfRepeater.conf documentation is available</value>
   </data>
   <data name="ModuleEcholinkConfDocLink" xml:space="preserve">
-    <value>La documentation du fichier ModuleEchoLink.conf est disponible </value>
+    <value>ModuleDtmfRepeater.conf documentation is available </value>
   </data>
   <data name="ModuleFrnConfDocLink" xml:space="preserve">
-    <value>La documentation du fichier ModuleFrn.conf est disponible </value>
+    <value>ModuleDtmfRepeater.conf documentation is available </value>
   </data>
   <data name="ModuleHelpConfDocLink" xml:space="preserve">
-    <value>La documentation du fichier ModuleHelp.conf est disponible </value>
+    <value>ModuleDtmfRepeater.conf documentation is available </value>
   </data>
   <data name="ModuleMetarInfoConfDocLink" xml:space="preserve">
-    <value>La documentation du fichier ModuleMetarInfo.conf est disponible</value>
+    <value>ModuleDtmfRepeater.conf documentation is available</value>
   </data>
   <data name="ModuleParrotConfDocLink" xml:space="preserve">
-    <value>La documentation du fichier ModuleParrot.conf est disponible</value>
+    <value>ModuleDtmfRepeater.conf documentation is available</value>
   </data>
   <data name="ModulePropagationMonitorConfDocLink" xml:space="preserve">
-    <value>La documentation du fichier ModulePropagationMonitor.conf est disponible</value>
+    <value>ModuleDtmfRepeater.conf documentation is available</value>
   </data>
   <data name="ModuleSelCallEncConfDocLink" xml:space="preserve">
-    <value>La documentation du fichier ModuleSelCallEnc.conf est disponible</value>
+    <value>ModuleDtmfRepeater.conf documentation is available</value>
   </data>
   <data name="ModuleTclVoiceMailConfDocLink" xml:space="preserve">
-    <value>La documentation du fichier ModuleTclVoiceMail.conf est disponible</value>
+    <value>ModuleDtmfRepeater.conf documentation is available</value>
   </data>
   <data name="SvxlinkConfDocLink" xml:space="preserve">
-    <value>La documentation du fichier svxlink.conf est disponible</value>
+    <value>ModuleDtmfRepeater.conf documentation is available</value>
   </data>
 </root>

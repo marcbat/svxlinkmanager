@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Channels" xml:space="preserve">
-    <value>Salons</value>
+    <value>Rooms</value>
   </data>
   <data name="Disconnect" xml:space="preserve">
-    <value>Déconnecter</value>
+    <value>Log Out</value>
   </data>
   <data name="Parrot" xml:space="preserve">
-    <value>Perroquet</value>
+    <value>Parrot</value>
   </data>
   <data name="Scan" xml:space="preserve">
     <value>Scan</value>

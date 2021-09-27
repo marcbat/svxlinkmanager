@@ -118,84 +118,84 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BtnCancel" xml:space="preserve">
-    <value>Annuler</value>
+    <value>Cancel</value>
   </data>
   <data name="InputCallSignLabel" xml:space="preserve">
-    <value>Indicatif</value>
+    <value>Callsign</value>
   </data>
   <data name="InputCallSignPlaceHolder" xml:space="preserve">
-    <value>AB9CDE-L</value>
+    <value>AB9DE-L</value>
   </data>
   <data name="InputCallSignToolTip" xml:space="preserve">
-    <value>Le call du link Echolink.</value>
+    <value>The call of the Echolink link.</value>
   </data>
   <data name="InputDescriptionLabel" xml:space="preserve">
     <value>Description</value>
   </data>
   <data name="InputDescriptionToolTip" xml:space="preserve">
-    <value>La description du link.</value>
+    <value>The link description.</value>
   </data>
   <data name="InputHostLabel" xml:space="preserve">
-    <value>Adresse du serveur</value>
+    <value>Server address</value>
   </data>
   <data name="InputHostPlaceHolder" xml:space="preserve">
     <value>europe.echolink.org</value>
   </data>
   <data name="InputHostToolTip" xml:space="preserve">
-    <value>L'adresse internet du serveur Echolink.</value>
+    <value>The internet address of the Echolink server.</value>
   </data>
   <data name="InputIsDefaultLabel" xml:space="preserve">
-    <value>Salon par défaut</value>
+    <value>Default room</value>
   </data>
   <data name="InputIsDefaultToolTip" xml:space="preserve">
-    <value>Si choché, c'est ce salon qui sera séléctionné au terme du délai des salons temporisés. &lt;br /&gt; Un salon ne peut être à la fois salon par défaut et salon temporisé.</value>
+    <value>If checked, this room will be selected at the end of the timeout period. &lt;br /&gt; One room cannot be both default and timed room.</value>
   </data>
   <data name="InputIsTemporizedLabel" xml:space="preserve">
-    <value>Temporisé</value>
+    <value>Timed</value>
   </data>
   <data name="InputIsTemporizedToolTip" xml:space="preserve">
-    <value>Un salon temporisé retournera automatiquement sur le salon par défaut après un délai de 3 minutes d'inactivité.</value>
+    <value>A timed channel will automatically return to the default channel after a period of 3 minutes of inactivity.</value>
   </data>
   <data name="InputLocationLabel" xml:space="preserve">
-    <value>Emplacement géographique</value>
+    <value>Geographic location</value>
   </data>
   <data name="InputLocationPlaceHolder" xml:space="preserve">
     <value>[Svx] 144.700, Ma Ville</value>
   </data>
   <data name="InputLocationToolTip" xml:space="preserve">
-    <value>L'emplacement géographique du link.</value>
+    <value>The geographic location of the link.</value>
   </data>
   <data name="InputMaxQsoLabel" xml:space="preserve">
-    <value>Nombre de connexion maximum</value>
+    <value>Maximum number of connections</value>
   </data>
   <data name="InputMaxQsoToolTip" xml:space="preserve">
-    <value>Le nombre maximum de link pouvant de connecter simultanément.</value>
+    <value>The maximum number of links that can be connected simultaneously.</value>
   </data>
   <data name="InputNameLabel" xml:space="preserve">
-    <value>Nom du link</value>
+    <value>Link Name</value>
   </data>
   <data name="InputNamePlaceHolder" xml:space="preserve">
-    <value>Nom du link</value>
+    <value>Link name</value>
   </data>
   <data name="InputNameToolTip" xml:space="preserve">
-    <value>Le nom du link s'affichera dans le menu déroulant de la page d'accueil.&lt;br /&gt; Choisissez un nom unique.</value>
+    <value>The link name will be displayed in the menu of the home page.&lt;br /&gt; Choose a unique name.</value>
   </data>
   <data name="InputPasswordLabel" xml:space="preserve">
-    <value>Mot de passe</value>
+    <value>Password</value>
   </data>
   <data name="InputPasswordToolTip" xml:space="preserve">
-    <value>Mot de passe associé au Call</value>
+    <value>Call associated password</value>
   </data>
   <data name="InputSoundLabel" xml:space="preserve">
-    <value>Annonce vocal</value>
+    <value>Voice Announcement</value>
   </data>
   <data name="InputSoundToolTip" xml:space="preserve">
-    <value>Un fichier .wav qui sera joué lors de l'activation du link.</value>
+    <value>A .wav file that will be played when activating the room.</value>
   </data>
   <data name="InputSysopLabel" xml:space="preserve">
-    <value>Nom du Sysop</value>
+    <value>Sysop Name</value>
   </data>
   <data name="InputSysopToolTip" xml:space="preserve">
-    <value>Nom du responsable technique du link.</value>
+    <value>Name of the link technical manager.</value>
   </data>
 </root>
