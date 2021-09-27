@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AvanceRoom" xml:space="preserve">
-    <value>Salons avancés</value>
+    <value>Advanced rooms</value>
   </data>
   <data name="BtnCreate" xml:space="preserve">
-    <value>Créer un nouveau salon avancé</value>
+    <value>Create a new advanced room</value>
   </data>
   <data name="BtnDelete" xml:space="preserve">
-    <value>Supprimer</value>
+    <value>Delete</value>
   </data>
   <data name="BtnEdit" xml:space="preserve">
-    <value>Editer</value>
+    <value>Edit</value>
   </data>
   <data name="IsDefaultRoomToolTip" xml:space="preserve">
-    <value>Le salon {0} est actuellement le salon par défaut.</value>
+    <value>Room {0} is currently the default room.</value>
   </data>
   <data name="IsTemporizedRoomToolTip" xml:space="preserve">
-    <value>Le salon {0} est temporisé.</value>
+    <value>Room {0} is temporised.</value>
   </data>
 </root>
