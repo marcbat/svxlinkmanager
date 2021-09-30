@@ -118,18 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BtnApply" xml:space="preserve">
-    <value>Appliquer</value>
+    <value>Apply</value>
   </data>
   <data name="BtnDelete" xml:space="preserve">
-    <value>Supprimer</value>
+    <value>Delete</value>
   </data>
   <data name="BtnEdit" xml:space="preserve">
-    <value>Editer</value>
+    <value>Edit</value>
   </data>
   <data name="CreateNewRadioProfile" xml:space="preserve">
-    <value>Créer un nouveau profil radio</value>
+    <value>Create a new radio profile</value>
   </data>
   <data name="RadioProfileTitle" xml:space="preserve">
-    <value>Profils Radio</value>
+    <value>Radio Profils</value>
   </data>
 </root>
