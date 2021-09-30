@@ -118,31 +118,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BtnActivate" xml:space="preserve">
-    <value>Activer</value>
+    <value>Enable</value>
   </data>
   <data name="BtnDeactivate" xml:space="preserve">
-    <value>Désactiver</value>
+    <value>Disabled</value>
   </data>
   <data name="BtnSave" xml:space="preserve">
-    <value>Sauver</value>
+    <value>Save</value>
   </data>
   <data name="ChannelsLabel" xml:space="preserve">
-    <value>Liste des salons scannés</value>
+    <value>List of scanned channels</value>
   </data>
   <data name="ChannelsToolTip" xml:space="preserve">
-    <value>Liste des salons scannés lors de l'activation du scan.  &lt;br /&gt; Seul les salons du RRF peuvent être scannés pour l'instant.</value>
+    <value>List of scanned channels when enabling scan.  &lt;br /&gt; Only RRF channels can be scanned at this time.</value>
   </data>
   <data name="InputScanDelayLabel" xml:space="preserve">
-    <value>Délai d'inactivité avant lancement</value>
+    <value>Delay of inactivity before launch</value>
   </data>
   <data name="InputScanToolTip" xml:space="preserve">
-    <value>Délai d'inactivité en secondes avant que le scan soit lancé.</value>
+    <value>Delay of inactivity in seconds before scanning started.</value>
   </data>
   <data name="LabelActivated" xml:space="preserve">
-    <value>activé</value>
+    <value>enabled</value>
   </data>
   <data name="LabelDeactivated" xml:space="preserve">
-    <value>désactivé</value>
+    <value>disabled</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Scan</value>
