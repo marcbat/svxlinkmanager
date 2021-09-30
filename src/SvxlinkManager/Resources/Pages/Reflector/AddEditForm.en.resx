@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BtnCancel" xml:space="preserve">
-    <value>Annuler</value>
+    <value>Cancel</value>
   </data>
   <data name="Here" xml:space="preserve">
-    <value>ici</value>
+    <value>here</value>
   </data>
   <data name="InputNameLabel" xml:space="preserve">
-    <value>Nom du reflecteur</value>
+    <value>Reflector Name</value>
   </data>
   <data name="InputNamePlaceHolder" xml:space="preserve">
-    <value>Mon reflecteur perso</value>
+    <value>My personal reflector</value>
   </data>
   <data name="InputNameToolTip" xml:space="preserve">
-    <value>Le nom du reflecteur &lt;br /&gt; Choisissez un nom unique.</value>
+    <value>The name of the radio profile. &lt;br /&gt; Choose a unique name.</value>
   </data>
   <data name="ReflectorDocLink" xml:space="preserve">
-    <value>La documentation du fichier svxreflector.conf est disponible</value>
+    <value>ModuleDtmfRepeater.conf documentation is available</value>
   </data>
 </root>
