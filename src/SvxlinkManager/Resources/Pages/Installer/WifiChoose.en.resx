@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AlertHeader" xml:space="preserve">
-    <value>Si vous le souhaitez, vous pouvez connecter un ou plusieurs Wifi.</value>
+    <value>If you want, you can connect one or more Wifi.</value>
   </data>
   <data name="BtnNext" xml:space="preserve">
-    <value>Suivant</value>
+    <value>Next</value>
   </data>
   <data name="BtnPreview" xml:space="preserve">
-    <value>Précédent</value>
+    <value>Back</value>
   </data>
   <data name="SearchForWifi" xml:space="preserve">
-    <value>Recherche de réseau wifi</value>
+    <value>Searching for wifi network</value>
   </data>
 </root>
