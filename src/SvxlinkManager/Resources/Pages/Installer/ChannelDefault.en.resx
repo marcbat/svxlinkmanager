@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AlertHeader" xml:space="preserve">
-    <value>Ok, maintenant, merci de choisir, parmis les salons que vous allez concerver, lequel sera le &lt;strong&gt;salon par défaut&lt;/strong&gt;.&lt;br /&gt;
-  Ce salon sera celui vers lequel retourneront les salons en fin de temporisation ou le scanner au terme d'une période d'inactivité.</value>
+    <value>Ok, now please choose from the room you are going to show, which will be the &lt;strong&gt;default room &lt;/strong&gt;.&lt;br /&gt;
+  This room will be the one to which the room will return at the end of the delay or scan after a period of inactivity.</value>
   </data>
   <data name="BtnNext" xml:space="preserve">
-    <value>Suivant</value>
+    <value>Next</value>
   </data>
   <data name="BtnPreview" xml:space="preserve">
-    <value>Précédent</value>
+    <value>Back</value>
   </data>
 </root>
