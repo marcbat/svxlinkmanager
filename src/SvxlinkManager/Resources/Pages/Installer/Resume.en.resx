@@ -118,45 +118,45 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AlertHeader" xml:space="preserve">
-    <value>Merci de vérifier les informations ci-dessous et de lancer l'installation.</value>
+    <value>Please check the information below and start the installation.</value>
   </data>
   <data name="AlertInstall" xml:space="preserve">
-    <value>Attention, la mise à jour redémarre automatiquement l'application. Vous devrez recharger la page dans 30 seconde environ.</value>
+    <value>Warning, the update automatically restarts the application. You will need to reload the page in about 30 seconds.</value>
   </data>
   <data name="AnnoncedCallLabel" xml:space="preserve">
-    <value>Indicatif annoncé</value>
+    <value>Announced callsign</value>
   </data>
   <data name="BtnInstall" xml:space="preserve">
-    <value>Installer</value>
+    <value>Install</value>
   </data>
   <data name="BtnUpdate" xml:space="preserve">
-    <value>Modifier</value>
+    <value>Modify</value>
   </data>
   <data name="CallLabel" xml:space="preserve">
-    <value>Indicatif</value>
+    <value>Callsign</value>
   </data>
   <data name="ChannelsToInstall" xml:space="preserve">
-    <value>Salons à installer</value>
+    <value>Room to install</value>
   </data>
   <data name="DefaultChannel" xml:space="preserve">
-    <value>Salons principal</value>
+    <value>Main Room</value>
   </data>
   <data name="GeneralInfos" xml:space="preserve">
-    <value>Informations générales</value>
+    <value>General Information</value>
   </data>
   <data name="ReleaseToInstall" xml:space="preserve">
-    <value>Mise à jour à installer</value>
+    <value>Update ready to be installed</value>
   </data>
   <data name="RxFrequencyLabel" xml:space="preserve">
-    <value>Fréquence RX</value>
+    <value>Rx Freqency</value>
   </data>
   <data name="TxFrequencyLabel" xml:space="preserve">
-    <value>Fréquence TX</value>
+    <value>Tx Freqency</value>
   </data>
   <data name="UpdateTitle" xml:space="preserve">
-    <value>Mise à jour</value>
+    <value>Updates</value>
   </data>
   <data name="UserLabel" xml:space="preserve">
-    <value>Utilisateur</value>
+    <value>User</value>
   </data>
 </root>
