@@ -118,37 +118,37 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AlertHeader" xml:space="preserve">
-    <value>Nous allons installer &lt;strong&gt;Svxlink Manager&lt;/strong&gt; ensemble.&lt;br /&gt;
-  Commençons par vous choisir un nom d'utilisateur et un mot de passe pour vos prochaines connexions.</value>
+    <value>Let's install &lt;strong&gt;Svxlink Manager&lt;/strong&gt; together.&lt;br /&gt;
+  Let's start by choosing a username and password for your next login.</value>
   </data>
   <data name="BtnNext" xml:space="preserve">
-    <value>Suivant</value>
+    <value>Next</value>
   </data>
   <data name="Password2Label" xml:space="preserve">
-    <value>Saisissez à nouveau votre mot de passe</value>
+    <value>Please re-enter your password</value>
   </data>
   <data name="Password2PlaceHolder" xml:space="preserve">
-    <value>Mot de passe pour vérification</value>
+    <value>Password for verification</value>
   </data>
   <data name="Password2ToolTip" xml:space="preserve">
-    <value>Saisissez à nouveau le mot de passe qui vous servira à acceder à SvxlinkManager.</value>
+    <value>Re-enter the password that will be used for access to SvxlinkManager.</value>
   </data>
   <data name="PasswordLabel" xml:space="preserve">
-    <value>Mot de passe</value>
+    <value>Password</value>
   </data>
   <data name="PasswordPlaceHolder" xml:space="preserve">
-    <value>Mot de passe</value>
+    <value>Password</value>
   </data>
   <data name="PasswordToolTip" xml:space="preserve">
-    <value>Le mot de passe qui vous servira à acceder à SvxlinkManager.</value>
+    <value>The password that will be used to access SvxlinkManager.</value>
   </data>
   <data name="UserNameLabel" xml:space="preserve">
-    <value>Nom d'utilisateur</value>
+    <value>Username</value>
   </data>
   <data name="UserNamePlaceHolder" xml:space="preserve">
-    <value>Votre nom d'utilisateur doit être un email valide</value>
+    <value>Your username must be a valid email</value>
   </data>
   <data name="UserNameToolTip" xml:space="preserve">
-    <value>Le nom d'utilisateur qui vous servira à vous connecter à SvxlinkManager.</value>
+    <value>The username you will use to login to SvxlinkManager.</value>
   </data>
 </root>
