@@ -118,39 +118,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AlertHeader" xml:space="preserve">
-    <value>&lt;p&gt;Pour pouvoir utiliser les reflecteurs, vous devez ouvrir le port indiqué dans la configuration de votre reflecteur à la ligne &lt;strong&gt;LISTEN_PORT&lt;/strong&gt; à la fois en TCP et UDP.&lt;/p&gt;
+    <value>&lt;p&gt;To be able to use reflectors, you need to open the port specified in your reflector configuration on the line &lt;strong&gt;LISTEN_PORT&lt;/strong&gt; at both TCP and UDP.&lt;/p&gt;
       &lt;p&gt;
-        Vous pouvez créer un salon qui pointe vers votre reflecteur en utilisant le paramètres suivants:
+        You can create a channel that points to your reflector using the following parameters:
         &lt;ul&gt;
-          &lt;li&gt;Adresse du reflector: localhost&lt;/li&gt;
-          &lt;li&gt;Port: La valeur du paramètre &lt;strong&gt;LISTEN_PORT&lt;/strong&gt;&lt;/li&gt;
-          &lt;li&gt;Utilisateur svxreflector: L'un des utilisateurs renseigné dans la section &lt;strong&gt;[USERS]&lt;/strong&gt;&lt;/li&gt;
-          &lt;li&gt;Mot de passe: le mot de passe associé à l'utilisateur et renseigné dans la partie &lt;strong&gt;[PASSWORDS]&lt;/strong&gt;&lt;/li&gt;
+          &lt;li&gt;Reflector Address: localhost&lt;/li&gt;
+          &lt;li&gt;Port: The value of the parameter &lt;strong&gt;LISTEN_PORT&lt;/strong&gt;&lt;/li&gt;
+          &lt;li&gt;svxreflector user: One of the users entered in section &lt;strong&gt;[USERS]&lt;/strong&gt;&lt;/li&gt;
+          &lt;li&gt;Password: the password associated with the user and information in part &lt;strong&gt;[PASSWORDS]&lt;/strong&gt;&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/p&gt;</value>
   </data>
   <data name="BtnCreate" xml:space="preserve">
-    <value>Créer un nouveau reflecteur</value>
+    <value>Create a new reflector</value>
   </data>
   <data name="BtnDelete" xml:space="preserve">
-    <value>Supprimer</value>
+    <value>Delete</value>
   </data>
   <data name="BtnEdit" xml:space="preserve">
-    <value>Editer</value>
+    <value>Edit</value>
   </data>
   <data name="BtnRun" xml:space="preserve">
-    <value>Démarrer</value>
+    <value>Start</value>
   </data>
   <data name="BtnStop" xml:space="preserve">
-    <value>Arrêter</value>
+    <value>Stop</value>
   </data>
   <data name="DangerSamePort" xml:space="preserve">
-    <value>Vous ne pouvez pas activer deux reflecteurs sur le même port en même temps.</value>
+    <value>You cannot activate two reflectors on the same port at the same time.</value>
   </data>
   <data name="OnAir" xml:space="preserve">
     <value>ON AIR</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Réflecteurs</value>
+    <value>Reflectors</value>
   </data>
 </root>
