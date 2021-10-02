@@ -160,7 +160,7 @@
     <value>Geographic location</value>
   </data>
   <data name="InputLocationPlaceHolder" xml:space="preserve">
-    <value>[Svx] 144.700, Ma Ville</value>
+    <value>[Svx] 144.700, My City</value>
   </data>
   <data name="InputLocationToolTip" xml:space="preserve">
     <value>The geographic location of the link.</value>
