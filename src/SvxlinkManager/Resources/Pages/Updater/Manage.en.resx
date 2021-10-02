@@ -154,6 +154,6 @@
     <value>Release details</value>
   </data>
   <data name="SearchForRelease" xml:space="preserve">
-    <value>Recherche de mise à jour.</value>
+    <value>Checking for update.</value>
   </data>
 </root>
