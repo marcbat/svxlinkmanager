@@ -118,45 +118,45 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BtnCancel" xml:space="preserve">
-    <value>Annuler</value>
+    <value>Cancel</value>
   </data>
   <data name="InputNameLabel" xml:space="preserve">
-    <value>Nom du profil</value>
+    <value>Profile Name</value>
   </data>
   <data name="InputNameplaceHolder" xml:space="preserve">
-    <value>Mon profil au QRA</value>
+    <value>My QRA profile</value>
   </data>
   <data name="InputNameToolTip" xml:space="preserve">
-    <value>Le nom du profil radio. &lt;br /&gt; Choisissez un nom unique.</value>
+    <value>The name of the radio profile. &lt;br /&gt; Choose a unique name.</value>
   </data>
   <data name="InputRxCtcssLabel" xml:space="preserve">
-    <value>Tone CTCSS en récéption</value>
+    <value>Rx CTCSS Tone</value>
   </data>
   <data name="InputRxLabel" xml:space="preserve">
-    <value>Fréquence de récéption</value>
+    <value>Rx frequency</value>
   </data>
   <data name="InputRxPlaceHolder" xml:space="preserve">
-    <value>145.450 ou 434.400 par exemple</value>
+    <value>145.450 or 434.400 for example</value>
   </data>
   <data name="InputRxToolTip" xml:space="preserve">
-    <value>La fréquence de récéption du module SA818.</value>
+    <value>SA818 module Rx frequency.</value>
   </data>
   <data name="InputSquelchLabel" xml:space="preserve">
     <value>Squelch</value>
   </data>
   <data name="InputTrxTypeLabel" xml:space="preserve">
-    <value>Type de TRX</value>
+    <value>Transmitter type</value>
   </data>
   <data name="InputTxCtcssLabel" xml:space="preserve">
-    <value>Tone CTCSS en émission</value>
+    <value>Tx CTCSS Tone</value>
   </data>
   <data name="InputTxLabel" xml:space="preserve">
-    <value>Fréquence d'émission</value>
+    <value>Tx frequency</value>
   </data>
   <data name="InputTxPlaceHolder" xml:space="preserve">
-    <value>145.450 ou 434.400 par exemple</value>
+    <value>145.450 or 434.400 for example</value>
   </data>
   <data name="InputTxToolTip" xml:space="preserve">
-    <value>La fréquence d'émission du module SA818.</value>
+    <value>SA818 module Tx frequency.</value>
   </data>
 </root>

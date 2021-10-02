@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ChannelsInstall" xml:space="preserve">
-    <value>Installation des salons</value>
+    <value>Room installation</value>
   </data>
   <data name="DownloadRelease" xml:space="preserve">
-    <value>Téléchargement de la mise à jour.</value>
+    <value>Downloading update.</value>
   </data>
   <data name="InstallRelease" xml:space="preserve">
-    <value>Installation de la mise à jour. Vous pourrez recharger la page dans 30 secondes environs.</value>
+    <value>Installing update. You will be able to reload the page in about 30 seconds.</value>
   </data>
   <data name="RadioProfileCreate" xml:space="preserve">
-    <value>Création du profil radio</value>
+    <value>Radio profile creation</value>
   </data>
   <data name="SetDefaultChannel" xml:space="preserve">
-    <value>Définition du salon principal</value>
+    <value>Main room definition</value>
   </data>
   <data name="UserCreate" xml:space="preserve">
-    <value>Création de l'utilisateur</value>
+    <value>User creation</value>
   </data>
 </root>

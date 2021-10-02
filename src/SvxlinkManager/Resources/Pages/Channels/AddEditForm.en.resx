@@ -148,7 +148,7 @@
     <value>Reflector's address</value>
   </data>
   <data name="InputHostPlaceHolder" xml:space="preserve">
-    <value>rrf2.f5nlg.ovh ou 137.74.192.234</value>
+    <value>rrf2.f5nlg.ovh or 137.74.192.234</value>
   </data>
   <data name="InputHostToolTip" xml:space="preserve">
     <value>The internet address of the reflector svxlink.</value>

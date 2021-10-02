@@ -118,42 +118,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BtnCurrentVersion" xml:space="preserve">
-    <value>Version courante</value>
+    <value>Current Revision</value>
   </data>
   <data name="BtnDownload" xml:space="preserve">
-    <value>Obtenir</value>
+    <value>Get</value>
   </data>
   <data name="BtnDownloadImg" xml:space="preserve">
-    <value>Télécharger</value>
+    <value>Download</value>
   </data>
   <data name="BtnInstaller" xml:space="preserve">
-    <value>Installer</value>
+    <value>Install</value>
   </data>
   <data name="BtnInstallerToolTip" xml:space="preserve">
-    <value>L'installation peut prendre un certain temps. &lt;br /&gt; Vous devrez recharger la page dans 30 secondes environ.</value>
+    <value>Setup may take a while. &lt;br /&gt; You will need to reload the page in about 30 seconds.</value>
   </data>
   <data name="CurrentVersion" xml:space="preserve">
-    <value>Version actuelle {0}</value>
+    <value>Current Version: {0}</value>
   </data>
   <data name="Downloads" xml:space="preserve">
-    <value>{0} téléchargements</value>
+    <value>{0} downloaded</value>
   </data>
   <data name="IsUpToDate" xml:space="preserve">
-    <value>Svxlink Manager est à jour.</value>
+    <value>Svxlink Manager is up to date.</value>
   </data>
   <data name="NewImageAvailable" xml:space="preserve">
-    <value>Une nouvelle image est disponible.</value>
+    <value>A new image version is available.</value>
   </data>
   <data name="NewImageAvailableToolTip" xml:space="preserve">
-    <value>Une nouvelle image est disponible, vous devez impérativement l'utiliser pour passer aux versions supérieures à la version {0}.</value>
+    <value>A new image version is available, you must use it to upgrade to version {0}.</value>
   </data>
   <data name="NewVersionAvailable" xml:space="preserve">
-    <value>Une nouvelle version est disponible.</value>
+    <value>A new version is available.</value>
   </data>
   <data name="ReleaseDetails" xml:space="preserve">
-    <value>Détails de la release</value>
+    <value>Release details</value>
   </data>
   <data name="SearchForRelease" xml:space="preserve">
-    <value>Recherche de mise à jour.</value>
+    <value>Checking for update.</value>
   </data>
 </root>

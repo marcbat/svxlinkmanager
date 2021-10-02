@@ -118,31 +118,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AlertHeader" xml:space="preserve">
-    <value>A présent, choisissez les &lt;strong&gt;salons&lt;/strong&gt; qui seront installés par défaut. &lt;br /&gt;
-  Les mots de passe de ces salons sont déjà renseignés pour vous. Indiquez simplement votre indicatif et décochez les salons que vous ne voulez pas.</value>
+    <value>Choose the &lt;strong&gt;channels&lt;/strong&gt; that will be installed by default. &lt;br /&gt;
+  The passwords for these channels are already provided for you. Simply specify your code and uncheck the channels you don't want.</value>
   </data>
   <data name="AnnonceCallSignLabel" xml:space="preserve">
-    <value>Indicatif annoncé</value>
+    <value>Announced callsign</value>
   </data>
   <data name="AnnonceCallSignPlaceHolder" xml:space="preserve">
-    <value>Utilisez également votre indicatif, mais sous sa forme simple, par exemple HB9ABC</value>
+    <value>Also use your callsign, but in its simple form, e. g. HB9ABC</value>
   </data>
   <data name="AnnonceCallSignToolTip" xml:space="preserve">
-    <value>L'indicatif annoncé sera utilisé par Svxlink pour annoncer le point d'accès à interval régulier.</value>
+    <value>The callsign will be used by Svxlink to announce the access point at regular intervals.</value>
   </data>
   <data name="BtnNext" xml:space="preserve">
-    <value>Suivant</value>
+    <value>Next</value>
   </data>
   <data name="BtnPreview" xml:space="preserve">
-    <value>Précédent</value>
+    <value>Back</value>
   </data>
   <data name="CallSignLabel" xml:space="preserve">
-    <value>Votre indicatif</value>
+    <value>Your callsign</value>
   </data>
   <data name="CallSignPlaceHolder" xml:space="preserve">
-    <value>Votre indicatif, par exemple (CH) HB9ABC H</value>
+    <value>Your callsign, e. g. (CH) HB9ABC H</value>
   </data>
   <data name="CallSignToolTip" xml:space="preserve">
-    <value>Votre indicatif. Il servira également à vous identifier sur les salons</value>
+    <value>Your callsign. It will also be used to identify you on room</value>
   </data>
 </root>

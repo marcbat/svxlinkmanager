@@ -118,40 +118,40 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AlertHeader" xml:space="preserve">
-    <value>Il est maintenant temps de configurer le profil radio par défaut.&lt;br /&gt;
-  Choisis une fréquence d'émission et de récéption ainsi que les tones CTCSS.</value>
+    <value>It is now time to configure the default radio profile.&lt;br /&gt;
+  Choose the TX and RX frequency and CTCSS tones.</value>
   </data>
   <data name="BtnNext" xml:space="preserve">
-    <value>Suivant</value>
+    <value>Next</value>
   </data>
   <data name="BtnPreview" xml:space="preserve">
-    <value>Précédent</value>
+    <value>Back</value>
   </data>
   <data name="InputRxCtcssLabel" xml:space="preserve">
-    <value>Tone CTCSS en récéption</value>
+    <value>Rx CTCSS Tone</value>
   </data>
   <data name="InputRxLabel" xml:space="preserve">
-    <value>Fréquence de récéption</value>
+    <value>Rx frequency</value>
   </data>
   <data name="InputRxPlaceHolder" xml:space="preserve">
-    <value>145.450 ou 434.400 par exemple</value>
+    <value>145.450 or 434.400 for example</value>
   </data>
   <data name="InputRxToolTip" xml:space="preserve">
-    <value>La fréquence de récéption du module SA818.</value>
+    <value>SA818 module Rx frequency.</value>
   </data>
   <data name="InputTrxTypeLabel" xml:space="preserve">
-    <value>Type de TRX</value>
+    <value>Transmitter type</value>
   </data>
   <data name="InputTxCtcssLabel" xml:space="preserve">
-    <value>Tone CTCSS en émission</value>
+    <value>Tx CTCSS Tone</value>
   </data>
   <data name="InputTxLabel" xml:space="preserve">
-    <value>Fréquence d'émission</value>
+    <value>Tx frequency</value>
   </data>
   <data name="InputTxPlaceHolder" xml:space="preserve">
-    <value>145.450 ou 434.400 par exemple</value>
+    <value>145.450 or 434.400 for example</value>
   </data>
   <data name="InputTxToolTip" xml:space="preserve">
-    <value>La fréquence d'émission du module SA818.</value>
+    <value>SA818 module Tx frequency.</value>
   </data>
 </root>
