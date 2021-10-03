@@ -33,6 +33,6 @@ namespace SvxlinkManager.Pages.RadioProfile
       NavigationManager.NavigateTo("RadioProfile/Manage");
     }
 
-    protected override string SubmitTitle => "Modifier";
+    protected override string SubmitTitle => Loc["Modify"];
   }
 }

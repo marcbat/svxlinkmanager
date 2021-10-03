@@ -19,7 +19,7 @@ namespace SvxlinkManager.Pages.RadioProfile
       RadioProfile = new Models.RadioProfile();
     }
 
-    protected override string SubmitTitle => "Créer";
+    protected override string SubmitTitle => Loc["Create"];
 
     protected override async Task HandleValidSubmitAsync()
     {

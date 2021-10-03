@@ -39,6 +39,6 @@ namespace SvxlinkManager.Pages.Reflector
       NavigationManager.NavigateTo("Reflector/Manage");
     }
 
-    protected override string SubmitTitle => "Modifier";
+    protected override string SubmitTitle => Loc["Modify"];
   }
 }

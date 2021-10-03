@@ -39,7 +39,7 @@ namespace SvxlinkManager.Pages.Reflector
       Reflector.Config = sb.ToString();
     }
 
-    protected override string SubmitTitle => "Créer";
+    protected override string SubmitTitle => Loc["Create"];
 
     protected override async Task HandleValidSubmitAsync()
     {

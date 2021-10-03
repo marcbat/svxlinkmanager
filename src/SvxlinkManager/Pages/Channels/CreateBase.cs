@@ -16,7 +16,7 @@ namespace SvxlinkManager.Pages.Channels
   [Authorize]
   public class CreateBase<TChannel, TLocalizer> : AddEditBase<TChannel, TLocalizer> where TChannel : ManagedChannel, new()
   {
-    protected override string SubmitTitle => "Créer";
+    protected override string SubmitTitle => Loc["Create"];
 
     /// <summary>
     /// Handles the form submit.
