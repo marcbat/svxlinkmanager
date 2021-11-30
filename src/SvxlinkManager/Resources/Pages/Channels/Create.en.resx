@@ -120,4 +120,7 @@
   <data name="AddNewRoom" xml:space="preserve">
     <value>Add Room</value>
   </data>
+  <data name="Create" xml:space="preserve">
+    <value>Créer</value>
+  </data>
 </root>
