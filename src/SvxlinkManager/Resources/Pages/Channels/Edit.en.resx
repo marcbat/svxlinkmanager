@@ -120,6 +120,9 @@
   <data name="EditRoom" xml:space="preserve">
     <value>Edit {0}</value>
   </data>
+  <data name="Modify" xml:space="preserve">
+    <value>Editer</value>
+  </data>
   <data name="RoomIsDefault" xml:space="preserve">
     <value>Room {0} is currently the default room.</value>
   </data>
