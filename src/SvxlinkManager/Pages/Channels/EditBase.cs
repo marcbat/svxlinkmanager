@@ -21,7 +21,7 @@ namespace SvxlinkManager.Pages.Channels
     [Inject]
     public SvxLinkService SvxLinkService { get; set; }
 
-    protected override string SubmitTitle => "Modifier";
+    protected override string SubmitTitle => Loc["Modify"];
 
     /// <summary>
     /// Handles the form submit.
