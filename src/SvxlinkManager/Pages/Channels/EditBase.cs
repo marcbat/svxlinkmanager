@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
-using SvxlinkManager.Models;
+using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Service;
 
 using System;
@@ -12,55 +12,55 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Channels
 {
-  [Authorize]
-  public class EditBase<TChannel, TLocalizer> : AddEditBase<TChannel, TLocalizer> where TChannel : ManagedChannel
-  {
-    [Parameter]
-    public string Id { get; set; }
-
-    [Inject]
-    public SvxLinkService SvxLinkService { get; set; }
-
-    protected override string SubmitTitle => Loc["Modify"];
-
-    /// <summary>
-    /// Handles the form submit.
-    /// </summary>
-    public virtual async Task HandleValidSubmit(string redirect)
+    [Authorize]
+    public class EditBase<TChannel, TLocalizer> : AddEditBase<TChannel, TLocalizer> where TChannel : ManagedChannel
     {
-      await base.HandleValidSubmit();
+        [Parameter]
+        public string Id { get; set; }
 
-      Repositories.Channels.Update(Channel);
+        [Inject]
+        public SvxLinkService SvxLinkService { get; set; }
 
-      if (Channel.Sound != null)
-        Repositories.Repository<Sound>().Update(Channel.Sound);
+        protected override string SubmitTitle => Loc["Modify"];
 
-      if (SvxLinkService.ChannelId == Channel.Id)
-        SvxLinkService.ActivateChannel(Channel.Id);
+        /// <summary>
+        /// Handles the form submit.
+        /// </summary>
+        public virtual async Task HandleValidSubmit(string redirect)
+        {
+            await base.HandleValidSubmit();
 
-      await ShowSuccessToastAsync("Modifié", $"Le salon {Channel.Name} a bien été modifié.");
+            Repositories.Channels.Update(Channel);
 
-      NavigationManager.NavigateTo($"{redirect}/Manage");
+            if (Channel.Sound != null)
+                Repositories.Repository<Sound>().Update(Channel.Sound);
+
+            if (SvxLinkService.ChannelId == Channel.Id)
+                SvxLinkService.ActivateChannel(Channel.Id);
+
+            await ShowSuccessToastAsync("Modifié", $"Le salon {Channel.Name} a bien été modifié.");
+
+            NavigationManager.NavigateTo($"{redirect}/Manage");
+        }
+
+        protected override void OnInitialized()
+        {
+            switch (Channel)
+            {
+                case SvxlinkChannel channel:
+                    Telemetry.TrackPageView(new PageViewTelemetry("Svxlink Channel Edit Page") { Url = new Uri("/Channel/Edit", UriKind.Relative) });
+                    break;
+
+                case EcholinkChannel channel:
+                    Telemetry.TrackPageView(new PageViewTelemetry("Echolink Channel Edit Page") { Url = new Uri("/Echolink/Edit", UriKind.Relative) });
+                    break;
+
+                default:
+                    Telemetry.TrackPageView("Channel Edit Page");
+                    break;
+            }
+
+            Channel = (TChannel)Repositories.Channels.GetWithSound(int.Parse(Id));
+        }
     }
-
-    protected override void OnInitialized()
-    {
-      switch (Channel)
-      {
-        case SvxlinkChannel channel:
-          Telemetry.TrackPageView(new PageViewTelemetry("Svxlink Channel Edit Page") { Url = new Uri("/Channel/Edit", UriKind.Relative) });
-          break;
-
-        case EcholinkChannel channel:
-          Telemetry.TrackPageView(new PageViewTelemetry("Echolink Channel Edit Page") { Url = new Uri("/Echolink/Edit", UriKind.Relative) });
-          break;
-
-        default:
-          Telemetry.TrackPageView("Channel Edit Page");
-          break;
-      }
-
-      Channel = (TChannel)Repositories.Channels.GetWithSound(int.Parse(Id));
-    }
-  }
 }

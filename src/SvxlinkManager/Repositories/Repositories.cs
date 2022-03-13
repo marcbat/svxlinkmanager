@@ -1,5 +1,5 @@
 ﻿using SvxlinkManager.Data;
-using SvxlinkManager.Models;
+using SvxlinkManager.Domain.Entities;
 
 using System;
 using System.Collections.Generic;
@@ -8,55 +8,55 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Repositories
 {
-  public interface IRepositories
-  {
-    IChannelRepository Channels { get; }
-
-    IRadioProfileRepository RadioProfiles { get; }
-
-    IRepository<SvxlinkChannel> SvxlinkChannels { get; set; }
-
-    IRepository<EcholinkChannel> EcholinkChannels { get; set; }
-
-    IRepository<ScanProfile> ScanProfiles { get; set; }
-
-    IRepository<Reflector> Reflectors { get; set; }
-
-    IParameterRepository Parameters { get; set; }
-
-    Repository<TEntity> Repository<TEntity>() where TEntity : class, IModelEntity;
-  }
-
-  public class Repositories : IRepositories
-  {
-    private readonly IDbContextFactory<ApplicationDbContext> contextFactory;
-
-    public Repositories(IDbContextFactory<ApplicationDbContext> contextFactory)
+    public interface IRepositories
     {
-      Channels = new ChannelRepository(contextFactory);
-      RadioProfiles = new RadioProfileRepository(contextFactory);
-      SvxlinkChannels = new Repository<SvxlinkChannel>(contextFactory);
-      EcholinkChannels = new Repository<EcholinkChannel>(contextFactory);
-      ScanProfiles = new ScanProfileRepository(contextFactory);
-      Reflectors = new ReflectorRepository(contextFactory);
-      Parameters = new ParameterRepository(contextFactory);
-      this.contextFactory = contextFactory;
+        IChannelRepository Channels { get; }
+
+        IRadioProfileRepository RadioProfiles { get; }
+
+        IRepository<SvxlinkChannel> SvxlinkChannels { get; set; }
+
+        IRepository<EcholinkChannel> EcholinkChannels { get; set; }
+
+        IRepository<ScanProfile> ScanProfiles { get; set; }
+
+        IRepository<Reflector> Reflectors { get; set; }
+
+        IParameterRepository Parameters { get; set; }
+
+        Repository<TEntity> Repository<TEntity>() where TEntity : class, IModelEntity;
     }
 
-    public IChannelRepository Channels { get; private set; }
+    public class Repositories : IRepositories
+    {
+        private readonly IDbContextFactory<ApplicationDbContext> contextFactory;
 
-    public IRadioProfileRepository RadioProfiles { get; private set; }
+        public Repositories(IDbContextFactory<ApplicationDbContext> contextFactory)
+        {
+            Channels = new ChannelRepository(contextFactory);
+            RadioProfiles = new RadioProfileRepository(contextFactory);
+            SvxlinkChannels = new Repository<SvxlinkChannel>(contextFactory);
+            EcholinkChannels = new Repository<EcholinkChannel>(contextFactory);
+            ScanProfiles = new ScanProfileRepository(contextFactory);
+            Reflectors = new ReflectorRepository(contextFactory);
+            Parameters = new ParameterRepository(contextFactory);
+            this.contextFactory = contextFactory;
+        }
 
-    public IRepository<SvxlinkChannel> SvxlinkChannels { get; set; }
+        public IChannelRepository Channels { get; private set; }
 
-    public IRepository<EcholinkChannel> EcholinkChannels { get; set; }
+        public IRadioProfileRepository RadioProfiles { get; private set; }
 
-    public IRepository<ScanProfile> ScanProfiles { get; set; }
+        public IRepository<SvxlinkChannel> SvxlinkChannels { get; set; }
 
-    public IParameterRepository Parameters { get; set; }
+        public IRepository<EcholinkChannel> EcholinkChannels { get; set; }
 
-    public IRepository<Reflector> Reflectors { get; set; }
+        public IRepository<ScanProfile> ScanProfiles { get; set; }
 
-    public Repository<TEntity> Repository<TEntity>() where TEntity : class, IModelEntity => new Repository<TEntity>(contextFactory);
-  }
+        public IParameterRepository Parameters { get; set; }
+
+        public IRepository<Reflector> Reflectors { get; set; }
+
+        public Repository<TEntity> Repository<TEntity>() where TEntity : class, IModelEntity => new Repository<TEntity>(contextFactory);
+    }
 }

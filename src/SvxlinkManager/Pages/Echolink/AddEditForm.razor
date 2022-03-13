@@ -86,7 +86,7 @@
 
 @code{
   [Parameter]
-  public Models.EcholinkChannel Channel { get; set; }
+  public SvxlinkManager.Domain.Entities.EcholinkChannel Channel { get; set; }
 
   [Parameter]
   public string SubmitTitle { get; set; }
@@ -121,7 +121,7 @@
 
   private void OnInputFileChange(InputFileChangeEventArgs eventArgs)
   {
-    Channel.SoundBrowserFile = eventArgs.File;
+    //Channel.SoundBrowserFile = eventArgs.File;
   }
 
   public string CurrentSoundName

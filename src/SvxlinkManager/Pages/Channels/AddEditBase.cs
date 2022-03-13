@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-using SvxlinkManager.Models;
+using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Pages.Shared;
 
 using System;
@@ -14,58 +14,58 @@ using Microsoft.JSInterop;
 
 namespace SvxlinkManager.Pages.Channels
 {
-  public abstract class AddEditBase<TChannel, TLocalizer> : RepositoryComponentBase<TLocalizer> where TChannel : ManagedChannel
-  {
-    private CancellationTokenSource cancelation;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public abstract class AddEditBase<TChannel, TLocalizer> : RepositoryComponentBase<TLocalizer> where TChannel : ManagedChannel
     {
-      await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
+        private CancellationTokenSource cancelation;
 
-      await Js.InvokeVoidAsync("SetEditor");
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
+
+            await Js.InvokeVoidAsync("SetEditor");
+        }
+
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
+        /// <summary>
+        /// Current Channel to Create or Edit
+        /// </summary>
+        /// <value>The channel.</value>
+        protected TChannel Channel { get; set; }
+
+        /// <summary>
+        /// Submit button label
+        /// </summary>
+        /// <value>The submit label.</value>
+        protected abstract string SubmitTitle { get; }
+
+        protected bool CanEditType => !Channel.IsDefault;
+
+        /// <summary>
+        /// Handles the form submit.
+        /// </summary>
+        protected virtual async Task HandleValidSubmit()
+        {
+            //if (Channel.SoundBrowserFile == null)
+            //    return;
+
+            //using var stream = Channel.SoundBrowserFile.OpenReadStream();
+
+            //using (var memoryStream = new MemoryStream())
+            //{
+            //    await stream.CopyToAsync(memoryStream);
+            //    Channel.Sound.SoundFile = memoryStream.ToArray();
+            //}
+
+            //Channel.Sound.SoundName = Channel.SoundBrowserFile.Name;
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            cancelation = new CancellationTokenSource();
+        }
     }
-
-    [Inject]
-    public NavigationManager NavigationManager { get; set; }
-
-    /// <summary>
-    /// Current Channel to Create or Edit
-    /// </summary>
-    /// <value>The channel.</value>
-    protected TChannel Channel { get; set; }
-
-    /// <summary>
-    /// Submit button label
-    /// </summary>
-    /// <value>The submit label.</value>
-    protected abstract string SubmitTitle { get; }
-
-    protected bool CanEditType => !Channel.IsDefault;
-
-    /// <summary>
-    /// Handles the form submit.
-    /// </summary>
-    protected virtual async Task HandleValidSubmit()
-    {
-      if (Channel.SoundBrowserFile == null)
-        return;
-
-      using var stream = Channel.SoundBrowserFile.OpenReadStream();
-
-      using (var memoryStream = new MemoryStream())
-      {
-        await stream.CopyToAsync(memoryStream);
-        Channel.Sound.SoundFile = memoryStream.ToArray();
-      }
-
-      Channel.Sound.SoundName = Channel.SoundBrowserFile.Name;
-    }
-
-    protected override void OnInitialized()
-    {
-      base.OnInitialized();
-
-      cancelation = new CancellationTokenSource();
-    }
-  }
 }

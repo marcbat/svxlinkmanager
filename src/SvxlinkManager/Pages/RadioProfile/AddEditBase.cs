@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.RadioProfile
 {
-  public abstract class AddEditBase<TLocalizer> : RepositoryComponentBase<TLocalizer>
-  {
-    [Inject]
-    public NavigationManager NavigationManager { get; set; }
+    public abstract class AddEditBase<TLocalizer> : RepositoryComponentBase<TLocalizer>
+    {
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
 
-    protected Models.RadioProfile RadioProfile { get; set; }
+        protected Domain.Entities.RadioProfile RadioProfile { get; set; }
 
-    protected abstract Task HandleValidSubmitAsync();
+        protected abstract Task HandleValidSubmitAsync();
 
-    protected abstract string SubmitTitle { get; }
-  }
+        protected abstract string SubmitTitle { get; }
+    }
 }

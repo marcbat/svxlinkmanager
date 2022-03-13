@@ -5,20 +5,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Models
+namespace SvxlinkManager.Domain.Entities
 {
-  public class SvxlinkChannel : Channel
-  {
-    public string AuthKey { get; set; }
+    public class SvxlinkChannel : Channel
+    {
+        public string AuthKey { get; set; }
 
-    [Required]
-    public int Port { get; set; }
+        [Required]
+        public int Port { get; set; }
 
-    [Required]
-    public string ReportCallSign { get; set; }
+        [Required]
+        public string ReportCallSign { get; set; }
 
-    [NotMapped]
-    public override Dictionary<string, string> TrackProperties => new Dictionary<string, string> {
+        [NotMapped]
+        public override Dictionary<string, string> TrackProperties => new Dictionary<string, string> {
       {nameof(Name), Name },
       {nameof(CallSign), CallSign },
       {nameof(IsDefault), IsDefault.ToString() },
@@ -27,5 +27,5 @@ namespace SvxlinkManager.Models
       {nameof(Dtmf), Dtmf.ToString() },
       {nameof(ReportCallSign),ReportCallSign },
     };
-  }
+    }
 }

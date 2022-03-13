@@ -5,27 +5,27 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Models
+namespace SvxlinkManager.Domain.Entities
 {
-  public class EcholinkChannel : Channel
-  {
-    [Required]
-    public string Password { get; set; }
+    public class EcholinkChannel : Channel
+    {
+        [Required]
+        public string Password { get; set; }
 
-    [Required]
-    public string SysopName { get; set; }
+        [Required]
+        public string SysopName { get; set; }
 
-    [Required]
-    public string Location { get; set; }
+        [Required]
+        public string Location { get; set; }
 
-    [Required]
-    public int MaxQso { get; set; } = 1;
+        [Required]
+        public int MaxQso { get; set; } = 1;
 
-    [Required]
-    public string Description { get; set; }
+        [Required]
+        public string Description { get; set; }
 
-    [NotMapped]
-    public override Dictionary<string, string> TrackProperties => new Dictionary<string, string>
+        [NotMapped]
+        public override Dictionary<string, string> TrackProperties => new Dictionary<string, string>
         {
           {nameof(Name), Name },
           {nameof(CallSign), CallSign },
@@ -36,5 +36,5 @@ namespace SvxlinkManager.Models
           {nameof(SysopName),SysopName },
           {nameof(MaxQso),MaxQso.ToString() },
         };
-  }
+    }
 }

@@ -11,28 +11,28 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Reflector
 {
-  public abstract class AddEditBase<TLocalizer> : RepositoryComponentBase<TLocalizer>
-  {
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public abstract class AddEditBase<TLocalizer> : RepositoryComponentBase<TLocalizer>
     {
-      await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
 
-      await Js.InvokeVoidAsync("SetEditor");
+            await Js.InvokeVoidAsync("SetEditor");
+        }
+
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
+        [Inject]
+        public SvxLinkService SvxLinkService { get; set; }
+
+        [Inject]
+        public IIniService IniService { get; set; }
+
+        protected Domain.Entities.Reflector Reflector { get; set; }
+
+        protected abstract Task HandleValidSubmitAsync();
+
+        protected abstract string SubmitTitle { get; }
     }
-
-    [Inject]
-    public NavigationManager NavigationManager { get; set; }
-
-    [Inject]
-    public SvxLinkService SvxLinkService { get; set; }
-
-    [Inject]
-    public IIniService IniService { get; set; }
-
-    protected Models.Reflector Reflector { get; set; }
-
-    protected abstract Task HandleValidSubmitAsync();
-
-    protected abstract string SubmitTitle { get; }
-  }
 }

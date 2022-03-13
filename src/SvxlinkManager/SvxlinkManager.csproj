@@ -72,11 +72,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\" />
     <Folder Include="SvxlinkConfig\svxlink.d\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Resources\Pages\Reflector\Create.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SvxlinkManager.Domain\SvxlinkManager.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
