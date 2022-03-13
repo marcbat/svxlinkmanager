@@ -4,10 +4,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
-using SvxlinkManager.Data;
 using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Pages.Shared;
-using SvxlinkManager.Repositories;
 using SvxlinkManager.Service;
 
 using System;

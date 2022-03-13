@@ -6,7 +6,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Domain.Entities;
-using SvxlinkManager.Repositories;
+using SvxlinkManager.Infrastructure.Persistence;
 using SvxlinkManager.Telemetry;
 
 using System;
