@@ -80,6 +80,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SvxlinkManager.Application\SvxlinkManager.Application.csproj" />
     <ProjectReference Include="..\SvxlinkManager.Domain\SvxlinkManager.Domain.csproj" />
     <ProjectReference Include="..\SvxlinkManager.Infrastructure\SvxlinkManager.Infrastructure.csproj" />
   </ItemGroup>

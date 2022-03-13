@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using SvxlinkManager.Areas.Identity;
 using SvxlinkManager.Infrastructure.Persistence;
 using SvxlinkManager.Infrastructure;
+using SvxlinkManager.Application;
 
 namespace SvxlinkManager
 {
@@ -33,6 +34,7 @@ namespace SvxlinkManager
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddInfrastructure(Configuration);
+            services.AddApplication();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
