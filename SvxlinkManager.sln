@@ -5,15 +5,11 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManager", "src\SvxlinkManager\SvxlinkManager.csproj", "{E3354947-D5C4-4106-9C83-99EFDE82BFC3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManagerTests", "src\SvxlinkManagerTests\SvxlinkManagerTests.csproj", "{8FC4201A-16DB-43DC-BC6D-A800651A260C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManager.Domain", "src\SvxlinkManager.Domain\SvxlinkManager.Domain.csproj", "{F728FAD8-286A-472E-8BB9-C6F811F900AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvxlinkManager.Domain", "src\SvxlinkManager.Domain\SvxlinkManager.Domain.csproj", "{F728FAD8-286A-472E-8BB9-C6F811F900AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManager.Application", "src\SvxlinkManager.Application\SvxlinkManager.Application.csproj", "{8C22944F-D12F-4956-B9D2-8B8E4E8CEE91}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{47EA04CD-CD89-4911-820C-557E340F8E64}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvxlinkManager.Application", "src\SvxlinkManager.Application\SvxlinkManager.Application.csproj", "{8C22944F-D12F-4956-B9D2-8B8E4E8CEE91}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvxlinkManager.Infrastructure", "src\SvxlinkManager.Infrastructure\SvxlinkManager.Infrastructure.csproj", "{4FB266AA-3F0A-47CD-B0F7-37E2C9F93554}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManager.Infrastructure", "src\SvxlinkManager.Infrastructure\SvxlinkManager.Infrastructure.csproj", "{4FB266AA-3F0A-47CD-B0F7-37E2C9F93554}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +21,6 @@ Global
 		{E3354947-D5C4-4106-9C83-99EFDE82BFC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3354947-D5C4-4106-9C83-99EFDE82BFC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3354947-D5C4-4106-9C83-99EFDE82BFC3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8FC4201A-16DB-43DC-BC6D-A800651A260C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FC4201A-16DB-43DC-BC6D-A800651A260C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FC4201A-16DB-43DC-BC6D-A800651A260C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FC4201A-16DB-43DC-BC6D-A800651A260C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F728FAD8-286A-472E-8BB9-C6F811F900AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F728FAD8-286A-472E-8BB9-C6F811F900AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F728FAD8-286A-472E-8BB9-C6F811F900AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -44,9 +36,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{8FC4201A-16DB-43DC-BC6D-A800651A260C} = {47EA04CD-CD89-4911-820C-557E340F8E64}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2D8D7F27-D1EF-4289-B71C-B7298E510A89}
