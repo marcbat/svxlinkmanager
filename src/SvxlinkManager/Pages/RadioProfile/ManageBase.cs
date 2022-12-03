@@ -15,62 +15,62 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.RadioProfile
 {
-  [Authorize]
-  public class ManageBase : RepositoryComponentBase<Manage>
-  {
-    protected override async Task OnInitializedAsync()
+    [Authorize]
+    public class ManageBase : RepositoryComponentBase<Manage>
     {
-      Telemetry.TrackPageView(new PageViewTelemetry("Radio Profile Manage Page") { Url = new Uri("/RadioProfile/Manage", UriKind.Relative) });
+        protected override async Task OnInitializedAsync()
+        {
+            Telemetry.TrackPageView(new PageViewTelemetry("Radio Profile Manage Page") { Url = new Uri("/RadioProfile/Manage", UriKind.Relative) });
 
-      await base.OnInitializedAsync().ConfigureAwait(false);
+            await base.OnInitializedAsync().ConfigureAwait(false);
 
-      LoadRadioProfiles();
+            LoadRadioProfiles();
+        }
+
+        private void LoadRadioProfiles() => RadioProfiles = Repositories.RadioProfiles.GetAll().ToList();
+
+        [Inject]
+        public SvxLinkService SvxLinkService { get; set; }
+
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
+        [Inject]
+        public ISa818Service Sa818Service { get; set; }
+
+        public List<Domain.Entities.RadioProfile> RadioProfiles { get; set; }
+
+        public async Task DeleteAsync(int id)
+        {
+            Repositories.RadioProfiles.Delete(id);
+
+            Telemetry.TrackEvent("Delete radio profile", RadioProfiles.Single(c => c.Id == id).TrackProperties);
+
+            RadioProfiles.Remove(RadioProfiles.Single(c => c.Id == id));
+
+            await ShowSuccessToastAsync("Supprimé", "Le profil radio a bien été supprimé.");
+
+            StateHasChanged();
+        }
+
+        public async Task ApplyAsync(int id)
+        {
+            var profile = Repositories.RadioProfiles.Get(id);
+
+            if (profile.HasSa818)
+                Sa818Service.WriteRadioProfile(profile);
+
+            profile.Enable = true;
+            Repositories.RadioProfiles.Update(profile);
+
+            Telemetry.TrackEvent("Apply radio profile", profile.TrackProperties);
+
+            if (SvxLinkService.ChannelId > 0)
+                SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
+
+            await ShowSuccessToastAsync($"{profile.Name} appliqué.", $"Le profil radio {profile.Name} a bien été appliqué.");
+
+            NavigationManager.NavigateTo("/RadioProfile/Manage", true);
+        }
     }
-
-    private void LoadRadioProfiles() => RadioProfiles = Repositories.RadioProfiles.GetAll().ToList();
-
-    [Inject]
-    public SvxLinkService SvxLinkService { get; set; }
-
-    [Inject]
-    public NavigationManager NavigationManager { get; set; }
-
-    [Inject]
-    public ISa818Service Sa818Service { get; set; }
-
-    public List<Models.RadioProfile> RadioProfiles { get; set; }
-
-    public async Task DeleteAsync(int id)
-    {
-      Repositories.RadioProfiles.Delete(id);
-
-      Telemetry.TrackEvent("Delete radio profile", RadioProfiles.Single(c => c.Id == id).TrackProperties);
-
-      RadioProfiles.Remove(RadioProfiles.Single(c => c.Id == id));
-
-      await ShowSuccessToastAsync("Supprimé", "Le profil radio a bien été supprimé.");
-
-      StateHasChanged();
-    }
-
-    public async Task ApplyAsync(int id)
-    {
-      var profile = Repositories.RadioProfiles.Get(id);
-
-      if (profile.HasSa818)
-        Sa818Service.WriteRadioProfile(profile);
-
-      profile.Enable = true;
-      Repositories.RadioProfiles.Update(profile);
-
-      Telemetry.TrackEvent("Apply radio profile", profile.TrackProperties);
-
-      if (SvxLinkService.ChannelId > 0)
-        SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
-
-      await ShowSuccessToastAsync($"{profile.Name} appliqué.", $"Le profil radio {profile.Name} a bien été appliqué.");
-
-      NavigationManager.NavigateTo("/RadioProfile/Manage", true);
-    }
-  }
 }

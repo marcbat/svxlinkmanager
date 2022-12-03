@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-using SvxlinkManager.Models;
+using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Pages.Shared;
 
 using System;
@@ -13,53 +13,53 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Channels
 {
-  [Authorize]
-  public class ManageBase<TChannel, TLocalizer> : RepositoryComponentBase<TLocalizer> where TChannel : ManagedChannel
-  {
-    [Inject]
-    public NavigationManager NavigationManager { get; set; }
-
-    protected override async Task OnInitializedAsync()
+    [Authorize]
+    public class ManageBase<TChannel, TLocalizer> : RepositoryComponentBase<TLocalizer> where TChannel : ManagedChannel
     {
-      switch (default(TChannel))
-      {
-        case SvxlinkChannel:
-          Telemetry.TrackPageView(new PageViewTelemetry("Svxlink Channel Manage Page") { Url = new Uri("/Channel/Manage", UriKind.Relative) });
-          break;
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
 
-        case EcholinkChannel:
-          Telemetry.TrackPageView(new PageViewTelemetry("Echolink Channel Manage Page") { Url = new Uri("/Echolink/Manage", UriKind.Relative) });
-          break;
+        protected override async Task OnInitializedAsync()
+        {
+            switch (default(TChannel))
+            {
+                case SvxlinkChannel:
+                    Telemetry.TrackPageView(new PageViewTelemetry("Svxlink Channel Manage Page") { Url = new Uri("/Channel/Manage", UriKind.Relative) });
+                    break;
 
-        default:
-          Telemetry.TrackPageView("Channel Manage Page");
-          break;
-      }
+                case EcholinkChannel:
+                    Telemetry.TrackPageView(new PageViewTelemetry("Echolink Channel Manage Page") { Url = new Uri("/Echolink/Manage", UriKind.Relative) });
+                    break;
 
-      await base.OnInitializedAsync().ConfigureAwait(false);
+                default:
+                    Telemetry.TrackPageView("Channel Manage Page");
+                    break;
+            }
 
-      LoadChannels();
+            await base.OnInitializedAsync().ConfigureAwait(false);
+
+            LoadChannels();
+        }
+
+        public List<TChannel> Channels { get; set; }
+
+        private void LoadChannels() => Channels = Repositories.Repository<TChannel>().GetAll().ToList();
+
+        /// <summary>
+        /// Deletes the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        public async Task DeleteAsync(TChannel channel)
+        {
+            Repositories.Channels.Delete(channel.Id);
+
+            Channels.Remove(channel);
+
+            Telemetry.TrackEvent("Delete channel", channel.TrackProperties);
+
+            StateHasChanged();
+
+            await ShowSuccessToastAsync("Supprimé", "Le salon a bien été supprimé.");
+        }
     }
-
-    public List<TChannel> Channels { get; set; }
-
-    private void LoadChannels() => Channels = Repositories.Repository<TChannel>().GetAll().ToList();
-
-    /// <summary>
-    /// Deletes the specified identifier.
-    /// </summary>
-    /// <param name="id">The identifier.</param>
-    public async Task DeleteAsync(TChannel channel)
-    {
-      Repositories.Channels.Delete(channel.Id);
-
-      Channels.Remove(channel);
-
-      Telemetry.TrackEvent("Delete channel", channel.TrackProperties);
-
-      StateHasChanged();
-
-      await ShowSuccessToastAsync("Supprimé", "Le salon a bien été supprimé.");
-    }
-  }
 }

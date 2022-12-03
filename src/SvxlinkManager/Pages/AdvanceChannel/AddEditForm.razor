@@ -1,5 +1,6 @@
 ﻿@using System.Globalization
 @using Microsoft.Extensions.Localization
+@using SvxlinkManager.Domain.Entities
 
 @inject IStringLocalizer<AddEditForm> Loc
 
@@ -165,7 +166,7 @@
 
 @code{
   [Parameter]
-  public Models.AdvanceSvxlinkChannel Channel { get; set; }
+  public AdvanceSvxlinkChannel Channel { get; set; }
 
   [Parameter]
   public string SubmitTitle { get; set; }
@@ -203,7 +204,7 @@
 
   private void OnInputFileChange(InputFileChangeEventArgs eventArgs)
   {
-    Channel.SoundBrowserFile = eventArgs.File;
+    //Channel.SoundBrowserFile = eventArgs.File;
   }
 
   public string CurrentSoundName

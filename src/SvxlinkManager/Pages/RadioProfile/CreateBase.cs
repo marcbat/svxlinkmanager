@@ -9,27 +9,27 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.RadioProfile
 {
-  [Authorize]
-  public class CreateBase : AddEditBase<Create>
-  {
-    protected override void OnInitialized()
+    [Authorize]
+    public class CreateBase : AddEditBase<Create>
     {
-      Telemetry.TrackPageView(new PageViewTelemetry("Radio Profile Create Page") { Url = new Uri("/RadioProfile/Create", UriKind.Relative) });
+        protected override void OnInitialized()
+        {
+            Telemetry.TrackPageView(new PageViewTelemetry("Radio Profile Create Page") { Url = new Uri("/RadioProfile/Create", UriKind.Relative) });
 
-      RadioProfile = new Models.RadioProfile();
+            RadioProfile = new Domain.Entities.RadioProfile();
+        }
+
+        protected override string SubmitTitle => Loc["Create"];
+
+        protected override async Task HandleValidSubmitAsync()
+        {
+            Repositories.RadioProfiles.Add(RadioProfile);
+
+            Telemetry.TrackEvent("Create radio profile", RadioProfile.TrackProperties);
+
+            await ShowSuccessToastAsync("Crée", $"Le profil radio {RadioProfile.Name} a bien été crée.");
+
+            NavigationManager.NavigateTo("RadioProfile/Manage");
+        }
     }
-
-    protected override string SubmitTitle => Loc["Create"];
-
-    protected override async Task HandleValidSubmitAsync()
-    {
-      Repositories.RadioProfiles.Add(RadioProfile);
-
-      Telemetry.TrackEvent("Create radio profile", RadioProfile.TrackProperties);
-
-      await ShowSuccessToastAsync("Crée", $"Le profil radio {RadioProfile.Name} a bien été crée.");
-
-      NavigationManager.NavigateTo("RadioProfile/Manage");
-    }
-  }
 }
