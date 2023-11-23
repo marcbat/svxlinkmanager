@@ -5,8 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Svxlink\Commands\" />
-    <Folder Include="Svxlink\Queries\" />
+    <Compile Remove="Svxlink\**" />
+    <EmbeddedResource Remove="Svxlink\**" />
+    <None Remove="Svxlink\**" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,7 +5,7 @@
     <UserSecretsId>aspnet-Spotnik.Gui-CD0BE138-429A-4FB1-865E-E55DA92114CE</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
-    <DockerfileRunArguments>-v "C:\Users\Marc\source\repos\SvxlinkManager\src\SvxlinkManager\SvxlinkConfig":/app/SvxlinkConfig</DockerfileRunArguments>
+    <!--<DockerfileRunArguments>-v "C:\Users\Marc\source\repos\SvxlinkManager\src\SvxlinkManager\SvxlinkConfig":/app/SvxlinkConfig</DockerfileRunArguments>-->
     <Company />
     <Authors>HB9GXP</Authors>
     <StartupObject></StartupObject>
@@ -44,7 +44,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="System.IO.Ports" Version="5.0.0" />
   </ItemGroup>
