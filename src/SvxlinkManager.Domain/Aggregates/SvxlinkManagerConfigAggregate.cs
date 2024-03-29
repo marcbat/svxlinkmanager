@@ -10,9 +10,18 @@ namespace SvxlinkManager.Domain.Aggregates
 {
     
 
-    public class SvxlinkManagerConfigAggregate
+    public class SvxlinkManagerConfigAggregate : AggregateRoot
     {
         private readonly List<SvxlinkChannel> _svxlinkChannels = [];
+
+        protected SvxlinkManagerConfigAggregate(Guid id) : base(id)
+        {
+        }
+
+        public static SvxlinkManagerConfigAggregate Create(Guid id)
+        {
+            return new SvxlinkManagerConfigAggregate(id);
+        }
 
         public IReadOnlyCollection<SvxlinkChannel> SvxlinkChannels => _svxlinkChannels.AsReadOnly();
 

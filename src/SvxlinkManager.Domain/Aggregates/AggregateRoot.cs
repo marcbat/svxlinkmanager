@@ -10,11 +10,6 @@ namespace SvxlinkManager.Domain.Aggregates
 {
     public class AggregateRoot : Entity
     {
-        public AggregateRoot() : base()
-        {
-
-        }
-
         protected AggregateRoot(Guid id) : base(id)
         {
         }

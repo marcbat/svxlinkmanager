@@ -8,9 +8,8 @@ namespace SvxlinkManager.Domain.Entities
 {
     public abstract class ChannelBase : Entity
     {
-        public ChannelBase(Guid id, string name)
+        public ChannelBase(Guid id, string name) : base(id)
         {
-            Id = id;
             Name = name;
         }
 

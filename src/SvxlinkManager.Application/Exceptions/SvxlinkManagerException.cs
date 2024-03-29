@@ -3,7 +3,7 @@
 namespace SvxlinkManager.Application
 {
     [Serializable]
-    internal class SvxlinkManagerException : Exception
+    public class SvxlinkManagerException : Exception
     {
         public SvxlinkManagerException()
         {

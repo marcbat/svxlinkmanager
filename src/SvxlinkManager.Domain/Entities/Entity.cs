@@ -13,14 +13,6 @@ namespace SvxlinkManager.Domain.Entities
             Id = id;
         }
 
-        protected Entity(Guid? id = null)
-        {
-            if (id == null)
-                Id = Guid.NewGuid();
-            else
-                Id = (Guid)id;
-        }
-
         public Guid Id { get; protected set; }
 
         public override bool Equals(object? obj)
