@@ -12,7 +12,7 @@ namespace SvxlinkManager.Domain.Aggregates
 
     public class SvxlinkManagerConfigAggregate : AggregateRoot
     {
-        private readonly List<SvxlinkChannel> _svxlinkChannels = [];
+        private List<SvxlinkChannel> _svxlinkChannels = [];
 
         protected SvxlinkManagerConfigAggregate(Guid id) : base(id)
         {
@@ -27,7 +27,10 @@ namespace SvxlinkManager.Domain.Aggregates
             return new SvxlinkManagerConfigAggregate(id);
         }
 
-        public IReadOnlyCollection<SvxlinkChannel> SvxlinkChannels => _svxlinkChannels.AsReadOnly();
+        public IReadOnlyCollection<SvxlinkChannel> SvxlinkChannels{
+            get=>  _svxlinkChannels.AsReadOnly(); 
+            private set => _svxlinkChannels = value.ToList();
+        } 
 
         public void AddSvxlinkChannel(SvxlinkChannel svxlinkChannel)
         {

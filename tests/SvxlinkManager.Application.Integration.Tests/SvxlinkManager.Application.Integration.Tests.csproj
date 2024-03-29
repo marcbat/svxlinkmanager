@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
@@ -21,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\SvxlinkManager.Application\SvxlinkManager.Application.csproj" />
+    <ProjectReference Include="..\..\src\SvxlinkManager.Domain\SvxlinkManager.Domain.csproj" />
     <ProjectReference Include="..\..\src\SvxlinkManager.Infrastructure\SvxlinkManager.Infrastructure.csproj" />
   </ItemGroup>
 

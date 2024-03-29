@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Application.SvxlinkManagerConfig
+namespace SvxlinkManager.Application.SvxlinkManagerConfigs
 {
     public record CreateSvxlinkManagerConfigCommand() : IRequest<Guid>;
 

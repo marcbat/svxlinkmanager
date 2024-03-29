@@ -12,19 +12,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Application.SvxlinkManagerConfig.Channels.Commands
+namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Commands
 {
-    public record AddSvxlinkChannelCommand(Guid ConfigId, string Name, string Host, string CallSign, int Port, string ReportCallSign, byte[] SoundFile) : IRequest<Unit>;
+    public record AddSvxlinkChannelCommand(Guid ConfigId, string Name, string Host, string CallSign, int Port, string ReportCallSign, byte[] SoundFile) : IRequest<Guid>;
 
     public class AddSvxlinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,
                                                          ISoundRepository soundRepository,
-                                                         ILogger<AddSvxlinkChannelCommandHandler> logger) : IRequestHandler<AddSvxlinkChannelCommand, Unit>
+                                                         ILogger<AddSvxlinkChannelCommandHandler> logger) : IRequestHandler<AddSvxlinkChannelCommand, Guid>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
         private readonly ISoundRepository soundRepository = soundRepository;
         private readonly ILogger<AddSvxlinkChannelCommandHandler> logger = logger;
 
-        public async Task<Unit> Handle(AddSvxlinkChannelCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(AddSvxlinkChannelCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -34,7 +34,8 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfig.Channels.Commands
                 var sound = new Sound(soundGuid, request.Name, request.SoundFile);
                 await soundRepository.CreateAsyc(sound);
 
-                var svxlinkChannel = new SvxlinkChannel(Guid.NewGuid(), request.Name, soundGuid, request.Host, request.CallSign, request.Port, request.ReportCallSign);
+                var svxlinkchannelGuid = Guid.NewGuid();
+                var svxlinkChannel = new SvxlinkChannel(svxlinkchannelGuid, request.Name, soundGuid, request.Host, request.CallSign, request.Port, request.ReportCallSign);
 
                 config.AddSvxlinkChannel(svxlinkChannel);
 
@@ -42,7 +43,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfig.Channels.Commands
 
                 logger.LogInformation("Un nouveau svxlink channel a été ajouté avec succès.");
 
-                return Unit.Value;
+                return svxlinkchannelGuid;
             }
             catch (Exception ex)
             {

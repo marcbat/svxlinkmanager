@@ -1,11 +1,17 @@
+using FluentAssertions;
+
+using LiteDB;
+
 using MediatR;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-using SvxlinkManager.Application.SvxlinkManagerConfig;
-using SvxlinkManager.Application.SvxlinkManagerConfig.Channels.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Queries;
+using SvxlinkManager.Domain.Aggregates;
 using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Infrastructure;
 
@@ -36,6 +42,11 @@ namespace SvxlinkManager.Application.Integration.Tests
             var serviceProvider = services.BuildServiceProvider();
 
             mediatr = serviceProvider.GetRequiredService<IMediator>();
+
+            //var mapper = BsonMapper.Global;
+
+            //mapper.Entity<SvxlinkManagerConfigAggregate>()
+            //    .Field(x => x.SvxlinkChannels, "SvxlinkChannels");
         }
 
         [Test]
@@ -45,27 +56,17 @@ namespace SvxlinkManager.Application.Integration.Tests
             {
                 var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
 
-                await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", 80, "Fake report callSign", new byte[] { 0x01, 0x02, 0x03 }));
-            
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-            finally
-            {
-                File.Delete(db);
-            }
-        }
+                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", 80, "Fake report callSign", new byte[] { 0x01, 0x02, 0x03 }));
 
-        [Test]
-        public async Task AddSvxlinkChannelCommand_WhenIsValid_ShouldAddNewSvxlinkChannel2()
-        {
-            try
-            {
-                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
+                var svxlinkChannel = await mediatr.Send(new GetSvxlinkChannelByIdQuery(configGuid, channelId));
 
-                await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", 80, "Fake report callSign", new byte[] { 0x01, 0x02, 0x03 }));
+                svxlinkChannel.Should().NotBeNull();
+                svxlinkChannel.Name.Should().Be("Fake channel");
+                svxlinkChannel.Host.Should().Be("Fake Host");
+                svxlinkChannel.CallSign.Should().Be("Fake callSign");
+                svxlinkChannel.Port.Should().Be(80);
+                svxlinkChannel.ReportCallSign.Should().Be("Fake report callSign");
+                svxlinkChannel.SoundGuid.Should().NotBeEmpty();
 
             }
             catch (Exception ex)
