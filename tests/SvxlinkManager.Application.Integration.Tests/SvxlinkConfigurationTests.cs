@@ -79,6 +79,63 @@ namespace SvxlinkManager.Application.Integration.Tests
             }
         }
 
+        [Test]
+        public async Task UpdateSvxlinkChannelCommand_WhenIsValid_ShouldUpdateSvxlinkChannel()
+        {
+            try
+            {
+                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
+
+                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", 80, "Fake report callSign", new byte[] { 0x01, 0x02, 0x03 }));
+
+                await mediatr.Send(new UpdateSvxlinkChannelCommand(configGuid, channelId, "Fake channel update", "Fake Host update", "Fake callSign update", 8080, "Fake report callSign update", new byte[] { 0x01, 0x02, 0x03 }));
+
+                var svxlinkChannel = await mediatr.Send(new GetSvxlinkChannelByIdQuery(configGuid, channelId));
+
+                svxlinkChannel.Should().NotBeNull();
+                svxlinkChannel.Name.Should().Be("Fake channel update");
+                svxlinkChannel.Host.Should().Be("Fake Host update");
+                svxlinkChannel.CallSign.Should().Be("Fake callSign update");
+                svxlinkChannel.Port.Should().Be(8080);
+                svxlinkChannel.ReportCallSign.Should().Be("Fake report callSign update");
+                svxlinkChannel.SoundGuid.Should().NotBeEmpty();
+
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
+
+        [Test]
+        public async Task DeleteSvxlinkChannelCommand_WhenIsValid_ShouldDeleteSvxlinkChannel()
+        {
+            try
+            {
+                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
+
+                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", 80, "Fake report callSign", new byte[] { 0x01, 0x02, 0x03 }));
+
+                await mediatr.Send(new DeleteSvxlinkChannelCommand(configGuid, channelId));
+
+                Func<Task> act = async() => await mediatr.Send(new GetSvxlinkChannelByIdQuery(configGuid, channelId));
+
+                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de récupérer le svxlink channel.");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
+
     }
 
     public class FakeOptions(string file) : IOptions<SvxlinkManagerOptions>

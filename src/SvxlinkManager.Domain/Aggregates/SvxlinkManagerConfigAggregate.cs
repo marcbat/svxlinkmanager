@@ -36,5 +36,12 @@ namespace SvxlinkManager.Domain.Aggregates
         {
             _svxlinkChannels.Add(svxlinkChannel);
         }
+
+        public void DeleteSvxlinkChannel(Guid channelId)
+        {
+            var svxlinkChannel = _svxlinkChannels.FirstOrDefault(x => x.Id == channelId) ?? throw new Exception("Svxlink channel not found");
+
+            _svxlinkChannels.Remove(svxlinkChannel);
+        }
     }
 }

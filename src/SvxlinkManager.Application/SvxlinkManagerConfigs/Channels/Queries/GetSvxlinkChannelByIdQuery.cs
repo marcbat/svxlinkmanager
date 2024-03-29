@@ -28,7 +28,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Queries
             {
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
 
-                return config.SvxlinkChannels.Single(c => c.Id == request.ChannelGuid);
+                var channel = config.SvxlinkChannels.SingleOrDefault(c => c.Id == request.ChannelGuid);
+
+                if (channel is null)
+                    throw new SvxlinkManagerException("Impossible de trouver le svxlink channel.");
+
+                return channel;
             }
             catch (Exception ex)
             {
