@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Domain.Aggregates
 {
-    
 
     public class SvxlinkManagerConfigAggregate : AggregateRoot
     {
-        private List<SvxlinkChannel> _svxlinkChannels = [];
+        private List<SvxlinkChannel> svxlinkChannels = [];
+        private List<EcholinkChannel> echolinkChannels = [];
+        private List<Reflector> reflectors = [];
 
         protected SvxlinkManagerConfigAggregate(Guid id) : base(id)
         {
@@ -28,20 +29,56 @@ namespace SvxlinkManager.Domain.Aggregates
         }
 
         public IReadOnlyCollection<SvxlinkChannel> SvxlinkChannels{
-            get=>  _svxlinkChannels.AsReadOnly(); 
-            private set => _svxlinkChannels = value.ToList();
+            get=>  svxlinkChannels.AsReadOnly(); 
+            private set => svxlinkChannels = value.ToList();
         } 
 
         public void AddSvxlinkChannel(SvxlinkChannel svxlinkChannel)
         {
-            _svxlinkChannels.Add(svxlinkChannel);
+            svxlinkChannels.Add(svxlinkChannel);
         }
 
         public void DeleteSvxlinkChannel(Guid channelId)
         {
-            var svxlinkChannel = _svxlinkChannels.FirstOrDefault(x => x.Id == channelId) ?? throw new Exception("Svxlink channel not found");
+            var svxlinkChannel = svxlinkChannels.FirstOrDefault(x => x.Id == channelId) ?? throw new Exception("Svxlink channel not found");
 
-            _svxlinkChannels.Remove(svxlinkChannel);
+            svxlinkChannels.Remove(svxlinkChannel);
+        }
+
+        public IReadOnlyCollection<EcholinkChannel> EcholinkChannels
+        {
+            get=>  echolinkChannels.AsReadOnly(); 
+            private set => echolinkChannels = value.ToList();
+        }
+
+        public void AddEcholinkChannel(EcholinkChannel echolinkChannel)
+        {
+            echolinkChannels.Add(echolinkChannel);
+        }
+
+        public void DeleteEcholinkChannel(Guid channelId)
+        {
+            var echolinkChannel = echolinkChannels.FirstOrDefault(x => x.Id == channelId) ?? throw new Exception("Echolink channel not found");
+
+            echolinkChannels.Remove(echolinkChannel);
+        }
+
+        public IReadOnlyCollection<Reflector> Reflectors
+        {
+            get=>  reflectors.AsReadOnly(); 
+            private set => reflectors = value.ToList();
+        }
+
+        public void AddReflector(Reflector reflector)
+        {
+            reflectors.Add(reflector);
+        }
+        
+        public void DeleteReflector(Guid reflectorId)
+        {
+            var reflector = reflectors.FirstOrDefault(x => x.Id == reflectorId) ?? throw new Exception("Reflector not found");
+
+            reflectors.Remove(reflector);
         }
     }
 }
