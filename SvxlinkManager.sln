@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManager.Application"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManager.Infrastructure", "src\SvxlinkManager.Infrastructure\SvxlinkManager.Infrastructure.csproj", "{E88CCDD4-7C5C-4082-AEC0-004CA560A534}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvxlinkManager.Domain", "src\SvxlinkManager.Domain\SvxlinkManager.Domain.csproj", "{09153DD7-FC55-4E23-8570-AC56165567D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E88CCDD4-7C5C-4082-AEC0-004CA560A534}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E88CCDD4-7C5C-4082-AEC0-004CA560A534}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E88CCDD4-7C5C-4082-AEC0-004CA560A534}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09153DD7-FC55-4E23-8570-AC56165567D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09153DD7-FC55-4E23-8570-AC56165567D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09153DD7-FC55-4E23-8570-AC56165567D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09153DD7-FC55-4E23-8570-AC56165567D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
