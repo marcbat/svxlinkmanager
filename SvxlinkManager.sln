@@ -9,13 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManager.Application"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManager.Infrastructure", "src\SvxlinkManager.Infrastructure\SvxlinkManager.Infrastructure.csproj", "{E88CCDD4-7C5C-4082-AEC0-004CA560A534}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvxlinkManager.Domain", "src\SvxlinkManager.Domain\SvxlinkManager.Domain.csproj", "{09153DD7-FC55-4E23-8570-AC56165567D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManager.Domain", "src\SvxlinkManager.Domain\SvxlinkManager.Domain.csproj", "{09153DD7-FC55-4E23-8570-AC56165567D4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{428FBBB6-B316-4DA7-A894-AAA20806B587}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4B9BC748-624B-41D8-9CFF-57A43B27CC8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvxlinkManager.Application.Tests", "tests\SvxlinkManager.Application.Tests\SvxlinkManager.Application.Tests.csproj", "{978DC95E-673B-43E3-A0F1-FFF93964D25D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManager.Application.Tests", "tests\SvxlinkManager.Application.Tests\SvxlinkManager.Application.Tests.csproj", "{978DC95E-673B-43E3-A0F1-FFF93964D25D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvxlinkManager.Application.Integration.Tests", "tests\SvxlinkManager.Application.Integration.Tests\SvxlinkManager.Application.Integration.Tests.csproj", "{431E1EB7-019C-46B6-AA12-1C8550CB0895}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{978DC95E-673B-43E3-A0F1-FFF93964D25D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{978DC95E-673B-43E3-A0F1-FFF93964D25D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{978DC95E-673B-43E3-A0F1-FFF93964D25D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{431E1EB7-019C-46B6-AA12-1C8550CB0895}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{431E1EB7-019C-46B6-AA12-1C8550CB0895}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{431E1EB7-019C-46B6-AA12-1C8550CB0895}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{431E1EB7-019C-46B6-AA12-1C8550CB0895}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{E88CCDD4-7C5C-4082-AEC0-004CA560A534} = {428FBBB6-B316-4DA7-A894-AAA20806B587}
 		{09153DD7-FC55-4E23-8570-AC56165567D4} = {428FBBB6-B316-4DA7-A894-AAA20806B587}
 		{978DC95E-673B-43E3-A0F1-FFF93964D25D} = {4B9BC748-624B-41D8-9CFF-57A43B27CC8F}
+		{431E1EB7-019C-46B6-AA12-1C8550CB0895} = {4B9BC748-624B-41D8-9CFF-57A43B27CC8F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2D8D7F27-D1EF-4289-B71C-B7298E510A89}

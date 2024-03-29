@@ -10,6 +10,8 @@ namespace SvxlinkManager.Application.Interfaces
 {
     public interface ISvxlinkManagerConfigRepository
     {
+        Task Create(SvxlinkManagerConfigAggregate config);
+
         Task<SvxlinkManagerConfigAggregate> GetConfigAsync(Guid configId);
 
         Task UpdateAsync(SvxlinkManagerConfigAggregate config);

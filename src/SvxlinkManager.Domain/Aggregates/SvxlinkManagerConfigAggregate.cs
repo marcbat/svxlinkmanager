@@ -18,6 +18,10 @@ namespace SvxlinkManager.Domain.Aggregates
         {
         }
 
+        public SvxlinkManagerConfigAggregate()
+        { 
+        }
+
         public static SvxlinkManagerConfigAggregate Create(Guid id)
         {
             return new SvxlinkManagerConfigAggregate(id);

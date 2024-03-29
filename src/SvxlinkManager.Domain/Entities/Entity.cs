@@ -8,6 +8,11 @@ namespace SvxlinkManager.Domain.Entities
 {
     public abstract class Entity : IEquatable<Entity>
     {
+        public Entity()
+        {
+           
+        }
+
         protected Entity(Guid id)
         {
             Id = id;
