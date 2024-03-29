@@ -8,7 +8,7 @@ namespace SvxlinkManager.Domain.Entities
 {
     public class SvxlinkChannel : Channel
     {
-        public SvxlinkChannel(Guid id, string name, Sound sound, string host, string callSign, int port, string reportCallSign) : base(id, name, sound, host, callSign)
+        public SvxlinkChannel(Guid id, string name, Guid soundGuid, string host, string callSign, int port, string reportCallSign) : base(id, name, soundGuid, host, callSign)
         {
             Port = port;
             ReportCallSign = reportCallSign;

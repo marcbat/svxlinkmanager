@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SvxlinkManager.Domain.Aggregates;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,16 +8,14 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Domain.Entities
 {
-    public class Sound
+    public class Sound : AggregateRoot
     {
-        public Sound(int id, string name, byte[] soundFile)
+        public Sound(Guid id, string name, byte[] soundFile) : base(id)
         {
-            Id = id;
             Name = name;
             SoundFile = soundFile;
         }
 
-        public int Id { get; }
         public string Name { get; }
         public byte[] SoundFile { get; }
     }

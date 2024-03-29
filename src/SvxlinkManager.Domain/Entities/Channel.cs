@@ -8,7 +8,7 @@ namespace SvxlinkManager.Domain.Entities
 {
     public abstract class Channel : ManagedChannel
     {
-        public Channel(Guid id, string name, Sound sound, string host, string callSign) : base(id, name, sound)
+        public Channel(Guid id, string name, Guid soundGuid, string host, string callSign) : base(id, name, soundGuid)
         {
             
             Host = host;

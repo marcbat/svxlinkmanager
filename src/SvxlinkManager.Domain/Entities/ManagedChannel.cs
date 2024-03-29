@@ -2,9 +2,9 @@
 {
     public abstract class ManagedChannel : ChannelBase
     {
-        protected ManagedChannel(Guid id, string name, Sound sound) : base(id, name)
+        protected ManagedChannel(Guid id, string name, Guid soundGuid) : base(id, name)
         {
-            Sound = sound;
+            SoundGuid = soundGuid;
         }
 
         public bool IsDefault { get; set; }
@@ -13,6 +13,6 @@
 
         public int TimerDelay { get; set; } = 180;
 
-        public Sound Sound { get; }
+        public Guid SoundGuid { get; }
     }
 }
