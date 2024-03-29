@@ -27,7 +27,7 @@
   <Class Name="SvxlinkManager.Models.RadioProfile" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="14.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACgABAgABAAAAIIQAACCUghAAAgBCEEAIAAAAAACA=</HashCode>
+      <HashCode>AAACgABAgABAAAAIIQAACCUghAAQgBCEEAIAAAAAACA=</HashCode>
       <FileName>Models\RadioProfile.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -67,7 +67,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="SvxlinkManager.Models.AdvanceSvxlinkChannel">
-    <Position X="10" Y="6.75" Width="1.5" />
+    <Position X="10" Y="6.75" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAgAQAABAQAAAIQAAIAAgAIAAAAAAAAAAACAABAg=</HashCode>
       <FileName>Models\AdvanceSvxlinkChannel.cs</FileName>
