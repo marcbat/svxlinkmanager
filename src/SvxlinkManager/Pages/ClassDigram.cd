@@ -8,13 +8,6 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="SvxlinkManager.Pages.Shared.RepositoryComponentBase">
-    <Position X="12.75" Y="4.75" Width="2.25" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Pages\Shared\RepositoryComponentBase.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="SvxlinkManager.Pages.Channels.AddEditBase&lt;TChannel&gt;">
     <Position X="10.75" Y="6.75" Width="1.75" />
     <TypeIdentifier>
@@ -79,9 +72,9 @@
     </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Pages.Shared.SvxlinkManagerComponentBase">
-    <Position X="12.75" Y="1.25" Width="2.5" />
+    <Position X="12.75" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AIAAAAAAAAIEAAAAAAAAAAAAAACoIAAACAAAAACAAAA=</HashCode>
+      <HashCode>AIAAAAAAAAIEAAAAAAAAAAAAAACoIAAACAAAAACAACA=</HashCode>
       <FileName>Pages\Shared\SvxlinkManagerComponentBase.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -90,6 +83,13 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
       <FileName>Pages\AdvanceChannel\EditBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SvxlinkManager.Pages.Shared.MediatrComponentBase">
+    <Position X="13" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Pages\Shared\MediatrComponentBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

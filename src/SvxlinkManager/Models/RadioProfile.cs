@@ -13,7 +13,7 @@ namespace SvxlinkManager.Models
     private bool enable;
     private string trx = "interne";
 
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     [Required]
     public string Name { get; set; }

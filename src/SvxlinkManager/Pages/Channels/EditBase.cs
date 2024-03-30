@@ -30,10 +30,10 @@ namespace SvxlinkManager.Pages.Channels
     {
       await base.HandleValidSubmit();
 
-      Repositories.Channels.Update(Channel);
+      Mediatr.Channels.Update(Channel);
 
       if (Channel.Sound != null)
-        Repositories.Repository<Sound>().Update(Channel.Sound);
+        Mediatr.Repository<Sound>().Update(Channel.Sound);
 
       if (SvxLinkService.ChannelId == Channel.Id)
         SvxLinkService.ActivateChannel(Channel.Id);
@@ -60,7 +60,7 @@ namespace SvxlinkManager.Pages.Channels
           break;
       }
 
-      Channel = (TChannel)Repositories.Channels.GetWithSound(int.Parse(Id));
+      Channel = (TChannel)Mediatr.Channels.GetWithSound(int.Parse(Id));
     }
   }
 }

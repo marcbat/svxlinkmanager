@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Models
 {
-  public abstract class ManagedChannel : ChannelBase, IModelEntity
+  public abstract class ManagedChannel : ChannelBase
   {
     public int Dtmf { get; set; }
 

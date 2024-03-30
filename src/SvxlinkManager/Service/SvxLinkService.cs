@@ -1,12 +1,13 @@
 ﻿using IniParser;
 
+using MediatR;
+
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Models;
-using SvxlinkManager.Repositories;
 using SvxlinkManager.Telemetry;
 
 using System;
@@ -25,7 +26,7 @@ namespace SvxlinkManager.Service
 
     private readonly ILogger<SvxLinkService> logger;
 
-    private readonly IRepositories repositories;
+    private readonly IMediator mediatr;
     private readonly ScanService scanService;
     private readonly TelemetryClient telemetry;
     private readonly IIniService iniService;
@@ -48,10 +49,10 @@ namespace SvxlinkManager.Service
       throw new NotImplementedException();
     }
 
-    public SvxLinkService(ILogger<SvxLinkService> logger, IRepositories repositories, ScanService scanService, TelemetryClient telemetry, IIniService iniService) : base(logger, telemetry)
+    public SvxLinkService(ILogger<SvxLinkService> logger, IMediator mediatr, ScanService scanService, TelemetryClient telemetry, IIniService iniService) : base(logger, telemetry)
     {
       this.logger = logger;
-      this.repositories = repositories;
+      this.mediatr = mediatr;
       this.scanService = scanService;
       this.telemetry = telemetry;
       this.iniService = iniService;
@@ -145,7 +146,7 @@ namespace SvxlinkManager.Service
     /// <summary>Connecte le salon par défaut.</summary>
     public virtual void StartDefaultChannel()
     {
-      var defaultId = repositories.Channels.GetDefault()?.Id;
+      var defaultId = mediatr.Channels.GetDefault()?.Id;
       if (defaultId != null)
         ChannelId = (int)defaultId;
     }
@@ -155,7 +156,7 @@ namespace SvxlinkManager.Service
     /// <exception cref="Exception">Impossible de trouver le type de channel.</exception>
     public virtual void ActivateChannel(int channelid)
     {
-      var channel = repositories.Channels.GetWithSound(channelid);
+      var channel = mediatr.Channels.GetWithSound(channelid);
 
       switch (channel)
       {
@@ -209,10 +210,10 @@ namespace SvxlinkManager.Service
         StopSvxlink();
         logger.LogInformation("Salon déconnecté");
 
-        var radioProfile = repositories.RadioProfiles.GetCurrent();
+        var radioProfile = mediatr.RadioProfiles.GetCurrent();
 
         Directory.CreateDirectory($"{applicationPath}/SvxlinkConfig/svxlink.d");
-        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", repositories.Parameters.GetStringValue("default.svxlink.conf"));
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", mediatr.Parameters.GetStringValue("default.svxlink.conf"));
 
         var global = new Dictionary<string, string>
       {
@@ -326,11 +327,11 @@ namespace SvxlinkManager.Service
         StopSvxlink();
         logger.LogInformation("Salon déconnecté");
 
-        var radioProfile = repositories.RadioProfiles.GetCurrent();
+        var radioProfile = mediatr.RadioProfiles.GetCurrent();
 
         Directory.CreateDirectory($"{applicationPath}/SvxlinkConfig/svxlink.d");
-        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", repositories.Parameters.GetStringValue("default.svxlink.conf"));
-        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", repositories.Parameters.GetStringValue("default.echolink.conf"));
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", mediatr.Parameters.GetStringValue("default.svxlink.conf"));
+        File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleEchoLink.conf", mediatr.Parameters.GetStringValue("default.echolink.conf"));
 
         var global = new Dictionary<string, string>
       {
@@ -391,7 +392,7 @@ namespace SvxlinkManager.Service
         return;
 
       var diff = (DateTime.Now - lastTx).TotalSeconds;
-      var channel = repositories.Channels.Get(channelId);
+      var channel = mediatr.Channels.Get(channelId);
 
       logger.LogDebug($"Durée depuis le dernier passage en émission {diff} secondes.");
 
@@ -405,7 +406,7 @@ namespace SvxlinkManager.Service
 
       logger.LogInformation("Delai d'inactivité dépassé. Retour au salon par défaut.");
 
-      var defaultChannel = repositories.Channels.GetDefault();
+      var defaultChannel = mediatr.Channels.GetDefault();
 
       telemetry.TrackEvent("Temporized QSY", defaultChannel.TrackProperties);
 
@@ -415,7 +416,7 @@ namespace SvxlinkManager.Service
     protected virtual void CheckScan(object sender, ElapsedEventArgs e)
     {
       var diff = (DateTime.Now - lastTx).TotalSeconds;
-      var scanProfile = repositories.ScanProfiles.Get(1);
+      var scanProfile = mediatr.ScanProfiles.Get(1);
 
       if (diff < scanProfile.ScanDelay)
       {
@@ -447,8 +448,8 @@ namespace SvxlinkManager.Service
       logger.LogInformation("Salon déconnecté");
 
       Directory.CreateDirectory($"{applicationPath}/SvxlinkConfig/svxlink.d");
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", repositories.Parameters.GetStringValue("default.svxlink.conf"));
-      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleParrot.conf", repositories.Parameters.GetStringValue("default.parrot.conf"));
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.conf", mediatr.Parameters.GetStringValue("default.svxlink.conf"));
+      File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxlink.d/ModuleParrot.conf", mediatr.Parameters.GetStringValue("default.parrot.conf"));
 
       var global = new Dictionary<string, string>
       {
@@ -500,7 +501,7 @@ namespace SvxlinkManager.Service
         var dtmf = File.ReadAllText(dtmfFilePath);
         logger.LogInformation($"Nouveau dtmf {dtmf}");
 
-        var dtmfChannel = repositories.Channels.FindBy(c => c.Dtmf == Int32.Parse(dtmf));
+        var dtmfChannel = mediatr.Channels.FindBy(c => c.Dtmf == Int32.Parse(dtmf));
         if (dtmfChannel == null)
         {
           logger.LogWarning("Le dtmf {dtmf} ne correspond à aucun channel.", dtmf);
@@ -573,7 +574,7 @@ namespace SvxlinkManager.Service
 
       base.StartSvxlink(channel, pidFile: "/var/run/svxlink.pid", runAs: "root", configFile: $"{applicationPath}/SvxlinkConfig/svxlink.conf");
 
-      var scanProfil = repositories.ScanProfiles.Get(1);
+      var scanProfil = mediatr.ScanProfiles.Get(1);
 
       if (channel.IsTemporized)
       {
@@ -616,7 +617,7 @@ namespace SvxlinkManager.Service
 
     public void StartEnableReflector()
     {
-      var reflectors = repositories.Reflectors.GetAllBy(r => r.Enable);
+      var reflectors = mediatr.Reflectors.GetAllBy(r => r.Enable);
       foreach (var r in reflectors)
         ActivateReflector(r);
     }

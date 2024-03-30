@@ -7,7 +7,7 @@ namespace SvxlinkManager.Models
 {
   public class Sound : IModelEntity
   {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public int ChannelId { get; set; }
 

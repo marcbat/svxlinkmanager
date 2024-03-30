@@ -28,7 +28,7 @@ namespace SvxlinkManager.Pages.Installer
     Progress
   }
 
-  public class HomeBase : RepositoryComponentBase
+  public class HomeBase : MediatrComponentBase
   {
     private InstallationStatus installationStatus = InstallationStatus.Security;
 
@@ -79,7 +79,7 @@ namespace SvxlinkManager.Pages.Installer
     [Inject]
     public SvxLinkService SvxLinkService { get; set; }
 
-    private List<SvxlinkChannel> LoadChannels() => Repositories.SvxlinkChannels.GetAll().ToList();
+    private List<SvxlinkChannel> LoadChannels() => Mediatr.SvxlinkChannels.GetAll().ToList();
 
     private Release LoadLastRelease() => UpdaterService.GetLastRelease();
 
@@ -189,11 +189,11 @@ namespace SvxlinkManager.Pages.Installer
         if (InstallerModel.RadioProfile.HasSa818)
           Sa818Service.WriteRadioProfile(InstallerModel.RadioProfile);
 
-        foreach (var radioprofile in Repositories.RadioProfiles.GetAll())
-          Repositories.Repository<Models.RadioProfile>().Delete(radioprofile.Id);
+        foreach (var radioprofile in Mediatr.RadioProfiles.GetAll())
+          Mediatr.Repository<Models.RadioProfile>().Delete(radioprofile.Id);
 
         InstallerModel.RadioProfile.Enable = true;
-        Repositories.RadioProfiles.Add(InstallerModel.RadioProfile);
+        Mediatr.RadioProfiles.Add(InstallerModel.RadioProfile);
 
         OnCreateRadioProfile?.Invoke();
       }
@@ -212,11 +212,11 @@ namespace SvxlinkManager.Pages.Installer
         Logger.LogInformation("Configuration du salon par défaut.");
         Telemetry.TrackEvent("Configuration du salon par défaut.");
 
-        var channel = Repositories.Channels.Get(InstallerModel.DefaultChannel.Id);
+        var channel = Mediatr.Channels.Get(InstallerModel.DefaultChannel.Id);
 
         channel.IsDefault = true;
         channel.IsTemporized = false;
-        Repositories.Channels.Update(channel);
+        Mediatr.Channels.Update(channel);
 
         OnSetDefaultChannel?.Invoke();
       }
@@ -236,14 +236,14 @@ namespace SvxlinkManager.Pages.Installer
         Telemetry.TrackEvent("Installation des salons.");
 
         foreach (var channel in InstallerModel.ChannelsToDelete)
-          Repositories.Channels.Delete(channel.Id);
+          Mediatr.Channels.Delete(channel.Id);
 
-        foreach (var channel in Repositories.SvxlinkChannels.GetAll())
+        foreach (var channel in Mediatr.SvxlinkChannels.GetAll())
         {
           channel.CallSign = InstallerModel.CallSign;
           channel.ReportCallSign = InstallerModel.AnnonceCallSign;
 
-          Repositories.Channels.Update(channel);
+          Mediatr.Channels.Update(channel);
         }
 
         OnInstallChannels?.Invoke();

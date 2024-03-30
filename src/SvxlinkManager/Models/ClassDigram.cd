@@ -86,7 +86,6 @@
       <HashCode>AAAAARABAAoAAAAABAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
       <FileName>Models\ManagedChannel.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
   </Class>
   <Class Name="SvxlinkManager.Models.ChannelBase">
     <Position X="7.75" Y="0.5" Width="1.5" />
@@ -94,6 +93,7 @@
       <HashCode>AAACAAAAAAAAAAAAgQAAAAQAAAAAAIAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\ChannelBase.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="SvxlinkManager.Models.Reflector">
     <Position X="10.75" Y="3.5" Width="1.5" />

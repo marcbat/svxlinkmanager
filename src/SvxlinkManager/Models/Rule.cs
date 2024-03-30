@@ -8,7 +8,7 @@ namespace SvxlinkManager.Models
 {
   public class Rule : IModelEntity
   {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public bool Enable { get; set; }
 

@@ -4,10 +4,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
-using SvxlinkManager.Data;
 using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Shared;
-using SvxlinkManager.Repositories;
 using SvxlinkManager.Service;
 
 using System;
@@ -26,7 +24,7 @@ using System.Xml.Linq;
 namespace SvxlinkManager.Pages
 {
   [Authorize]
-  public class HomeBase : RepositoryComponentBase, IDisposable
+  public class HomeBase : MediatrComponentBase, IDisposable
   {
     protected override async Task OnInitializedAsync()
     {
@@ -178,7 +176,7 @@ namespace SvxlinkManager.Pages
 
     public List<ManagedChannel> Channels { get; set; }
 
-    private void LoadChannels() => Channels = Repositories.Channels.GetAll().ToList();
+    private void LoadChannels() => Channels = Mediatr.Channels.GetAll().ToList();
 
     private async void SvxLinkService_Error(string t, string b)
     {

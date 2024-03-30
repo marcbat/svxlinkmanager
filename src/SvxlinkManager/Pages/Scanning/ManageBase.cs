@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.Scanning
 {
   [Authorize]
-  public class ManageBase : RepositoryComponentBase
+  public class ManageBase : MediatrComponentBase
   {
     public EditContext EditContext;
 
@@ -37,12 +37,12 @@ namespace SvxlinkManager.Pages.Scanning
 
     private void LoadScanProfile()
     {
-      ScanProfile = Repositories.ScanProfiles.Get(1);
+      ScanProfile = Mediatr.ScanProfiles.Get(1);
     }
 
     private void LoadChannels()
     {
-      Channels = Repositories.Channels.GetAll().Where(c => !string.IsNullOrEmpty(c.TrackerUrl)).ToList();
+      Channels = Mediatr.Channels.GetAll().Where(c => !string.IsNullOrEmpty(c.TrackerUrl)).ToList();
     }
 
     public bool IsChanged { get; set; }
@@ -55,7 +55,7 @@ namespace SvxlinkManager.Pages.Scanning
     {
       ScanProfile.Enable = true;
 
-      Repositories.ScanProfiles.Update(ScanProfile);
+      Mediatr.ScanProfiles.Update(ScanProfile);
 
       Telemetry.TrackEvent("Enable scan", ScanProfile.TrackProperties);
 
@@ -68,7 +68,7 @@ namespace SvxlinkManager.Pages.Scanning
     {
       ScanProfile.Enable = false;
 
-      Repositories.ScanProfiles.Update(ScanProfile);
+      Mediatr.ScanProfiles.Update(ScanProfile);
 
       Telemetry.TrackEvent("Disable scan", ScanProfile.TrackProperties);
 
@@ -91,7 +91,7 @@ namespace SvxlinkManager.Pages.Scanning
 
     protected async Task HandleValidSubmitAsync()
     {
-      Repositories.ScanProfiles.Update(ScanProfile);
+      Mediatr.ScanProfiles.Update(ScanProfile);
 
       Telemetry.TrackEvent("Update scan profile", ScanProfile.TrackProperties);
 

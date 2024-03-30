@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
+using SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +18,7 @@ namespace SvxlinkManager.Pages.RadioProfile
     {
       Telemetry.TrackPageView(new PageViewTelemetry("Radio Profile Edit Page") { Url = new Uri("/RadioProfile/Edit", UriKind.Relative) });
 
-      RadioProfile = Repositories.RadioProfiles.Get(int.Parse(Id));
+      RadioProfile = Mediatr.RadioProfiles.Get(int.Parse(Id));
     }
 
     [Parameter]
@@ -24,7 +26,7 @@ namespace SvxlinkManager.Pages.RadioProfile
 
     override protected async Task HandleValidSubmitAsync()
     {
-      Repositories.RadioProfiles.Update(RadioProfile);
+      await Mediatr.Send(new UpdateRadioProfilCommand(Guid.NewGuid(), RadioProfile.Id, RadioProfile.Name, RadioProfile.RxFequ, RadioProfile.TxFrequ, RadioProfile.Squelch, RadioProfile.TxCtcss, RadioProfile.RxCtcss, RadioProfile.Volume, RadioProfile.PreEmph, RadioProfile.HightPass, RadioProfile.LowPass, RadioProfile.SquelchDetection));
 
       Telemetry.TrackEvent("Update radio profile", RadioProfile.TrackProperties);
 

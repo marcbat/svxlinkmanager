@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using MediatR;
+
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
-using SvxlinkManager.Repositories;
 
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Shared
 {
-  public class RepositoryComponentBase : SvxlinkManagerComponentBase
+  public class MediatrComponentBase : SvxlinkManagerComponentBase
   {
     [Inject]
-    public IRepositories Repositories { get; set; }
+    public IMediator Mediatr { get; set; }
   }
 }

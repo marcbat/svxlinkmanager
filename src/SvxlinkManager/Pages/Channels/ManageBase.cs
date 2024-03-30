@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.Channels
 {
   [Authorize]
-  public class ManageBase<TChannel> : RepositoryComponentBase where TChannel : ManagedChannel
+  public class ManageBase<TChannel> : MediatrComponentBase where TChannel : ManagedChannel
   {
     [Inject]
     public NavigationManager NavigationManager { get; set; }
@@ -43,7 +43,7 @@ namespace SvxlinkManager.Pages.Channels
 
     public List<TChannel> Channels { get; set; }
 
-    private void LoadChannels() => Channels = Repositories.Repository<TChannel>().GetAll().ToList();
+    private void LoadChannels() => Channels = Mediatr.Repository<TChannel>().GetAll().ToList();
 
     /// <summary>
     /// Deletes the specified identifier.
@@ -51,7 +51,7 @@ namespace SvxlinkManager.Pages.Channels
     /// <param name="id">The identifier.</param>
     public async Task DeleteAsync(TChannel channel)
     {
-      Repositories.Channels.Delete(channel.Id);
+      Mediatr.Channels.Delete(channel.Id);
 
       Channels.Remove(channel);
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.RadioProfile
 {
-  public abstract class AddEditBase : RepositoryComponentBase
+  public abstract class AddEditBase : MediatrComponentBase
   {
     [Inject]
     public NavigationManager NavigationManager { get; set; }
