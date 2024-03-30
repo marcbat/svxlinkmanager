@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Channels\" />
+    <Compile Remove="Channels\**" />
+    <EmbeddedResource Remove="Channels\**" />
+    <None Remove="Channels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="SvxlinkManagerConfigs\Echolinks\Commands\NewFolder\" />
   </ItemGroup>
 
