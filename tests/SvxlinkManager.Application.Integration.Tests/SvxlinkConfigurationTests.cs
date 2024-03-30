@@ -13,6 +13,8 @@ using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Queries;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Echolinks.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Echolinks.Queries;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries;
 using SvxlinkManager.Domain.Aggregates;
 using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Infrastructure;
@@ -238,6 +240,89 @@ namespace SvxlinkManager.Application.Integration.Tests
                 File.Delete(db);
             }
         }
+
+        [Test]
+        public async Task AddReflectorCommand_WhenIsValid_ShouldAddNewReflector()
+        {
+            try
+            {
+                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
+
+                // Arrange
+                var reflectorName = "Fake Name";
+                var reflectorConfig = "Fake Config";
+
+                var reflectorId = await mediatr.Send(new AddReflectorCommand(configGuid, reflectorName, reflectorConfig));
+
+                var reflector = await mediatr.Send(new GetReflectorByIdQuery(configGuid, reflectorId));
+
+                reflector.Should().NotBeNull();
+                reflector.Name.Should().Be(reflectorName);
+                reflector.Config.Should().Be(reflectorConfig);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
+
+        [Test]
+        public async Task UpdateReflectorCommand_WhenIsValid_ShouldUpdateReflector()
+        {
+            try
+            {
+                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
+
+                var reflectorId = await mediatr.Send(new AddReflectorCommand(configGuid, "Fake Name", "Fake Config"));
+
+                await mediatr.Send(new UpdateReflectorCommand(configGuid, reflectorId, "Fake Name Update", "Fake Config Update"));
+
+                var reflector = await mediatr.Send(new GetReflectorByIdQuery(configGuid, reflectorId));
+
+                reflector.Should().NotBeNull();
+                reflector.Name.Should().Be("Fake Name Update");
+                reflector.Config.Should().Be("Fake Config Update");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
+
+        [Test]
+        public async Task DeleteReflectorCommand_WhenIsValid_ShouldDeleteReflector()
+        {
+            try
+            {
+                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
+
+                var reflectorId = await mediatr.Send(new AddReflectorCommand(configGuid, "Fake Name", "Fake Config"));
+
+                await mediatr.Send(new DeleteReflectorCommand(configGuid, reflectorId));
+
+                Func<Task> act = async () => await mediatr.Send(new GetReflectorByIdQuery(configGuid, reflectorId));
+
+                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de récupérer le réflecteur.");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
+
+
     }
 
     public class FakeOptions(string file) : IOptions<SvxlinkManagerOptions>
