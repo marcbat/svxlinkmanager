@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Channels\" />
+    <Folder Include="SvxlinkManagerConfigs\Echolinks\Commands\NewFolder\" />
   </ItemGroup>
 
   <ItemGroup>

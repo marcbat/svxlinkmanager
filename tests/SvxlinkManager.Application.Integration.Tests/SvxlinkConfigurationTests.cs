@@ -11,6 +11,8 @@ using Microsoft.Extensions.Options;
 using SvxlinkManager.Application.SvxlinkManagerConfigs;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Queries;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Echolinks.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Echolinks.Queries;
 using SvxlinkManager.Domain.Aggregates;
 using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Infrastructure;
@@ -136,6 +138,106 @@ namespace SvxlinkManager.Application.Integration.Tests
             }
         }
 
+        [Test]
+        public async Task AddEcholinkChannelCommand_WhenIsValid_ShouldAddNewEcholinkChannel()
+        {
+            try
+            {
+                // Arrange
+                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
+                var channelName = "Fake Name";
+                var host = "Fake Host";
+                var callSign = "Fake Callsign";
+                var password = "Fake Password";
+                var sysopName = "Fake SysopName";
+                var location = "Fake Location";
+                var maxQso = 3;
+                var description = "Fake Description";
+                var soundGuid = new byte[] { 0x01, 0x02, 0x03 };
+
+                var channelId = await mediatr.Send(new AddEcholinkChannelCommand(configGuid, channelName, host, callSign, password, sysopName, location, maxQso, description, soundGuid));
+
+                // Act
+                var echolinkChannel = await mediatr.Send(new GetEchoLinkChannelByIdQuery(configGuid, channelId));
+
+                // Assert
+                echolinkChannel.Should().NotBeNull();
+                echolinkChannel.Name.Should().Be(channelName);
+                echolinkChannel.Host.Should().Be(host);
+                echolinkChannel.CallSign.Should().Be(callSign);
+                echolinkChannel.Password.Should().Be(password);
+                echolinkChannel.SysopName.Should().Be(sysopName);
+                echolinkChannel.Location.Should().Be(location);
+                echolinkChannel.MaxQso.Should().Be(maxQso);
+                echolinkChannel.Description.Should().Be(description);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
+
+        [Test]
+        public async Task UpdateEcholinkChannelCommand_WhenIsValid_ShouldUpdateEcholinkChannel()
+        {
+            try
+            {
+                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
+
+                var channelId = await mediatr.Send(new AddEcholinkChannelCommand(configGuid, "Fake Name", "Fake Host", "Fake Callsign", "Fake Password", "Fake SysopName", "Fake Location", 3, "Fake Description", new byte[] { 0x01, 0x02, 0x03 }));
+
+                await mediatr.Send(new UpdateEcholinkChannelCommand(configGuid, channelId, "Fake Name Update", "Fake Host Update", "Fake Callsign Update", "Fake Password Update", "Fake SysopName Update", "Fake Location Update", 5, "Fake Description Update", new byte[] { 0x01, 0x02, 0x03 }));
+
+                var echolinkChannel = await mediatr.Send(new GetEchoLinkChannelByIdQuery(configGuid, channelId));
+
+                echolinkChannel.Should().NotBeNull();
+                echolinkChannel.Name.Should().Be("Fake Name Update");
+                echolinkChannel.Host.Should().Be("Fake Host Update");
+                echolinkChannel.CallSign.Should().Be("Fake Callsign Update");
+                echolinkChannel.Password.Should().Be("Fake Password Update");
+                echolinkChannel.SysopName.Should().Be("Fake SysopName Update");
+                echolinkChannel.Location.Should().Be("Fake Location Update");
+                echolinkChannel.MaxQso.Should().Be(5);
+                echolinkChannel.Description.Should().Be("Fake Description Update");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
+
+        [Test]
+        public async Task DeleteEcholinkChannelCommand_WhenIsValid_ShouldDeleteEcholinkChannel()
+        {
+            try
+            {
+                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
+
+                var channelId = await mediatr.Send(new AddEcholinkChannelCommand(configGuid, "Fake Name", "Fake Host", "Fake Callsign", "Fake Password", "Fake SysopName", "Fake Location", 3, "Fake Description", new byte[] { 0x01, 0x02, 0x03 }));
+
+                await mediatr.Send(new DeleteEcholinkChannelCommand(configGuid, channelId));
+
+                Func<Task> act = async () => await mediatr.Send(new GetEchoLinkChannelByIdQuery(configGuid, channelId));
+
+                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de récupérer le echolink channel.");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
     }
 
     public class FakeOptions(string file) : IOptions<SvxlinkManagerOptions>
