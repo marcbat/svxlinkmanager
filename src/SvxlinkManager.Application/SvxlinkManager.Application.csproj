@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="SvxlinkManagerConfigs\AdvanceChannel\Commands\" />
     <Folder Include="SvxlinkManagerConfigs\Echolinks\Commands\NewFolder\" />
   </ItemGroup>
 

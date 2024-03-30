@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using SvxlinkManager.Application.SvxlinkManagerConfigs;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.AvanceSvxlinkChannels.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.AvanceSvxlinkChannels.Queries;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Queries;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Echolinks.Commands;
@@ -445,6 +447,119 @@ namespace SvxlinkManager.Application.Integration.Tests
                 File.Delete(db);
             }
         }
+
+        [Test]
+        public async Task AddAvanceSvxlinkChannelCommand_WhenIsValid_ShouldAddNewAdvanceSvxlinkChannel()
+        {
+            try
+            {
+                // Arrange
+                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
+
+                var channelId = await mediatr.Send(new AddAdvanceSvxlinkChannelCommand(configGuid, "Name",
+                                        "SvxlinkConf",
+                                        "ModuleDtmfRepeater",
+                                        "ModuleEchoLink",
+                                        "ModuleFrn",
+                                        "ModuleHelp",
+                                        "ModuleMetarInfo",
+                                        "ModuleParrot",
+                                        "ModulePropagationMonitor",
+                                        "ModuleSelCallEnc",
+                                        "ModuleTclVoiceMail",
+                                        "ModuleTrx", new byte[] { 0x01, 0x02, 0x03 }));
+
+                // Act
+                var advanceSvxlinkChannel = await mediatr.Send(new GetAvanceSvxlinkChannelByIdQuery(configGuid, channelId));
+
+                // Assert
+                advanceSvxlinkChannel.Should().NotBeNull();
+                advanceSvxlinkChannel.Name.Should().Be("Name");
+                advanceSvxlinkChannel.SvxlinkConf.Should().Be("SvxlinkConf");
+                advanceSvxlinkChannel.ModuleDtmfRepeater.Should().Be("ModuleDtmfRepeater");
+                advanceSvxlinkChannel.ModuleEchoLink.Should().Be("ModuleEchoLink");
+                advanceSvxlinkChannel.ModuleFrn.Should().Be("ModuleFrn");
+                advanceSvxlinkChannel.ModuleHelp.Should().Be("ModuleHelp");
+                advanceSvxlinkChannel.ModuleMetarInfo.Should().Be("ModuleMetarInfo");
+                advanceSvxlinkChannel.ModuleParrot.Should().Be("ModuleParrot");
+                advanceSvxlinkChannel.ModulePropagationMonitor.Should().Be("ModulePropagationMonitor");
+                advanceSvxlinkChannel.ModuleSelCallEnc.Should().Be("ModuleSelCallEnc");
+                advanceSvxlinkChannel.ModuleTclVoiceMail.Should().Be("ModuleTclVoiceMail");
+                advanceSvxlinkChannel.ModuleTrx.Should().Be("ModuleTrx");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
+
+        [Test]
+        public async Task UpdateAdvanceSvxlinkChannelCommand_WhenIsValid_ShouldUpdateAdvanceSvxlinkChannel()
+        {
+            try
+            {
+                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
+
+                var channelId = await mediatr.Send(new AddAdvanceSvxlinkChannelCommand(configGuid, "Fake Name", "Fake SvxlinkConf", "Fake ModuleDtmfRepeater", "Fake ModuleEchoLink", "Fake ModuleFrn", "Fake ModuleHelp", "Fake ModuleMetarInfo", "Fake ModuleParrot", "Fake ModulePropagationMonitor", "Fake ModuleSelCallEnc", "Fake ModuleTclVoiceMail", "Fake ModuleTrx", new byte[] { 0x01, 0x02, 0x03 }));
+
+                await mediatr.Send(new UpdateAdvanceSvxlinkChannelCommand(configGuid, channelId, "Fake Name Update", "Fake SvxlinkConf Update", "Fake ModuleDtmfRepeater Update", "Fake ModuleEchoLink Update", "Fake ModuleFrn Update", "Fake ModuleHelp Update", "Fake ModuleMetarInfo Update", "Fake ModuleParrot Update", "Fake ModulePropagationMonitor Update", "Fake ModuleSelCallEnc Update", "Fake ModuleTclVoiceMail Update", "Fake ModuleTrx Update", new byte[] { 0x04, 0x05, 0x06 }));
+
+                var avanceSvxlinkChannel = await mediatr.Send(new GetAvanceSvxlinkChannelByIdQuery(configGuid, channelId));
+
+                avanceSvxlinkChannel.Should().NotBeNull();
+                avanceSvxlinkChannel.Name.Should().Be("Fake Name Update");
+                avanceSvxlinkChannel.SvxlinkConf.Should().Be("Fake SvxlinkConf Update");
+                avanceSvxlinkChannel.ModuleDtmfRepeater.Should().Be("Fake ModuleDtmfRepeater Update");
+                avanceSvxlinkChannel.ModuleEchoLink.Should().Be("Fake ModuleEchoLink Update");
+                avanceSvxlinkChannel.ModuleFrn.Should().Be("Fake ModuleFrn Update");
+                avanceSvxlinkChannel.ModuleHelp.Should().Be("Fake ModuleHelp Update");
+                avanceSvxlinkChannel.ModuleMetarInfo.Should().Be("Fake ModuleMetarInfo Update");
+                avanceSvxlinkChannel.ModuleParrot.Should().Be("Fake ModuleParrot Update");
+                avanceSvxlinkChannel.ModulePropagationMonitor.Should().Be("Fake ModulePropagationMonitor Update");
+                avanceSvxlinkChannel.ModuleSelCallEnc.Should().Be("Fake ModuleSelCallEnc Update");
+                avanceSvxlinkChannel.ModuleTclVoiceMail.Should().Be("Fake ModuleTclVoiceMail Update");
+                avanceSvxlinkChannel.ModuleTrx.Should().Be("Fake ModuleTrx Update");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
+
+        [Test]
+        public async Task DeleteAdvanceSvxlinkChannelCommand_WhenIsValid_ShouldDeleteAdvanceSvxlinkChannel()
+        {
+            try
+            {
+                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
+
+                var channelId = await mediatr.Send(new AddAdvanceSvxlinkChannelCommand(configGuid, "Fake Name", "Fake SvxlinkConf", "Fake ModuleDtmfRepeater", "Fake ModuleEchoLink", "Fake ModuleFrn", "Fake ModuleHelp", "Fake ModuleMetarInfo", "Fake ModuleParrot", "Fake ModulePropagationMonitor", "Fake ModuleSelCallEnc", "Fake ModuleTclVoiceMail", "Fake ModuleTrx", new byte[] { 0x01, 0x02, 0x03 }));
+
+                await mediatr.Send(new DeleteAdvanceSvxlinkChannelCommand(configGuid, channelId));
+
+                Func<Task> act = async () => await mediatr.Send(new GetAvanceSvxlinkChannelByIdQuery(configGuid, channelId));
+
+                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de récupérer le canal avancé Svxlink.");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
+
+
     }
 
     public class FakeOptions(string file) : IOptions<SvxlinkManagerOptions>

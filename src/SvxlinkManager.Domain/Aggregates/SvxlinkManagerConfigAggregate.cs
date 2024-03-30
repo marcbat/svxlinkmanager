@@ -13,6 +13,7 @@ namespace SvxlinkManager.Domain.Aggregates
     {
         private List<SvxlinkChannel> svxlinkChannels = [];
         private List<EcholinkChannel> echolinkChannels = [];
+        private List<AdvanceSvxlinkChannel> advanceSvxlinkChannels = [];
         private List<Reflector> reflectors = [];
         private List<RadioProfil> radioProfils = [];
 
@@ -99,5 +100,25 @@ namespace SvxlinkManager.Domain.Aggregates
 
             radioProfils.Remove(radioProfil);
         }
+
+        public IReadOnlyCollection<AdvanceSvxlinkChannel> AdvanceSvxlinkChannels
+        {
+            get=>  advanceSvxlinkChannels.AsReadOnly(); 
+            private set => advanceSvxlinkChannels = value.ToList();
+        }
+
+        public void AddAdvanceSvxlinkChannel(AdvanceSvxlinkChannel advanceSvxlinkChannel)
+        {
+            advanceSvxlinkChannels.Add(advanceSvxlinkChannel);
+        }
+
+        public void DeleteAdvanceSvxlinkChannel(Guid channelId)
+        {
+            var avanceSvxlinkChannel = advanceSvxlinkChannels.FirstOrDefault(x => x.Id == channelId) ?? throw new Exception("AvanceSvxlink channel not found");
+
+            advanceSvxlinkChannels.Remove(avanceSvxlinkChannel);
+        }
+
+
     }
 }
