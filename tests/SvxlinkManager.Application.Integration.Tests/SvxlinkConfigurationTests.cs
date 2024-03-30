@@ -13,11 +13,15 @@ using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Queries;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Echolinks.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Echolinks.Queries;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Queries;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries;
 using SvxlinkManager.Domain.Aggregates;
 using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Infrastructure;
+
+using System.Xml.Linq;
 
 namespace SvxlinkManager.Application.Integration.Tests
 {
@@ -322,7 +326,125 @@ namespace SvxlinkManager.Application.Integration.Tests
             }
         }
 
+        [Test]
+        public async Task AddRadioProfilCommand_WhenIsValid_ShouldAddNewRadioProfil()
+        {
+            try
+            {
+                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
 
+                // Arrange
+                var name = "Fake Name";
+                var rxFrequency = "123.45";
+                var txFrequency = "543.21";
+                var squelch = "5";
+                var txCtcss = "Fake CTCSS";
+                var rxCtCss = "Fake CTCSS";
+                var volume = "10";
+                var preEmph = "0.5";
+                var highPass = "100";
+                var lowPass = "10000";
+                var squelchDetection = "true";
+
+                var radioProfilId = await mediatr.Send(new AddRadioProfilCommand(configGuid, name,
+                               rxFrequency,
+                               txFrequency,
+                               squelch,
+                               txCtcss,
+                               rxCtCss,
+                               volume,
+                               preEmph,
+                               highPass,
+                               lowPass,
+                               squelchDetection));
+
+                var radioProfil = await mediatr.Send(new GetRadioProfilByIdQuery(configGuid, radioProfilId));
+
+                radioProfil.Should().NotBeNull();
+                radioProfil.Name.Should().Be(name);
+                radioProfil.RxFequency.Should().Be(rxFrequency);
+                radioProfil.TxFrequency.Should().Be(txFrequency);
+                radioProfil.Squelch.Should().Be(squelch);
+                radioProfil.TxCtcss.Should().Be(txCtcss);
+                radioProfil.RxCtCss.Should().Be(rxCtCss);
+                radioProfil.Volume.Should().Be(volume);
+                radioProfil.PreEmph.Should().Be(preEmph);
+                radioProfil.HightPass.Should().Be(highPass);
+                radioProfil.LowPass.Should().Be(lowPass);
+                radioProfil.SquelchDetection.Should().Be(squelchDetection);
+
+
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
+
+        [Test]
+        public async Task UpdateRadioProfilCommand_WhenIsValid_ShouldUpdateRadioProfil()
+        {
+            try
+            {
+                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
+
+                var radioProfilId = await mediatr.Send(new AddRadioProfilCommand(configGuid, "Fake Name", "123.45", "543.21", "5", "Fake CTCSS", "Fake CTCSS", "10", "0.5", "100", "10000", "true"));
+
+                await mediatr.Send(new UpdateRadioProfilCommand(configGuid, radioProfilId, "Fake Name Update", "111.11", "222.22", "6", "Fake CTCSS Update", "Fake CTCSS Update", "20", "1.0", "200", "20000", "false"));
+
+                var radioProfil = await mediatr.Send(new GetRadioProfilByIdQuery(configGuid, radioProfilId));
+
+                radioProfil.Should().NotBeNull();
+                radioProfil.Name.Should().Be("Fake Name Update");
+                radioProfil.RxFequency.Should().Be("111.11");
+                radioProfil.TxFrequency.Should().Be("222.22");
+                radioProfil.Squelch.Should().Be("6");
+                radioProfil.TxCtcss.Should().Be("Fake CTCSS Update");
+                radioProfil.RxCtCss.Should().Be("Fake CTCSS Update");
+                radioProfil.Volume.Should().Be("20");
+                radioProfil.PreEmph.Should().Be("1.0");
+                radioProfil.HightPass.Should().Be("200");
+                radioProfil.LowPass.Should().Be("20000");
+                radioProfil.SquelchDetection.Should().Be("false");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
+
+        [Test]
+        public async Task DeleteRadioProfilCommand_WhenIsValid_ShouldDeleteRadioProfil()
+        {
+            try
+            {
+                var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand());
+
+                var radioProfilId = await mediatr.Send(new AddRadioProfilCommand(configGuid, "Fake Name", "123.45", "543.21", "5", "Fake CTCSS", "Fake CTCSS", "10", "0.5", "100", "10000", "true"));
+
+                await mediatr.Send(new DeleteRadioProfilCommand(configGuid, radioProfilId));
+
+                Func<Task> act = async () => await mediatr.Send(new GetRadioProfilByIdQuery(configGuid, radioProfilId));
+
+                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de récupérer le profil radio.");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
     }
 
     public class FakeOptions(string file) : IOptions<SvxlinkManagerOptions>

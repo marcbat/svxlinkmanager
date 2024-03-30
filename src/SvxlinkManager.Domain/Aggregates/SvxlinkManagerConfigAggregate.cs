@@ -14,6 +14,7 @@ namespace SvxlinkManager.Domain.Aggregates
         private List<SvxlinkChannel> svxlinkChannels = [];
         private List<EcholinkChannel> echolinkChannels = [];
         private List<Reflector> reflectors = [];
+        private List<RadioProfil> radioProfils = [];
 
         protected SvxlinkManagerConfigAggregate(Guid id) : base(id)
         {
@@ -79,6 +80,24 @@ namespace SvxlinkManager.Domain.Aggregates
             var reflector = reflectors.FirstOrDefault(x => x.Id == reflectorId) ?? throw new Exception("Reflector not found");
 
             reflectors.Remove(reflector);
+        }
+
+        public IReadOnlyCollection<RadioProfil> RadioProfils
+        {
+            get=>  radioProfils.AsReadOnly(); 
+            private set => radioProfils = value.ToList();
+        }
+
+        public void AddRadioProfil(RadioProfil radioProfil)
+        {
+            radioProfils.Add(radioProfil);
+        }
+
+        public void DeleteRadioProfil(Guid radioProfilId)
+        {
+            var radioProfil = radioProfils.FirstOrDefault(x => x.Id == radioProfilId) ?? throw new Exception("Radio profil not found");
+
+            radioProfils.Remove(radioProfil);
         }
     }
 }
