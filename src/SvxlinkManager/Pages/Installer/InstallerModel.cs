@@ -54,7 +54,7 @@ namespace SvxlinkManager.Pages.Installer
         { nameof(AnnonceCallSign), AnnonceCallSign },
         { nameof(ChannelsToPreservedList), ChannelsToPreservedList },
         { nameof(UpdateToLastRelease), UpdateToLastRelease.ToString() },
-        { nameof(LastRelease), LastRelease.Name },
+        { nameof(LastRelease), LastRelease?.Name },
         { nameof(CurrentVersion), CurrentVersion },
         };
 

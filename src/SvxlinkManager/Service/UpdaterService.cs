@@ -94,7 +94,7 @@ namespace SvxlinkManager.Service
     /// Return last release
     /// </summary>
     /// <returns></returns>
-    public Release GetLastRelease() => IsPreRelease ? Releases.First() : Releases.Where(IsStable).Where(IsSameMajor).First();
+    public Release GetLastRelease() => IsPreRelease ? Releases.First() : Releases.Where(IsStable).Where(IsSameMajor).FirstOrDefault();
 
     /// <summary>
     /// Return last image not in the same major
@@ -128,7 +128,7 @@ namespace SvxlinkManager.Service
     /// </summary>
     /// <param name="release">the release</param>
     /// <returns>True if the release is the durrent installed release</returns>
-    public bool IsCurrent(Release release) => release.TagName == CurrentVersion;
+    public bool IsCurrent(Release release) => release?.TagName == CurrentVersion;
 
     /// <summary>
     /// Check if svxlinkmanager is up to date
