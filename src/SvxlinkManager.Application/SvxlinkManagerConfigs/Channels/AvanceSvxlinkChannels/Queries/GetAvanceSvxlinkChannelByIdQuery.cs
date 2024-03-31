@@ -1,5 +1,4 @@
 ﻿using MediatR;
-
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Domain.Entities;
 
@@ -10,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Application.SvxlinkManagerConfigs.AvanceSvxlinkChannels.Queries
+namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlinkChannels.Queries
 {
     public record GetAvanceSvxlinkChannelByIdQuery(Guid ConfigGuid, Guid ChannelGuid) : IRequest<AdvanceSvxlinkChannel>;
 

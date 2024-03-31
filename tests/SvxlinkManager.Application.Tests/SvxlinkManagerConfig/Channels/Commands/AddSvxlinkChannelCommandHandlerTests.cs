@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Commands;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfig.Channels.Commands.Tests
 {

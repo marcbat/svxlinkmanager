@@ -1,7 +1,6 @@
 ﻿using MediatR;
 
 using Microsoft.Extensions.Logging;
-
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Domain.Aggregates;
 using SvxlinkManager.Domain.Entities;
@@ -13,7 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Echolinks.Commands
+namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Commands
 {
     public record AddEcholinkChannelCommand(Guid ConfigId, string Name, string Host, string CallSign, string Password, string SysopName, string Location, int MaxQso, string Description, byte[] SoundFile) : IRequest<Guid>;
 

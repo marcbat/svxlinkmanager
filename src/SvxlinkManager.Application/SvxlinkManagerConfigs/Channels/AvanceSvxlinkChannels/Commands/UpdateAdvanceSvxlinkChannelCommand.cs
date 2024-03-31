@@ -1,7 +1,6 @@
 ﻿using MediatR;
 
 using Microsoft.Extensions.Logging;
-
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Domain.Aggregates;
 using SvxlinkManager.Domain.Entities;
@@ -13,7 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Application.SvxlinkManagerConfigs.AvanceSvxlinkChannels.Commands
+namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlinkChannels.Commands
 {
     public record UpdateAdvanceSvxlinkChannelCommand(Guid ConfigId, Guid ChannelId, string Name,
                                         string SvxlinkConf,

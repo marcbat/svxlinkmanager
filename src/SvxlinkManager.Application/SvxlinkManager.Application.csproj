@@ -14,7 +14,8 @@
 
   <ItemGroup>
     <Folder Include="SvxlinkManagerConfigs\AdvanceChannel\Commands\" />
-    <Folder Include="SvxlinkManagerConfigs\Echolinks\Commands\NewFolder\" />
+    <Folder Include="SvxlinkManagerConfigs\Channels\Echolinks\Commands\NewFolder\" />
+    <Folder Include="SvxlinkManagerConfigs\Channels\Command\" />
   </ItemGroup>
 
   <ItemGroup>

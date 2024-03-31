@@ -2,13 +2,9 @@
 
 using MediatR;
 
-using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.DataContracts;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
 
-using SvxlinkManager.Models;
-using SvxlinkManager.Telemetry;
+using SvxlinkManager.Domain.Entities;
 
 using System;
 using System.Collections.Generic;
@@ -18,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Timers;
 
-namespace SvxlinkManager.Service
+namespace SvxlinkManager.Infrastructure.Services
 {
   public class SvxLinkService : SvxlinkServiceBase
   {
@@ -28,7 +24,6 @@ namespace SvxlinkManager.Service
 
     private readonly IMediator mediatr;
     private readonly ScanService scanService;
-    private readonly TelemetryClient telemetry;
     private readonly IIniService iniService;
     private int channelId;
 
@@ -131,7 +126,6 @@ namespace SvxlinkManager.Service
         }
         catch (Exception e)
         {
-          telemetry.TrackException(e, new Dictionary<string, string> { { "ChannelId", value.ToString() } });
           OnError("Impossible de changer de salon.", e.Message);
         }
       }
@@ -184,14 +178,6 @@ namespace SvxlinkManager.Service
     public virtual void ActivateSvxlinkChannel(SvxlinkChannel channel)
     {
       var url = new UriBuilder("http", channel.Host, channel.Port).Uri;
-
-      var dependencyTracker = new DependencyTelemetry
-      {
-        Name = "ActivateSvxlinkChannel",
-        Data = url.AbsolutePath,
-        Target = url.Authority,
-        Type = "http"
-      };
 
       using (var operation = telemetry.StartOperation(dependencyTracker))
       {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
 using SvxlinkManager.Application.Interfaces;
+using SvxlinkManager.Infrastructure.Services;
 
 namespace SvxlinkManager.Infrastructure
 {
@@ -10,6 +11,8 @@ namespace SvxlinkManager.Infrastructure
         {
             services.AddSingleton<ISoundRepository, SoundRepository>();
             services.AddSingleton<ISvxlinkManagerConfigRepository, SvxlinkManagerConfigRepository>();
+
+            services.AddSingleton<ISvxlinkServiceBase, SvxlinkServiceBase>();
 
             return services;
         }

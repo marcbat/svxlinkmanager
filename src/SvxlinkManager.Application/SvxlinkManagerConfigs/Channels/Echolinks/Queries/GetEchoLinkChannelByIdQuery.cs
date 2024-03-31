@@ -1,5 +1,4 @@
 ﻿using MediatR;
-
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Domain.Entities;
 
@@ -9,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Echolinks.Queries
+namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Queries
 {
     public record GetEchoLinkChannelByIdQuery(Guid ConfigGuid, Guid ChannelGuid) : IRequest<EcholinkChannel>;
 

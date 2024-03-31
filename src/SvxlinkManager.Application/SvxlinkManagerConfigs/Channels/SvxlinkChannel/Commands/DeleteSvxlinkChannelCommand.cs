@@ -1,14 +1,12 @@
 ﻿using MediatR;
-
 using SvxlinkManager.Application.Interfaces;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Commands
+namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Commands
 {
     public record DeleteSvxlinkChannelCommand(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Unit>;
 
@@ -28,7 +26,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Commands
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
 
                 var channel = config.SvxlinkChannels.SingleOrDefault(c => c.Id == request.ChannelGuid) ?? throw new SvxlinkManagerException("Impossible de trouver le svxlink channel.");
-                
+
                 config.DeleteSvxlinkChannel(request.ChannelGuid);
 
                 await svxlinkManagerConfigRepository.UpdateAsync(config);

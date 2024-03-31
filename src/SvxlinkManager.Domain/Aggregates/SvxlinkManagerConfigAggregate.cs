@@ -119,6 +119,15 @@ namespace SvxlinkManager.Domain.Aggregates
             advanceSvxlinkChannels.Remove(avanceSvxlinkChannel);
         }
 
+        public IEnumerable<ManagedChannel> GetManagedChannels()
+        {
+            var managedChannels = new List<ManagedChannel>();
 
+            managedChannels.AddRange(svxlinkChannels);
+            managedChannels.AddRange(echolinkChannels);
+            managedChannels.AddRange(advanceSvxlinkChannels);
+
+            return managedChannels;
+        }
     }
 }

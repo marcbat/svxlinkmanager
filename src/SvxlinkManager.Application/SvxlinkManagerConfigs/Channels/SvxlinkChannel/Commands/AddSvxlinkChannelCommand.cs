@@ -1,7 +1,6 @@
 ﻿using MediatR;
 
 using Microsoft.Extensions.Logging;
-
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Domain.Aggregates;
 using SvxlinkManager.Domain.Entities;
@@ -12,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Commands
+namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Commands
 {
     public record AddSvxlinkChannelCommand(Guid ConfigId, string Name, string Host, string CallSign, int Port, string ReportCallSign, byte[] SoundFile) : IRequest<Guid>;
 
