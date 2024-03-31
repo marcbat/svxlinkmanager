@@ -18,9 +18,6 @@ namespace SvxlinkManager.Pages.Shared
     public ILogger<SvxlinkManagerComponentBase> Logger { get; set; }
 
     [Inject]
-    public TelemetryClient Telemetry { get; set; }
-
-    [Inject]
     public IJSRuntime Js { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

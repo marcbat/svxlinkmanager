@@ -15,8 +15,8 @@ namespace SvxlinkManager.Domain.Entities
             CallSign = callSign;
         }
 
-        public string Host { get; }
+        public string Host { get;}
 
-        public string CallSign { get; }
+        public string CallSign { get; set; }
     }
 }

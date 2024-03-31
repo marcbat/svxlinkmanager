@@ -17,15 +17,17 @@ namespace SvxlinkManager.Models
     [Required]
     public string ReportCallSign { get; set; }
 
-    [NotMapped]
-    public override Dictionary<string, string> TrackProperties => new Dictionary<string, string> {
-      {nameof(Name), Name },
-      {nameof(CallSign), CallSign },
-      {nameof(IsDefault), IsDefault.ToString() },
-      {nameof(IsTemporized), IsTemporized.ToString()},
-      {nameof(TimerDelay), TimerDelay.ToString()},
-      {nameof(Dtmf), Dtmf.ToString() },
-      {nameof(ReportCallSign),ReportCallSign },
-    };
+    public static implicit operator SvxlinkChannel(Domain.Entities.SvxlinkChannel svxlinkChannel)
+    {
+      return new SvxlinkChannel
+      {
+        Id = svxlinkChannel.Id,
+        Name = svxlinkChannel.Name,
+        AuthKey = svxlinkChannel.AuthKey,
+        Port = svxlinkChannel.Port,
+        ReportCallSign = svxlinkChannel.ReportCallSign
+      };
+    }
+
   }
 }

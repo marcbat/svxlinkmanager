@@ -13,6 +13,7 @@ namespace SvxlinkManager.Infrastructure
             services.AddSingleton<ISvxlinkManagerConfigRepository, SvxlinkManagerConfigRepository>();
 
             services.AddSingleton<ISvxlinkServiceBase, SvxlinkServiceBase>();
+            services.AddSingleton<ISa818Service, Sa818Service>();
 
             return services;
         }

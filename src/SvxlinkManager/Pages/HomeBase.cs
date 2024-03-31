@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
+using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Shared;
 using SvxlinkManager.Service;
@@ -316,7 +317,7 @@ namespace SvxlinkManager.Pages
     }
 
     [Inject]
-    public SvxLinkService SvxLinkService { get; set; }
+    public ISvxlinkServiceBase SvxLinkService { get; set; }
 
     public Models.Node CurrentTxNode { get; set; }
 

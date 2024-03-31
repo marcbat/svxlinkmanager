@@ -2,6 +2,8 @@ using AspNetCore.Identity.LiteDB;
 using AspNetCore.Identity.LiteDB.Data;
 using AspNetCore.Identity.LiteDB.Models;
 
+using MediatR;
+
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
@@ -15,11 +17,16 @@ using Microsoft.Extensions.Hosting;
 
 using Spotnik.Gui.Areas.Identity;
 
+using SvxlinkManager.Application.Interfaces;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands;
 using SvxlinkManager.Service;
 using SvxlinkManager.ServiceMockup;
 using SvxlinkManager.Telemetry;
 
+using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace SvxlinkManager
 {
@@ -46,7 +53,6 @@ namespace SvxlinkManager
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 
-            services.AddSingleton<SvxLinkService>();
             services.AddSingleton<ScanService>();
             services.AddSingleton<UpdaterService>();
             services.AddSingleton<IIniService, IniService>();
@@ -80,7 +86,7 @@ namespace SvxlinkManager
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<IdentityUser> userManager, NavigationManager navigationManager)
+        public async Task ConfigureAsync(IApplicationBuilder app, IWebHostEnvironment env, UserManager<IdentityUser> userManager, NavigationManager navigationManager)
         {
             if (env.IsDevelopment())
             {
@@ -96,12 +102,14 @@ namespace SvxlinkManager
 
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
+
+
                 // start default channel
-                var svxlinkservice = serviceScope.ServiceProvider.GetRequiredService<SvxLinkService>();
-                svxlinkservice.StartDefaultChannel();
+                var mediatr = serviceScope.ServiceProvider.GetRequiredService<IMediator>();
+                await mediatr.Send(new StartDefaultChannelCommand(Guid.NewGuid()));
 
                 // start enable reflector
-                svxlinkservice.StartEnableReflector();
+                await mediatr.Send(new StartEnableReflectors(Guid.NewGuid()));
             }
 
             app.UseHttpsRedirection();

@@ -101,6 +101,11 @@ namespace SvxlinkManager.Domain.Aggregates
             radioProfils.Remove(radioProfil);
         }
 
+        public void DeleteAllRadioProfils()
+        {
+            radioProfils.Clear();
+        }
+
         public IReadOnlyCollection<AdvanceSvxlinkChannel> AdvanceSvxlinkChannels
         {
             get=>  advanceSvxlinkChannels.AsReadOnly(); 

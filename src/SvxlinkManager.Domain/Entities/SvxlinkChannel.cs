@@ -18,6 +18,6 @@ namespace SvxlinkManager.Domain.Entities
 
         public int Port { get; }
 
-        public string ReportCallSign { get; }
+        public string ReportCallSign { get; set; }
     }
 }

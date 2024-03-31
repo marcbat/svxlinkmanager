@@ -6,7 +6,7 @@ using SvxlinkManager.Application.Interfaces;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Commands
 {
-    public record StartDefaultChannelCommand(Guid ConfigId, Guid ChannelId) : IRequest<Unit>;
+    public record StartDefaultChannelCommand(Guid ConfigId) : IRequest<Unit>;
 
     public class StartDefaultChannelCommandHandler : IRequestHandler<StartDefaultChannelCommand, Unit>
     {
