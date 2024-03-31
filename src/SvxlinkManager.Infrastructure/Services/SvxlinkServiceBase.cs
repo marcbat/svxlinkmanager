@@ -56,6 +56,8 @@ namespace SvxlinkManager.Infrastructure.Services
 
         public Guid ActiveChannel { get; private set; }
 
+        public string Status { get; private set; }
+
         protected void OnError(string title, string body) =>
           Error?.Invoke(title, body);
 

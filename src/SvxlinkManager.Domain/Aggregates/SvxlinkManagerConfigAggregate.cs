@@ -135,6 +135,16 @@ namespace SvxlinkManager.Domain.Aggregates
             return managedChannels;
         }
 
+        public IEnumerable<ManagedChannel> GetSvxlinkAndEcholinkChannels()
+        {
+            var managedChannels = new List<ManagedChannel>();
+
+            managedChannels.AddRange(svxlinkChannels);
+            managedChannels.AddRange(echolinkChannels);
+
+            return managedChannels;
+        }
+
         public ManagedChannel? GetManagedChannel(Guid channelId)
         {
             return GetManagedChannels().FirstOrDefault(x => x.Id == channelId);

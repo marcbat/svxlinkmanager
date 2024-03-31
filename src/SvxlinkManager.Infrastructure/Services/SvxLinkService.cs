@@ -44,12 +44,11 @@ namespace SvxlinkManager.Infrastructure.Services
       throw new NotImplementedException();
     }
 
-    public SvxLinkService(ILogger<SvxLinkService> logger, IMediator mediatr, ScanService scanService, TelemetryClient telemetry, IIniService iniService) : base(logger, telemetry)
+    public SvxLinkService(ILogger<SvxLinkService> logger, IMediator mediatr, ScanService scanService,  IIniService iniService) : base(logger, telemetry)
     {
       this.logger = logger;
       this.mediatr = mediatr;
       this.scanService = scanService;
-      this.telemetry = telemetry;
       this.iniService = iniService;
       lastTx = DateTime.Now;
 
@@ -179,14 +178,11 @@ namespace SvxlinkManager.Infrastructure.Services
     {
       var url = new UriBuilder("http", channel.Host, channel.Port).Uri;
 
-      using (var operation = telemetry.StartOperation(dependencyTracker))
-      {
+      
         logger.LogInformation("Restart salon.");
 
         if (channel?.CallSign == "(CH) SVX4LINK H")
         {
-          telemetry.TrackTrace("Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.", SeverityLevel.Error, channel.TrackProperties);
-
           ChannelId = 0;
           OnError("Attention", "Vous ne pouvez pas vous connecter avec le call par défaut. <br/> Merci de le changer dans la configuration des salons.");
           return;
@@ -244,12 +240,11 @@ namespace SvxlinkManager.Infrastructure.Services
         StartSvxLink(channel);
         logger.LogInformation($"Le channel {channel.Name} est connecté.");
       }
-    }
+    
 
     private void ActivateAdvanceSvxlinkChannel(AdvanceSvxlinkChannel channel)
     {
-      using (var operation = telemetry.StartOperation<DependencyTelemetry>("ActivateAdvanceSvxlinkChannel"))
-      {
+      
         logger.LogInformation("restart advance salon.");
 
         // Stop svxlink
@@ -274,7 +269,7 @@ namespace SvxlinkManager.Infrastructure.Services
         // Lance svxlink
         StartSvxLink(channel);
         logger.LogInformation($"Le channel {channel.Name} est connecté.");
-      }
+      
     }
 
     /// <summary>Replaces the sound file for the channel</summary>
@@ -303,10 +298,9 @@ namespace SvxlinkManager.Infrastructure.Services
     /// <param name="channel">The Echolink channel</param>
     public virtual void ActivateEcholink(EcholinkChannel channel)
     {
-      telemetry.TrackEvent("Start echolink", new Dictionary<string, string> { { "linkName", channel.Name } });
+      
 
-      using (var operation = telemetry.StartOperation<DependencyTelemetry>("ActivateEcholink"))
-      {
+     
         logger.LogInformation("Restart link echolink.");
 
         // Stop svxlink
@@ -364,7 +358,7 @@ namespace SvxlinkManager.Infrastructure.Services
         // Lance svxlink
         StartSvxLink(channel);
         logger.LogInformation($"Le channel {channel.Name} est connecté.");
-      }
+      
     }
 
     /// <summary>
@@ -394,8 +388,6 @@ namespace SvxlinkManager.Infrastructure.Services
 
       var defaultChannel = mediatr.Channels.GetDefault();
 
-      telemetry.TrackEvent("Temporized QSY", defaultChannel.TrackProperties);
-
       ChannelId = defaultChannel.Id;
     }
 
@@ -417,7 +409,6 @@ namespace SvxlinkManager.Infrastructure.Services
       {
         ScanningQsy?.Invoke();
 
-        telemetry.TrackEvent("Scan QSY", activeChannel.TrackProperties);
         ChannelId = activeChannel.Id;
       }
     }
@@ -427,8 +418,7 @@ namespace SvxlinkManager.Infrastructure.Services
     /// </summary>
     public virtual void Parrot()
     {
-      telemetry.TrackEvent("Start parrot");
-
+     
       // Stop svxlink
       StopSvxlink();
       logger.LogInformation("Salon déconnecté");
@@ -481,8 +471,7 @@ namespace SvxlinkManager.Infrastructure.Services
 
       watcher.Changed += (s, e) =>
       {
-        telemetry.TrackEvent("DTMF change");
-
+        
         logger.LogInformation("Changement de dtmf détécté.");
         var dtmf = File.ReadAllText(dtmfFilePath);
         logger.LogInformation($"Nouveau dtmf {dtmf}");
@@ -505,8 +494,7 @@ namespace SvxlinkManager.Infrastructure.Services
     /// </summary>
     protected virtual void StartTemporization(Node node = null)
     {
-      telemetry.TrackEvent("Start temporization", new Dictionary<string, string> { { "node", node?.Name } });
-
+      
       logger.LogInformation($"La temporisation a été enclenchée par {node?.Name}.");
 
       lastTx = DateTime.Now;
@@ -517,8 +505,7 @@ namespace SvxlinkManager.Infrastructure.Services
 
     protected virtual void StopTemporization(Node node = null)
     {
-      telemetry.TrackEvent("Stop temporization", new Dictionary<string, string> { { "node", node?.Name } });
-
+      
       logger.LogInformation($"La temporisation a été stoppée par {node?.Name}.");
 
       lastTx = DateTime.Now;
@@ -529,8 +516,7 @@ namespace SvxlinkManager.Infrastructure.Services
 
     protected virtual void StartScan(Node node = null)
     {
-      telemetry.TrackEvent("Start scan", new Dictionary<string, string> { { "node", node?.Name } });
-
+      
       logger.LogDebug("Le scan a été enclenchée par {nodeName}.", node?.Name);
 
       lastTx = DateTime.Now;
@@ -539,8 +525,7 @@ namespace SvxlinkManager.Infrastructure.Services
 
     protected virtual void StopScan(Node node = null)
     {
-      telemetry.TrackEvent("Stop scan", new Dictionary<string, string> { { "node", node?.Name } });
-
+      
       logger.LogInformation($"Le scan a été stoppée par {node?.Name}.");
 
       lastTx = DateTime.Now;
@@ -554,8 +539,7 @@ namespace SvxlinkManager.Infrastructure.Services
     /// </summary>
     public virtual void StartSvxLink(ManagedChannel channel)
     {
-      telemetry.TrackEvent("Channel Connection", channel.TrackProperties);
-
+      
       logger.LogInformation("Connection au channel {ChannelName}.", channel.Name);
 
       base.StartSvxlink(channel, pidFile: "/var/run/svxlink.pid", runAs: "root", configFile: $"{applicationPath}/SvxlinkConfig/svxlink.conf");
@@ -584,8 +568,7 @@ namespace SvxlinkManager.Infrastructure.Services
     /// </summary>
     public override void StopSvxlink()
     {
-      telemetry.TrackEvent("Stop svxlink");
-
+      
       logger.LogInformation("Kill de svxlink.");
 
       StopTemporization();
@@ -610,8 +593,7 @@ namespace SvxlinkManager.Infrastructure.Services
 
     public void ActivateReflector(Reflector reflector)
     {
-      using (var operation = telemetry.StartOperation<DependencyTelemetry>("ActivateReflector"))
-      {
+      
         logger.LogInformation($"Activation du reflector {reflector.Name}");
 
         File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxreflector-{reflector.Id}.conf", reflector.Config);
@@ -619,7 +601,7 @@ namespace SvxlinkManager.Infrastructure.Services
         // Lance svxlink
         StartReflector(reflector);
         logger.LogInformation($"Le reflecteur {reflector.Name} est activé.");
-      }
+      
     }
 
     /// <summary>
@@ -628,15 +610,14 @@ namespace SvxlinkManager.Infrastructure.Services
     /// <param name="reflector">The reflector.</param>
     public virtual void StartReflector(Reflector reflector)
     {
-      telemetry.TrackEvent("Reflector start", reflector.TrackProperties);
+      
 
       base.StartReflector(reflector, pidFile: $"/var/run/reflector-{reflector.Id}.pid", runAs: "root", configFile: $"{applicationPath}/SvxlinkConfig/svxreflector-{reflector.Id}.conf");
     }
 
     public override void StopReflector(Reflector reflector)
     {
-      telemetry.TrackEvent("Reflector stop", reflector.TrackProperties);
-
+      
       logger.LogInformation($"Arret du reflecteur {reflector.Name}.");
 
       base.StopReflector(reflector);
@@ -644,8 +625,7 @@ namespace SvxlinkManager.Infrastructure.Services
 
     public void RestartReflector(Reflector reflector)
     {
-      telemetry.TrackEvent("Reflector restart", reflector.TrackProperties);
-
+     
       logger.LogInformation($"Redémarrage du reflecteur {reflector.Name}.");
 
       StopReflector(reflector);
