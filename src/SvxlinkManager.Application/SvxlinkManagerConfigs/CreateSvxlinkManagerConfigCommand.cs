@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs
 {
-    public record CreateSvxlinkManagerConfigCommand() : IRequest<Guid>;
+    public record CreateSvxlinkManagerConfigCommand(Guid ConfigId) : IRequest<Guid>;
 
     public class CreateSvxlinkManagerConfigCommandHandler : IRequestHandler<CreateSvxlinkManagerConfigCommand, Guid>
     {
@@ -30,7 +30,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs
         {
             try
             {
-                var config = SvxlinkManagerConfigAggregate.Create(Guid.NewGuid());
+                var config = SvxlinkManagerConfigAggregate.Create(request.ConfigId);
                 await svxlinkManagerConfigRepository.Create(config);
 
                 return config.Id;

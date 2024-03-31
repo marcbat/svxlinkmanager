@@ -6,8 +6,20 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application
 {
-    public class SvxlinkManagerOptions(string liteDbFile)
+    public class SvxlinkManagerOptions
     {
-        public string LiteDbFile { get; } = liteDbFile;
+        public SvxlinkManagerOptions()
+        {
+            
+        }
+
+        public SvxlinkManagerOptions(string liteDbFile)
+        {
+            LiteDbFile = liteDbFile;
+        }
+
+        public string LiteDbFile { get; set; }
+
+        public Guid ConfigId { get; set; }
     }
 }

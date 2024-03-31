@@ -16,12 +16,10 @@ namespace SvxlinkManager.Service
   public class ScanService
   {
     private readonly ILogger<ScanService> logger;
-    private readonly TelemetryClient telemetry;
 
-    public ScanService(ILogger<ScanService> logger, TelemetryClient telemetry)
+    public ScanService(ILogger<ScanService> logger)
     {
       this.logger = logger;
-      this.telemetry = telemetry;
     }
 
     public virtual ManagedChannel GetActiveChannel(ScanProfile scanProfile)
@@ -47,7 +45,6 @@ namespace SvxlinkManager.Service
         catch (Exception e)
         {
           logger.LogError($"Erreur lors du scan du channel {channel.Name}.", e);
-          telemetry.TrackException(e, new Dictionary<string, string> { { "ChannelName", channel.Name } });
         }
       }
 

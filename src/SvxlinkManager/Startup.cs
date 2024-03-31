@@ -14,12 +14,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 using Spotnik.Gui.Areas.Identity;
 
+using SvxlinkManager.Application;
 using SvxlinkManager.Application.Interfaces;
+using SvxlinkManager.Application.SvxlinkManagerConfigs;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands;
+using SvxlinkManager.Infrastructure;
 using SvxlinkManager.Service;
 using SvxlinkManager.ServiceMockup;
 using SvxlinkManager.Telemetry;
@@ -43,15 +47,20 @@ namespace SvxlinkManager
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<SvxlinkManagerOptions>(Configuration.GetSection("SvxlinkManager"));
+
             services.AddSingleton<ILiteDbContext, LiteDbContext>();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                       .AddUserStore<LiteDbUserStore<ApplicationUser>>();
+
+            services.AddApplication();
+            services.AddInfrastructure();
 
             services.AddRazorPages();
 
             services.AddServerSideBlazor();
-            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
 
             services.AddSingleton<ScanService>();
             services.AddSingleton<UpdaterService>();
@@ -68,10 +77,8 @@ namespace SvxlinkManager
 #endif
 
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
-            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<ITelemetryInitializer, SvxlinkManagerTelemetry>();
 
             // Password complexity
             services.Configure<IdentityOptions>(options =>
@@ -86,12 +93,11 @@ namespace SvxlinkManager
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async Task ConfigureAsync(IApplicationBuilder app, IWebHostEnvironment env, UserManager<IdentityUser> userManager, NavigationManager navigationManager)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -102,10 +108,13 @@ namespace SvxlinkManager
 
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
+                var mediatr = serviceScope.ServiceProvider.GetRequiredService<IMediator>();
+                var options = serviceScope.ServiceProvider.GetRequiredService<IOptions<SvxlinkManagerOptions>>();
 
+                // Seed default config if not exists
+                await mediatr.Send(new CreateSvxlinkManagerConfigCommand(options.Value.ConfigId));
 
                 // start default channel
-                var mediatr = serviceScope.ServiceProvider.GetRequiredService<IMediator>();
                 await mediatr.Send(new StartDefaultChannelCommand(Guid.NewGuid()));
 
                 // start enable reflector
