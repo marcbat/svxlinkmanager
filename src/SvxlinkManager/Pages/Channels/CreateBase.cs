@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
-using SvxlinkManager.Application.SvxlinkManagerConfigs.AvanceSvxlinkChannels.Commands;
-using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Commands;
-using SvxlinkManager.Application.SvxlinkManagerConfigs.Echolinks.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlinkChannels.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Commands;
 using SvxlinkManager.Models;
 
 using System;
@@ -26,7 +26,6 @@ namespace SvxlinkManager.Pages.Channels
         /// </summary>
         public async Task HandleValidSubmit(string redirect)
         {
-            Telemetry.TrackEvent("Create channel", Channel.TrackProperties);
 
             await base.HandleValidSubmit();
 
@@ -34,17 +33,17 @@ namespace SvxlinkManager.Pages.Channels
             {
                 case SvxlinkChannel svxlinkChannel:
                     await Mediatr.Send(new AddSvxlinkChannelCommand(Guid.NewGuid(), svxlinkChannel.Name, svxlinkChannel.Host, svxlinkChannel.CallSign, svxlinkChannel.Port, svxlinkChannel.ReportCallSign, svxlinkChannel.Sound.SoundFile), CancellationToken.None);
-                    Telemetry.TrackPageView(new PageViewTelemetry("Svxlink Channel Create Page") { Url = new Uri("/Channel/Create", UriKind.Relative) });
+                   
                     break;
 
                 case EcholinkChannel echolinkChannel:
                     await Mediatr.Send(new AddEcholinkChannelCommand(Guid.NewGuid(), echolinkChannel.Name, echolinkChannel.Host, echolinkChannel.CallSign, echolinkChannel.Password, echolinkChannel.SysopName, echolinkChannel.Location, echolinkChannel.MaxQso, echolinkChannel.Description, echolinkChannel.Sound.SoundFile), CancellationToken.None);
-                    Telemetry.TrackPageView(new PageViewTelemetry("Echolink Channel Create Page") { Url = new Uri("/Echolink/Create", UriKind.Relative) });
+                    
                     break;
 
                 case AdvanceSvxlinkChannel advanceChannel:
                     await Mediatr.Send(new AddAdvanceSvxlinkChannelCommand(Guid.NewGuid(), advanceChannel.Name, advanceChannel.SvxlinkConf, advanceChannel.ModuleDtmfRepeater, advanceChannel.ModuleEchoLink, advanceChannel.ModuleFrn, advanceChannel.ModuleHelp, advanceChannel.ModuleMetarInfo, advanceChannel.ModuleParrot, advanceChannel.ModulePropagationMonitor, advanceChannel.ModuleSelCallEnc, advanceChannel.ModuleTclVoiceMail, advanceChannel.ModuleTrx, advanceChannel.Sound.SoundFile), CancellationToken.None);
-                    Telemetry.TrackPageView("Channel Edit Page");
+                    
                     break;
 
                 default:
@@ -58,21 +57,6 @@ namespace SvxlinkManager.Pages.Channels
 
         protected override void OnInitialized()
         {
-            switch (Channel)
-            {
-                case SvxlinkChannel channel:
-                    Telemetry.TrackPageView(new PageViewTelemetry("Svxlink Channel Create Page") { Url = new Uri("/Channel/Create", UriKind.Relative) });
-                    break;
-
-                case EcholinkChannel channel:
-                    Telemetry.TrackPageView(new PageViewTelemetry("Echolink Channel Create Page") { Url = new Uri("/Echolink/Create", UriKind.Relative) });
-                    break;
-
-                default:
-                    Telemetry.TrackPageView("Channel Edit Page");
-                    break;
-            }
-
             base.OnInitialized();
 
             Channel = new TChannel

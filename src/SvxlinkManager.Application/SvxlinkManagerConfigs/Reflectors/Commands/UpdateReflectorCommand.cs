@@ -26,18 +26,20 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
     public class UpdateReflectorCommandHandler : IRequestHandler<UpdateReflectorCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository _svxlinkManagerConfigRepository;
-        private readonly ILogger<UpdateReflectorCommandHandler> _logger;
+        private readonly ISvxlinkServiceBase svxlinkServiceBase;
+        private readonly ILogger<UpdateReflectorCommandHandler> logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateReflectorCommandHandler"/> class.
         /// </summary>
         /// <param name="svxlinkManagerConfigRepository">The repository for managing SVXLink Manager configurations.</param>
         /// <param name="logger">The logger.</param>
-        public UpdateReflectorCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,
+        public UpdateReflectorCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ISvxlinkServiceBase svxlinkServiceBase,
                                              ILogger<UpdateReflectorCommandHandler> logger)
         {
             _svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
-            _logger = logger;
+            this.svxlinkServiceBase = svxlinkServiceBase;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -60,13 +62,18 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
 
                 await _svxlinkManagerConfigRepository.UpdateAsync(config);
 
-                _logger.LogInformation("Un réflecteur a été mis à jour avec succès.");
+                logger.LogInformation("Un réflecteur a été mis à jour avec succès.");
+
+                if(reflector.Enable)
+                    svxlinkServiceBase.StartReflector(reflector);
+
+                logger.LogInformation("Le réflecteur a été démarré avec succès.");
 
                 return Unit.Value;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Impossible de mettre à jour un réflecteur.");
+                logger.LogError(ex, "Impossible de mettre à jour un réflecteur.");
                 throw new SvxlinkManagerException("Impossible de mettre à jour un réflecteur.", ex);
             }
         }

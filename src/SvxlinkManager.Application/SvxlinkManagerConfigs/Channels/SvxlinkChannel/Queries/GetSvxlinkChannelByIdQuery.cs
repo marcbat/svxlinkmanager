@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Queries
 {
-    public record GetSvxlinkChannelByIdQuery(Guid ConfigGuid, Guid ChannelGuid) : IRequest<SvxlinkChannel>;
+    public record GetSvxlinkChannelByIdQuery(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Domain.Entities.SvxlinkChannel>;
 
-    public class GetSvxlinkChannelByIdQueryHandler : IRequestHandler<GetSvxlinkChannelByIdQuery, SvxlinkChannel>
+    public class GetSvxlinkChannelByIdQueryHandler : IRequestHandler<GetSvxlinkChannelByIdQuery, Domain.Entities.SvxlinkChannel>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
 
@@ -21,7 +21,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
             this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
         }
 
-        public async Task<SvxlinkChannel> Handle(GetSvxlinkChannelByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Domain.Entities.SvxlinkChannel> Handle(GetSvxlinkChannelByIdQuery request, CancellationToken cancellationToken)
         {
             try
             {

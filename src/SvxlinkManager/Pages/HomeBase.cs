@@ -29,7 +29,6 @@ namespace SvxlinkManager.Pages
   {
     protected override async Task OnInitializedAsync()
     {
-      Telemetry.TrackPageView(new PageViewTelemetry("Accueil Page") { Url = new Uri("/", UriKind.Relative) });
 
       LoadChannels();
 
@@ -73,7 +72,6 @@ namespace SvxlinkManager.Pages
       catch (Exception e)
       {
         Logger.LogError($"Impossible de mettre à jour la valeur TemporizationIsActive. {e.Message}");
-        Telemetry.TrackException(e);
       }
     }
 

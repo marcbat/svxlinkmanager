@@ -134,5 +134,10 @@ namespace SvxlinkManager.Domain.Aggregates
 
             return managedChannels;
         }
+
+        public ManagedChannel? GetManagedChannel(Guid channelId)
+        {
+            return GetManagedChannels().FirstOrDefault(x => x.Id == channelId);
+        }
     }
 }

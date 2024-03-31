@@ -14,6 +14,8 @@ namespace SvxlinkManager.Application.Interfaces
         event Action<Node> NodeRx;
         event Action<Node> NodeTx;
 
+        Guid ActiveChannel { get; }
+
         void StartReflector(Reflector reflector, bool runAsDaemon = false, string logFile = null, string configFile = null, string pidFile = null, string runAs = null);
 
         void StartSvxlink(ChannelBase channel, bool runAsDaemon = false, string logFile = null, string configFile = null, string pidFile = null, string runAs = null);

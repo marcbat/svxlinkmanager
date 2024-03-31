@@ -1,40 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SvxlinkManager.Models
 {
-  public class EcholinkChannel : Channel
-  {
-    [Required]
-    public string Password { get; set; }
+    public class EcholinkChannel : Channel
+    {
+        [Required]
+        public string Password { get; set; }
 
-    [Required]
-    public string SysopName { get; set; }
+        [Required]
+        public string SysopName { get; set; }
 
-    [Required]
-    public string Location { get; set; }
+        [Required]
+        public string Location { get; set; }
 
-    [Required]
-    public int MaxQso { get; set; } = 1;
+        [Required]
+        public int MaxQso { get; set; } = 1;
 
-    [Required]
-    public string Description { get; set; }
+        [Required]
+        public string Description { get; set; }
 
-    [NotMapped]
-    public override Dictionary<string, string> TrackProperties => new Dictionary<string, string>
+        public static implicit operator EcholinkChannel(Domain.Entities.EcholinkChannel v)
         {
-          {nameof(Name), Name },
-          {nameof(CallSign), CallSign },
-          {nameof(IsDefault), IsDefault.ToString() },
-          {nameof(IsTemporized), IsTemporized.ToString()},
-          {nameof(TimerDelay), TimerDelay.ToString()},
-          {nameof(Dtmf), Dtmf.ToString() },
-          {nameof(SysopName),SysopName },
-          {nameof(MaxQso),MaxQso.ToString() },
-        };
-  }
+            return new EcholinkChannel
+            {
+                Id = v.Id,
+                Name = v.Name,
+                Host = v.Host,
+                CallSign = v.CallSign,
+                Password = v.Password,
+                SysopName = v.SysopName,
+                Location = v.Location,
+                MaxQso = v.MaxQso,
+                Description = v.Description
+            };
+        }
+    }
 }

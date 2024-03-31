@@ -13,51 +13,48 @@ using SvxlinkManager.Application.Interfaces;
 
 namespace SvxlinkManager.Infrastructure.Services
 {
-    public class SvxlinkServiceBase : ISvxlinkServiceBase
+    public class SvxlinkServiceBase(ILogger<SvxlinkServiceBase> logger) : ISvxlinkServiceBase
     {
-        private readonly ILogger<SvxlinkServiceBase> logger;
-        private Process shell;
-        private readonly Dictionary<Guid, Process> reflectorshells = new Dictionary<Guid, Process>();
-
-        public SvxlinkServiceBase(ILogger<SvxlinkServiceBase> logger)
-        {
-            this.logger = logger;
-        }
+        private readonly ILogger<SvxlinkServiceBase> logger = logger;
+        private Process? shell;
+        private readonly Dictionary<Guid, Process> reflectorshells = new();
 
         /// <summary>
         /// Occurs when svxlink is connected
         /// </summary>
-        public event Action<ChannelBase> Connected;
+        public event Action<ChannelBase>? Connected;
 
         /// <summary>
         /// Occurs when svxlink is disconnected
         /// </summary>
-        public event Action Disconnected;
+        public event Action? Disconnected;
 
         /// <summary>
         /// Occurs when a new node join the channel
         /// </summary>
-        public event Action<Node> NodeConnected;
+        public event Action<Node>? NodeConnected;
 
         /// <summary>
         /// Occurs when a node quit the channel
         /// </summary>
-        public event Action<Node> NodeDisconnected;
+        public event Action<Node>? NodeDisconnected;
 
         /// <summary>
         /// Occurs when a node stop a transmission.
         /// </summary>
-        public event Action<Node> NodeRx;
+        public event Action<Node>? NodeRx;
 
         /// <summary>
         /// Occurs when a node start a transmission.
         /// </summary>
-        public event Action<Node> NodeTx;
+        public event Action<Node>? NodeTx;
 
         /// <summary>
         /// Occurs when an error is throw
         /// </summary>
-        public event Action<string, string> Error;
+        public event Action<string, string>? Error;
+
+        public Guid ActiveChannel { get; private set; }
 
         protected void OnError(string title, string body) =>
           Error?.Invoke(title, body);
@@ -139,14 +136,14 @@ namespace SvxlinkManager.Infrastructure.Services
             if (s.Contains("Connected nodes"))
             {
                 Nodes.Clear();
-                s.Split(':')[2].Split(',').ToList().ForEach(n => Nodes.Add(new Node { Name = n }));
+                s.Split(':')[2].Split(',').ToList().ForEach(n => Nodes.Add(new Node(n)));
                 Connected?.Invoke(channel);
                 return;
             }
 
             if (s.Contains("Node left"))
             {
-                var node = new Node { Name = s.Split(":")[2] };
+                var node = new Node(s.Split(":")[2]);
                 Nodes.Remove(node);
                 NodeDisconnected?.Invoke(node);
                 return;
@@ -154,7 +151,7 @@ namespace SvxlinkManager.Infrastructure.Services
 
             if (s.Contains("Node joined"))
             {
-                var node = new Node { Name = s.Split(":")[2] };
+                var node = new Node(s.Split(":")[2]);
                 Nodes.Add(node);
                 NodeConnected?.Invoke(node);
                 return;
@@ -162,7 +159,7 @@ namespace SvxlinkManager.Infrastructure.Services
 
             if (s.Contains("Talker start"))
             {
-                var node = Nodes.Single(nx => nx.Equals(new Node { Name = s.Split(":")[2] }));
+                var node = Nodes.Single(nx => nx.Equals(new Node(s.Split(":")[2])));
                 node.ClassName = "node node-tx";
                 NodeTx?.Invoke(node);
                 return;
@@ -170,7 +167,7 @@ namespace SvxlinkManager.Infrastructure.Services
 
             if (s.Contains("Talker stop"))
             {
-                var node = Nodes.Single(nx => nx.Equals(new Node { Name = s.Split(":")[2] }));
+                var node = Nodes.Single(nx => nx.Equals(new Node(s.Split(":")[2])));
                 node.ClassName = "node";
                 NodeRx?.Invoke(node);
                 return;
