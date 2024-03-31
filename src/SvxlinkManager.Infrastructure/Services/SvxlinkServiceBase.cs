@@ -54,7 +54,7 @@ namespace SvxlinkManager.Infrastructure.Services
         /// </summary>
         public event Action<string, string>? Error;
 
-        public Guid ActiveChannel { get; private set; }
+        public Guid? ActiveChannel { get; private set; }
 
         public string Status { get; private set; }
 

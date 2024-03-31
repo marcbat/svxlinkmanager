@@ -15,8 +15,6 @@ namespace SvxlinkManager.Pages.Reflector
     {
         protected override void OnInitialized()
         {
-            Telemetry.TrackPageView(new PageViewTelemetry("Radio Profile Create Page") { Url = new Uri("/Reflector/Create", UriKind.Relative) });
-
             Reflector = new Models.Reflector();
 
             var sb = new StringBuilder();
@@ -44,8 +42,6 @@ namespace SvxlinkManager.Pages.Reflector
         protected override async Task HandleValidSubmitAsync()
         {
             await Mediatr.Send(new AddReflectorCommand(Guid.NewGuid(), Reflector.Name, Reflector.Config));
-
-            Telemetry.TrackEvent("Create radio profile", Reflector.TrackProperties);
 
             await ShowSuccessToastAsync("Crée", $"Le profil radio {Reflector.Name} a bien été crée.");
 

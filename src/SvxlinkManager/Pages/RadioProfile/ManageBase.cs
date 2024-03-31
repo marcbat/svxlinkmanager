@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
+using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Queries;
 using SvxlinkManager.Pages.Shared;
 using SvxlinkManager.Service;
 
@@ -18,17 +20,20 @@ namespace SvxlinkManager.Pages.RadioProfile
     {
         protected override async Task OnInitializedAsync()
         {
-            Telemetry.TrackPageView(new PageViewTelemetry("Radio Profile Manage Page") { Url = new Uri("/RadioProfile/Manage", UriKind.Relative) });
-
             await base.OnInitializedAsync().ConfigureAwait(false);
 
-            LoadRadioProfiles();
+            await LoadRadioProfiles();
         }
 
-        private void LoadRadioProfiles() => RadioProfiles = Mediatr.RadioProfiles.GetAll().ToList();
+        private async Task LoadRadioProfiles()
+        {
+            var radiosProfil = await Mediatr.Send(new GetAllRadioProfilQuery(Guid.NewGuid()));
+
+            radiosProfil.ToList().ForEach(radioProfil => RadioProfiles.Add(radioProfil));
+        }
 
         [Inject]
-        public SvxLinkService SvxLinkService { get; set; }
+        public ISvxlinkServiceBase SvxLinkService { get; set; }
 
         [Inject]
         public NavigationManager NavigationManager { get; set; }
@@ -42,8 +47,6 @@ namespace SvxlinkManager.Pages.RadioProfile
         {
             await Mediatr.Send(new DeleteRadioProfilCommand(Guid.NewGuid(), id));
 
-            Telemetry.TrackEvent("Delete radio profile", RadioProfiles.Single(c => c.Id == id).TrackProperties);
-
             RadioProfiles.Remove(RadioProfiles.Single(c => c.Id == id));
 
             await ShowSuccessToastAsync("Supprimé", "Le profil radio a bien été supprimé.");
@@ -53,21 +56,9 @@ namespace SvxlinkManager.Pages.RadioProfile
 
         public async Task ApplyAsync(Guid id)
         {
-            var profile = Mediatr.RadioProfiles.Get(id);
+            await Mediatr.Send(new ApplyRadioProfilCommand(Guid.NewGuid(), id));
 
-            if (profile.HasSa818)
-                Sa818Service.WriteRadioProfile(profile);
-
-            profile.Enable = true;
-
-            await Mediatr.Send(new UpdateRadioProfilCommand(Guid.NewGuid(), profile.Id, profile.Name, profile.RxFequ, profile.TxFrequ, profile.Squelch, profile.TxCtcss, profile.RxCtcss, profile.Volume, profile.PreEmph, profile.HightPass, profile.LowPass, profile.SquelchDetection));
-
-            Telemetry.TrackEvent("Apply radio profile", profile.TrackProperties);
-
-            if (SvxLinkService.ChannelId > 0)
-                SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
-
-            await ShowSuccessToastAsync($"{profile.Name} appliqué.", $"Le profil radio {profile.Name} a bien été appliqué.");
+            await ShowSuccessToastAsync($"Profil appliqué.", $"Le profil radio a bien été appliqué.");
 
             NavigationManager.NavigateTo("/RadioProfile/Manage", true);
         }

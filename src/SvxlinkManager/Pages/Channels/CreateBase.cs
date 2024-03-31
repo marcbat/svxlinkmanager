@@ -1,7 +1,5 @@
-﻿using Microsoft.ApplicationInsights.DataContracts;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlinkChannels.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Commands;
@@ -9,14 +7,12 @@ using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.C
 using SvxlinkManager.Models;
 
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Channels
 {
-  [Authorize]
+    [Authorize]
     public class CreateBase<TChannel> : AddEditBase<TChannel> where TChannel : ManagedChannel, new()
     {
         protected override string SubmitTitle => "Créer";
@@ -33,17 +29,17 @@ namespace SvxlinkManager.Pages.Channels
             {
                 case SvxlinkChannel svxlinkChannel:
                     await Mediatr.Send(new AddSvxlinkChannelCommand(Guid.NewGuid(), svxlinkChannel.Name, svxlinkChannel.Host, svxlinkChannel.CallSign, svxlinkChannel.Port, svxlinkChannel.ReportCallSign, svxlinkChannel.Sound.SoundFile), CancellationToken.None);
-                   
+
                     break;
 
                 case EcholinkChannel echolinkChannel:
                     await Mediatr.Send(new AddEcholinkChannelCommand(Guid.NewGuid(), echolinkChannel.Name, echolinkChannel.Host, echolinkChannel.CallSign, echolinkChannel.Password, echolinkChannel.SysopName, echolinkChannel.Location, echolinkChannel.MaxQso, echolinkChannel.Description, echolinkChannel.Sound.SoundFile), CancellationToken.None);
-                    
+
                     break;
 
                 case AdvanceSvxlinkChannel advanceChannel:
                     await Mediatr.Send(new AddAdvanceSvxlinkChannelCommand(Guid.NewGuid(), advanceChannel.Name, advanceChannel.SvxlinkConf, advanceChannel.ModuleDtmfRepeater, advanceChannel.ModuleEchoLink, advanceChannel.ModuleFrn, advanceChannel.ModuleHelp, advanceChannel.ModuleMetarInfo, advanceChannel.ModuleParrot, advanceChannel.ModulePropagationMonitor, advanceChannel.ModuleSelCallEnc, advanceChannel.ModuleTclVoiceMail, advanceChannel.ModuleTrx, advanceChannel.Sound.SoundFile), CancellationToken.None);
-                    
+
                     break;
 
                 default:

@@ -1,8 +1,7 @@
-﻿using Microsoft.ApplicationInsights.DataContracts;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Commands;
 using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Shared;
 
@@ -13,53 +12,39 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Channels
 {
-  [Authorize]
-  public class ManageBase<TChannel> : MediatrComponentBase where TChannel : ManagedChannel
-  {
-    [Inject]
-    public NavigationManager NavigationManager { get; set; }
-
-    protected override async Task OnInitializedAsync()
+    [Authorize]
+    public class ManageBase<TChannel> : MediatrComponentBase where TChannel : ManagedChannel
     {
-      switch (default(TChannel))
-      {
-        case SvxlinkChannel:
-          Telemetry.TrackPageView(new PageViewTelemetry("Svxlink Channel Manage Page") { Url = new Uri("/Channel/Manage", UriKind.Relative) });
-          break;
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
 
-        case EcholinkChannel:
-          Telemetry.TrackPageView(new PageViewTelemetry("Echolink Channel Manage Page") { Url = new Uri("/Echolink/Manage", UriKind.Relative) });
-          break;
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync().ConfigureAwait(false);
 
-        default:
-          Telemetry.TrackPageView("Channel Manage Page");
-          break;
-      }
+            LoadChannels();
+        }
 
-      await base.OnInitializedAsync().ConfigureAwait(false);
+        public List<TChannel> Channels { get; set; }
 
-      LoadChannels();
+        protected virtual void LoadChannels()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Deletes the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        public async Task DeleteAsync(TChannel channel)
+        {
+            await Mediatr.Send(new DeleteManagedChannelCommand(Guid.NewGuid(), channel.Id));
+
+            Channels.Remove(channel);
+
+            StateHasChanged();
+
+            await ShowSuccessToastAsync("Supprimé", "Le salon a bien été supprimé.");
+        }
     }
-
-    public List<TChannel> Channels { get; set; }
-
-    private void LoadChannels() => Channels = Mediatr.Repository<TChannel>().GetAll().ToList();
-
-    /// <summary>
-    /// Deletes the specified identifier.
-    /// </summary>
-    /// <param name="id">The identifier.</param>
-    public async Task DeleteAsync(TChannel channel)
-    {
-      Mediatr.Channels.Delete(channel.Id);
-
-      Channels.Remove(channel);
-
-      Telemetry.TrackEvent("Delete channel", channel.TrackProperties);
-
-      StateHasChanged();
-
-      await ShowSuccessToastAsync("Supprimé", "Le salon a bien été supprimé.");
-    }
-  }
 }

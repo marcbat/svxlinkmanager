@@ -16,7 +16,7 @@ namespace SvxlinkManager.Application.Interfaces
 
         string Status { get; }
 
-        Guid ActiveChannel { get; }
+        Guid? ActiveChannel { get; }
 
         void StartReflector(Reflector reflector, bool runAsDaemon = false, string logFile = null, string configFile = null, string pidFile = null, string runAs = null);
 

@@ -324,10 +324,12 @@ namespace SvxlinkManager.Pages
             get => SvxLinkService.Status;
         }
 
-        public Guid Channel
+        public Guid? ActiveChannel
         {
             get => SvxLinkService.ActiveChannel;
         }
+
+        public int Channel { get; set; }
 
         public string TemporizationValue { get; set; }
 

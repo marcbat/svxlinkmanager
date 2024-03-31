@@ -20,8 +20,6 @@ namespace SvxlinkManager.Pages.Wifi
   {
     protected override void OnInitialized()
     {
-      Telemetry.TrackPageView(new PageViewTelemetry("Wifi Page") { Url = new Uri("/Wifi/Manage", UriKind.Relative) });
-
       base.OnInitialized();
 
       WifiService.LoadDevices();
@@ -46,7 +44,6 @@ namespace SvxlinkManager.Pages.Wifi
 
       WifiService.Connect(device);
 
-      Telemetry.TrackEvent("Connect Wifi");
     }
 
     public void Up(Device device)
@@ -55,7 +52,6 @@ namespace SvxlinkManager.Pages.Wifi
 
       WifiService.Up(device.Connection);
 
-      Telemetry.TrackEvent("Activate Wifi");
     }
 
     public void Down(Device device)
@@ -64,7 +60,6 @@ namespace SvxlinkManager.Pages.Wifi
 
       WifiService.Down(device.Connection);
 
-      Telemetry.TrackEvent("Deactivate Wifi");
     }
 
     public void Disconnect(Device device)
@@ -73,7 +68,6 @@ namespace SvxlinkManager.Pages.Wifi
 
       WifiService.Disconnect(device.Connection);
 
-      Telemetry.TrackEvent("Deconnect Wifi");
     }
   }
 }

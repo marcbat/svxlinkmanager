@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
+using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Pages.Shared;
 using SvxlinkManager.Service;
 
@@ -24,7 +25,7 @@ namespace SvxlinkManager.Pages.Reflector
     public NavigationManager NavigationManager { get; set; }
 
     [Inject]
-    public SvxLinkService SvxLinkService { get; set; }
+    public ISvxlinkServiceBase SvxLinkService { get; set; }
 
     [Inject]
     public IIniService IniService { get; set; }

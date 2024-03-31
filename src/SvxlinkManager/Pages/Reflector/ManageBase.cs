@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
+using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries;
 using SvxlinkManager.Pages.Shared;
 using SvxlinkManager.Service;
 
@@ -18,17 +20,21 @@ namespace SvxlinkManager.Pages.Reflector
     {
         protected override async Task OnInitializedAsync()
         {
-            Telemetry.TrackPageView(new PageViewTelemetry("Reflector Manage Page") { Url = new Uri("/Reflector/Manage", UriKind.Relative) });
 
             await base.OnInitializedAsync().ConfigureAwait(false);
 
-            LoadReflectors();
+            await LoadReflectorsAsync();
         }
 
-        private void LoadReflectors() => Reflectors = Mediatr.Reflectors.GetAll().ToList();
+        private async Task LoadReflectorsAsync()
+        {
+            var reflectors = await Mediatr.Send(new GetAllReflectorQuery(Guid.NewGuid()));
+
+            reflectors.ToList().ForEach(r => Reflectors.Add(r));
+        }
 
         [Inject]
-        public SvxLinkService SvxLinkService { get; set; }
+        public ISvxlinkServiceBase SvxLinkService { get; set; }
 
         [Inject]
         public NavigationManager NavigationManager { get; set; }
@@ -45,42 +51,27 @@ namespace SvxlinkManager.Pages.Reflector
         {
             await Mediatr.Send(new DeleteReflectorCommand(Guid.NewGuid(), id));
 
-            Telemetry.TrackEvent("Delete reflector profile", Reflectors.Single(c => c.Id == id).TrackProperties);
-
             Reflectors.Remove(Reflectors.Single(c => c.Id == id));
 
             await ShowSuccessToastAsync("Supprimé", "le reflecteur a bien été supprimé.");
         }
 
-        public async Task StartAsync(int id)
+        public async Task StartAsync(Guid id)
         {
-            var reflector = Mediatr.Reflectors.Get(id);
+            await Mediatr.Send(new StartReflectorCommand(Guid.NewGuid(), id));
 
-            reflector.Enable = true;
+            await ShowSuccessToastAsync($"Reflector démarré.", $"Le reflecteur a bien été démarré.");
 
-            await Mediatr.Send(new UpdateReflectorCommand(Guid.NewGuid(), reflector.Id, reflector.Name, reflector.Config));
-
-            Telemetry.TrackEvent("Start reflector", reflector.TrackProperties);
-            SvxLinkService.ActivateReflector(reflector);
-
-            await ShowSuccessToastAsync($"{reflector.Name} démarré.", $"Le reflecteur {reflector.Name} a bien été démarré.");
-
-            Replace(Reflectors, reflector);
+            //Replace(Reflectors, reflector);
         }
 
-        public async Task StopAsync(int id)
+        public async Task StopAsync(Guid id)
         {
-            var reflector = Mediatr.Reflectors.Get(id);
+            await Mediatr.Send(new StopReflectorCommand(Guid.NewGuid(), id));
 
-            reflector.Enable = false;
-            await Mediatr.Send(new UpdateReflectorCommand(Guid.NewGuid(), reflector.Id, reflector.Name, reflector.Config));
+            await ShowSuccessToastAsync($"Reflector arreté.", $"Le reflecteur a bien été arreté.");
 
-            Telemetry.TrackEvent("Stop reflector", reflector.TrackProperties);
-            SvxLinkService.StopReflector(reflector);
-
-            await ShowSuccessToastAsync($"{reflector.Name} arreté.", $"Le reflecteur {reflector.Name} a bien été arreté.");
-
-            Replace(Reflectors, reflector);
+            //Replace(Reflectors, reflector);
         }
     }
 }
