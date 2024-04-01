@@ -156,7 +156,6 @@ namespace SvxlinkManager.Pages.Installer
             try
             {
                 Logger.LogInformation("Installation du profil radio.");
-                InstallerModel.TrackProperties.ToList().ForEach(x => Logger.LogInformation($"{x.Key}: {x.Value}"));
 
                 SeedUser();
                 await InstallChannelsAsync();
