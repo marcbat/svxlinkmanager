@@ -41,7 +41,7 @@ namespace SvxlinkManager.Pages.Reflector
 
         protected override async Task HandleValidSubmitAsync()
         {
-            await Mediatr.Send(new AddReflectorCommand(Guid.NewGuid(), Reflector.Name, Reflector.Config));
+            await Mediatr.Send(new AddReflectorCommand(Options.Value.ConfigId, Reflector.Name, Reflector.Config));
 
             await ShowSuccessToastAsync("Crée", $"Le profil radio {Reflector.Name} a bien été crée.");
 

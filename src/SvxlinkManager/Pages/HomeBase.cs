@@ -166,7 +166,7 @@ namespace SvxlinkManager.Pages
 
         private async Task LoadChannelsAsync()
         {
-            foreach (var channel in await Mediatr.Send(new GetAllManagedChannelQuery(Guid.Empty)))
+            foreach (var channel in await Mediatr.Send(new GetAllManagedChannelQuery(Options.Value.ConfigId)))
             {
                 switch (channel)
                 {

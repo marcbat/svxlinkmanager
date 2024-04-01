@@ -23,7 +23,7 @@ namespace SvxlinkManager.Pages.Reflector
 
         override protected async Task HandleValidSubmitAsync()
         {
-            await Mediatr.Send(new UpdateReflectorCommand(Guid.NewGuid(), Reflector.Id, Reflector.Name, Reflector.Config));
+            await Mediatr.Send(new UpdateReflectorCommand(Options.Value.ConfigId, Reflector.Id, Reflector.Name, Reflector.Config));
 
             await ShowSuccessToastAsync("Modifié", $"le reflecteur {Reflector.Name} a bien été modifié.");
 

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using AspNetCore.Identity.LiteDB.Models;
+
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
@@ -72,7 +74,7 @@ namespace SvxlinkManager.Pages.Installer
         public UpdaterService UpdaterService { get; set; }
 
         [Inject]
-        public UserManager<IdentityUser> UserManager { get; set; }
+        public UserManager<ApplicationUser> UserManager { get; set; }
 
         [Inject]
         public NavigationManager NavigationManager { get; set; }
@@ -82,7 +84,7 @@ namespace SvxlinkManager.Pages.Installer
 
         private async Task<List<SvxlinkChannel>> LoadChannelsAsync()
         {
-            var channels = await Mediatr.Send(new GetAllSvxlinChannelQuery(Guid.NewGuid()));
+            var channels = await Mediatr.Send(new GetAllSvxlinChannelQuery(Options.Value.ConfigId));
 
             return channels.Select<Domain.Entities.SvxlinkChannel, SvxlinkChannel>(c=> c).ToList();
         }
@@ -164,7 +166,7 @@ namespace SvxlinkManager.Pages.Installer
                     Update();
                 else
                 {
-                    await Mediatr.Send(new StartDefaultChannelCommand(Guid.NewGuid()));
+                    await Mediatr.Send(new StartDefaultChannelCommand(Options.Value.ConfigId));
                     NavigationManager.NavigateTo("Identity/Account/Login", true);
                 }
             }
@@ -183,7 +185,7 @@ namespace SvxlinkManager.Pages.Installer
                 Logger.LogInformation("Installation du profil radio.");
 
                 await Mediatr.Send(new CreateRadioProfilCommand(
-                    Guid.NewGuid(),
+                    Options.Value.ConfigId,
                     InstallerModel.RadioProfile.Name,
                     InstallerModel.RadioProfile.RxFequ,
                     InstallerModel.RadioProfile.TxFrequ,
@@ -213,7 +215,7 @@ namespace SvxlinkManager.Pages.Installer
             {
                 Logger.LogInformation("Configuration du salon par défaut.");
 
-                await Mediatr.Send(new SetDefaultChannelCommand(Guid.NewGuid(), InstallerModel.DefaultChannel.Id));
+                await Mediatr.Send(new SetDefaultChannelCommand(Options.Value.ConfigId, InstallerModel.DefaultChannel.Id));
 
                 OnSetDefaultChannel?.Invoke();
             }
@@ -231,7 +233,7 @@ namespace SvxlinkManager.Pages.Installer
             {
                 Logger.LogInformation("Installation des salons.");
 
-                await Mediatr.Send(new InstallChannelsCommand(Guid.NewGuid(), InstallerModel.ChannelsToDelete.Select(c => c.Id), InstallerModel.CallSign, InstallerModel.AnnonceCallSign));
+                await Mediatr.Send(new InstallChannelsCommand(Options.Value.ConfigId, InstallerModel.ChannelsToDelete.Select(c => c.Id), InstallerModel.CallSign, InstallerModel.AnnonceCallSign));
 
                 OnInstallChannels?.Invoke();
             }
@@ -249,7 +251,7 @@ namespace SvxlinkManager.Pages.Installer
             {
                 Logger.LogInformation("Installation de l'utilisateur par défaut.");
 
-                var user = new IdentityUser
+                var user = new ApplicationUser
                 {
                     UserName = InstallerModel.UserName,
                     Email = InstallerModel.UserName

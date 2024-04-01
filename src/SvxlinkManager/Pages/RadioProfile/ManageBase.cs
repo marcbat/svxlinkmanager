@@ -27,7 +27,7 @@ namespace SvxlinkManager.Pages.RadioProfile
 
         private async Task LoadRadioProfiles()
         {
-            var radiosProfil = await Mediatr.Send(new GetAllRadioProfilQuery(Guid.NewGuid()));
+            var radiosProfil = await Mediatr.Send(new GetAllRadioProfilQuery(Options.Value.ConfigId));
 
             radiosProfil.ToList().ForEach(radioProfil => RadioProfiles.Add(radioProfil));
         }
@@ -45,7 +45,7 @@ namespace SvxlinkManager.Pages.RadioProfile
 
         public async Task DeleteAsync(Guid id)
         {
-            await Mediatr.Send(new DeleteRadioProfilCommand(Guid.NewGuid(), id));
+            await Mediatr.Send(new DeleteRadioProfilCommand(Options.Value.ConfigId, id));
 
             RadioProfiles.Remove(RadioProfiles.Single(c => c.Id == id));
 
@@ -56,7 +56,7 @@ namespace SvxlinkManager.Pages.RadioProfile
 
         public async Task ApplyAsync(Guid id)
         {
-            await Mediatr.Send(new ApplyRadioProfilCommand(Guid.NewGuid(), id));
+            await Mediatr.Send(new ApplyRadioProfilCommand(Options.Value.ConfigId, id));
 
             await ShowSuccessToastAsync($"Profil appliqué.", $"Le profil radio a bien été appliqué.");
 

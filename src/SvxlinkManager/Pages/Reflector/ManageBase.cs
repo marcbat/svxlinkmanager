@@ -28,7 +28,7 @@ namespace SvxlinkManager.Pages.Reflector
 
         private async Task LoadReflectorsAsync()
         {
-            var reflectors = await Mediatr.Send(new GetAllReflectorQuery(Guid.NewGuid()));
+            var reflectors = await Mediatr.Send(new GetAllReflectorQuery(Options.Value.ConfigId));
 
             reflectors.ToList().ForEach(r => Reflectors.Add(r));
         }
@@ -49,7 +49,7 @@ namespace SvxlinkManager.Pages.Reflector
 
         public async Task DeleteAsync(Guid id)
         {
-            await Mediatr.Send(new DeleteReflectorCommand(Guid.NewGuid(), id));
+            await Mediatr.Send(new DeleteReflectorCommand(Options.Value.ConfigId, id));
 
             Reflectors.Remove(Reflectors.Single(c => c.Id == id));
 
@@ -58,7 +58,7 @@ namespace SvxlinkManager.Pages.Reflector
 
         public async Task StartAsync(Guid id)
         {
-            await Mediatr.Send(new StartReflectorCommand(Guid.NewGuid(), id));
+            await Mediatr.Send(new StartReflectorCommand(Options.Value.ConfigId, id));
 
             await ShowSuccessToastAsync($"Reflector démarré.", $"Le reflecteur a bien été démarré.");
 
@@ -67,7 +67,7 @@ namespace SvxlinkManager.Pages.Reflector
 
         public async Task StopAsync(Guid id)
         {
-            await Mediatr.Send(new StopReflectorCommand(Guid.NewGuid(), id));
+            await Mediatr.Send(new StopReflectorCommand(Options.Value.ConfigId, id));
 
             await ShowSuccessToastAsync($"Reflector arreté.", $"Le reflecteur a bien été arreté.");
 

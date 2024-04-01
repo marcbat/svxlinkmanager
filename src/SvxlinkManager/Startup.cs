@@ -115,10 +115,10 @@ namespace SvxlinkManager
                 await mediatr.Send(new CreateSvxlinkManagerConfigCommand(options.Value.ConfigId));
 
                 // start default channel
-                await mediatr.Send(new StartDefaultChannelCommand(Guid.NewGuid()));
+                await mediatr.Send(new StartDefaultChannelCommand(options.Value.ConfigId));
 
                 // start enable reflector
-                await mediatr.Send(new StartEnableReflectors(Guid.NewGuid()));
+                await mediatr.Send(new StartEnableReflectors(options.Value.ConfigId));
             }
 
             app.UseHttpsRedirection();

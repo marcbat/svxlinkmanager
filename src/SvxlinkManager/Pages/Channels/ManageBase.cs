@@ -38,7 +38,7 @@ namespace SvxlinkManager.Pages.Channels
         /// <param name="id">The identifier.</param>
         public async Task DeleteAsync(TChannel channel)
         {
-            await Mediatr.Send(new DeleteManagedChannelCommand(Guid.NewGuid(), channel.Id));
+            await Mediatr.Send(new DeleteManagedChannelCommand(Options.Value.ConfigId, channel.Id));
 
             Channels.Remove(channel);
 
