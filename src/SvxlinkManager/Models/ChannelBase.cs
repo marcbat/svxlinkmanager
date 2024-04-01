@@ -6,9 +6,9 @@ using System.Text;
 
 namespace SvxlinkManager.Models
 {
-  public class ChannelBase
-  {
-    public int Id { get; set; }
+  public class ChannelBase : IModelEntity
+    {
+    public Guid Id { get; set; }
 
     [Required]
     public string Name { get; set; }

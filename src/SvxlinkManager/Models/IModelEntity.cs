@@ -7,6 +7,6 @@ namespace SvxlinkManager.Models
 {
   public interface IModelEntity
   {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
   }
 }

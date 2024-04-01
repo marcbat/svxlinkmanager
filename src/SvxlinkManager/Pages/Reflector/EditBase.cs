@@ -2,43 +2,34 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries;
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Reflector
 {
-  [Authorize]
-  public class EditBase : AddEditBase
-  {
-    protected override void OnInitialized()
+    [Authorize]
+    public class EditBase : AddEditBase
     {
-      Telemetry.TrackPageView(new PageViewTelemetry("Reflector Edit Page") { Url = new Uri("/Reflector/Edit", UriKind.Relative) });
+        protected override async void OnInitialized()
+        {
+            Reflector = await Mediatr.Send(new GetReflectorByIdQuery(Guid.NewGuid(), Guid.Parse(Id)));
+        }
 
-      Reflector = Repositories.Repository<Models.Reflector>().Get(int.Parse(Id));
+        [Parameter]
+        public string Id { get; set; }
+
+        override protected async Task HandleValidSubmitAsync()
+        {
+            await Mediatr.Send(new UpdateReflectorCommand(Options.Value.ConfigId, Reflector.Id, Reflector.Name, Reflector.Config));
+
+            await ShowSuccessToastAsync("Modifié", $"le reflecteur {Reflector.Name} a bien été modifié.");
+
+            NavigationManager.NavigateTo("Reflector/Manage");
+        }
+
+        protected override string SubmitTitle => "Modifier";
     }
-
-    [Parameter]
-    public string Id { get; set; }
-
-    override protected async Task HandleValidSubmitAsync()
-    {
-      Repositories.Repository<Models.Reflector>().Update(Reflector);
-
-      Telemetry.TrackEvent("Update reflector", Reflector.TrackProperties);
-
-      await ShowSuccessToastAsync("Modifié", $"le reflecteur {Reflector.Name} a bien été modifié.");
-
-      if (Reflector.Enable)
-      {
-        SvxLinkService.RestartReflector(Reflector);
-        await ShowSuccessToastAsync("Redémarrage", $"le reflecteur {Reflector.Name} a bien été redémarré.");
-      }
-
-      NavigationManager.NavigateTo("Reflector/Manage");
-    }
-
-    protected override string SubmitTitle => "Modifier";
-  }
 }

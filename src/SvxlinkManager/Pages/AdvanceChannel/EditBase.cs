@@ -1,25 +1,24 @@
-﻿using Microsoft.JSInterop;
-
+﻿using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlinkChannels.Commands;
 using SvxlinkManager.Pages.Channels;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.AdvanceChannel
 {
-  public class EditBase : EditBase<Models.AdvanceSvxlinkChannel>
-  {
-    public override async Task HandleValidSubmit(string redirect)
+    public class EditBase : EditBase<Models.AdvanceSvxlinkChannel>
     {
-      StateHasChanged();
+        public override async Task HandleValidSubmit(string redirect)
+        {
+            await Mediatr.Send(new UpdateAdvanceSvxlinkChannelCommand(Options.Value.ConfigId, Channel.Id, Channel.Name, Channel.SvxlinkConf, Channel.ModuleDtmfRepeater, Channel.ModuleEchoLink, Channel.ModuleFrn, Channel.ModuleHelp, Channel.ModuleMetarInfo, Channel.ModuleParrot, Channel.ModulePropagationMonitor, Channel.ModuleSelCallEnc, Channel.ModuleTclVoiceMail, Channel.ModuleTrx, Channel.Sound.SoundFile));
 
-      //var toto = await Js.InvokeAsync<string>("GetEditorValue", new object[] { "SvxlinkConfEditor" });
+            StateHasChanged();
 
-      //await Js.InvokeVoidAsync("EditorToTextArea");
+            //var toto = await Js.InvokeAsync<string>("GetEditorValue", new object[] { "SvxlinkConfEditor" });
 
-      await base.HandleValidSubmit(redirect);
+            //await Js.InvokeVoidAsync("EditorToTextArea");
+
+            await base.HandleValidSubmit(redirect);
+        }
     }
-  }
 }

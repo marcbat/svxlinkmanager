@@ -1,66 +1,67 @@
-﻿using Microsoft.ApplicationInsights.DataContracts;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
+using SvxlinkManager.Application.Interfaces;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlinkChannels.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlinkChannels.Queries;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queries;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Queries;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Queries;
 using SvxlinkManager.Models;
-using SvxlinkManager.Service;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Channels
 {
-  [Authorize]
-  public class EditBase<TChannel> : AddEditBase<TChannel> where TChannel : ManagedChannel
-  {
-    [Parameter]
-    public string Id { get; set; }
-
-    [Inject]
-    public SvxLinkService SvxLinkService { get; set; }
-
-    protected override string SubmitTitle => "Modifier";
-
-    /// <summary>
-    /// Handles the form submit.
-    /// </summary>
-    public virtual async Task HandleValidSubmit(string redirect)
+    [Authorize]
+    public class EditBase<TChannel> : AddEditBase<TChannel> where TChannel : ManagedChannel
     {
-      await base.HandleValidSubmit();
+        [Parameter]
+        public string Id { get; set; }
 
-      Repositories.Channels.Update(Channel);
+        [Inject]
+        public ISvxlinkServiceBase SvxLinkService { get; set; }
 
-      if (Channel.Sound != null)
-        Repositories.Repository<Sound>().Update(Channel.Sound);
+        protected override string SubmitTitle => "Modifier";
 
-      if (SvxLinkService.ChannelId == Channel.Id)
-        SvxLinkService.ActivateChannel(Channel.Id);
+        /// <summary>
+        /// Handles the form submit.
+        /// </summary>
+        public virtual async Task HandleValidSubmit(string redirect)
+        {
+            await base.HandleValidSubmit();
 
-      await ShowSuccessToastAsync("Modifié", $"Le salon {Channel.Name} a bien été modifié.");
+            await ShowSuccessToastAsync("Modifié", $"Le salon {Channel.Name} a bien été modifié.");
 
-      NavigationManager.NavigateTo($"{redirect}/Manage");
+            NavigationManager.NavigateTo($"{redirect}/Manage");
+        }
+
     }
 
-    protected override void OnInitialized()
+    public class EditSvxlinkChannelBase : EditBase<SvxlinkChannel>
     {
-      switch (Channel)
-      {
-        case SvxlinkChannel channel:
-          Telemetry.TrackPageView(new PageViewTelemetry("Svxlink Channel Edit Page") { Url = new Uri("/Channel/Edit", UriKind.Relative) });
-          break;
-
-        case EcholinkChannel channel:
-          Telemetry.TrackPageView(new PageViewTelemetry("Echolink Channel Edit Page") { Url = new Uri("/Echolink/Edit", UriKind.Relative) });
-          break;
-
-        default:
-          Telemetry.TrackPageView("Channel Edit Page");
-          break;
-      }
-
-      Channel = (TChannel)Repositories.Channels.GetWithSound(int.Parse(Id));
+        protected override async void OnInitialized()
+        {
+            Channel = await Mediatr.Send(new GetSvxlinkChannelByIdQuery(Options.Value.ConfigId, Channel.Id));
+        }
     }
-  }
+
+    public class EditEcholinkChannelBase : EditBase<EcholinkChannel>
+    {
+        protected override async void OnInitialized()
+        {
+            Channel = await Mediatr.Send(new GetEchoLinkChannelByIdQuery(Options.Value.ConfigId, Channel.Id));
+        }
+    }
+
+    public class EditAdvanceSvxlinkChannelBase : EditBase<AdvanceSvxlinkChannel>
+    {
+        protected override async void OnInitialized()
+        {
+            Channel = await Mediatr.Send(new GetAvanceSvxlinkChannelByIdQuery(Options.Value.ConfigId, Channel.Id));
+        }
+    }
 }

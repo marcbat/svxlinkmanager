@@ -1,28 +1,29 @@
-﻿using IniParser;
-
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.IO;
-using System.Text;
 
 namespace SvxlinkManager.Models
 {
-  public class Reflector : IModelEntity
-  {
-    public int Id { get; set; }
+    public class Reflector : IModelEntity
+    {
+        public Guid Id { get; set; }
 
-    [Required]
-    public string Name { get; set; }
+        [Required]
+        public string Name { get; set; }
 
-    [Required]
-    public string Config { get; set; }
+        [Required]
+        public string Config { get; set; }
 
-    public bool Enable { get; set; }
+        public bool Enable { get; set; }
 
-    [NotMapped]
-    public Dictionary<string, string> TrackProperties => new Dictionary<string, string> {
-        { nameof(Name), Name }
-        };
-  }
+        public static implicit operator Reflector(Domain.Entities.Reflector v)
+        {
+            return new Reflector
+            {
+                Id = v.Id,
+                Name = v.Name,
+                Config = v.Config,
+                Enable = v.Enable
+            };
+        }
+    }
 }

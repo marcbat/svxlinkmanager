@@ -4,80 +4,79 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SvxlinkManager.Models
 {
-  public class RadioProfile : IModelEntity, INotifyPropertyChanged
-  {
-    private bool enable;
-    private string trx = "interne";
-
-    public int Id { get; set; }
-
-    [Required]
-    public string Name { get; set; }
-
-    public bool Enable
+    public class RadioProfile : IModelEntity, INotifyPropertyChanged
     {
-      get => enable;
-      set
-      {
-        enable = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Enable)));
-      }
-    }
+        private bool enable;
+        private string trx = "interne";
 
-    [RegularExpression("^[0-9]{3}.[0-9]{3}")]
-    public string RxFequ { get; set; }
+        public Guid Id { get; set; }
 
-    [RegularExpression("^[0-9]{3}.[0-9]{3}")]
-    public string TxFrequ { get; set; }
+        [Required]
+        public string Name { get; set; }
 
-    [Required]
-    public string Squelch { get; set; } = "2";
+        public bool Enable
+        {
+            get => enable;
+            set
+            {
+                enable = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Enable)));
+            }
+        }
 
-    /// <summary>CTCSS au format SA818</summary>
-    /// <value>The rx tone.</value>
-    [Required]
-    // CTCSS au format SA818
-    public string TxCtcss { get; set; } = "0000";
+        [RegularExpression("^[0-9]{3}.[0-9]{3}")]
+        public string RxFequ { get; set; }
 
-    /// <summary>CTCSS au format SA818</summary>
-    /// <value>The rx tone.</value>
-    [Required]
-    // CTCSS au format SA818
-    public string RxCtcss { get; set; } = "0000";
+        [RegularExpression("^[0-9]{3}.[0-9]{3}")]
+        public string TxFrequ { get; set; }
 
-    [Required]
-    public string Volume { get; set; } = "4";
+        [Required]
+        public string Squelch { get; set; } = "2";
 
-    [Required]
-    public string PreEmph { get; set; } = "0";
+        /// <summary>CTCSS au format SA818</summary>
+        /// <value>The rx tone.</value>
+        [Required]
+        // CTCSS au format SA818
+        public string TxCtcss { get; set; } = "0000";
 
-    [Required]
-    public string HightPass { get; set; } = "0";
+        /// <summary>CTCSS au format SA818</summary>
+        /// <value>The rx tone.</value>
+        [Required]
+        // CTCSS au format SA818
+        public string RxCtcss { get; set; } = "0000";
 
-    [Required]
-    public string LowPass { get; set; } = "0";
+        [Required]
+        public string Volume { get; set; } = "4";
 
-    [Required]
-    public string SquelchDetection { get; set; } = "GPIO";
+        [Required]
+        public string PreEmph { get; set; } = "0";
 
-    public bool HasSa818 { get; set; } = true;
+        [Required]
+        public string HightPass { get; set; } = "0";
 
-    /// <summary>CTCSS au format classique</summary>
-    /// <value>The rx tone.</value>
-    [NotMapped]
-    public string TxTone { get => Ctcss.Single(c => c.Key == TxCtcss).Value; }
+        [Required]
+        public string LowPass { get; set; } = "0";
 
-    /// <summary>CTCSS au format classique</summary>
-    /// <value>The rx tone.</value>
-    [NotMapped]
-    public string RxTone { get => Ctcss.Single(c => c.Key == RxCtcss).Value; }
+        [Required]
+        public string SquelchDetection { get; set; } = "GPIO";
 
-    [NotMapped]
-    public Dictionary<string, string> Ctcss => new Dictionary<string, string>
+        public bool HasSa818 { get; set; } = true;
+
+        /// <summary>CTCSS au format classique</summary>
+        /// <value>The rx tone.</value>
+        [NotMapped]
+        public string TxTone { get => Ctcss.Single(c => c.Key == TxCtcss).Value; }
+
+        /// <summary>CTCSS au format classique</summary>
+        /// <value>The rx tone.</value>
+        [NotMapped]
+        public string RxTone { get => Ctcss.Single(c => c.Key == RxCtcss).Value; }
+
+        [NotMapped]
+        public Dictionary<string, string> Ctcss => new Dictionary<string, string>
     {
       {"0000", "Pas de tone" },
       {"0001","67"},
@@ -120,8 +119,8 @@ namespace SvxlinkManager.Models
       {"0038","250.3"}
     };
 
-    [NotMapped]
-    public Dictionary<string, string> TrackProperties => new Dictionary<string, string> {
+        [NotMapped]
+        public Dictionary<string, string> TrackProperties => new Dictionary<string, string> {
         { nameof(Name), Name },
         { nameof(RxFequ), RxFequ },
         { nameof(TxFrequ), TxFrequ },
@@ -136,38 +135,57 @@ namespace SvxlinkManager.Models
         { nameof(HasSa818), HasSa818.ToString() },
         };
 
-    [NotMapped]
-    public Dictionary<string, string> TrxTypes { get; } = new Dictionary<string, string> { { "interne", "Hotspot" }, { "externe", "Externe" } };
+        [NotMapped]
+        public Dictionary<string, string> TrxTypes { get; } = new Dictionary<string, string> { { "interne", "Hotspot" }, { "externe", "Externe" } };
 
-    [NotMapped]
-    public string Trx
-    {
-      get
-      {
-        if (HasSa818)
-          return "interne";
-        else
-          return "externe";
-      }
-      set
-      {
-        switch (value)
+        [NotMapped]
+        public string Trx
         {
-          case "interne":
-            SquelchDetection = "GPIO";
-            HasSa818 = true;
-            break;
+            get
+            {
+                if (HasSa818)
+                    return "interne";
+                else
+                    return "externe";
+            }
+            set
+            {
+                switch (value)
+                {
+                    case "interne":
+                        SquelchDetection = "GPIO";
+                        HasSa818 = true;
+                        break;
 
-          default:
-            SquelchDetection = "CTCSS";
-            HasSa818 = false;
-            break;
+                    default:
+                        SquelchDetection = "CTCSS";
+                        HasSa818 = false;
+                        break;
+                }
+
+                trx = value;
+            }
         }
 
-        trx = value;
-      }
-    }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-    public event PropertyChangedEventHandler PropertyChanged;
-  }
+
+        public static implicit operator RadioProfile(Domain.Entities.RadioProfil v)
+        {
+            return new RadioProfile
+            {
+                Id = v.Id,
+                Name = v.Name,
+                RxFequ = v.RxFequency,
+                TxFrequ = v.TxFrequency,
+                Squelch = v.Squelch,
+                TxCtcss = v.TxCtcss,
+                RxCtcss = v.RxCtCss,
+                Volume = v.Volume,
+                PreEmph = v.PreEmph,
+                HightPass = v.HightPass,
+                LowPass = v.LowPass
+            };
+        }
+    }
 }

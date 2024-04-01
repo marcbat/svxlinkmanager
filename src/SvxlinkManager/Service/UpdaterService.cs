@@ -23,7 +23,6 @@ namespace SvxlinkManager.Service
   public class UpdaterService
   {
     private readonly IConfiguration configuration;
-    private readonly TelemetryClient telemetry;
     private readonly ILogger<UpdaterService> logger;
 
     public event Action OnReleasesDownloadCompleted;
@@ -34,10 +33,9 @@ namespace SvxlinkManager.Service
 
     public event Action<Release> OndownloadComplete;
 
-    public UpdaterService(IConfiguration configuration, TelemetryClient telemetry, ILogger<UpdaterService> logger)
+    public UpdaterService(IConfiguration configuration, ILogger<UpdaterService> logger)
     {
       this.configuration = configuration;
-      this.telemetry = telemetry;
       this.logger = logger;
 
       Releases = new List<Release>();
@@ -66,7 +64,7 @@ namespace SvxlinkManager.Service
       }
       catch (Exception e)
       {
-        telemetry.TrackException(new Exception("Impossible de charger les releases", e));
+        logger.LogError(e, "Echec du chargement des releases.");
       }
     }
 
@@ -209,9 +207,8 @@ namespace SvxlinkManager.Service
         Type = "http"
       };
 
-      using (var operation = telemetry.StartOperation(downloadTacker))
-      {
-        telemetry.TrackEvent("Download release file", new Dictionary<string, string> { { "Name", release.Name } });
+      
+        logger.LogInformation($"Telechargement de la release {release.Package.DownloadUrl}.");
 
         var downloadPath = "/tmp/svxlinkmanager";
 
@@ -240,9 +237,6 @@ namespace SvxlinkManager.Service
             if (packageCheckSum != GetChecksum(packageTarget))
               throw new Exception($"Echec de la validation du fichier {release.Package.Name}.");
 
-            using (var operation = telemetry.StartOperation(downloadUpdaterTacker))
-            {
-              telemetry.TrackEvent("Download Update file", new Dictionary<string, string> { { "Name", release.Name } });
               logger.LogInformation($"Download Update file {release.Updater.DownloadUrl}");
 
               client.DownloadFile(new Uri(release.Updater.DownloadUrl), updaterTarget);
@@ -253,7 +247,7 @@ namespace SvxlinkManager.Service
               logger.LogInformation($"Download Update file {release.Updater.DownloadUrl} complet.");
 
               OndownloadComplete?.Invoke(release);
-            }
+            
           };
 
           logger.LogInformation($"Telechargement de la release {release.Package.DownloadUrl}");
@@ -266,7 +260,7 @@ namespace SvxlinkManager.Service
 
           throw (new UpdateException("Echec du telechargement de la mise à jour.", e));
         }
-      }
+      
     }
 
     /// <summary>

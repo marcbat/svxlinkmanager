@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
+using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Shared;
 using SvxlinkManager.Service;
@@ -15,14 +16,13 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.Scanning
 {
   [Authorize]
-  public class ManageBase : RepositoryComponentBase
+  public class ManageBase : MediatrComponentBase
   {
     public EditContext EditContext;
 
     protected override async Task OnInitializedAsync()
     {
-      Telemetry.TrackPageView(new PageViewTelemetry("Scan page") { Url = new Uri("/Scanning/Manage", UriKind.Relative) });
-
+      
       await base.OnInitializedAsync().ConfigureAwait(false);
 
       LoadScanProfile();
@@ -33,16 +33,16 @@ namespace SvxlinkManager.Pages.Scanning
     }
 
     [Inject]
-    public SvxLinkService SvxLinkService { get; set; }
+    public ISvxlinkServiceBase SvxLinkService { get; set; }
 
     private void LoadScanProfile()
     {
-      ScanProfile = Repositories.ScanProfiles.Get(1);
+      //ScanProfile = Mediatr.ScanProfiles.Get(1);
     }
 
     private void LoadChannels()
     {
-      Channels = Repositories.Channels.GetAll().Where(c => !string.IsNullOrEmpty(c.TrackerUrl)).ToList();
+      //Channels = Mediatr.Channels.GetAll().Where(c => !string.IsNullOrEmpty(c.TrackerUrl)).ToList();
     }
 
     public bool IsChanged { get; set; }
@@ -55,11 +55,9 @@ namespace SvxlinkManager.Pages.Scanning
     {
       ScanProfile.Enable = true;
 
-      Repositories.ScanProfiles.Update(ScanProfile);
+      //Mediatr.ScanProfiles.Update(ScanProfile);
 
-      Telemetry.TrackEvent("Enable scan", ScanProfile.TrackProperties);
-
-      SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
+      //SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
 
       await ShowSuccessToastAsync("Activé", $"le scan a bien été activé.");
     }
@@ -68,11 +66,9 @@ namespace SvxlinkManager.Pages.Scanning
     {
       ScanProfile.Enable = false;
 
-      Repositories.ScanProfiles.Update(ScanProfile);
+      //Mediatr.ScanProfiles.Update(ScanProfile);
 
-      Telemetry.TrackEvent("Disable scan", ScanProfile.TrackProperties);
-
-      SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
+      //SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
 
       await ShowSuccessToastAsync("Désactivé", $"le scan a bien été désactivé.");
     }
@@ -91,11 +87,9 @@ namespace SvxlinkManager.Pages.Scanning
 
     protected async Task HandleValidSubmitAsync()
     {
-      Repositories.ScanProfiles.Update(ScanProfile);
+      //Mediatr.ScanProfiles.Update(ScanProfile);
 
-      Telemetry.TrackEvent("Update scan profile", ScanProfile.TrackProperties);
-
-      SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
+      //SvxLinkService.ActivateChannel(SvxLinkService.ChannelId);
 
       IsChanged = false;
 

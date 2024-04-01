@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-using SvxlinkManager.Models;
+using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Service;
 
 using System;
@@ -12,13 +12,13 @@ namespace SvxlinkManager.ServiceMockup
 {
   public class Sa818ServiceMockup : ISa818Service
   {
-    private ILogger<Sa818ServiceMockup> logger;
+    private readonly ILogger<Sa818ServiceMockup> logger;
 
     public Sa818ServiceMockup(ILogger<Sa818ServiceMockup> logger)
     {
       this.logger = logger;
     }
 
-    public void WriteRadioProfile(RadioProfile radioProfile) => logger.LogInformation($"Write {radioProfile.Name} radio profile.");
+    public void WriteRadioProfile(Domain.Entities.RadioProfil radioProfile) => logger.LogInformation($"Write {radioProfile.Name} radio profile.");
   }
 }

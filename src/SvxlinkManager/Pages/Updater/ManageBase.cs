@@ -29,7 +29,6 @@ namespace SvxlinkManager.Pages.Updater
   {
     protected override async Task OnInitializedAsync()
     {
-      Telemetry.TrackPageView(new PageViewTelemetry("Updater page") { Url = new Uri("/Updater/Manage", UriKind.Relative) });
 
       await base.OnInitializedAsync().ConfigureAwait(false);
 
@@ -48,7 +47,6 @@ namespace SvxlinkManager.Pages.Updater
       catch (Exception e)
       {
         Logger.LogError("Impossible de charger la liste des releases.", e);
-        Telemetry.TrackException(e);
 
         await ShowErrorToastAsync("Release", $"Impossible d'obtenir la liste des release.");
       }
@@ -90,8 +88,6 @@ namespace SvxlinkManager.Pages.Updater
       }
       catch (Exception e)
       {
-        Telemetry.TrackException(e);
-
         await ShowErrorToastAsync("Erreur", e.Message);
       }
 
@@ -106,8 +102,6 @@ namespace SvxlinkManager.Pages.Updater
       }
       catch (Exception e)
       {
-        Telemetry.TrackException(new UpdateException("Echec du telechargement de la mise à jour.", e), new Dictionary<string, string> { { "Name", release.Name } });
-
         await ShowErrorToastAsync($"Erreur", $"Echec du telechargement de la mise à jour {release.Package.Name}.<br/> {e.Message}");
       }
     }

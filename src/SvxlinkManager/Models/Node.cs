@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SvxlinkManager.Models
+﻿namespace SvxlinkManager.Models
 {
-  public class Node
-  {
-    private string className = "node";
-
-    public string Name { get; set; }
-
-    public string ClassName
+    public class Node
     {
-      get => className;
-      set => className = value;
-    }
+        private string className = "node";
 
-    public override bool Equals(object obj) => Name.Trim() == ((Node)obj).Name.Trim();
-  }
+        public string Name { get; set; }
+
+        public string ClassName
+        {
+            get => className;
+            set => className = value;
+        }
+
+        public override bool Equals(object obj) => Name.Trim() == ((Node)obj).Name.Trim();
+
+        public static implicit operator Node(Domain.Entities.Node node)
+        {
+            return new Node
+            {
+                Name = node.Name,
+                ClassName = node.ClassName
+            };
+        }
+    }
 }

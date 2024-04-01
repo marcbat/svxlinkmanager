@@ -7,7 +7,7 @@ namespace SvxlinkManager.Models
 {
   public class SvxlinkManagerParameter : IModelEntity
   {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public string Key { get; set; }
 

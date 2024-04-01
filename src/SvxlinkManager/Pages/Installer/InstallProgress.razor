@@ -77,7 +77,7 @@
       InvokeAsync(() => StateHasChanged());
     };
 
-    Task.Run(() => Home.Install());
+    Task.Run(() => Home.InstallAsync());
   }
 
   public string UserStatus { get; set; } = "alert-secondary";
