@@ -30,7 +30,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
     {
         private readonly ISvxlinkManagerConfigRepository _svxlinkManagerConfigRepository;
         private readonly ISoundRepository _soundRepository;
-        private readonly ILogger<UpdateRadioProfilCommandHandler> _logger;
+        private readonly ILogger<UpdateRadioProfilCommandHandler> logger;
 
         public UpdateRadioProfilCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,
                                                ISoundRepository soundRepository,
@@ -38,14 +38,14 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
         {
             _svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
             _soundRepository = soundRepository;
-            _logger = logger;
+            this.logger = logger;
         }
 
         public async Task<Unit> Handle(UpdateRadioProfilCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                Logger.LogInformation("Mise à jour d'un profil radio.");
+                logger.LogInformation("Mise à jour d'un profil radio.");
 
                 var config = await _svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
@@ -57,13 +57,13 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
 
                 await _svxlinkManagerConfigRepository.UpdateAsync(config);
 
-                _logger.LogInformation("Un profil radio a été mis à jour avec succès.");
+                logger.LogInformation("Un profil radio a été mis à jour avec succès.");
 
                 return Unit.Value;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Impossible de mettre à jour un profil radio.");
+                logger.LogError(ex, "Impossible de mettre à jour un profil radio.");
                 throw new SvxlinkManagerException("Impossible de mettre à jour un profil radio.", ex);
             }
         }
