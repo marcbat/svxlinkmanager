@@ -1,95 +1,116 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="SvxlinkManager.Pages.HomeBase">
-    <Position X="3.5" Y="9.5" Width="2.5" />
+    <Position X="1" Y="6.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>ABAgEAAkgCAVAAQAgAAIQAAAAECBQAEiQAACgICAEAA=</HashCode>
+      <HashCode>ABAgEAAkgCBVAAQAgAAIQAAAAECAQAEiQAACgICQEAA=</HashCode>
       <FileName>Pages\HomeBase.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="SvxlinkManager.Pages.Channels.AddEditBase&lt;TChannel&gt;">
-    <Position X="10.75" Y="6.75" Width="1.75" />
+    <Position X="12.5" Y="6.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAgAAAAAIAAEAAAAAAAAACAAAAACAAUAACAAAA=</HashCode>
       <FileName>Pages\Channels\AddEditBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Pages.Channels.CreateBase&lt;TChannel&gt;">
-    <Position X="12" Y="10.25" Width="2" />
+    <Position X="13.5" Y="10.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAACAAAA=</HashCode>
       <FileName>Pages\Channels\CreateBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Pages.Channels.EditBase&lt;TChannel&gt;">
-    <Position X="9.5" Y="10.25" Width="1.75" />
+    <Position X="11" Y="10.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAEAAAAAAAAAAAAAAAAAAAACAAQAACAAAA=</HashCode>
+      <HashCode>AAACAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAQAACAAAA=</HashCode>
       <FileName>Pages\Channels\EditBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Pages.Channels.ManageBase&lt;TChannel&gt;">
-    <Position X="6.75" Y="6.75" Width="2" />
+    <Position X="6.25" Y="6.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAABAAACAAAAAAAAEIA=</HashCode>
       <FileName>Pages\Channels\ManageBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Pages.RadioProfile.AddEditBase">
-    <Position X="16" Y="6.75" Width="2" />
+    <Position X="17.75" Y="6.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAEAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAQAAAACAA=</HashCode>
       <FileName>Pages\RadioProfile\AddEditBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Pages.RadioProfile.CreateBase">
-    <Position X="17.5" Y="9.75" Width="2" />
+    <Position X="19" Y="9.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAAAAAAA=</HashCode>
       <FileName>Pages\RadioProfile\CreateBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Pages.RadioProfile.EditBase">
-    <Position X="14.75" Y="9.75" Width="2" />
+    <Position X="16.25" Y="9.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAACEAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAAAAAAA=</HashCode>
       <FileName>Pages\RadioProfile\EditBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Pages.RadioProfile.ManageBase">
-    <Position X="22.75" Y="6.75" Width="1.75" />
+    <Position X="24.25" Y="6.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAQAAAgAAEAIAAAAAAAAAAAIAAAAACAAAAAAAQAIA=</HashCode>
       <FileName>Pages\RadioProfile\ManageBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Pages.Wifi.ManageBase">
-    <Position X="20.25" Y="6.75" Width="1.75" />
+    <Position X="21.75" Y="6.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAQAAAIAAABAAIAAAAAAAIAAQAAAAAAACAAAAAAAAAY=</HashCode>
       <FileName>Pages\Wifi\ManageBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Pages.Shared.SvxlinkManagerComponentBase">
-    <Position X="12.75" Y="0.5" Width="2.5" />
+    <Position X="12.25" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AIAAAAAAAAIEAAAAAAAAAAAAAACoIAAACAAAAACAACA=</HashCode>
+      <HashCode>AIAAAAAAAAIEAAAAAAAAAAAAAACIIAAACAAAAADAACA=</HashCode>
       <FileName>Pages\Shared\SvxlinkManagerComponentBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Pages.AdvanceChannel.EditBase">
-    <Position X="9.75" Y="13.25" Width="1.5" />
+    <Position X="11.25" Y="13" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
       <FileName>Pages\AdvanceChannel\EditBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SvxlinkManager.Pages.Shared.MediatrComponentBase">
-    <Position X="13" Y="4.25" Width="1.5" />
+    <Position X="12.75" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
       <FileName>Pages\Shared\MediatrComponentBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SvxlinkManager.Pages.AdvanceChannel.ManageBase">
+    <Position X="4.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Pages\AdvanceChannel\ManageBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SvxlinkManager.Pages.Channels.ManageBase">
+    <Position X="6.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Pages\Channels\ManageBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SvxlinkManager.Pages.Echolink.ManageBase">
+    <Position X="8.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Pages\Echolink\ManageBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
