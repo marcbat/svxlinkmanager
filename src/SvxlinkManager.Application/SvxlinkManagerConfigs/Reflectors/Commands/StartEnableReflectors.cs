@@ -14,7 +14,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
 {
     public record StartEnableReflectors(Guid ConfigId): IRequest<Unit>;
 
-    public class StartEnableReflectorsHandler : IRequestHandler<StartEnableReflectors, Unit>
+    internal class StartEnableReflectorsHandler : IRequestHandler<StartEnableReflectors, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ISvxlinkServiceBase svxlinkService;

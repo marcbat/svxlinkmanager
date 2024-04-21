@@ -12,7 +12,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Qu
 {
     public record GetEchoLinkChannelByIdQuery(Guid ConfigGuid, Guid ChannelGuid) : IRequest<EcholinkChannel>;
 
-    public class GetEchoLinkChannelByIdQueryHandler : IRequestHandler<GetEchoLinkChannelByIdQuery, EcholinkChannel>
+    internal class GetEchoLinkChannelByIdQueryHandler : IRequestHandler<GetEchoLinkChannelByIdQuery, EcholinkChannel>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
 

@@ -16,7 +16,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Queries
 {
     public record GetAllRadioProfilQuery(Guid ConfigId) : IRequest<IEnumerable<RadioProfil>>;
 
-    public class GetAllRadioProfilQueryHandler : IRequestHandler<GetAllRadioProfilQuery, IEnumerable<RadioProfil>>
+    internal class GetAllRadioProfilQueryHandler : IRequestHandler<GetAllRadioProfilQuery, IEnumerable<RadioProfil>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetAllRadioProfilQueryHandler> logger;

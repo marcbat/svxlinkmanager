@@ -28,7 +28,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
                                         string ModuleTclVoiceMail,
                                         string ModuleTrx, byte[] SoundFile) : IRequest<Guid>;
 
-    public class AddAdvanceSvxlinkChannelCommandHandler : IRequestHandler<AddAdvanceSvxlinkChannelCommand, Guid>
+    internal class AddAdvanceSvxlinkChannelCommandHandler : IRequestHandler<AddAdvanceSvxlinkChannelCommand, Guid>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ISoundRepository soundRepository;

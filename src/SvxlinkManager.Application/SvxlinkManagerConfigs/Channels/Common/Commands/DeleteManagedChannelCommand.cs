@@ -15,7 +15,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
 {
     public record DeleteManagedChannelCommand(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Unit>;
 
-    public class DeleteManagedChannelCommandHandler : IRequestHandler<DeleteManagedChannelCommand, Unit>
+    internal class DeleteManagedChannelCommandHandler : IRequestHandler<DeleteManagedChannelCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<DeleteManagedChannelCommandHandler> logger;

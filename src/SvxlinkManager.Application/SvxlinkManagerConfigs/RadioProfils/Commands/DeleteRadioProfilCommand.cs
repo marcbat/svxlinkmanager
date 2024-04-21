@@ -10,7 +10,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
 {
     public record DeleteRadioProfilCommand(Guid ConfigGuid, Guid RadioProfilGuid) : IRequest<Unit>;
 
-    public class DeleteRadioProfilCommandHandler : IRequestHandler<DeleteRadioProfilCommand, Unit>
+    internal class DeleteRadioProfilCommandHandler : IRequestHandler<DeleteRadioProfilCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
 

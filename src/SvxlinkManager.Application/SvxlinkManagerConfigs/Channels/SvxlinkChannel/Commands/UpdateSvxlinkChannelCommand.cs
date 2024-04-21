@@ -15,7 +15,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
 {
     public record UpdateSvxlinkChannelCommand(Guid ConfigId, Guid ChannelId, string Name, string Host, string CallSign, int Port, string ReportCallSign, byte[] SoundFile) : IRequest<Unit>;
 
-    public class UpdateSvxlinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,
+    internal class UpdateSvxlinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,
                                                          ISoundRepository soundRepository,
                                                          ILogger<AddSvxlinkChannelCommandHandler> logger) : IRequestHandler<UpdateSvxlinkChannelCommand, Unit>
     {

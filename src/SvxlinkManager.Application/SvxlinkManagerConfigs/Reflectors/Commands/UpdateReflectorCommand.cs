@@ -23,7 +23,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
     /// <summary>
     /// Handler for the <see cref="UpdateReflectorCommand"/>.
     /// </summary>
-    public class UpdateReflectorCommandHandler : IRequestHandler<UpdateReflectorCommand, Unit>
+    internal class UpdateReflectorCommandHandler : IRequestHandler<UpdateReflectorCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository _svxlinkManagerConfigRepository;
         private readonly ISvxlinkServiceBase svxlinkServiceBase;

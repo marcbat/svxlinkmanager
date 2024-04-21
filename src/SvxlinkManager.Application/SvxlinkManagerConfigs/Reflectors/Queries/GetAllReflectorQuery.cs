@@ -16,7 +16,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries
 {
     public record GetAllReflectorQuery(Guid ConfigId) : IRequest<IEnumerable<Reflector>>;
 
-    public class GetAllReflectorQueryHandler : IRequestHandler<GetAllReflectorQuery, IEnumerable<Reflector>>
+    internal class GetAllReflectorQueryHandler : IRequestHandler<GetAllReflectorQuery, IEnumerable<Reflector>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetAllReflectorQueryHandler> logger;

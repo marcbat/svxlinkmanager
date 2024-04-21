@@ -10,7 +10,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
 {
     public record DeleteAdvanceSvxlinkChannelCommand(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Unit>;
 
-    public class DeleteAdvanceSvxlinkChannelCommandHandler : IRequestHandler<DeleteAdvanceSvxlinkChannelCommand, Unit>
+    internal class DeleteAdvanceSvxlinkChannelCommandHandler : IRequestHandler<DeleteAdvanceSvxlinkChannelCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
 

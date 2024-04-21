@@ -8,7 +8,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
 {
     public record SetDefaultChannelCommand(Guid ConfigId, Guid ChannelId) : IRequest<Unit>;
 
-    public class SetDefaultChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<SetDefaultChannelCommandHandler> logger) : IRequestHandler<SetDefaultChannelCommand, Unit>
+    internal class SetDefaultChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<SetDefaultChannelCommandHandler> logger) : IRequestHandler<SetDefaultChannelCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
         private readonly ILogger<SetDefaultChannelCommandHandler> logger = logger;

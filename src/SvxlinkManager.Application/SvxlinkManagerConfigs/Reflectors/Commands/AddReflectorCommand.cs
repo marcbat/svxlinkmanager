@@ -22,7 +22,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
     /// <summary>
     /// Handler for the AddReflectorCommand.
     /// </summary>
-    public class AddReflectorCommandHandler : IRequestHandler<AddReflectorCommand, Guid>
+    internal class AddReflectorCommandHandler : IRequestHandler<AddReflectorCommand, Guid>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<AddReflectorCommandHandler> logger;

@@ -17,7 +17,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
 {
     public record ApplyRadioProfilCommand(Guid ConfigId, Guid RadioProfilId) : IRequest<Unit>;
 
-    public class ApplyRadioProfilCommandHandler : IRequestHandler<ApplyRadioProfilCommand, Unit>
+    internal class ApplyRadioProfilCommandHandler : IRequestHandler<ApplyRadioProfilCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ISa818Service sa818Service;

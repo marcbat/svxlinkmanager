@@ -45,7 +45,7 @@ namespace SvxlinkManager.Pages.Channels
     {
         protected override async void OnInitialized()
         {
-            Channel = await Mediatr.Send(new GetSvxlinkChannelByIdQuery(Options.Value.ConfigId, Channel.Id));
+            Channel = await Mediatr.Send(new GetSvxlinkChannelByIdQuery(Options.Value.ConfigId, Guid.Parse(Id)));
         }
     }
 
@@ -53,7 +53,7 @@ namespace SvxlinkManager.Pages.Channels
     {
         protected override async void OnInitialized()
         {
-            Channel = await Mediatr.Send(new GetEchoLinkChannelByIdQuery(Options.Value.ConfigId, Channel.Id));
+            Channel = await Mediatr.Send(new GetEchoLinkChannelByIdQuery(Options.Value.ConfigId, Guid.Parse(Id)));
         }
     }
 
@@ -61,7 +61,7 @@ namespace SvxlinkManager.Pages.Channels
     {
         protected override async void OnInitialized()
         {
-            Channel = await Mediatr.Send(new GetAvanceSvxlinkChannelByIdQuery(Options.Value.ConfigId, Channel.Id));
+            Channel = await Mediatr.Send(new GetAvanceSvxlinkChannelByIdQuery(Options.Value.ConfigId, Guid.Parse(Id)));
         }
     }
 }

@@ -14,7 +14,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
 {
     public record StartReflectorCommand(Guid ConfigId, Guid ReflectorId) : IRequest<Unit>;
 
-    public class StartReflectorCommandHandler : IRequestHandler<StartReflectorCommand, Unit>
+    internal class StartReflectorCommandHandler : IRequestHandler<StartReflectorCommand, Unit>
     {
         private readonly string applicationPath = Directory.GetCurrentDirectory();
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;

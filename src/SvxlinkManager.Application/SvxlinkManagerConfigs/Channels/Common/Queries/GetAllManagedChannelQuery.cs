@@ -13,7 +13,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queri
 {
     public record GetAllManagedChannelQuery(Guid ConfigId) : IRequest<IEnumerable<ManagedChannel>>;
 
-    public class GetAllManagedChannelQueryHandler : IRequestHandler<GetAllManagedChannelQuery, IEnumerable<ManagedChannel>>
+    internal class GetAllManagedChannelQueryHandler : IRequestHandler<GetAllManagedChannelQuery, IEnumerable<ManagedChannel>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
 

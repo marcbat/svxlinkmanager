@@ -24,7 +24,9 @@ namespace SvxlinkManager.Models
         Id = svxlinkChannel.Id,
         Name = svxlinkChannel.Name,
         AuthKey = svxlinkChannel.AuthKey,
+        Host = svxlinkChannel.Host,
         Port = svxlinkChannel.Port,
+        CallSign = svxlinkChannel.CallSign,
         ReportCallSign = svxlinkChannel.ReportCallSign
       };
     }

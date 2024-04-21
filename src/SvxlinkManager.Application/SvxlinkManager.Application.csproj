@@ -27,4 +27,9 @@
     <ProjectReference Include="..\SvxlinkManager.Domain\SvxlinkManager.Domain.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="SvxlinkManager.Application.Tests" />
+		<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+	</ItemGroup>
+
 </Project>

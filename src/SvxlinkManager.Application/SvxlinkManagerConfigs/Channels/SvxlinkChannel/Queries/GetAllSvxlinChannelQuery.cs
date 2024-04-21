@@ -13,7 +13,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
 {
     public record GetAllSvxlinChannelQuery(Guid ConfigId): IRequest<List<Domain.Entities.SvxlinkChannel>>;
 
-    public class GetAllSvxlinChannelQueryHandler : IRequestHandler<GetAllSvxlinChannelQuery, List<Domain.Entities.SvxlinkChannel>>
+    internal class GetAllSvxlinChannelQueryHandler : IRequestHandler<GetAllSvxlinChannelQuery, List<Domain.Entities.SvxlinkChannel>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
 

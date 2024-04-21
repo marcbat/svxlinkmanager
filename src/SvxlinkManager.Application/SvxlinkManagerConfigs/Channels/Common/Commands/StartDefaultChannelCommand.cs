@@ -8,7 +8,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
 {
     public record StartDefaultChannelCommand(Guid ConfigId) : IRequest<Unit>;
 
-    public class StartDefaultChannelCommandHandler : IRequestHandler<StartDefaultChannelCommand, Unit>
+    internal class StartDefaultChannelCommandHandler : IRequestHandler<StartDefaultChannelCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ISvxlinkServiceBase svxlinkService;

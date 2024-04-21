@@ -15,7 +15,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs
 {
     public record CreateSvxlinkManagerConfigCommand(Guid ConfigId) : IRequest<Guid>;
 
-    public class CreateSvxlinkManagerConfigCommandHandler : IRequestHandler<CreateSvxlinkManagerConfigCommand, Guid>
+    internal class CreateSvxlinkManagerConfigCommandHandler : IRequestHandler<CreateSvxlinkManagerConfigCommand, Guid>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<CreateSvxlinkManagerConfigCommandHandler> logger;

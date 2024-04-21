@@ -26,7 +26,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
                                string LowPass,
                                string SquelchDetection) : IRequest<Guid>;
 
-    public class AddRadioProfilCommandHandler : IRequestHandler<AddRadioProfilCommand, Guid>
+    internal class AddRadioProfilCommandHandler : IRequestHandler<AddRadioProfilCommand, Guid>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<AddRadioProfilCommandHandler> logger;

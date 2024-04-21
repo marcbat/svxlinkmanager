@@ -14,7 +14,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
 {
     public record StopReflectorCommand(Guid ConfigId, Guid ReflectorId) : IRequest<Unit>;
 
-    public class StopReflectorCommandHandler : IRequestHandler<StopReflectorCommand, Unit>
+    internal class StopReflectorCommandHandler : IRequestHandler<StopReflectorCommand, Unit>
     {
         private readonly string applicationPath = Directory.GetCurrentDirectory();
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;

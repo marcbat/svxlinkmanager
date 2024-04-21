@@ -9,7 +9,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
 {
     public record InstallChannelsCommand(Guid ConfigId, IEnumerable<Guid> InstallChannels, string CallSign, string AnnonceCallSign) : IRequest<Unit>;
 
-    public class InstallChannelsCommandHandler : IRequestHandler<InstallChannelsCommand, Unit>
+    internal class InstallChannelsCommandHandler : IRequestHandler<InstallChannelsCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly IMediator mediator;

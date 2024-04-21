@@ -16,7 +16,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
 {
     public record UpdateEcholinkChannelCommand(Guid ConfigId, Guid ChannelId, string Name, string Host, string CallSign, string Password, string SysopName, string Location, int MaxQso, string Description, byte[] SoundFile) : IRequest<Unit>;
 
-    public class UpdateEcholinkChannelCommandHandler : IRequestHandler<UpdateEcholinkChannelCommand, Unit>
+    internal class UpdateEcholinkChannelCommandHandler : IRequestHandler<UpdateEcholinkChannelCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ISoundRepository soundRepository;

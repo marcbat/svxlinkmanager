@@ -17,7 +17,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
 {
     public record ActivateSvxlinkChannelCommand(Guid ConfigId, Guid ChannelId) : IRequest<Unit>;
 
-    public class ActivateSvxlinkChannelCommandHandler : IRequestHandler<ActivateSvxlinkChannelCommand, Unit>
+    internal class ActivateSvxlinkChannelCommandHandler : IRequestHandler<ActivateSvxlinkChannelCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<ActivateSvxlinkChannelCommandHandler> logger;

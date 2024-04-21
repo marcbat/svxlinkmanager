@@ -17,7 +17,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries
     /// <summary>
     /// Gère la requête pour obtenir un réflecteur par son identifiant.
     /// </summary>
-    public class GetReflectorByIdQueryHandler : IRequestHandler<GetReflectorByIdQuery, Reflector>
+    internal class GetReflectorByIdQueryHandler : IRequestHandler<GetReflectorByIdQuery, Reflector>
     {
         private readonly ISvxlinkManagerConfigRepository _svxlinkManagerConfigRepository;
 

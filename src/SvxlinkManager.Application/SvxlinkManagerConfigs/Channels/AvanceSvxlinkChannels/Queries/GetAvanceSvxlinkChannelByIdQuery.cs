@@ -13,7 +13,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
 {
     public record GetAvanceSvxlinkChannelByIdQuery(Guid ConfigGuid, Guid ChannelGuid) : IRequest<AdvanceSvxlinkChannel>;
 
-    public class GetAvanceSvxlinkChannelQueryHandler : IRequestHandler<GetAvanceSvxlinkChannelByIdQuery, AdvanceSvxlinkChannel>
+    internal class GetAvanceSvxlinkChannelQueryHandler : IRequestHandler<GetAvanceSvxlinkChannelByIdQuery, AdvanceSvxlinkChannel>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
 

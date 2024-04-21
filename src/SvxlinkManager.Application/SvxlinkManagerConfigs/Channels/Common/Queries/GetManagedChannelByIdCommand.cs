@@ -15,7 +15,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queri
 {
     public record GetManagedChannelByIdCommand(Guid ConfigId, Guid ChannelId): IRequest<ManagedChannel>;
 
-    public class GetManagedChannelByIdCommandHandler : IRequestHandler<GetManagedChannelByIdCommand, ManagedChannel>
+    internal class GetManagedChannelByIdCommandHandler : IRequestHandler<GetManagedChannelByIdCommand, ManagedChannel>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetManagedChannelByIdCommandHandler> logger;

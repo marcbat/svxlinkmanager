@@ -19,7 +19,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
     /// <summary>
     /// Gère la commande de suppression d'un réflecteur.
     /// </summary>
-    public class DeleteReflectorCommandHandler : IRequestHandler<DeleteReflectorCommand, Unit>
+    internal class DeleteReflectorCommandHandler : IRequestHandler<DeleteReflectorCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
 

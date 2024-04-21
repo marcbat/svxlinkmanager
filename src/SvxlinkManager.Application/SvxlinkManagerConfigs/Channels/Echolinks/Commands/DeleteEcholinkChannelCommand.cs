@@ -10,7 +10,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
 {
     public record DeleteEcholinkChannelCommand(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Unit>;
 
-    public class DeleteEcholinkChannelCommandHandler : IRequestHandler<DeleteEcholinkChannelCommand, Unit>
+    internal class DeleteEcholinkChannelCommandHandler : IRequestHandler<DeleteEcholinkChannelCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
 
