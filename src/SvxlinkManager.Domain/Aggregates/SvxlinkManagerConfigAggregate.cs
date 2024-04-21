@@ -433,7 +433,15 @@ namespace SvxlinkManager.Domain.Aggregates
 
         public RadioProfil GetActiveRadioProfile()
         {
-            return radioProfils.Single(x => x.IsActive);
+            try
+            {
+                var profil = radioProfils.FirstOrDefault(x => x.IsActive) ?? throw new Exception("Profil radio non trouvé.");
+                return profil;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Impossible de trouver le profil radio actif.", ex);
+            }
         }
     }
 }

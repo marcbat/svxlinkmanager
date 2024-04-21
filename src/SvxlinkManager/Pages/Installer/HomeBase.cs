@@ -8,6 +8,7 @@ using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Queries;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands;
 using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Shared;
 using SvxlinkManager.Pages.Updater;
@@ -153,14 +154,14 @@ namespace SvxlinkManager.Pages.Installer
         /// <summary>Installation de SvxlinkManager</summary>
         public async Task InstallAsync()
         {
-            try
-            {
-                Logger.LogInformation("Installation du profil radio.");
+            try { 
+                Logger.LogInformation("Installation de SvxlinkManager.");
 
                 SeedUser();
                 await InstallChannelsAsync();
                 await SetDefaultChannelAsync();
-                await CreateRadioProfileAsync();
+                var radioGuid = await CreateRadioProfileAsync();
+                await ApplyRadioProfilAsync(radioGuid);
                 if (InstallerModel.UpdateToLastRelease)
                     Update();
                 else
@@ -175,15 +176,30 @@ namespace SvxlinkManager.Pages.Installer
             }
         }
 
+        private async Task ApplyRadioProfilAsync(Guid radioGuid)
+        {
+            try
+            {
+                Logger.LogInformation("Application du profil radio.");
+
+                await Mediatr.Send(new ApplyRadioProfilCommand(Options.Value.ConfigId, radioGuid));
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Impossible d'appliquer le profil radio.");
+                throw new Exception("Impossible d'appliquer le profil radio.", ex);
+            }
+        }
+
         /// <summary>Crée le profil radio et programme le SA818 si necessaire</summary>
         /// <exception cref="Exception">Impossible de créer le profil radio</exception>
-        private async Task CreateRadioProfileAsync()
+        private async Task<Guid> CreateRadioProfileAsync()
         {
             try
             {
                 Logger.LogInformation("Installation du profil radio.");
 
-                await Mediatr.Send(new CreateRadioProfilCommand(
+                var radioGuid = await Mediatr.Send(new CreateRadioProfilCommand(
                     Options.Value.ConfigId,
                     InstallerModel.RadioProfile.Name,
                     InstallerModel.RadioProfile.RxFequ,
@@ -199,9 +215,12 @@ namespace SvxlinkManager.Pages.Installer
                 ));
 
                 OnCreateRadioProfile?.Invoke();
+
+                return radioGuid;
             }
             catch (Exception e)
             {
+                Logger.LogError(e, "Impossible de créer le profil radio");
                 throw new Exception("Impossible de créer le profil radio", e);
             }
         }

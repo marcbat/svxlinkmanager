@@ -47,6 +47,8 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
                     sa818Service.WriteRadioProfile(radioProfil);
 
                 radioProfil.Enable = true;
+
+                config.SetActiveRadioProfile(radioProfil.Id);
                 
                 await svxlinkManagerConfigRepository.UpdateAsync(config);
 

@@ -23,9 +23,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
                                string PreEmph,
                                string HighPass,
                                string LowPass,
-                               string SquelchDetection) : IRequest<Unit>;
+                               string SquelchDetection) : IRequest<Guid>;
 
-    internal class CreateRadioProfilCommandHandler : IRequestHandler<CreateRadioProfilCommand, Unit>
+    internal class CreateRadioProfilCommandHandler : IRequestHandler<CreateRadioProfilCommand, Guid>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ISa818Service sa818Service;
@@ -38,7 +38,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(CreateRadioProfilCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateRadioProfilCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
 
                 logger.LogInformation("Le profil radio a été écrit avec succès.");
 
-                return Unit.Value;
+                return radioProfilGuid;
             }
             catch (Exception ex)
             {

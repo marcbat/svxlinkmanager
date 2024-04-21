@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
+using Newtonsoft.Json.Linq;
+
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queries;
@@ -17,7 +19,7 @@ namespace SvxlinkManager.Pages
     [Authorize]
     public class HomeBase : MediatrComponentBase, IDisposable
     {
-        private Task<string> channel;
+        private string channel;
 
         protected override async Task OnInitializedAsync()
         {
@@ -331,14 +333,19 @@ namespace SvxlinkManager.Pages
             get => SvxLinkService.ActiveChannel;
         }
 
-        public async Task<string> Channel
+        public string Channel
         {
             get => channel; 
             set
             {
                 channel = value;
-                await Mediatr.Send(new ActivateSvxlinkChannelCommand(Options.Value.ConfigId, Guid.Parse(value)));
+                //Mediatr.Send(new ActivateSvxlinkChannelCommand(Options.Value.ConfigId, Guid.Parse(value))).Result;
             }
+        }
+
+        protected async Task Activate(ChangeEventArgs e)
+        {
+            await Mediatr.Send(new ActivateSvxlinkChannelCommand(Options.Value.ConfigId, Guid.Parse(e.Value.ToString())));
         }
 
         public string TemporizationValue { get; set; }
