@@ -34,7 +34,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
                 await soundRepository.CreateAsyc(sound);
 
                 var svxlinkchannelGuid = Guid.NewGuid();
-                var svxlinkChannel = new Domain.Entities.SvxlinkChannel(svxlinkchannelGuid, request.Name, soundGuid, request.Host, request.CallSign, request.Port, request.ReportCallSign);
+                var svxlinkChannel = new Domain.Entities.SvxlinkChannel(svxlinkchannelGuid, request.Name, soundGuid, request.Host, request.Port, request.CallSign, request.ReportCallSign);
 
                 config.AddSvxlinkChannel(svxlinkChannel);
 

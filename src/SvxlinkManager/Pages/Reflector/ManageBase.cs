@@ -30,7 +30,7 @@ namespace SvxlinkManager.Pages.Reflector
         {
             var reflectors = await Mediatr.Send(new GetAllReflectorQuery(Options.Value.ConfigId));
 
-            reflectors.ToList().ForEach(r => Reflectors.Add(r));
+            Reflectors =  reflectors.Select<Domain.Entities.Reflector, Models.Reflector>(r => r).ToList();
         }
 
         [Inject]

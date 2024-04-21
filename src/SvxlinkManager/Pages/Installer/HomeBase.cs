@@ -84,7 +84,7 @@ namespace SvxlinkManager.Pages.Installer
 
         private async Task<List<SvxlinkChannel>> LoadChannelsAsync()
         {
-            var channels = await Mediatr.Send(new GetAllSvxlinChannelQuery(Options.Value.ConfigId));
+            var channels = await Mediatr.Send(new GetAllOriginalChannelsCommand());
 
             return channels.Select<Domain.Entities.SvxlinkChannel, SvxlinkChannel>(c=> c).ToList();
         }
@@ -232,7 +232,7 @@ namespace SvxlinkManager.Pages.Installer
             {
                 Logger.LogInformation("Installation des salons.");
 
-                await Mediatr.Send(new InstallChannelsCommand(Options.Value.ConfigId, InstallerModel.ChannelsToDelete.Select(c => c.Id), InstallerModel.CallSign, InstallerModel.AnnonceCallSign));
+                await Mediatr.Send(new InstallChannelsCommand(Options.Value.ConfigId, InstallerModel.ChannelsToPreserved.Select(c => c.Id), InstallerModel.CallSign, InstallerModel.AnnonceCallSign));
 
                 OnInstallChannels?.Invoke();
             }

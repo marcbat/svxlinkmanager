@@ -6,18 +6,12 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Domain.Entities
 {
-    public class SvxlinkChannel : Channel
+    public class SvxlinkChannel(Guid id, string name, Guid soundGuid, string host, int port, string callSign, string reportCallSign) : Channel(id, name, soundGuid, host, callSign)
     {
-        public SvxlinkChannel(Guid id, string name, Guid soundGuid, string host, string callSign, int port, string reportCallSign) : base(id, name, soundGuid, host, callSign)
-        {
-            Port = port;
-            ReportCallSign = reportCallSign;
-        }
+    public string? AuthKey { get; set; }
 
-        public string? AuthKey { get; set; }
+    public int Port { get; } = port;
 
-        public int Port { get; }
-
-        public string ReportCallSign { get; set; }
-    }
+    public string ReportCallSign { get; set; } = reportCallSign;
+  }
 }

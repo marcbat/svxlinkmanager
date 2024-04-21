@@ -35,7 +35,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
 
                 config.DeleteSvxlinkChannel(request.ChannelId);
 
-                var svxlinkChannel = new Domain.Entities.SvxlinkChannel(request.ChannelId, request.Name, soundGuid, request.Host, request.CallSign, request.Port, request.ReportCallSign);
+                var svxlinkChannel = new Domain.Entities.SvxlinkChannel(request.ChannelId, request.Name, soundGuid, request.Host, request.Port, request.CallSign, request.ReportCallSign);
 
                 config.AddSvxlinkChannel(svxlinkChannel);
 

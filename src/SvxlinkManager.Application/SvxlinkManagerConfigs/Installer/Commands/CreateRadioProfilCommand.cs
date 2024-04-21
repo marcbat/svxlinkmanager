@@ -40,26 +40,36 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
 
         public async Task<Unit> Handle(CreateRadioProfilCommand request, CancellationToken cancellationToken)
         {
-            var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            try
+            {
+                logger.LogInformation("Début de la création d'un nouveau profil radio.");
 
-            config.DeleteAllRadioProfils();
+                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
-            var radioProfilGuid = Guid.NewGuid();
-            var radioProfil = new RadioProfil(radioProfilGuid, request.Name, request.RxFrequency, request.TxFrequency, request.Squelch, request.TxCtcss, request.RxCtCss, request.Volume, request.PreEmph, request.HighPass, request.LowPass, request.SquelchDetection);
+                config.DeleteAllRadioProfils();
 
-            radioProfil.Enable = true;
+                var radioProfilGuid = Guid.NewGuid();
+                var radioProfil = new RadioProfil(radioProfilGuid, request.Name, request.RxFrequency, request.TxFrequency, request.Squelch, request.TxCtcss, request.RxCtCss, request.Volume, request.PreEmph, request.HighPass, request.LowPass, request.SquelchDetection);
 
-            config.AddRadioProfil(radioProfil);
+                radioProfil.Enable = true;
 
-            await svxlinkManagerConfigRepository.UpdateAsync(config);
+                config.AddRadioProfil(radioProfil);
 
-            logger.LogInformation("Un nouveau profil radio a été ajouté avec succès.");
+                await svxlinkManagerConfigRepository.UpdateAsync(config);
 
-            sa818Service.WriteRadioProfile(radioProfil);
+                logger.LogInformation("Un nouveau profil radio a été ajouté avec succès.");
 
-            logger.LogInformation("Le profil radio a été écrit avec succès.");
+                sa818Service.WriteRadioProfile(radioProfil);
 
-            return Unit.Value;
+                logger.LogInformation("Le profil radio a été écrit avec succès.");
+
+                return Unit.Value;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Une erreur s'est produite lors de la création du profil radio.");
+                throw new SvxlinkManagerException("Une erreur s'est produite lors de la création du profil radio.", ex);
+            }
         }
     }
 }

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Components;
 
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queries;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Queries;
 using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Shared;
 
@@ -13,7 +15,7 @@ using System.Threading.Tasks;
 namespace SvxlinkManager.Pages.Channels
 {
     [Authorize]
-    public class ManageBase<TChannel> : MediatrComponentBase where TChannel : ManagedChannel
+    public abstract class ManageBase<TChannel> : MediatrComponentBase where TChannel : ManagedChannel
     {
         [Inject]
         public NavigationManager NavigationManager { get; set; }
@@ -22,15 +24,12 @@ namespace SvxlinkManager.Pages.Channels
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
 
-            LoadChannels();
+            await LoadChannels();
         }
 
         public List<TChannel> Channels { get; set; }
 
-        protected virtual void LoadChannels()
-        {
-            throw new NotImplementedException();
-        }
+        protected abstract Task LoadChannels();
 
         /// <summary>
         /// Deletes the specified identifier.
@@ -47,4 +46,15 @@ namespace SvxlinkManager.Pages.Channels
             await ShowSuccessToastAsync("Supprimé", "Le salon a bien été supprimé.");
         }
     }
+
+    public class ManageBase : ManageBase<SvxlinkChannel>
+    {
+        protected override async Task LoadChannels()
+        {
+            var channels = await Mediatr.Send(new GetAllSvxlinChannelQuery(Options.Value.ConfigId));
+
+            Channels = channels.Select<Domain.Entities.SvxlinkChannel, Models.SvxlinkChannel>(c=>c).ToList();
+        }
+    }
+
 }

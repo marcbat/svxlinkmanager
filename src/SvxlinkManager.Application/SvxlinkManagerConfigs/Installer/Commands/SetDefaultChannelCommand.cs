@@ -8,19 +8,15 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
 {
     public record SetDefaultChannelCommand(Guid ConfigId, Guid ChannelId) : IRequest<Unit>;
 
-    public class SetDefaultChannelCommandHandler : IRequestHandler<SetDefaultChannelCommand, Unit>
+    public class SetDefaultChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<SetDefaultChannelCommandHandler> logger) : IRequestHandler<SetDefaultChannelCommand, Unit>
     {
-        private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
-        private readonly ILogger<SetDefaultChannelCommandHandler> logger;
-
-        public SetDefaultChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<SetDefaultChannelCommandHandler> logger)
-        {
-            this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
-            this.logger = logger;
-        }
+        private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
+        private readonly ILogger<SetDefaultChannelCommandHandler> logger = logger;
 
         public async Task<Unit> Handle(SetDefaultChannelCommand request, CancellationToken cancellationToken)
         {
+            logger.LogInformation("Début de la configuration du channel par defaut.");
+
             var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
             var channel = config.SvxlinkChannels.FirstOrDefault(c => c.Id == request.ChannelId);

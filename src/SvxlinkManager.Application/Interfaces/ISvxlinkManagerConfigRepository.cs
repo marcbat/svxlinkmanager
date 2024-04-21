@@ -1,4 +1,5 @@
 ﻿using SvxlinkManager.Domain.Aggregates;
+using SvxlinkManager.Domain.Entities;
 
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,7 @@ namespace SvxlinkManager.Application.Interfaces
         Task<SvxlinkManagerConfigAggregate> GetConfigAsync(Guid configId);
 
         Task UpdateAsync(SvxlinkManagerConfigAggregate config);
+
+        Task<IEnumerable<SvxlinkChannel>> GetAllOriginalChannels();
     }
 }
