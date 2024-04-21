@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using Spotnik.Gui.Areas.Identity;
@@ -48,6 +49,8 @@ namespace SvxlinkManager
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<SvxlinkManagerOptions>(Configuration.GetSection("SvxlinkManager"));
+
+            services.AddLogging(b => b.AddConsole());
 
             services.AddSingleton<ILiteDbContext, LiteDbContext>();
 

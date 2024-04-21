@@ -16,9 +16,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
     internal class DeleteEcholinkChannelCommandHandler : IRequestHandler<DeleteEcholinkChannelCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
-        private readonly Logger<DeleteEcholinkChannelCommandHandler> logger;
+        private readonly ILogger<DeleteEcholinkChannelCommandHandler> logger;
 
-        public DeleteEcholinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, Logger<DeleteEcholinkChannelCommandHandler> logger)
+        public DeleteEcholinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<DeleteEcholinkChannelCommandHandler> logger)
         {
             this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
             this.logger = logger;

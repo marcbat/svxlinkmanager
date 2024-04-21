@@ -18,9 +18,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
     internal class GetSvxlinkChannelByIdQueryHandler : IRequestHandler<GetSvxlinkChannelByIdQuery, Domain.Entities.SvxlinkChannel>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
-        private readonly Logger<GetSvxlinkChannelByIdQueryHandler> logger;
+        private readonly ILogger<GetSvxlinkChannelByIdQueryHandler> logger;
 
-        public GetSvxlinkChannelByIdQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, Logger<GetSvxlinkChannelByIdQueryHandler> logger)
+        public GetSvxlinkChannelByIdQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<GetSvxlinkChannelByIdQueryHandler> logger)
         {
             this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
             this.logger = logger;
