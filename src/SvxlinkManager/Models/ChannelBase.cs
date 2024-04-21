@@ -18,9 +18,6 @@ namespace SvxlinkManager.Models
       return Id == ((ChannelBase)obj).Id;
     }
 
-    [NotMapped]
-    public virtual Dictionary<string, string> TrackProperties { get; }
-
     public override int GetHashCode()
     {
       return base.GetHashCode();

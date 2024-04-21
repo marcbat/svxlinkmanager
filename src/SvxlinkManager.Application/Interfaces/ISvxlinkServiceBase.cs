@@ -20,7 +20,7 @@ namespace SvxlinkManager.Application.Interfaces
 
         void StartReflector(Reflector reflector, bool runAsDaemon = false, string logFile = null, string configFile = null, string pidFile = null, string runAs = null);
 
-        void StartSvxlink(ChannelBase channel, bool runAsDaemon = false, string logFile = null, string configFile = null, string pidFile = null, string runAs = null);
+        void StartSvxlink(ChannelBase channel, bool runAsDaemon = false, string? logFile = null, string? configFile = null, string? pidFile = null, string? runAs = null);
 
         void StopReflector(Reflector reflector);
 

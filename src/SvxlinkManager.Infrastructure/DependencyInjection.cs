@@ -15,6 +15,7 @@ namespace SvxlinkManager.Infrastructure
             services.AddSingleton<ISvxlinkServiceBase, SvxlinkServiceBase>();
             services.AddSingleton<ISa818Service, Sa818Service>();
             services.AddSingleton<IFileService, FileService>();
+            services.AddSingleton<IIniService, IniService>();
 
             return services;
         }

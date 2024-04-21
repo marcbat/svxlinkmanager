@@ -1,5 +1,7 @@
 ﻿using IniParser;
 
+using SvxlinkManager.Application.Interfaces;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,17 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Service
+namespace SvxlinkManager.Infrastructure.Services
 {
-  public interface IIniService
-  {
-    string FindConfigValueInFile(string filePath, string key);
-
-    string FindConfigValueInString(string ini, string key);
-
-    void ReplaceConfig(string filePath, Dictionary<string, Dictionary<string, string>> parameters);
-  }
-
+  
   public class IniService : IIniService
   {
     /// <summary>
@@ -58,7 +52,7 @@ namespace SvxlinkManager.Service
       parser.WriteFile(filePath, data, utf8WithoutBom);
     }
 
-    public virtual string FindConfigValueInFile(string filePath, string key)
+    public virtual string? FindConfigValueInFile(string filePath, string key)
     {
       var parser = new FileIniDataParser();
       parser.Parser.Configuration.NewLineStr = "\r\n";
@@ -74,7 +68,7 @@ namespace SvxlinkManager.Service
       return null;
     }
 
-    public virtual string FindConfigValueInString(string ini, string key)
+    public virtual string? FindConfigValueInString(string ini, string key)
     {
       var parser = new FileIniDataParser();
       parser.Parser.Configuration.NewLineStr = "\r\n";

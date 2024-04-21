@@ -13,6 +13,8 @@
 
         public int TimerDelay { get; set; } = 180;
 
+        public bool IsActive { get; set; }
+
         public Guid SoundGuid { get; }
     }
 }

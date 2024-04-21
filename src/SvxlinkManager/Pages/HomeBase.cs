@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Application.Interfaces;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queries;
 using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Shared;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages
@@ -17,6 +17,8 @@ namespace SvxlinkManager.Pages
     [Authorize]
     public class HomeBase : MediatrComponentBase, IDisposable
     {
+        private Task<string> channel;
+
         protected override async Task OnInitializedAsync()
         {
 
@@ -329,7 +331,15 @@ namespace SvxlinkManager.Pages
             get => SvxLinkService.ActiveChannel;
         }
 
-        public int Channel { get; set; }
+        public async Task<string> Channel
+        {
+            get => channel; 
+            set
+            {
+                channel = value;
+                await Mediatr.Send(new ActivateSvxlinkChannelCommand(Options.Value.ConfigId, Guid.Parse(value)));
+            }
+        }
 
         public string TemporizationValue { get; set; }
 

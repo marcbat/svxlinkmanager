@@ -42,5 +42,7 @@
         public string LowPass { get; }
         public string SquelchDetection { get; }
         public bool Enable { get; set; }
+
+        internal bool IsActive { get; set; }
     }
 }

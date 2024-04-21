@@ -67,7 +67,7 @@ namespace SvxlinkManager
 
             services.AddSingleton<ScanService>();
             services.AddSingleton<UpdaterService>();
-            services.AddSingleton<IIniService, IniService>();
+
 
 #if DEBUG
             services.AddSingleton<ISa818Service, Sa818ServiceMockup>();

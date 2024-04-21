@@ -18,5 +18,7 @@ namespace SvxlinkManager.Application.Interfaces
         Task UpdateAsync(SvxlinkManagerConfigAggregate config);
 
         Task<IEnumerable<SvxlinkChannel>> GetAllOriginalChannels();
+
+        string GetDefaultSvxlinkConfig();
     }
 }

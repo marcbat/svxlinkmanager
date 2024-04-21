@@ -76,7 +76,7 @@ namespace SvxlinkManager.Infrastructure.Services
         /// <param name="configFile">Specify which configuration file to use.</param>
         /// <param name="pidFile">Specify a pid file to write the process ID into.</param>
         /// <param name="runAs">Start SvxReflector as the specified user. The switch to the new user will happen after the log and pid files has been opened.</param>
-        public void StartSvxlink(ChannelBase channel, bool runAsDaemon = false, string logFile = null, string configFile = null, string pidFile = null, string runAs = null)
+        public void StartSvxlink(ChannelBase channel, bool runAsDaemon = false, string? logFile = null, string? configFile = null, string? pidFile = null, string? runAs = null)
         {
             var parameters = new List<string>();
 
@@ -125,6 +125,8 @@ namespace SvxlinkManager.Infrastructure.Services
             shell.BeginErrorReadLine();
             shell.BeginOutputReadLine();
         }
+
+
 
         /// <summary>
         /// Parse the Svxlink logs
