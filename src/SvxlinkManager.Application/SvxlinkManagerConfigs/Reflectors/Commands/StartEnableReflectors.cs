@@ -31,6 +31,8 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
         {
             try
             {
+                logger.LogInformation("Starting default reflector.");
+
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
                 var reflectors = config.Reflectors.Where(r => r.Enable).ToList();
@@ -42,6 +44,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
                     return Unit.Value;
                 }
 
+                logger.LogInformation("Starting default reflector ok.");
 
                 return Unit.Value;
             }
@@ -49,7 +52,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
             {
                 logger.LogError(ex, "Error starting default reflector.");
 
-                throw;
+                throw new Exception("Error starting default reflector.", ex);
             }
         }
     }

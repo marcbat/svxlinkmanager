@@ -35,6 +35,8 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
         {
             try
             {
+                logger.LogInformation("Mise à jour du canal Echolink");
+
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
                 var soundGuid = Guid.NewGuid();
@@ -49,7 +51,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
 
                 await svxlinkManagerConfigRepository.UpdateAsync(config);
 
-                logger.LogInformation("An echolink channel has been successfully updated.");
+                logger.LogInformation("Echolink channel updated successfully.");
 
                 return Unit.Value;
             }

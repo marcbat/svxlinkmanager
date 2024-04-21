@@ -1,5 +1,7 @@
 ﻿using MediatR;
 
+using Microsoft.Extensions.Logging;
+
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Domain.Entities;
 
@@ -20,14 +22,16 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries
     internal class GetReflectorByIdQueryHandler : IRequestHandler<GetReflectorByIdQuery, Reflector>
     {
         private readonly ISvxlinkManagerConfigRepository _svxlinkManagerConfigRepository;
+        private readonly ILogger<GetReflectorByIdQueryHandler> logger;
 
         /// <summary>
         /// Initialise une nouvelle instance de la classe <see cref="GetReflectorByIdQueryHandler"/>.
         /// </summary>
         /// <param name="svxlinkManagerConfigRepository">Le référentiel de configuration de SvxlinkManager.</param>
-        public GetReflectorByIdQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository)
+        public GetReflectorByIdQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<GetReflectorByIdQueryHandler> logger)
         {
             _svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -40,6 +44,8 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries
         {
             try
             {
+                logger.LogInformation("Récupération du réflecteur.");
+
                 var config = await _svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
 
                 var reflector = config.Reflectors.SingleOrDefault(r => r.Id == request.ReflectorGuid);
@@ -47,10 +53,13 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries
                 if (reflector is null)
                     throw new SvxlinkManagerException("Impossible de trouver le réflecteur.");
 
+                logger.LogInformation("Réflecteur trouvé.");
+
                 return reflector;
             }
             catch (Exception ex)
             {
+                logger.LogError(ex, "Erreur lors de la récupération du réflecteur.");
                 throw new SvxlinkManagerException("Impossible de récupérer le réflecteur.", ex);
             }
         }

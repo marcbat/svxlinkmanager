@@ -55,7 +55,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
             {
                 logger.LogError(ex, "Erreur lors de l'installation des canaux.");
 
-                throw;
+                throw new Exception("Erreur lors de l'installation des canaux.", ex);
             }
         }
     }

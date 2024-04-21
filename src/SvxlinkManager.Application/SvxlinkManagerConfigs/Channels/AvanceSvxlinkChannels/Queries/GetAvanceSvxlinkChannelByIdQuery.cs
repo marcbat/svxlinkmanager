@@ -1,4 +1,7 @@
 ﻿using MediatR;
+
+using Microsoft.Extensions.Logging;
+
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Domain.Entities;
 
@@ -16,16 +19,20 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
     internal class GetAvanceSvxlinkChannelQueryHandler : IRequestHandler<GetAvanceSvxlinkChannelByIdQuery, AdvanceSvxlinkChannel>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
+        private readonly ILogger<GetAvanceSvxlinkChannelQueryHandler> logger;
 
-        public GetAvanceSvxlinkChannelQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository)
+        public GetAvanceSvxlinkChannelQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<GetAvanceSvxlinkChannelQueryHandler> logger)
         {
             this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
+            this.logger = logger;
         }
 
         public async Task<AdvanceSvxlinkChannel> Handle(GetAvanceSvxlinkChannelByIdQuery request, CancellationToken cancellationToken)
         {
             try
             {
+                logger.LogInformation("Récupération du canal avancé Svxlink.");
+
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
 
                 var channel = config.AdvanceSvxlinkChannels.SingleOrDefault(c => c.Id == request.ChannelGuid);
@@ -33,10 +40,13 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
                 if (channel is null)
                     throw new SvxlinkManagerException("Impossible de trouver le canal avancé Svxlink.");
 
+                logger.LogInformation("Récupération du canal avancé Svxlink réussie.");
+
                 return channel;
             }
             catch (Exception ex)
             {
+                logger.LogError(ex, "Erreur lors de la récupération du canal avancé Svxlink.");
                 throw new SvxlinkManagerException("Impossible de récupérer le canal avancé Svxlink.", ex);
             }
         }

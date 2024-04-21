@@ -27,7 +27,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
         {
             try
             {
-                SvxlinkManagerConfigAggregate config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+                logger.LogInformation("Ajout d'un nouveau svxlink channel.");
+
+                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
                 var soundGuid = Guid.NewGuid();
                 var sound = new Sound(soundGuid, request.Name, request.SoundFile);

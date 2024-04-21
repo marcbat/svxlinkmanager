@@ -1,5 +1,7 @@
 ﻿using MediatR;
 
+using Microsoft.Extensions.Logging;
+
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Domain.Entities;
 
@@ -14,17 +16,31 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Qu
     internal class GetAllEcholinkChannelsQueryHandler : IRequestHandler<GetAllEcholinkChannelsQuery, IEnumerable<EcholinkChannel>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
+        private readonly ILogger<GetAllEcholinkChannelsQueryHandler> logger;
 
-        public GetAllEcholinkChannelsQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository)
+        public GetAllEcholinkChannelsQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<GetAllEcholinkChannelsQueryHandler> logger)
         {
             this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
+            this.logger = logger;
         }
 
         public async Task<IEnumerable<EcholinkChannel>> Handle(GetAllEcholinkChannelsQuery request, CancellationToken cancellationToken)
         {
-            var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            try
+            {
+                logger.LogInformation("Récupération de tous les canaux Echolink.");
 
-            return config.EcholinkChannels.ToList();
+                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+
+                logger.LogInformation("Récupération de tous les canaux Echolink réussie.");
+
+                return config.EcholinkChannels;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex,"Erreur lors de la récupération de tous les canaux Echolink.");
+                throw new Exception("Erreur lors de la récupération de tous les canaux Echolink.",ex);
+            }
         }
     }
 }

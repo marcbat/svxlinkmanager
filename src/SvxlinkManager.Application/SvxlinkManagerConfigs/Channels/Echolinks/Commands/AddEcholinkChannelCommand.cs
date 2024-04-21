@@ -36,6 +36,8 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
         {
             try
             {
+                logger.LogInformation("Ajout d'un nouveau echolink channel.");
+
                 SvxlinkManagerConfigAggregate config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
                 var soundGuid = Guid.NewGuid();

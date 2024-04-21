@@ -31,12 +31,20 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
         /// <returns>The list of original channels.</returns>
         public async Task<IEnumerable<Domain.Entities.SvxlinkChannel>> Handle(GetAllOriginalChannelsCommand request, CancellationToken cancellationToken)
         {
-            logger.LogInformation("GetAllOriginalChannelsCommand");
+            try
+            {
+                logger.LogInformation("Recupéreation des configuration de Channel originals");
 
-            var channels = await svxlinkManagerConfigRepository.GetAllOriginalChannels();
-            logger.LogInformation("GetAllOriginalChannelsCommand: {channels}", channels);
+                var channels = await svxlinkManagerConfigRepository.GetAllOriginalChannels();
 
-            return channels;
+                logger.LogInformation("Recupération des configuration de Channel originals réussie.");
+                return channels;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erreur lors de la récupération des configuration de Channel originals.");
+                throw new Exception("Erreur lors de la récupération des configuration de Channel originals.", ex);
+            }
         }
     }
 }

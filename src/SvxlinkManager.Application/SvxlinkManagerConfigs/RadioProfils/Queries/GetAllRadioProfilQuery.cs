@@ -29,11 +29,20 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Queries
 
         public async Task<IEnumerable<RadioProfil>> Handle(GetAllRadioProfilQuery request, CancellationToken cancellationToken)
         {
-            var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            try
+            {
+                logger.LogInformation("Récupération de tous les profils radio.");
+                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
-            logger.LogInformation("Tous les profils radio ont été récupérés avec succès.");
+                logger.LogInformation("Tous les profils radio ont été récupérés avec succès.");
 
-            return config.RadioProfils;
+                return config.RadioProfils;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erreur lors de la récupération de tous les profils radio.");
+                throw new Exception("Erreur lors de la récupération de tous les profils radio.", ex);
+            }
         }
     }
 }

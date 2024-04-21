@@ -30,6 +30,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs
         {
             try
             {
+                logger.LogInformation("Création d'un nouveau svxlink manager config.");
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
                 if (config is null)
@@ -39,6 +40,8 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs
                     config = SvxlinkManagerConfigAggregate.Create(request.ConfigId);
                     await svxlinkManagerConfigRepository.Create(config);
                 }
+
+                logger.LogInformation("Création d'un nouveau svxlink manager config réussie.");
 
                 return config.Id;
             }

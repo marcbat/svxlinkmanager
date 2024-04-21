@@ -1,5 +1,7 @@
 ﻿using MediatR;
 
+using Microsoft.Extensions.Logging;
+
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Domain.Entities;
 
@@ -16,17 +18,31 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queri
     internal class GetAllManagedChannelQueryHandler : IRequestHandler<GetAllManagedChannelQuery, IEnumerable<ManagedChannel>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
+        private readonly ILogger<GetAllManagedChannelQueryHandler> logger;
 
-        public GetAllManagedChannelQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository)
+        public GetAllManagedChannelQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<GetAllManagedChannelQueryHandler> logger)
         {
             this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
+            this.logger = logger;
         }
 
         public async Task<IEnumerable<ManagedChannel>> Handle(GetAllManagedChannelQuery request, CancellationToken cancellationToken)
         {
-            var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            try
+            {
+                logger.LogInformation("Récupération de tous les canaux managés.");
 
-            return config.GetSvxlinkAndEcholinkChannels();
+                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+
+                logger.LogInformation("Récupération de tous les canaux managés réussie.");
+
+                return config.GetSvxlinkAndEcholinkChannels();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Erreur lors de la récupération des cannaux managés.");
+                throw new Exception("Erreur lors de la récupération des cannaux managés.", ex);
+            }
         }
     }
 }

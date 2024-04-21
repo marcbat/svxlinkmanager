@@ -49,7 +49,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
         {
             try
             {
-                SvxlinkManagerConfigAggregate config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+                logger.LogInformation("Ajout d'un nouveau réflecteur.");
+
+                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
                 var reflectorGuid = Guid.NewGuid();
                 var reflector = new Reflector(reflectorGuid, request.Name, request.Config);

@@ -42,7 +42,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
         {
             try
             {
-                SvxlinkManagerConfigAggregate config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+                logger.LogInformation("Ajout d'un nouveau profil radio.");
+
+                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
                 var radioProfilGuid = Guid.NewGuid();
                 var radioProfil = new RadioProfil(radioProfilGuid, request.Name, request.RxFrequency, request.TxFrequency, request.Squelch, request.TxCtcss, request.RxCtCss, request.Volume, request.PreEmph, request.HighPass, request.LowPass, request.SquelchDetection);

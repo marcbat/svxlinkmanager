@@ -30,11 +30,15 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
         {
             try
             {
+                logger.LogInformation("Suppression du managed channel.");
+
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
 
                 config.DeleteManagedChannel(request.ChannelGuid);
 
                 await svxlinkManagerConfigRepository.UpdateAsync(config);
+
+                logger.LogInformation("Managed channel supprimé.");
 
                 return Unit.Value;
             }

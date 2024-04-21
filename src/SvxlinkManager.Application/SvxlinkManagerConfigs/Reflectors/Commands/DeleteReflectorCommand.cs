@@ -1,5 +1,7 @@
 ﻿using MediatR;
 
+using Microsoft.Extensions.Logging;
+
 using SvxlinkManager.Application.Interfaces;
 
 using System;
@@ -22,14 +24,16 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
     internal class DeleteReflectorCommandHandler : IRequestHandler<DeleteReflectorCommand, Unit>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
+        private readonly ILogger<DeleteReflectorCommandHandler> logger;
 
         /// <summary>
         /// Initialise une nouvelle instance de la classe <see cref="DeleteReflectorCommandHandler"/>.
         /// </summary>
         /// <param name="svxlinkManagerConfigRepository">Le référentiel de configuration du gestionnaire Svxlink.</param>
-        public DeleteReflectorCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository)
+        public DeleteReflectorCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<DeleteReflectorCommandHandler> logger)
         {
             this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -42,6 +46,8 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
         {
             try
             {
+                logger.LogInformation("Suppression du réflecteur.");
+
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
 
                 var reflector = config.Reflectors.SingleOrDefault(r => r.Id == request.ReflectorGuid) ?? throw new SvxlinkManagerException("Impossible de trouver le réflecteur.");
@@ -50,10 +56,13 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
 
                 await svxlinkManagerConfigRepository.UpdateAsync(config);
 
+                logger.LogInformation("Réflecteur supprimé.");
+
                 return Unit.Value;
             }
             catch (Exception ex)
             {
+                logger.LogError(ex, "Erreur lors de la suppression du réflecteur.");
                 throw new SvxlinkManagerException("Impossible de supprimer le réflecteur.", ex);
             }
         }

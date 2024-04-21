@@ -45,6 +45,8 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
         {
             try
             {
+                Logger.LogInformation("Mise à jour d'un profil radio.");
+
                 var config = await _svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
                 config.DeleteRadioProfil(request.ProfilId);

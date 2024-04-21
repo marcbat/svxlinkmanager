@@ -31,7 +31,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
     {
         private readonly ISvxlinkManagerConfigRepository _svxlinkManagerConfigRepository;
         private readonly ISoundRepository _soundRepository;
-        private readonly ILogger<UpdateAdvanceSvxlinkChannelCommandHandler> _logger;
+        private readonly ILogger<UpdateAdvanceSvxlinkChannelCommandHandler> logger;
 
         public UpdateAdvanceSvxlinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,
                                                          ISoundRepository soundRepository,
@@ -39,13 +39,15 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
         {
             _svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
             _soundRepository = soundRepository;
-            _logger = logger;
+            this.logger = logger;
         }
 
         public async Task<Unit> Handle(UpdateAdvanceSvxlinkChannelCommand request, CancellationToken cancellationToken)
         {
             try
             {
+                logger.LogInformation("Mise à jour d'un canal avancé Svxlink.");
+
                 var config = await _svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
                 var soundGuid = Guid.NewGuid();
@@ -60,13 +62,13 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
 
                 await _svxlinkManagerConfigRepository.UpdateAsync(config);
 
-                _logger.LogInformation("Un canal avancé Svxlink a été mis à jour avec succès.");
+                logger.LogInformation("Un canal avancé Svxlink a été mis à jour avec succès.");
 
                 return Unit.Value;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Impossible de mettre à jour un canal avancé Svxlink.");
+                logger.LogError(ex, "Impossible de mettre à jour un canal avancé Svxlink.");
                 throw new SvxlinkManagerException("Impossible de mettre à jour un canal avancé Svxlink.", ex);
             }
         }

@@ -37,6 +37,8 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
         {
             try
             {
+                logger.LogInformation("Application du profil radio.");
+
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
                 var radioProfil = config.RadioProfils.FirstOrDefault(rp => rp.Id == request.RadioProfilId) ?? throw new SvxlinkManagerException("Le profil radio spécifié n'existe pas.");

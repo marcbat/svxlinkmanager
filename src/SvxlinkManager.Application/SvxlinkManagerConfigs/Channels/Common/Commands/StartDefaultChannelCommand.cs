@@ -25,6 +25,8 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
         {
             try
             {
+                logger.LogInformation("Starting default channel.");
+
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
                 var channel = config.GetManagedChannels().Where(c => c.IsDefault).SingleOrDefault();
@@ -38,9 +40,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
                     return Unit.Value;
                 }
 
-
-
                 await svxlinkManagerConfigRepository.UpdateAsync(config);
+
+                logger.LogInformation("Starting default channel.");
 
                 return Unit.Value;
             }
@@ -48,7 +50,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
             {
                 logger.LogError(ex, "Error starting default channel.");
 
-                throw;
+                throw new Exception("Error starting default channel.",ex);
             }
         }
     }

@@ -29,11 +29,21 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries
 
         public async Task<IEnumerable<Reflector>> Handle(GetAllReflectorQuery request, CancellationToken cancellationToken)
         {
-            var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            try
+            {
+                logger.LogInformation("Récupération de tous les réflecteurs.");
 
-            logger.LogInformation("Tous les réflecteurs ont été récupérés avec succès.");
+                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
-            return config.Reflectors;
+                logger.LogInformation("Tous les réflecteurs ont été récupérés avec succès.");
+
+                return config.Reflectors;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erreur lors de la récupération de tous les réflecteurs.");
+                throw new Exception("Erreur lors de la récupération de tous les réflecteurs.", ex);
+            }
         }
     }
 }

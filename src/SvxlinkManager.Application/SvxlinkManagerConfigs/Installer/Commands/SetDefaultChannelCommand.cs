@@ -15,26 +15,34 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
 
         public async Task<Unit> Handle(SetDefaultChannelCommand request, CancellationToken cancellationToken)
         {
-            logger.LogInformation("Début de la configuration du channel par defaut.");
-
-            var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
-
-            var channel = config.SvxlinkChannels.FirstOrDefault(c => c.Id == request.ChannelId);
-            if (channel is null)
+            try
             {
-                logger.LogWarning("Channel not found.");
+                logger.LogInformation("Début de la configuration du channel par defaut.");
+
+                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+
+                var channel = config.SvxlinkChannels.FirstOrDefault(c => c.Id == request.ChannelId);
+                if (channel is null)
+                {
+                    logger.LogWarning("Channel not found.");
+
+                    return Unit.Value;
+                }
+
+                channel.IsDefault = true;
+                channel.IsTemporized = false;
+
+                await svxlinkManagerConfigRepository.UpdateAsync(config);
+
+                logger.LogInformation("Le channel par defaut a été configuré.");
 
                 return Unit.Value;
             }
-
-            channel.IsDefault = true;
-            channel.IsTemporized = false;
-
-            await svxlinkManagerConfigRepository.UpdateAsync(config);
-
-            logger.LogInformation("Le channel par defaut a été configuré.");
-
-            return Unit.Value;
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erreur de la configuration du channel par defaut.");
+                throw new Exception("Erreur de la configuration du channel par defaut.", ex);
+            }
         }
     }
 }

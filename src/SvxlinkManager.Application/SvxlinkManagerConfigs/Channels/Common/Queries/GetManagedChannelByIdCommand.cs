@@ -28,19 +28,29 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queri
 
         public async Task<ManagedChannel> Handle(GetManagedChannelByIdCommand request, CancellationToken cancellationToken)
         {
-            var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
-
-            var channel = config.GetManagedChannel(request.ChannelId);
-
-            if (channel is null)
+            try
             {
-                logger.LogError("Channel not found.");
-                throw new SvxlinkManagerException("Channel not found.");
+                logger.LogInformation("Récupération de canal managé.");
+
+                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+
+                var channel = config.GetManagedChannel(request.ChannelId);
+
+                if (channel is null)
+                {
+                    logger.LogError("Channel not found.");
+                    throw new SvxlinkManagerException("Channel not found.");
+                }
+
+                logger.LogInformation("Channel found.");
+
+                return channel;
             }
-
-            logger.LogInformation("Channel found.");
-
-            return channel;
+            catch (Exception ex)
+            {
+               logger.LogError(ex, "Error while getting managed channel.");
+                throw new Exception("");
+            }
         }
     }
 }

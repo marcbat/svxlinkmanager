@@ -32,25 +32,35 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
 
         public async Task<Unit> Handle(StopReflectorCommand request, CancellationToken cancellationToken)
         {
-            var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
-
-            var reflector = config.Reflectors.FirstOrDefault(x => x.Id == request.ReflectorId);
-
-            if (reflector is null)
+            try
             {
-                logger.LogError("Impossible d'arrêter le reflector. Le reflector n'existe pas.");
-                throw new SvxlinkManagerException("Impossible d'arrêter le reflector. Le reflector n'existe pas.");
+                logger.LogInformation("Arrêt du reflector.");
+
+                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+
+                var reflector = config.Reflectors.FirstOrDefault(x => x.Id == request.ReflectorId);
+
+                if (reflector is null)
+                {
+                    logger.LogError("Impossible d'arrêter le reflector. Le reflector n'existe pas.");
+                    throw new SvxlinkManagerException("Impossible d'arrêter le reflector. Le reflector n'existe pas.");
+                }
+
+                reflector.Enable = false;
+
+                await svxlinkManagerConfigRepository.UpdateAsync(config);
+
+                svxlinkService.StopReflector(reflector);
+
+                logger.LogInformation("Le reflector a été arrêté avec succès.");
+
+                return Unit.Value;
             }
-
-            reflector.Enable = false;
-
-            await svxlinkManagerConfigRepository.UpdateAsync(config);
-
-            svxlinkService.StopReflector(reflector);
-
-            logger.LogInformation("Le reflector a été arrêté avec succès.");
-
-            return Unit.Value;
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erreur lors de l'arrêt du reflector.");
+                throw new Exception("Erreur lors de l'arrêt du reflector.", ex);
+            }
         }
     }
 }

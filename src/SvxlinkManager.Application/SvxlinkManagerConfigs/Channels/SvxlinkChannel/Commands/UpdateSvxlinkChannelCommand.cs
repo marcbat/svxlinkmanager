@@ -27,6 +27,8 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
         {
             try
             {
+                logger.LogInformation("Mise à jour d'un svxlink channel.");
+
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
                 var soundGuid = Guid.NewGuid();

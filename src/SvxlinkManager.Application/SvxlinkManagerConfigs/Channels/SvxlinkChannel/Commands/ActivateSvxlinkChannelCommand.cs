@@ -33,11 +33,13 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
         {
             try
             {
-                SvxlinkManagerConfigAggregate config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+                logger.LogInformation("Activating Svxlink channel.");
 
-                
+                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
                 await svxlinkManagerConfigRepository.UpdateAsync(config);
+
+                logger.LogInformation("Svxlink channel activated successfully.");
 
                 logger.LogInformation("Svxlink channel activated successfully.");
 

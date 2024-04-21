@@ -1,5 +1,7 @@
 ﻿using MediatR;
 
+using Microsoft.Extensions.Logging;
+
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Domain.Entities;
 
@@ -17,17 +19,31 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
     internal class GetAllAdvanceChannelsQueryHandler : IRequestHandler<GetAllAdvanceChannelsQuery, IEnumerable<AdvanceSvxlinkChannel>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
+        private readonly ILogger<GetAllAdvanceChannelsQueryHandler> logger;
 
-        public GetAllAdvanceChannelsQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository)
+        public GetAllAdvanceChannelsQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<GetAllAdvanceChannelsQueryHandler> logger)
         {
             this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
+            this.logger = logger;
         }
 
         public async Task<IEnumerable<AdvanceSvxlinkChannel>> Handle(GetAllAdvanceChannelsQuery request, CancellationToken cancellationToken)
         {
-            var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            try
+            {
+                logger.LogInformation("Récupération de tous les canaux avancés Svxlink.");
 
-            return config.AdvanceSvxlinkChannels;
+                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+
+                logger.LogInformation("Récupération de tous les canaux avancés Svxlink réussie.");
+
+                return config.AdvanceSvxlinkChannels;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erreur lors de la récupération de tous les canaux avancés Svxlink.");
+                throw new Exception("Erreur lors de la récupération de tous les canaux avancés Svxlink.", ex) ;
+            }
         }
     }
 }

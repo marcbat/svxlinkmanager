@@ -1,5 +1,7 @@
 ﻿using MediatR;
 
+using Microsoft.Extensions.Logging;
+
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Domain.Entities;
 
@@ -11,22 +13,36 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Queries
 {
-    public record GetAllSvxlinChannelQuery(Guid ConfigId): IRequest<List<Domain.Entities.SvxlinkChannel>>;
+    public record GetAllSvxlinChannelQuery(Guid ConfigId): IRequest<IEnumerable<Domain.Entities.SvxlinkChannel>>;
 
-    internal class GetAllSvxlinChannelQueryHandler : IRequestHandler<GetAllSvxlinChannelQuery, List<Domain.Entities.SvxlinkChannel>>
+    internal class GetAllSvxlinChannelQueryHandler : IRequestHandler<GetAllSvxlinChannelQuery, IEnumerable<Domain.Entities.SvxlinkChannel>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
+        private readonly ILogger<GetAllSvxlinChannelQueryHandler> logger;
 
-        public GetAllSvxlinChannelQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository)
+        public GetAllSvxlinChannelQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<GetAllSvxlinChannelQueryHandler> logger)
         {
             this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
+            this.logger = logger;
         }
 
-        public async Task<List<Domain.Entities.SvxlinkChannel>> Handle(GetAllSvxlinChannelQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Domain.Entities.SvxlinkChannel>> Handle(GetAllSvxlinChannelQuery request, CancellationToken cancellationToken)
         {
-            var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            try
+            {
+                logger.LogInformation("Récupération de tous les canaux Svxlink.");
 
-            return config.SvxlinkChannels.ToList();
+                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+
+                logger.LogInformation("Récupération de tous les canaux Svxlink réussie.");
+
+                return config.SvxlinkChannels;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex,"Erreur lors de la récupération de tous les canaux Svxlink.");
+                throw new Exception("Erreur lors de la récupération de tous les canaux Svxlink.", ex);
+            }
         }
     }
 }

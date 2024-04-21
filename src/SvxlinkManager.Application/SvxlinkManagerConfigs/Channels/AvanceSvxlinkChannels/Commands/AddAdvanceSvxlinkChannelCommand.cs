@@ -47,6 +47,8 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
         {
             try
             {
+                logger.LogInformation("Ajout d'un nouveau canal avancé svxlink.");
+
                 SvxlinkManagerConfigAggregate config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
                 var soundGuid = Guid.NewGuid();
