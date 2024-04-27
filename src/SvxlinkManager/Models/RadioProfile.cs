@@ -36,18 +36,6 @@ namespace SvxlinkManager.Models
         [Required]
         public string Squelch { get; set; } = "2";
 
-        /// <summary>CTCSS au format SA818</summary>
-        /// <value>The rx tone.</value>
-        [Required]
-        // CTCSS au format SA818
-        public string TxCtcss { get; set; } = "0000";
-
-        /// <summary>CTCSS au format SA818</summary>
-        /// <value>The rx tone.</value>
-        [Required]
-        // CTCSS au format SA818
-        public string RxCtcss { get; set; } = "0000";
-
         [Required]
         public string Volume { get; set; } = "4";
 
@@ -67,56 +55,53 @@ namespace SvxlinkManager.Models
 
         /// <summary>CTCSS au format classique</summary>
         /// <value>The rx tone.</value>
-        [NotMapped]
-        public string TxTone { get => Ctcss.Single(c => c.Key == TxCtcss).Value; }
+        public string TxTone { get; set; }
 
         /// <summary>CTCSS au format classique</summary>
         /// <value>The rx tone.</value>
-        [NotMapped]
-        public string RxTone { get => Ctcss.Single(c => c.Key == RxCtcss).Value; }
+        public string RxTone { get;set; }
 
-        [NotMapped]
-        public Dictionary<string, string> Ctcss => new Dictionary<string, string>
+        public List<string> Ctcss => new List<string>
     {
-      {"0000", "Pas de tone" },
-      {"0001","67"},
-      {"0002","71.9"},
-      {"0003","74.4"},
-      {"0004","77"},
-      {"0005","79.7"},
-      {"0006","82.5"},
-      {"0007","85.4"},
-      {"0008","88.5"},
-      {"0009","91.5"},
-      {"0010","94.8"},
-      {"0011","97.4"},
-      {"0012","100"},
-      {"0013","103.5"},
-      {"0014","107.2"},
-      {"0015","110.9"},
-      {"0016","114.8"},
-      {"0017","118.8"},
-      {"0018","123"},
-      {"0019","127.3"},
-      {"0020","131.8"},
-      {"0021","136.5"},
-      {"0022","141.3"},
-      {"0023","146.2"},
-      {"0024","151.4"},
-      {"0025","156.7"},
-      {"0026","162.2"},
-      {"0027","167.9"},
-      {"0028","173.8"},
-      {"0029","179.9"},
-      {"0030","186.2"},
-      {"0031","192.8"},
-      {"0032","203.5"},
-      {"0033","210.7"},
-      {"0034","218.1"},
-      {"0035","225.7"},
-      {"0036","233.6"},
-      {"0037","241.8"},
-      {"0038","250.3"}
+      {"Pas de tone" },
+      { "67" },
+      { "71.9" },
+      { "74.4" },
+      { "77" },
+      { "79.7" },
+      { "82.5" },
+      { "85.4" },
+      { "88.5" },
+      { "91.5" },
+      { "94.8" },
+      { "97.4" },
+      { "100" },
+      { "103.5" },
+      { "107.2" },
+      { "110.9" },
+      { "114.8" },
+      { "118.8" },
+      { "123" },
+      { "127.3" },
+      { "131.8" },
+      { "136.5" },
+      { "141.3" },
+      { "146.2" },
+      { "151.4" },
+      { "156.7" },
+      { "162.2" },
+      { "167.9" },
+      { "173.8" },
+      { "179.9" },
+      { "186.2" },
+      { "192.8" },
+      { "203.5" },
+      { "210.7" },
+      { "218.1" },
+      { "225.7" },
+      { "233.6" },
+      { "241.8" },
+      { "250.3" }
     };
 
         [NotMapped]
@@ -179,8 +164,8 @@ namespace SvxlinkManager.Models
                 RxFequ = v.RxFequency,
                 TxFrequ = v.TxFrequency,
                 Squelch = v.Squelch,
-                TxCtcss = v.TxCtcss,
-                RxCtcss = v.RxCtCss,
+                TxTone = v.TxCtcss,
+                RxTone = v.RxCtCss,
                 Volume = v.Volume,
                 PreEmph = v.PreEmph,
                 HightPass = v.HightPass,

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Commands
 {
-    public record UpdateSvxlinkChannelCommand(Guid ConfigId, Guid ChannelId, string Name, string Host, string CallSign, int Port, string ReportCallSign, byte[] SoundFile) : IRequest<Unit>;
+    public record UpdateSvxlinkChannelCommand(Guid ConfigId, Guid ChannelId, string Name, string Host, string CallSign, string AuthKey, int Port, string ReportCallSign, byte[] SoundFile) : IRequest<Unit>;
 
     internal class UpdateSvxlinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,
                                                          ISoundRepository soundRepository,
@@ -37,7 +37,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
 
                 config.DeleteSvxlinkChannel(request.ChannelId);
 
-                var svxlinkChannel = new Domain.Entities.SvxlinkChannel(request.ChannelId, request.Name, soundGuid, request.Host, request.Port, request.CallSign, request.ReportCallSign);
+                var svxlinkChannel = new Domain.Entities.SvxlinkChannel(request.ChannelId, request.Name, soundGuid, request.Host, request.Port, request.CallSign, request.AuthKey, request.ReportCallSign);
 
                 config.AddSvxlinkChannel(svxlinkChannel);
 

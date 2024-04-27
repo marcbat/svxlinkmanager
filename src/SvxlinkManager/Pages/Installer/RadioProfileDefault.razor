@@ -39,23 +39,23 @@
   <div class="form-row">
     <div class="form-group col-md-4">
       <label>Tone CTCSS en émission</label>
-      <InputSelect @bind-Value="InstallerModel.RadioProfile.TxCtcss" class="form-control">
+      <InputSelect @bind-Value="InstallerModel.RadioProfile.TxTone" class="form-control">
         @foreach (var ct in InstallerModel.RadioProfile.Ctcss)
 {
-<option value="@ct.Key">@ct.Value</option>
+<option value="@ct">@ct</option>
 }
       </InputSelect>
-      <ValidationMessage For="@(() => InstallerModel.RadioProfile.TxCtcss)" />
+      <ValidationMessage For="@(() => InstallerModel.RadioProfile.TxTone)" />
     </div>
     <div class="form-group col-md-4">
       <label>Tone CTCSS en récéption</label>
-      <InputSelect @bind-Value="InstallerModel.RadioProfile.RxCtcss" class="form-control">
+      <InputSelect @bind-Value="InstallerModel.RadioProfile.RxTone" class="form-control">
         @foreach (var ct in InstallerModel.RadioProfile.Ctcss)
 {
-<option value="@ct.Key">@ct.Value</option>
+<option value="@ct">@ct</option>
 }
       </InputSelect>
-      <ValidationMessage For="@(() => InstallerModel.RadioProfile.RxCtcss)" />
+      <ValidationMessage For="@(() => InstallerModel.RadioProfile.RxTone)" />
     </div>
     <div class="form-group col-md-4">
       <label>Squelch</label>

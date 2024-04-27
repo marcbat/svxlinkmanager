@@ -66,7 +66,7 @@ namespace SvxlinkManager.Application.Integration.Tests
             {
                 var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(Guid.NewGuid()));
 
-                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", 80, "Fake report callSign", new byte[] { 0x01, 0x02, 0x03 }));
+                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", "Fake Password", 80, "Fake report callSign", new byte[] { 0x01, 0x02, 0x03 }));
 
                 var svxlinkChannel = await mediatr.Send(new GetSvxlinkChannelByIdQuery(configGuid, channelId));
 
@@ -96,9 +96,9 @@ namespace SvxlinkManager.Application.Integration.Tests
             {
                 var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(Guid.NewGuid()));
 
-                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", 80, "Fake report callSign", new byte[] { 0x01, 0x02, 0x03 }));
+                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", "Fake password", 80, "Fake report callSign", new byte[] { 0x01, 0x02, 0x03 }));
 
-                await mediatr.Send(new UpdateSvxlinkChannelCommand(configGuid, channelId, "Fake channel update", "Fake Host update", "Fake callSign update", 8080, "Fake report callSign update", new byte[] { 0x01, 0x02, 0x03 }));
+                await mediatr.Send(new UpdateSvxlinkChannelCommand(configGuid, channelId, "Fake channel update", "Fake Host update", "Fake callSign update", "Fake password", 8080, "Fake report callSign update", new byte[] { 0x01, 0x02, 0x03 }));
 
                 var svxlinkChannel = await mediatr.Send(new GetSvxlinkChannelByIdQuery(configGuid, channelId));
 
@@ -128,7 +128,7 @@ namespace SvxlinkManager.Application.Integration.Tests
             {
                 var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(Guid.NewGuid()));
 
-                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", 80, "Fake report callSign", new byte[] { 0x01, 0x02, 0x03 }));
+                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", "Fake Password", 80, "Fake report callSign", new byte[] { 0x01, 0x02, 0x03 }));
 
                 await mediatr.Send(new DeleteSvxlinkChannelCommand(configGuid, channelId));
 

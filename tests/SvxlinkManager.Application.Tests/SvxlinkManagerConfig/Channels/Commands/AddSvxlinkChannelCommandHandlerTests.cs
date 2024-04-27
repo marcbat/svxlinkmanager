@@ -48,11 +48,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfig.Channels.Commands.Test
             var name = "Test Channel";
             var host = "localhost";
             var callSign = "ABCD";
+            var password = "fake password";
             var port = 1234;
             var reportCallSign = "EFGH";
             var soundFile = new byte[] { 0x01, 0x02, 0x03 };
 
-            var command = new AddSvxlinkChannelCommand(configId, name, host, callSign, port, reportCallSign, soundFile);
+            var command = new AddSvxlinkChannelCommand(configId, name, host, callSign, password, port, reportCallSign, soundFile);
 
             var config = SvxlinkManagerConfigAggregate.Create(Guid.NewGuid());
             _svxlinkManagerConfigRepository.GetConfigAsync(configId).Returns(config);
@@ -87,11 +88,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfig.Channels.Commands.Test
             var name = "Test Channel";
             var host = "localhost";
             var callSign = "ABCD";
+            var password = "fake password";
             var port = 1234;
             var reportCallSign = "EFGH";
             var soundFile = new byte[] { 0x01, 0x02, 0x03 };
 
-            var command = new AddSvxlinkChannelCommand(configId, name, host, callSign, port, reportCallSign, soundFile);
+            var command = new AddSvxlinkChannelCommand(configId, name, host, callSign, password, port, reportCallSign, soundFile);
 
             _svxlinkManagerConfigRepository.GetConfigAsync(configId).Throws(new Exception("Test Exception"));
 

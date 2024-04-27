@@ -25,7 +25,7 @@ namespace SvxlinkManager.Pages.RadioProfile
 
     override protected async Task HandleValidSubmitAsync()
     {
-      await Mediatr.Send(new UpdateRadioProfilCommand(Options.Value.ConfigId, RadioProfile.Id, RadioProfile.Name, RadioProfile.RxFequ, RadioProfile.TxFrequ, RadioProfile.Squelch, RadioProfile.TxCtcss, RadioProfile.RxCtcss, RadioProfile.Volume, RadioProfile.PreEmph, RadioProfile.HightPass, RadioProfile.LowPass, RadioProfile.SquelchDetection));
+      await Mediatr.Send(new UpdateRadioProfilCommand(Options.Value.ConfigId, RadioProfile.Id, RadioProfile.Name, RadioProfile.RxFequ, RadioProfile.TxFrequ, RadioProfile.Squelch, RadioProfile.TxTone, RadioProfile.RxTone, RadioProfile.Volume, RadioProfile.PreEmph, RadioProfile.HightPass, RadioProfile.LowPass, RadioProfile.SquelchDetection));
 
       await ShowSuccessToastAsync("Modifié", $"le profil radio {RadioProfile.Name} a bien été modifié.");
 

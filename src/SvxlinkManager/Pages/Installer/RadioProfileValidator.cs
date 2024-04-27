@@ -19,9 +19,6 @@ namespace SvxlinkManager.Pages.Installer
         .Matches(new Regex("^[0-9]{3}.[0-9]{3}")).WithMessage("Le format de fréquence Tx n'est pas valide.");
 
       RuleFor(r => r.Squelch).NotEmpty();
-      RuleFor(r => r.TxCtcss).Must((r, t) => r.Ctcss.Keys.Contains(t)).WithMessage("Le Tx Ctcss n'est pas valide.");
-      RuleFor(r => r.RxCtcss).Must((r, t) => r.Ctcss.Keys.Contains(t)).WithMessage("Le Rx Ctcss n'est pas valide.");
-
       RuleFor(r => r.Volume).NotEmpty();
       RuleFor(r => r.PreEmph).NotEmpty();
       RuleFor(r => r.HightPass).NotEmpty();
