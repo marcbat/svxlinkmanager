@@ -95,6 +95,8 @@ namespace SvxlinkManager.Infrastructure.Services
             if (runAs != null)
                 parameters.Add($"--runasuser={runAs}");
 
+            logger.LogInformation($"Command: svxlink {string.Join(" ", parameters)}");
+
             shell = new Process()
             {
                 StartInfo = new ProcessStartInfo

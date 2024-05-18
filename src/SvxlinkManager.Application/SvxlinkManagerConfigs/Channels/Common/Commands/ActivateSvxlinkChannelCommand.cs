@@ -86,7 +86,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
                 ReplaceSoundFile(channel);
 
                 // Lance svxlink
-                svxlinkService.StartSvxlink(channel);
+                svxlinkService.StartSvxlink(channel, pidFile: "/var/run/svxlink.pid", runAs: "root", configFile: $"{applicationPath}/SvxlinkConfig/svxlink.conf");
                 logger.LogInformation($"Le channel {channel.Name} est connecté.");
 
                 return Unit.Value;
