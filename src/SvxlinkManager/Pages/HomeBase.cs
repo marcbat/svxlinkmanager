@@ -345,6 +345,12 @@ namespace SvxlinkManager.Pages
 
         protected async Task Activate(ChangeEventArgs e)
         {
+            if(e.Value.ToString() == "0")
+            {
+                await Mediatr.Send(new DisconnectChannelCommand());
+                return;
+            }
+
             await Mediatr.Send(new ActivateSvxlinkChannelCommand(Options.Value.ConfigId, Guid.Parse(e.Value.ToString())));
         }
 

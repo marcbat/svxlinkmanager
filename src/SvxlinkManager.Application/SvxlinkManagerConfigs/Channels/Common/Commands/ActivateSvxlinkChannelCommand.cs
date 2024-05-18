@@ -29,6 +29,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
         {
             try
             {
+                
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
                 var channel = config.SvxlinkChannels.SingleOrDefault(x => x.Id == request.IdSvxlinkChannel) ?? throw new Exception("Svxlink Channel non trouvé.");
                 var url = new UriBuilder("http", channel.Host, channel.Port).Uri;
