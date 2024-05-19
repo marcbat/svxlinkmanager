@@ -4,19 +4,20 @@ namespace SvxlinkManager.Application.Interfaces
 {
     public interface ISvxlinkServiceBase
     {
-        List<Node> Nodes { get; set; }
 
         event Action<ChannelBase> Connected;
-        event Action Disconnected;
+        event Action<ChannelBase> Disconnected;
         event Action<string, string> Error;
         event Action<Node> NodeConnected;
         event Action<Node> NodeDisconnected;
         event Action<Node> NodeRx;
         event Action<Node> NodeTx;
 
+        IReadOnlyList<Node> Nodes { get; } 
+
         string Status { get; }
 
-        Guid? ActiveChannel { get; }
+        ChannelBase? ActiveChannel { get; }
 
         void StartReflector(Reflector reflector, bool runAsDaemon = false, string logFile = null, string configFile = null, string pidFile = null, string runAs = null);
 

@@ -17,6 +17,7 @@ namespace SvxlinkManager.Infrastructure.Services
     {
         private readonly ILogger<SvxlinkServiceBase> logger = logger;
         private Process? shell;
+        private readonly List<Node> nodes = [];
         private readonly Dictionary<Guid, Process> reflectorshells = new();
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace SvxlinkManager.Infrastructure.Services
         /// <summary>
         /// Occurs when svxlink is disconnected
         /// </summary>
-        public event Action? Disconnected;
+        public event Action<ChannelBase?>? Disconnected;
 
         /// <summary>
         /// Occurs when a new node join the channel
@@ -54,18 +55,14 @@ namespace SvxlinkManager.Infrastructure.Services
         /// </summary>
         public event Action<string, string>? Error;
 
-        public Guid? ActiveChannel { get; private set; }
+        public IReadOnlyList<Node> Nodes { get => nodes; }
+
+        public ChannelBase? ActiveChannel { get; private set; }
 
         public string Status { get; private set; }
 
         protected void OnError(string title, string body) =>
           Error?.Invoke(title, body);
-
-        /// <summary>
-        /// List of connected nodes
-        /// </summary>
-        /// <value>connected nodes</value>
-        public List<Node> Nodes { get; set; } = new List<Node>();
 
         /// <summary>
         /// Starts svxlink.
@@ -141,8 +138,8 @@ namespace SvxlinkManager.Infrastructure.Services
 
             if (s.Contains("Connected nodes"))
             {
-                Nodes.Clear();
-                s.Split(':')[2].Split(',').ToList().ForEach(n => Nodes.Add(new Node(n)));
+                s.Split(':')[2].Split(',').ToList().ForEach(n => nodes.Add(new Node(n)));
+                
                 Connected?.Invoke(channel);
                 return;
             }
@@ -150,7 +147,7 @@ namespace SvxlinkManager.Infrastructure.Services
             if (s.Contains("Node left"))
             {
                 var node = new Node(s.Split(":")[2]);
-                Nodes.Remove(node);
+                nodes.Remove(node);
                 NodeDisconnected?.Invoke(node);
                 return;
             }
@@ -158,23 +155,21 @@ namespace SvxlinkManager.Infrastructure.Services
             if (s.Contains("Node joined"))
             {
                 var node = new Node(s.Split(":")[2]);
-                Nodes.Add(node);
+                nodes.Add(node);
                 NodeConnected?.Invoke(node);
                 return;
             }
 
             if (s.Contains("Talker start"))
             {
-                var node = Nodes.Single(nx => nx.Equals(new Node(s.Split(":")[2])));
-                node.ClassName = "node node-tx";
+                var node = new Node(s.Split(":")[2]);
                 NodeTx?.Invoke(node);
                 return;
             }
 
             if (s.Contains("Talker stop"))
             {
-                var node = Nodes.Single(nx => nx.Equals(new Node(s.Split(":")[2])));
-                node.ClassName = "node";
+                var node = new Node(s.Split(":")[2]);
                 NodeRx?.Invoke(node);
                 return;
             }
@@ -200,8 +195,8 @@ namespace SvxlinkManager.Infrastructure.Services
 
             shell?.Dispose();
 
-            Nodes.Clear();
-            Disconnected?.Invoke();
+            nodes.Clear();
+            Disconnected?.Invoke(ActiveChannel);
         }
 
         /// <summary>

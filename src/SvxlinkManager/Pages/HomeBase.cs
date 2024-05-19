@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
-using Newtonsoft.Json.Linq;
-
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queries;
@@ -12,6 +10,7 @@ using SvxlinkManager.Pages.Shared;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages
@@ -26,9 +25,13 @@ namespace SvxlinkManager.Pages
 
             await LoadChannelsAsync();
 
+            var nodes = await Mediatr.Send(new GetAllNodeQuery());
+
+            Nodes = nodes.Select(n => (Models.Node)n).ToList();
+
             SvxLinkService.Connected += SvxLinkService_ConnectedAsync;
 
-            SvxLinkService.Disconnected += SvxLinkService_Disconnected;
+            SvxLinkService.Disconnected += SvxLinkService_DisconnectedAsync;
 
             SvxLinkService.NodeConnected += SvxLinkService_NodeConnected;
 
@@ -244,6 +247,7 @@ namespace SvxlinkManager.Pages
             try
             {
                 await InvokeAsync(() => StateHasChanged());
+
                 await ShowInfoToastAsync(n.Name, "A rejoint le salon.");
             }
             catch (Exception e)
@@ -252,13 +256,19 @@ namespace SvxlinkManager.Pages
             }
         }
 
-        private void SvxLinkService_Disconnected()
+        private async void SvxLinkService_DisconnectedAsync(Domain.Entities.ChannelBase? channel)
         {
             try
             {
                 CurrentTxNode = null;
                 Scanning = false;
                 InvokeAsync(() => StateHasChanged());
+
+                if (channel == null)
+                    return;
+
+                await ShowInfoToastAsync(channel.Name, $"Deconnection du salon {channel.Name}");
+
             }
             catch (Exception e)
             {
@@ -291,7 +301,7 @@ namespace SvxlinkManager.Pages
         {
             SvxLinkService.Connected -= SvxLinkService_ConnectedAsync;
 
-            SvxLinkService.Disconnected -= SvxLinkService_Disconnected;
+            SvxLinkService.Disconnected -= SvxLinkService_DisconnectedAsync;
 
             SvxLinkService.NodeConnected -= SvxLinkService_NodeConnected;
 
@@ -328,14 +338,9 @@ namespace SvxlinkManager.Pages
             get => SvxLinkService.Status;
         }
 
-        public Guid? ActiveChannel
-        {
-            get => SvxLinkService.ActiveChannel;
-        }
-
         public string Channel
         {
-            get => channel; 
+            get => channel;
             set
             {
                 channel = value;
@@ -345,7 +350,7 @@ namespace SvxlinkManager.Pages
 
         protected async Task Activate(ChangeEventArgs e)
         {
-            if(e.Value.ToString() == "0")
+            if (e.Value.ToString() == "0")
             {
                 await Mediatr.Send(new DisconnectChannelCommand());
                 return;
@@ -360,10 +365,8 @@ namespace SvxlinkManager.Pages
 
         public bool Scanning { get; set; } = false;
 
-        public List<Models.Node> Nodes { get; set; } = new List<Models.Node>();
-        //{
-        //    get => SvxLinkService.Nodes.OrderBy(n => n.Name).ToList();
-        //    set => SvxLinkService.Nodes = value;
-        //}
+        public List<Models.Node> Nodes { get; private set; }
+
+
     }
 }

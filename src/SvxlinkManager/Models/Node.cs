@@ -14,12 +14,13 @@
 
         public override bool Equals(object obj) => Name.Trim() == ((Node)obj).Name.Trim();
 
+        public override int GetHashCode() => Name.Trim().GetHashCode();
+
         public static implicit operator Node(Domain.Entities.Node node)
         {
             return new Node
             {
-                Name = node.Name,
-                ClassName = node.ClassName
+                Name = node.Name
             };
         }
     }
