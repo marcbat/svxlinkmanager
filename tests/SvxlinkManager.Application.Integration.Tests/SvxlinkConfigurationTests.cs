@@ -340,8 +340,8 @@ namespace SvxlinkManager.Application.Integration.Tests
                 var rxFrequency = "123.45";
                 var txFrequency = "543.21";
                 var squelch = "5";
-                var txCtcss = "Fake CTCSS";
-                var rxCtCss = "Fake CTCSS";
+                var txCtcss = "67";
+                var rxCtCss = "67";
                 var volume = "10";
                 var preEmph = "0.5";
                 var highPass = "100";
@@ -394,9 +394,9 @@ namespace SvxlinkManager.Application.Integration.Tests
             {
                 var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(Guid.NewGuid()));
 
-                var radioProfilId = await mediatr.Send(new AddRadioProfilCommand(configGuid, "Fake Name", "123.45", "543.21", "5", "Fake CTCSS", "Fake CTCSS", "10", "0.5", "100", "10000", "true"));
+                var radioProfilId = await mediatr.Send(new AddRadioProfilCommand(configGuid, "Fake Name", "123.45", "543.21", "5", "67", "67", "10", "0.5", "100", "10000", "true"));
 
-                await mediatr.Send(new UpdateRadioProfilCommand(configGuid, radioProfilId, "Fake Name Update", "111.11", "222.22", "6", "Fake CTCSS Update", "Fake CTCSS Update", "20", "1.0", "200", "20000", "false"));
+                await mediatr.Send(new UpdateRadioProfilCommand(configGuid, radioProfilId, "Fake Name Update", "111.11", "222.22", "6", "77", "77", "20", "1.0", "200", "20000", "false"));
 
                 var radioProfil = await mediatr.Send(new GetRadioProfilByIdQuery(configGuid, radioProfilId));
 
@@ -405,8 +405,8 @@ namespace SvxlinkManager.Application.Integration.Tests
                 radioProfil.RxFequency.Should().Be("111.11");
                 radioProfil.TxFrequency.Should().Be("222.22");
                 radioProfil.Squelch.Should().Be("6");
-                radioProfil.TxCtcss.Should().Be("Fake CTCSS Update");
-                radioProfil.RxCtCss.Should().Be("Fake CTCSS Update");
+                radioProfil.TxCtcss.Should().Be("77");
+                radioProfil.RxCtCss.Should().Be("77");
                 radioProfil.Volume.Should().Be("20");
                 radioProfil.PreEmph.Should().Be("1.0");
                 radioProfil.HightPass.Should().Be("200");
@@ -430,7 +430,7 @@ namespace SvxlinkManager.Application.Integration.Tests
             {
                 var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(Guid.NewGuid()));
 
-                var radioProfilId = await mediatr.Send(new AddRadioProfilCommand(configGuid, "Fake Name", "123.45", "543.21", "5", "Fake CTCSS", "Fake CTCSS", "10", "0.5", "100", "10000", "true"));
+                var radioProfilId = await mediatr.Send(new AddRadioProfilCommand(configGuid, "Fake Name", "123.45", "543.21", "5", "67", "67", "10", "0.5", "100", "10000", "true"));
 
                 await mediatr.Send(new DeleteRadioProfilCommand(configGuid, radioProfilId));
 
