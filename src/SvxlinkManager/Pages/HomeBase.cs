@@ -27,21 +27,21 @@ namespace SvxlinkManager.Pages
 
             var nodes = await Mediatr.Send(new GetAllNodeQuery());
 
-            Nodes = nodes.Select(n => (Models.Node)n).ToList();
+            nodes.ToList().ForEach(n => Nodes.Add(n));
 
-            SvxLinkService.Connected += SvxLinkService_ConnectedAsync;
+            SvxLinkActionService.Connected += SvxLinkService_ConnectedAsync;
 
-            SvxLinkService.Disconnected += SvxLinkService_DisconnectedAsync;
+            SvxLinkActionService.Disconnected += SvxLinkService_DisconnectedAsync;
 
-            SvxLinkService.NodeConnected += SvxLinkService_NodeConnected;
+            SvxLinkActionService.NodeConnected += SvxLinkService_NodeConnected;
 
-            SvxLinkService.NodeDisconnected += SvxLinkService_NodeDisconnected;
+            SvxLinkActionService.NodeDisconnected += SvxLinkService_NodeDisconnected;
 
-            SvxLinkService.NodeTx += SvxLinkService_NodeTx;
+            SvxLinkActionService.NodeTx += SvxLinkService_NodeTx;
 
-            SvxLinkService.NodeRx += SvxLinkService_NodeRx;
+            SvxLinkActionService.NodeRx += SvxLinkService_NodeRx;
 
-            SvxLinkService.Error += SvxLinkService_Error;
+            SvxLinkActionService.Error += SvxLinkService_Error;
 
             //SvxLinkService.StopTempo += SvxLinkService_StopTempo;
 
@@ -233,6 +233,8 @@ namespace SvxlinkManager.Pages
         {
             try
             {
+                Nodes.Remove(n);
+
                 await InvokeAsync(() => StateHasChanged());
                 await ShowInfoToastAsync(n.Name, "A quitté le salon.");
             }
@@ -246,6 +248,8 @@ namespace SvxlinkManager.Pages
         {
             try
             {
+                Nodes.Add(n);
+
                 await InvokeAsync(() => StateHasChanged());
 
                 await ShowInfoToastAsync(n.Name, "A rejoint le salon.");
@@ -260,6 +264,8 @@ namespace SvxlinkManager.Pages
         {
             try
             {
+                Nodes.Clear();
+
                 CurrentTxNode = null;
                 Scanning = false;
                 InvokeAsync(() => StateHasChanged());
@@ -299,19 +305,19 @@ namespace SvxlinkManager.Pages
 
         public void Dispose()
         {
-            SvxLinkService.Connected -= SvxLinkService_ConnectedAsync;
+            SvxLinkActionService.Connected -= SvxLinkService_ConnectedAsync;
 
-            SvxLinkService.Disconnected -= SvxLinkService_DisconnectedAsync;
+            SvxLinkActionService.Disconnected -= SvxLinkService_DisconnectedAsync;
 
-            SvxLinkService.NodeConnected -= SvxLinkService_NodeConnected;
+            SvxLinkActionService.NodeConnected -= SvxLinkService_NodeConnected;
 
-            SvxLinkService.NodeDisconnected -= SvxLinkService_NodeDisconnected;
+            SvxLinkActionService.NodeDisconnected -= SvxLinkService_NodeDisconnected;
 
-            SvxLinkService.NodeTx -= SvxLinkService_NodeTx;
+            SvxLinkActionService.NodeTx -= SvxLinkService_NodeTx;
 
-            SvxLinkService.NodeRx -= SvxLinkService_NodeRx;
+            SvxLinkActionService.NodeRx -= SvxLinkService_NodeRx;
 
-            SvxLinkService.Error -= SvxLinkService_Error;
+            SvxLinkActionService.Error -= SvxLinkService_Error;
 
             //SvxLinkService.StopTempo -= SvxLinkService_StopTempo;
 
@@ -329,14 +335,9 @@ namespace SvxlinkManager.Pages
         }
 
         [Inject]
-        public ISvxlinkServiceBase SvxLinkService { get; set; }
+        public ISvxlinkActionService SvxLinkActionService { get; set; }
 
         public Models.Node CurrentTxNode { get; set; }
-
-        public string Status
-        {
-            get => SvxLinkService.Status;
-        }
 
         public string Channel
         {
@@ -365,7 +366,7 @@ namespace SvxlinkManager.Pages
 
         public bool Scanning { get; set; } = false;
 
-        public List<Models.Node> Nodes { get; private set; }
+        public List<Models.Node> Nodes { get; private set; } = [];
 
 
     }

@@ -12,7 +12,9 @@ namespace SvxlinkManager.Infrastructure
             services.AddSingleton<ISoundRepository, SoundRepository>();
             services.AddSingleton<ISvxlinkManagerConfigRepository, SvxlinkManagerConfigRepository>();
 
-            services.AddSingleton<ISvxlinkServiceBase, SvxlinkServiceBase>();
+            services.AddSingleton<SvxlinkServiceBase>();
+            services.AddSingleton<ISvxlinkServiceBase>(sp => sp.GetRequiredService<SvxlinkServiceBase>());
+            services.AddSingleton<ISvxlinkActionService>(sp => sp.GetRequiredService<SvxlinkServiceBase>());
             services.AddSingleton<ISa818Service, Sa818Service>();
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<IIniService, IniService>();

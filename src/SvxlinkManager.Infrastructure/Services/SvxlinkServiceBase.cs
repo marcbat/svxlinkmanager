@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.Extensions.Logging;
 
-using Microsoft.Extensions.Logging;
-
-
-using System.IO;
-using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Application.Interfaces;
+using SvxlinkManager.Domain.Entities;
+
+using System.Diagnostics;
+using System.Text;
 
 namespace SvxlinkManager.Infrastructure.Services
 {
-    public class SvxlinkServiceBase(ILogger<SvxlinkServiceBase> logger) : ISvxlinkServiceBase
+    public class SvxlinkServiceBase(ILogger<SvxlinkServiceBase> logger) : ISvxlinkServiceBase, ISvxlinkActionService
     {
         private readonly ILogger<SvxlinkServiceBase> logger = logger;
         private Process? shell;
@@ -138,8 +133,13 @@ namespace SvxlinkManager.Infrastructure.Services
 
             if (s.Contains("Connected nodes"))
             {
-                s.Split(':')[2].Split(',').ToList().ForEach(n => nodes.Add(new Node(n)));
-                
+                s.Split(':')[2].Split(',').ToList().ForEach(n =>
+                {
+                    var node = new Node(n);
+                    nodes.Add(node);
+                    NodeConnected?.Invoke(node);
+                });
+
                 Connected?.Invoke(channel);
                 return;
             }

@@ -57,9 +57,11 @@
         get
         {
             if (Nodes.Any())
-                return $"{Nodes.Count} {Status}";
+                //return $"{Nodes.Count} {Status}";
+                return $"{Nodes.Count}";
             else
-                return $"{Status}";
+                //return $"{Status}";
+                return $"";
         }
     }
     
