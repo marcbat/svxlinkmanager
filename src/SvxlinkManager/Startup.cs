@@ -25,6 +25,7 @@ using SvxlinkManager.Application.SvxlinkManagerConfigs;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands;
 using SvxlinkManager.Infrastructure;
+using SvxlinkManager.Infrastructure.Services;
 using SvxlinkManager.Service;
 using SvxlinkManager.ServiceMockup;
 using SvxlinkManager.Telemetry;

@@ -28,7 +28,7 @@ namespace SvxlinkManager.Infrastructure.Services
         /// <summary>
         /// Occurs when a new node join the channel
         /// </summary>
-        public event Action<Node>? NodeConnected;
+        public event Action<Node, bool>? NodeConnected;
 
         /// <summary>
         /// Occurs when a node quit the channel
@@ -137,7 +137,10 @@ namespace SvxlinkManager.Infrastructure.Services
                 {
                     var node = new Node(n);
                     nodes.Add(node);
-                    NodeConnected?.Invoke(node);
+
+                    ActiveChannel = channel;
+
+                    NodeConnected?.Invoke(node, false);
                 });
 
                 Connected?.Invoke(channel);
@@ -156,7 +159,7 @@ namespace SvxlinkManager.Infrastructure.Services
             {
                 var node = new Node(s.Split(":")[2]);
                 nodes.Add(node);
-                NodeConnected?.Invoke(node);
+                NodeConnected?.Invoke(node, true);
                 return;
             }
 
@@ -196,6 +199,9 @@ namespace SvxlinkManager.Infrastructure.Services
             shell?.Dispose();
 
             nodes.Clear();
+
+            ActiveChannel = null;
+
             Disconnected?.Invoke(ActiveChannel);
         }
 

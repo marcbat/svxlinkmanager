@@ -29,6 +29,8 @@ namespace SvxlinkManager.Pages
 
             nodes.ToList().ForEach(n => Nodes.Add(n));
 
+            ActiveChannelId = (await Mediatr.Send(new GetActiveChannelQuery()))?.Id;
+
             SvxLinkActionService.Connected += SvxLinkService_ConnectedAsync;
 
             SvxLinkActionService.Disconnected += SvxLinkService_DisconnectedAsync;
@@ -169,7 +171,9 @@ namespace SvxlinkManager.Pages
             }
         }
 
-        public List<ManagedChannel> Channels { get; set; } = new List<ManagedChannel>();
+        public Guid? ActiveChannelId { get; private set; }
+
+        public List<ManagedChannel> Channels { get; set; } = [];
 
         private async Task LoadChannelsAsync()
         {
@@ -244,7 +248,7 @@ namespace SvxlinkManager.Pages
             }
         }
 
-        private async void SvxLinkService_NodeConnected(Domain.Entities.Node n)
+        private async void SvxLinkService_NodeConnected(Domain.Entities.Node n, bool notify)
         {
             try
             {
@@ -252,7 +256,8 @@ namespace SvxlinkManager.Pages
 
                 await InvokeAsync(() => StateHasChanged());
 
-                await ShowInfoToastAsync(n.Name, "A rejoint le salon.");
+                if (notify)
+                    await ShowInfoToastAsync(n.Name, "A rejoint le salon.");
             }
             catch (Exception e)
             {

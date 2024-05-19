@@ -13,7 +13,7 @@ namespace SvxlinkManager.Application.Interfaces
         event Action<ChannelBase> Connected;
         event Action<ChannelBase> Disconnected;
         event Action<string, string> Error;
-        event Action<Node> NodeConnected;
+        event Action<Node, bool> NodeConnected;
         event Action<Node> NodeDisconnected;
         event Action<Node> NodeRx;
         event Action<Node> NodeTx;

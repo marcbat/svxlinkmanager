@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queries
 {
-    public record GetManagedChannelByIdCommand(Guid ConfigId, Guid ChannelId): IRequest<ManagedChannel>;
+    public record GetManagedChannelByIdQuery(Guid ConfigId, Guid ChannelId): IRequest<ManagedChannel>;
 
-    internal class GetManagedChannelByIdCommandHandler : IRequestHandler<GetManagedChannelByIdCommand, ManagedChannel>
+    internal class GetManagedChannelByIdCommandHandler : IRequestHandler<GetManagedChannelByIdQuery, ManagedChannel>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetManagedChannelByIdCommandHandler> logger;
@@ -26,7 +26,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queri
             this.logger = logger;
         }
 
-        public async Task<ManagedChannel> Handle(GetManagedChannelByIdCommand request, CancellationToken cancellationToken)
+        public async Task<ManagedChannel> Handle(GetManagedChannelByIdQuery request, CancellationToken cancellationToken)
         {
             try
             {
