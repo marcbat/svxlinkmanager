@@ -134,7 +134,7 @@ namespace SvxlinkManager.Application.Integration.Tests
 
                 Func<Task> act = async() => await mediatr.Send(new GetSvxlinkChannelByIdQuery(configGuid, channelId));
 
-                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de r�cup�rer le svxlink channel.");
+                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de récupérer le svxlink channel.");
             }
             catch (Exception ex)
             {
@@ -235,7 +235,7 @@ namespace SvxlinkManager.Application.Integration.Tests
 
                 Func<Task> act = async () => await mediatr.Send(new GetEchoLinkChannelByIdQuery(configGuid, channelId));
 
-                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de r�cup�rer le echolink channel.");
+                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de récupérer le echolink channel.");
             }
             catch (Exception ex)
             {
@@ -316,7 +316,7 @@ namespace SvxlinkManager.Application.Integration.Tests
 
                 Func<Task> act = async () => await mediatr.Send(new GetReflectorByIdQuery(configGuid, reflectorId));
 
-                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de r�cup�rer le r�flecteur.");
+                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de récupérer le réflecteur.");
             }
             catch (Exception ex)
             {
@@ -436,7 +436,7 @@ namespace SvxlinkManager.Application.Integration.Tests
 
                 Func<Task> act = async () => await mediatr.Send(new GetRadioProfilByIdQuery(configGuid, radioProfilId));
 
-                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de r�cup�rer le profil radio.");
+                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de récupérer le profil radio.");
             }
             catch (Exception ex)
             {
@@ -547,7 +547,7 @@ namespace SvxlinkManager.Application.Integration.Tests
 
                 Func<Task> act = async () => await mediatr.Send(new GetAvanceSvxlinkChannelByIdQuery(configGuid, channelId));
 
-                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de r�cup�rer le canal avanc� Svxlink.");
+                await act.Should().ThrowAsync<SvxlinkManagerException>().WithMessage("Impossible de récupérer le canal avancé Svxlink.");
             }
             catch (Exception ex)
             {
