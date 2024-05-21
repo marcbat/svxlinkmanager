@@ -85,7 +85,6 @@ steps:
     tagSource: 'userSpecifiedTag'
     tag: '$(GitVersion.FullSemVer)'
     title: 'SvxlinkManager $(GitVersion.FullSemVer)'
-    releaseNotesSource: 'inline'
     isPreRelease: true
-    changeLogCompareToRelease: 'lastFullRelease'
+    changeLogCompareToRelease: 'lastNonDraftRelease'
     changeLogType: 'commitBased'
