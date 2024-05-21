@@ -55,3 +55,11 @@ steps:
     command: 'test'
     projects: '**/*[Tt]ests/*.csproj'
     arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Publish
+  inputs:
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)  -p:PublishProfile=FolderProfile'
+    zipAfterPublish: True
