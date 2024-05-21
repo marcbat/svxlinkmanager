@@ -63,3 +63,14 @@ steps:
     publishWebProjects: True
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)  -p:PublishProfile=FolderProfile'
     zipAfterPublish: True
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish main artifact'
+  condition: succeededOrFailed()
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish installer artifact'
+  inputs:
+    PathtoPublish: install
+    ArtifactName: installer
+  condition: succeededOrFailed()
