@@ -10,10 +10,56 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- task: gittools.gittools.setup-gitversion-task.gitversion/setup@0
+  displayName: gitversion/setup
+  inputs:
+    versionSpec: 5.x
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: gittools.gittools.execute-gitversion-task.gitversion/execute@0
+  displayName: gitversion/execute
+
+- task: bleddynrichards.Assembly-Info-Task.Assembly-Info-NetCore.Assembly-Info-NetCore@2
+  displayName: 'Set Assembly Manifest Data'
+  inputs:
+    InsertAttributes: true
+    Authors: HB9GXP
+    VersionNumber: '$(GitVersion.MajorMinorPatch)'
+    FileVersionNumber: '$(GitVersion.MajorMinorPatch)'
+    InformationalVersion: '$(GitVersion.SemVer)'
+
+- task: qetza.replacetokens.replacetokens-task.replacetokens@3
+  displayName: 'Inject version in **/*.sh'
+  inputs:
+    rootDirectory: install
+    targetFiles: '*.sh'
+    tokenPrefix: '__'
+    tokenSuffix: '__'
+
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    command: 'install'
+    workingDir: 'src/SvxlinkManager'
+    verbose: true
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: 'test'
+    projects: '**/*[Tt]ests/*.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Publish
+  inputs:
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)  -p:PublishProfile=FolderProfile'
+    zipAfterPublish: True
