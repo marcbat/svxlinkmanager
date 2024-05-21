@@ -14,3 +14,15 @@ steps:
   displayName: gitversion/setup
   inputs:
     versionSpec: 5.x
+
+- task: gittools.gittools.execute-gitversion-task.gitversion/execute@0
+  displayName: gitversion/execute
+
+- task: bleddynrichards.Assembly-Info-Task.Assembly-Info-NetCore.Assembly-Info-NetCore@2
+  displayName: 'Set Assembly Manifest Data'
+  inputs:
+    InsertAttributes: true
+    Authors: HB9GXP
+    VersionNumber: '$(GitVersion.MajorMinorPatch)'
+    FileVersionNumber: '$(GitVersion.MajorMinorPatch)'
+    InformationalVersion: '$(GitVersion.SemVer)'
