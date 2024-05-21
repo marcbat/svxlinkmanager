@@ -26,3 +26,24 @@ steps:
     VersionNumber: '$(GitVersion.MajorMinorPatch)'
     FileVersionNumber: '$(GitVersion.MajorMinorPatch)'
     InformationalVersion: '$(GitVersion.SemVer)'
+
+- task: qetza.replacetokens.replacetokens-task.replacetokens@3
+  displayName: 'Inject version in **/*.sh'
+  inputs:
+    rootDirectory: install
+    targetFiles: '*.sh'
+    tokenPrefix: '__'
+    tokenSuffix: '__'
+
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    projects: '$(Parameters.RestoreBuildProjects)'
+
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    command: 'install'
+    workingDir: 'src/SvxlinkManager'
+    verbose: true
