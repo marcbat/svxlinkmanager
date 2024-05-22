@@ -75,14 +75,3 @@ steps:
     PathtoPublish: install
     ArtifactName: installer
   condition: succeededOrFailed()
-
-- task: GitHubRelease@1
-  inputs:
-    gitHubConnection: 'GitHub Connection'
-    repositoryName: '$(Build.Repository.Name)'
-    action: 'create'
-    target: '$(GitVersion.MajorMinorPatch)'
-    tagSource: 'userSpecifiedTag'
-    tag: '$(GitVersion.FullSemVer)'
-    title: 'SvxlinkManager $(GitVersion.FullSemVer)'
-    isPreRelease: true
