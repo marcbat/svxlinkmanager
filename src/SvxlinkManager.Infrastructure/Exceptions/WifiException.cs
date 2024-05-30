@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Exceptions
+namespace SvxlinkManager.Infrastructure.Exceptions
 {
   public class WifiException : Exception
   {

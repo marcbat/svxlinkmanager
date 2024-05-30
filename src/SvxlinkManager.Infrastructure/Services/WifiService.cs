@@ -1,8 +1,9 @@
 ﻿
 using Microsoft.Extensions.Logging;
 
-using SvxlinkManager.Exceptions;
-using SvxlinkManager.Pages.Wifi;
+using SvxlinkManager.Application.Interfaces;
+using SvxlinkManager.Domain.Entities;
+using SvxlinkManager.Infrastructure.Exceptions;
 
 using System;
 using System.Collections.Generic;
@@ -10,22 +11,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace SvxlinkManager.Service
+namespace SvxlinkManager.Infrastructure.Services
 {
-    public interface IWifiService
-    {
-        List<Device> Devices { get; }
-
-        void LoadDevices();
-
-        void Connect(Device device);
-
-        void Disconnect(Connection connection);
-
-        void Down(Connection connection);
-
-        void Up(Connection connection);
-    }
+    
 
     public class WifiService : IWifiService
     {

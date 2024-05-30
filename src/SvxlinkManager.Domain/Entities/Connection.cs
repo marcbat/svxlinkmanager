@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Pages.Wifi
-{
+namespace SvxlinkManager.Domain.Entities { 
   public class Connection
   {
     public string Name { get; set; }

@@ -1,6 +1,6 @@
-﻿using SvxlinkManager.Models;
+﻿using SvxlinkManager.Domain.Entities;
+using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Updater;
-using SvxlinkManager.Pages.Wifi;
 
 using System;
 using System.Collections.Generic;
@@ -24,15 +24,15 @@ namespace SvxlinkManager.Pages.Installer
 
     public string AnnonceCallSign { get; set; }
 
-    public SvxlinkChannel DefaultChannel { get; set; }
+    public Models.SvxlinkChannel DefaultChannel { get; set; }
 
-    public List<SvxlinkChannel> Channels { get; set; }
+    public List<Models.SvxlinkChannel> Channels { get; set; }
 
-    public List<SvxlinkChannel> ChannelsToDelete { get; } = new List<SvxlinkChannel>();
+    public List<Models.SvxlinkChannel> ChannelsToDelete { get; } = new List<Models.SvxlinkChannel>();
 
     public Models.RadioProfile RadioProfile { get; set; } = new Models.RadioProfile { Name = "Profil principal", SquelchDetection = "GPIO", HasSa818 = true };
 
-    public List<SvxlinkChannel> ChannelsToPreserved => Channels.Where(c => !ChannelsToDelete.Any(e => c.Equals(e))).ToList();
+    public List<Models.SvxlinkChannel> ChannelsToPreserved => Channels.Where(c => !ChannelsToDelete.Any(e => c.Equals(e))).ToList();
 
     public string ChannelsToPreservedList => String.Join(", ", ChannelsToPreserved.Select(x => x.Name));
 

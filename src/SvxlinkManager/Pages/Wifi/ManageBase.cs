@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
+using SvxlinkManager.Application.Interfaces;
+using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Shared;
 using SvxlinkManager.Service;

@@ -9,6 +9,8 @@ using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Queries;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands;
+using SvxlinkManager.Domain.Entities;
+using SvxlinkManager.Infrastructure.Services;
 using SvxlinkManager.Models;
 using SvxlinkManager.Pages.Shared;
 using SvxlinkManager.Pages.Updater;
@@ -83,11 +85,11 @@ namespace SvxlinkManager.Pages.Installer
         [Inject]
         public ISvxlinkServiceBase SvxLinkService { get; set; }
 
-        private async Task<List<SvxlinkChannel>> LoadChannelsAsync()
+        private async Task<List<Models.SvxlinkChannel>> LoadChannelsAsync()
         {
             var channels = await Mediatr.Send(new GetAllOriginalChannelsCommand());
 
-            return channels.Select<Domain.Entities.SvxlinkChannel, SvxlinkChannel>(c=> c).ToList();
+            return channels.Select<Domain.Entities.SvxlinkChannel, Models.SvxlinkChannel>(c=> c).ToList();
         }
 
         private Release LoadLastRelease() => UpdaterService.GetLastRelease();

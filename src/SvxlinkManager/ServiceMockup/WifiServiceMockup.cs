@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 
+using SvxlinkManager.Application.Interfaces;
+using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Pages.Wifi;
 using SvxlinkManager.Service;
 
