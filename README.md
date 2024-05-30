@@ -2,8 +2,8 @@
 
 | Branche        | Status       |
 | ------------- |:-------------:| 
-| master      | [![Build Status](https://dev.azure.com/marcbat79/SvxlinkManager/_apis/build/status/SvxlinkManager-core-CI?repoName=marcbat%2Fsvxlinkmanager&branchName=develop)](https://dev.azure.com/marcbat79/SvxlinkManager/_build/latest?definitionId=8&repoName=marcbat%2Fsvxlinkmanager&branchName=master) | 
-| develop      | [![Build Status](https://dev.azure.com/marcbat79/SvxlinkManager/_apis/build/status/SvxlinkManager-core-CI?repoName=marcbat%2Fsvxlinkmanager&branchName=develop)](https://dev.azure.com/marcbat79/SvxlinkManager/_build/latest?definitionId=8&repoName=marcbat%2Fsvxlinkmanager&branchName=develop) |
+| master      | [![Build Status](https://marcbat79.visualstudio.com/SvxlinkManager/_apis/build/status%2Fmarcbat.svxlinkmanager?branchName=master)](https://marcbat79.visualstudio.com/SvxlinkManager/_build/latest?definitionId=17&branchName=master) | 
+| develop      | [![Build Status](https://marcbat79.visualstudio.com/SvxlinkManager/_apis/build/status%2Fmarcbat.svxlinkmanager?branchName=develop)](https://marcbat79.visualstudio.com/SvxlinkManager/_build/latest?definitionId=17&branchName=develop) |
 
 ## Présentation
 Le projet SvxlinkManager permet la gestion de plusieurs connexions à des [Svxlink Reflector](https://github.com/sm0svx/svxlink). 
