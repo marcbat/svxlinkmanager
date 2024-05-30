@@ -1,7 +1,5 @@
-﻿using Microsoft.ApplicationInsights;
+﻿
 using Microsoft.Extensions.Logging;
-
-using Newtonsoft.Json;
 
 using SvxlinkManager.Models;
 
@@ -9,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SvxlinkManager.Service
@@ -32,7 +32,7 @@ namespace SvxlinkManager.Service
 
           using var client = new WebClient();
           string response = client.DownloadString(channel.TrackerUrl);
-          var tracker = JsonConvert.DeserializeObject<Tracker>(response);
+          var tracker = JsonSerializer.Deserialize<Tracker>(response);
 
           if (tracker?.Metadata.First().Tot > 3)
           {
@@ -54,7 +54,7 @@ namespace SvxlinkManager.Service
 
   public class Tracker
   {
-    [JsonProperty("abstract")]
+    [JsonPropertyName("abstract")]
     public Metadata[] Metadata { get; set; }
   }
 
@@ -62,7 +62,7 @@ namespace SvxlinkManager.Service
   {
     public string Version { get; set; }
 
-    [JsonProperty("TOT")]
+    [JsonPropertyName("TOT")]
     public int Tot { get; set; }
 
     public string Indicatif { get; set; }

@@ -1,5 +1,4 @@
-﻿using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.DataContracts;
+﻿
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -187,25 +186,9 @@ namespace SvxlinkManager.Service
     {
       var releaseUrl = new Uri(release.Package.DownloadUrl);
 
-      var downloadTacker = new DependencyTelemetry()
-      {
-        Id = Guid.NewGuid().ToString(),
-        Name = "Download Release",
-        Data = releaseUrl.AbsolutePath,
-        Target = releaseUrl.Authority,
-        Type = "http"
-      };
+      
 
       var updaterUrl = new Uri(release.Updater.DownloadUrl);
-
-      var downloadUpdaterTacker = new DependencyTelemetry
-      {
-        Id = Guid.NewGuid().ToString(),
-        Name = "Download Update file",
-        Data = updaterUrl.AbsolutePath,
-        Target = updaterUrl.Authority,
-        Type = "http"
-      };
 
       
         logger.LogInformation($"Telechargement de la release {release.Package.DownloadUrl}.");

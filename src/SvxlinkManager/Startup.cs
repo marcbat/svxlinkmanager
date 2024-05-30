@@ -4,9 +4,7 @@ using AspNetCore.Identity.LiteDB.Models;
 
 using MediatR;
 
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -25,14 +23,10 @@ using SvxlinkManager.Application.SvxlinkManagerConfigs;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands;
 using SvxlinkManager.Infrastructure;
-using SvxlinkManager.Infrastructure.Services;
 using SvxlinkManager.Service;
 using SvxlinkManager.ServiceMockup;
-using SvxlinkManager.Telemetry;
 
-using System;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace SvxlinkManager
 {

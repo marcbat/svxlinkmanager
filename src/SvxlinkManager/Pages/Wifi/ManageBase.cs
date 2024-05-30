@@ -1,4 +1,4 @@
-﻿using Microsoft.ApplicationInsights.DataContracts;
+﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
