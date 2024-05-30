@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Infrastructure.Exceptions;
-using SvxlinkManager.Pages.Updater;
 
 using System;
 using System.Collections.Generic;

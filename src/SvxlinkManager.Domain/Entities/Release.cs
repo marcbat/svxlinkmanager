@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Pages.Updater
+namespace SvxlinkManager.Domain.Entities
 {
   public class Release
   {

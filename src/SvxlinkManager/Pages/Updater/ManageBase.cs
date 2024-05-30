@@ -5,7 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
-using SvxlinkManager.Exceptions;
+using SvxlinkManager.Domain.Entities;
+
 using SvxlinkManager.Pages.Shared;
 using SvxlinkManager.Service;
 
