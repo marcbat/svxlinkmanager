@@ -66,7 +66,7 @@ namespace SvxlinkManager.Application.Integration.Tests
             {
                 var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(Guid.NewGuid()));
 
-                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", "Fake Password", 80, "Fake report callSign", new byte[] { 0x01, 0x02, 0x03 }));
+                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", "Fake Password", 80, "Fake report callSign", "SoundTest", new byte[] { 0x01, 0x02, 0x03 }));
 
                 var svxlinkChannel = await mediatr.Send(new GetSvxlinkChannelByIdQuery(configGuid, channelId));
 
@@ -96,9 +96,9 @@ namespace SvxlinkManager.Application.Integration.Tests
             {
                 var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(Guid.NewGuid()));
 
-                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", "Fake password", 80, "Fake report callSign", new byte[] { 0x01, 0x02, 0x03 }));
+                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", "Fake password", 80, "Fake report callSign", "SoundTest", new byte[] { 0x01, 0x02, 0x03 }));
 
-                await mediatr.Send(new UpdateSvxlinkChannelCommand(configGuid, channelId, "Fake channel update", "Fake Host update", "Fake callSign update", "Fake password", 8080, "Fake report callSign update", new byte[] { 0x01, 0x02, 0x03 }));
+                await mediatr.Send(new UpdateSvxlinkChannelCommand(configGuid, channelId, "Fake channel update", "Fake Host update", "Fake callSign update", "Fake password", 8080, "Fake report callSign update", "Sound Test", new byte[] { 0x01, 0x02, 0x03 }));
 
                 var svxlinkChannel = await mediatr.Send(new GetSvxlinkChannelByIdQuery(configGuid, channelId));
 
@@ -128,7 +128,7 @@ namespace SvxlinkManager.Application.Integration.Tests
             {
                 var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(Guid.NewGuid()));
 
-                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", "Fake Password", 80, "Fake report callSign", new byte[] { 0x01, 0x02, 0x03 }));
+                var channelId = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", "Fake Password", 80, "Fake report callSign", "SoundTest", new byte[] { 0x01, 0x02, 0x03 }));
 
                 await mediatr.Send(new DeleteSvxlinkChannelCommand(configGuid, channelId));
 
@@ -160,10 +160,11 @@ namespace SvxlinkManager.Application.Integration.Tests
                 var sysopName = "Fake SysopName";
                 var location = "Fake Location";
                 var maxQso = 3;
-                var description = "Fake Description";
-                var soundGuid = new byte[] { 0x01, 0x02, 0x03 };
+                var description = "Fake Description"; 
+                var soundName = "Test Sound";
+                var soundFile = new byte[] { 0x01, 0x02, 0x03 };
 
-                var channelId = await mediatr.Send(new AddEcholinkChannelCommand(configGuid, channelName, host, callSign, password, sysopName, location, maxQso, description, soundGuid));
+                var channelId = await mediatr.Send(new AddEcholinkChannelCommand(configGuid, channelName, host, callSign, password, sysopName, location, maxQso, description, soundName, soundFile));
 
                 // Act
                 var echolinkChannel = await mediatr.Send(new GetEchoLinkChannelByIdQuery(configGuid, channelId));
@@ -196,9 +197,9 @@ namespace SvxlinkManager.Application.Integration.Tests
             {
                 var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(Guid.NewGuid()));
 
-                var channelId = await mediatr.Send(new AddEcholinkChannelCommand(configGuid, "Fake Name", "Fake Host", "Fake Callsign", "Fake Password", "Fake SysopName", "Fake Location", 3, "Fake Description", new byte[] { 0x01, 0x02, 0x03 }));
+                var channelId = await mediatr.Send(new AddEcholinkChannelCommand(configGuid, "Fake Name", "Fake Host", "Fake Callsign", "Fake Password", "Fake SysopName", "Fake Location", 3, "Fake Description", "Sound Test", new byte[] { 0x01, 0x02, 0x03 }));
 
-                await mediatr.Send(new UpdateEcholinkChannelCommand(configGuid, channelId, "Fake Name Update", "Fake Host Update", "Fake Callsign Update", "Fake Password Update", "Fake SysopName Update", "Fake Location Update", 5, "Fake Description Update", new byte[] { 0x01, 0x02, 0x03 }));
+                await mediatr.Send(new UpdateEcholinkChannelCommand(configGuid, channelId, "Fake Name Update", "Fake Host Update", "Fake Callsign Update", "Fake Password Update", "Fake SysopName Update", "Fake Location Update", 5, "Fake Description Update", "Sound Test", new byte[] { 0x01, 0x02, 0x03 }));
 
                 var echolinkChannel = await mediatr.Send(new GetEchoLinkChannelByIdQuery(configGuid, channelId));
 
@@ -229,7 +230,7 @@ namespace SvxlinkManager.Application.Integration.Tests
             {
                 var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(Guid.NewGuid()));
 
-                var channelId = await mediatr.Send(new AddEcholinkChannelCommand(configGuid, "Fake Name", "Fake Host", "Fake Callsign", "Fake Password", "Fake SysopName", "Fake Location", 3, "Fake Description", new byte[] { 0x01, 0x02, 0x03 }));
+                var channelId = await mediatr.Send(new AddEcholinkChannelCommand(configGuid, "Fake Name", "Fake Host", "Fake Callsign", "Fake Password", "Fake SysopName", "Fake Location", 3, "Fake Description", "Sound Test", new byte[] { 0x01, 0x02, 0x03 }));
 
                 await mediatr.Send(new DeleteEcholinkChannelCommand(configGuid, channelId));
 
@@ -467,7 +468,7 @@ namespace SvxlinkManager.Application.Integration.Tests
                                         "ModulePropagationMonitor",
                                         "ModuleSelCallEnc",
                                         "ModuleTclVoiceMail",
-                                        "ModuleTrx", new byte[] { 0x01, 0x02, 0x03 }));
+                                        "ModuleTrx", "Sound Test", new byte[] { 0x01, 0x02, 0x03 }));
 
                 // Act
                 var advanceSvxlinkChannel = await mediatr.Send(new GetAvanceSvxlinkChannelByIdQuery(configGuid, channelId));
@@ -504,9 +505,9 @@ namespace SvxlinkManager.Application.Integration.Tests
             {
                 var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(Guid.NewGuid()));
 
-                var channelId = await mediatr.Send(new AddAdvanceSvxlinkChannelCommand(configGuid, "Fake Name", "Fake SvxlinkConf", "Fake ModuleDtmfRepeater", "Fake ModuleEchoLink", "Fake ModuleFrn", "Fake ModuleHelp", "Fake ModuleMetarInfo", "Fake ModuleParrot", "Fake ModulePropagationMonitor", "Fake ModuleSelCallEnc", "Fake ModuleTclVoiceMail", "Fake ModuleTrx", new byte[] { 0x01, 0x02, 0x03 }));
+                var channelId = await mediatr.Send(new AddAdvanceSvxlinkChannelCommand(configGuid, "Fake Name", "Fake SvxlinkConf", "Fake ModuleDtmfRepeater", "Fake ModuleEchoLink", "Fake ModuleFrn", "Fake ModuleHelp", "Fake ModuleMetarInfo", "Fake ModuleParrot", "Fake ModulePropagationMonitor", "Fake ModuleSelCallEnc", "Fake ModuleTclVoiceMail", "Fake ModuleTrx", "Sound Test", new byte[] { 0x01, 0x02, 0x03 }));
 
-                await mediatr.Send(new UpdateAdvanceSvxlinkChannelCommand(configGuid, channelId, "Fake Name Update", "Fake SvxlinkConf Update", "Fake ModuleDtmfRepeater Update", "Fake ModuleEchoLink Update", "Fake ModuleFrn Update", "Fake ModuleHelp Update", "Fake ModuleMetarInfo Update", "Fake ModuleParrot Update", "Fake ModulePropagationMonitor Update", "Fake ModuleSelCallEnc Update", "Fake ModuleTclVoiceMail Update", "Fake ModuleTrx Update", new byte[] { 0x04, 0x05, 0x06 }));
+                await mediatr.Send(new UpdateAdvanceSvxlinkChannelCommand(configGuid, channelId, "Fake Name Update", "Fake SvxlinkConf Update", "Fake ModuleDtmfRepeater Update", "Fake ModuleEchoLink Update", "Fake ModuleFrn Update", "Fake ModuleHelp Update", "Fake ModuleMetarInfo Update", "Fake ModuleParrot Update", "Fake ModulePropagationMonitor Update", "Fake ModuleSelCallEnc Update", "Fake ModuleTclVoiceMail Update", "Fake ModuleTrx Update", "Sound Test", new byte[] { 0x04, 0x05, 0x06 }));
 
                 var avanceSvxlinkChannel = await mediatr.Send(new GetAvanceSvxlinkChannelByIdQuery(configGuid, channelId));
 
@@ -541,7 +542,7 @@ namespace SvxlinkManager.Application.Integration.Tests
             {
                 var configGuid = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(Guid.NewGuid()));
 
-                var channelId = await mediatr.Send(new AddAdvanceSvxlinkChannelCommand(configGuid, "Fake Name", "Fake SvxlinkConf", "Fake ModuleDtmfRepeater", "Fake ModuleEchoLink", "Fake ModuleFrn", "Fake ModuleHelp", "Fake ModuleMetarInfo", "Fake ModuleParrot", "Fake ModulePropagationMonitor", "Fake ModuleSelCallEnc", "Fake ModuleTclVoiceMail", "Fake ModuleTrx", new byte[] { 0x01, 0x02, 0x03 }));
+                var channelId = await mediatr.Send(new AddAdvanceSvxlinkChannelCommand(configGuid, "Fake Name", "Fake SvxlinkConf", "Fake ModuleDtmfRepeater", "Fake ModuleEchoLink", "Fake ModuleFrn", "Fake ModuleHelp", "Fake ModuleMetarInfo", "Fake ModuleParrot", "Fake ModulePropagationMonitor", "Fake ModuleSelCallEnc", "Fake ModuleTclVoiceMail", "Fake ModuleTrx", "Sound Test", new byte[] { 0x01, 0x02, 0x03 }));
 
                 await mediatr.Send(new DeleteAdvanceSvxlinkChannelCommand(configGuid, channelId));
 
