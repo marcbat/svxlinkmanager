@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Domain.Entities
 {
-    public class Reflector : Entity
+    public class Reflector : Entity<Guid>
     {
         public Reflector(Guid id, string name, string config) : base(id)
         {

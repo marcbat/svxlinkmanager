@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Domain.Entities
 {
-    public class Sound : AggregateRoot
+    public class Sound : AggregateRoot<string>
     {
-        public Sound(Guid id, string name, byte[] soundFile) : base(id)
+        public Sound(string id, string name, byte[] soundFile) : base(id)
         {
             Name = name;
             SoundFile = soundFile;

@@ -27,7 +27,7 @@ namespace SvxlinkManager.Models
         [FileValidation(new[] { ".wav" })]
         public IBrowserFile SoundBrowserFile { get; set; }
 
-        public Sound Sound { get; set; }
+        public Sound Sound { get; set; } = new Sound();
 
         private class FileValidationAttribute : ValidationAttribute
         {

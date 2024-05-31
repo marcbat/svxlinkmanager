@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Domain.Entities
 {
-    public abstract class ChannelBase : Entity
+    public abstract class ChannelBase : Entity<Guid>
     {
         public ChannelBase(Guid id, string name) : base(id)
         {

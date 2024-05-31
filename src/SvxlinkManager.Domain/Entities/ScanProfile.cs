@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Domain.Entities
 {
-    public class ScanProfile : Entity
+    public class ScanProfile : Entity<Guid>
     {
         public ScanProfile(Guid id, string name, int scanDelay): base(id)
         {

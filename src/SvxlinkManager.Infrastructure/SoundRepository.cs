@@ -27,11 +27,13 @@ namespace SvxlinkManager.Infrastructure
         {
             using var db = new LiteDatabase(options.LiteDbFile);
 
-            var collection = db.GetCollection<Sound>("sounds");
+            var fs = db.FileStorage;
 
-            collection.EnsureIndex(x => x.Id, true);
+            var stream = new MemoryStream(sound.SoundFile);
 
-            collection.Insert(sound);
+            fs.Upload(sound.Id, sound.Name, stream);
+
+            
         }
     }
 }

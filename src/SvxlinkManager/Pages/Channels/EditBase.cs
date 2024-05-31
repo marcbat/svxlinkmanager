@@ -12,6 +12,7 @@ using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Q
 using SvxlinkManager.Models;
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SvxlinkManager.Pages.Channels
@@ -33,6 +34,18 @@ namespace SvxlinkManager.Pages.Channels
         public virtual async Task HandleValidSubmit(string redirect)
         {
             await base.HandleValidSubmit();
+
+            switch (Channel)
+            {
+                case SvxlinkChannel svxlinkChannel:
+                    await Mediatr.Send(new UpdateSvxlinkChannelCommand(Options.Value.ConfigId, svxlinkChannel.Id, svxlinkChannel.Name,svxlinkChannel.Host, svxlinkChannel.CallSign, svxlinkChannel.AuthKey, svxlinkChannel.Port, svxlinkChannel.ReportCallSign, svxlinkChannel.Sound.SoundFile), CancellationToken.None);
+
+                    break;
+
+                
+                default:
+                    throw new InvalidOperationException("Invalid channel type");
+            }
 
             await ShowSuccessToastAsync("Modifié", $"Le salon {Channel.Name} a bien été modifié.");
 

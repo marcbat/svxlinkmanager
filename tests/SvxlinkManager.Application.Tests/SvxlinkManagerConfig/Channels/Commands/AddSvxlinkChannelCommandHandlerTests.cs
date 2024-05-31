@@ -58,8 +58,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfig.Channels.Commands.Test
             var config = SvxlinkManagerConfigAggregate.Create(Guid.NewGuid());
             _svxlinkManagerConfigRepository.GetConfigAsync(configId).Returns(config);
 
-            var soundGuid = Guid.NewGuid();
-            var sound = new Sound(soundGuid, name, soundFile);
+            var sound = new Sound(string.Empty, name, soundFile);
             _soundRepository.CreateAsyc(Arg.Any<Sound>()).Returns(Task.FromResult(sound));
 
             // Act

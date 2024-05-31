@@ -1,6 +1,6 @@
 ﻿namespace SvxlinkManager.Domain.Entities
 {
-    public class SvxlinkChannel(Guid id, string name, Guid soundGuid, string host, int port, string callSign, string authKey, string reportCallSign) : Channel(id, name, soundGuid, host, callSign)
+    public class SvxlinkChannel(Guid id, string name, string soundGuid, string host, int port, string callSign, string authKey, string reportCallSign) : Channel(id, name, soundGuid, host, callSign)
     {
         public string? AuthKey { get; } = authKey;
 

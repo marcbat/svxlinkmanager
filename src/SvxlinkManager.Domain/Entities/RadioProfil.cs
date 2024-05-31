@@ -1,6 +1,6 @@
 ﻿namespace SvxlinkManager.Domain.Entities
 {
-    public class RadioProfil : Entity
+    public class RadioProfil : Entity<Guid>
     {
         private string txCtcss;
         private string rxCtCss;

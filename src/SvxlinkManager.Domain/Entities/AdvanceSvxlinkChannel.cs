@@ -10,7 +10,7 @@ namespace SvxlinkManager.Domain.Entities
     {
         public AdvanceSvxlinkChannel(Guid id,
                                     string name,
-                                    Guid soundGuid,
+                                    string soundGuid,
                                     string svxlinkConf,
                                     string moduleDtmfRepeater,
                                     string moduleEchoLink,

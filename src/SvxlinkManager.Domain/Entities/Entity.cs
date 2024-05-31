@@ -6,36 +6,36 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Domain.Entities
 {
-    public abstract class Entity : IEquatable<Entity>
+    public abstract class Entity<TId> : IEquatable<Entity<TId>> 
     {
         public Entity()
         {
            
         }
 
-        protected Entity(Guid id)
+        protected Entity(TId id)
         {
             Id = id;
         }
 
-        public Guid Id { get; protected set; }
+        public TId Id { get; protected set; }
 
         public override bool Equals(object? obj)
         {
-            return obj is Entity entity && Id.Equals(entity.Id);
+            return obj is Entity<TId> entity && Id.Equals(entity.Id);
         }
 
-        public bool Equals(Entity? other)
+        public bool Equals(Entity<TId>? other)
         {
             return Equals((object?)other);
         }
 
-        public static bool operator ==(Entity left, Entity right)
+        public static bool operator ==(Entity<TId> left, Entity<TId> right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(Entity left, Entity right)
+        public static bool operator !=(Entity<TId> left, Entity<TId> right)
         {
             return !Equals(left, right);
         }

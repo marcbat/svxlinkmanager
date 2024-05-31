@@ -9,7 +9,7 @@ namespace SvxlinkManager.Domain.Aggregates
     /// <summary>
     /// Représente l'agrégat de configuration du gestionnaire Svxlink.
     /// </summary>
-    public class SvxlinkManagerConfigAggregate : AggregateRoot
+    public class SvxlinkManagerConfigAggregate : AggregateRoot<Guid>
     {
         private List<SvxlinkChannel> svxlinkChannels = [];
         private List<EcholinkChannel> echolinkChannels = [];

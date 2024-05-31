@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Domain.Aggregates
 {
-    public class AggregateRoot : Entity
+    public abstract class AggregateRoot<TId> : Entity<TId>
     {
         public AggregateRoot()
         {
         }
 
-        protected AggregateRoot(Guid id) : base(id)
+        protected AggregateRoot(TId id) : base(id)
         {
         }
     }

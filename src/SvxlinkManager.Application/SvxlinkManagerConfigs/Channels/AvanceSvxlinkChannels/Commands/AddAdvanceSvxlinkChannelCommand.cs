@@ -51,12 +51,11 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
 
                 SvxlinkManagerConfigAggregate config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
-                var soundGuid = Guid.NewGuid();
-                var sound = new Sound(soundGuid, request.Name, request.SoundFile);
+                var sound = new Sound($"$/sounds/{request.Name}.wav", request.Name, request.SoundFile);
                 await soundRepository.CreateAsyc(sound);
 
                 var advanceSvxlinkchannelGuid = Guid.NewGuid();
-                var advanceSvxlinkChannel = new AdvanceSvxlinkChannel(advanceSvxlinkchannelGuid, request.Name, soundGuid, request.SvxlinkConf, request.ModuleDtmfRepeater, request.ModuleEchoLink, request.ModuleFrn, request.ModuleHelp, request.ModuleMetarInfo, request.ModuleParrot, request.ModulePropagationMonitor, request.ModuleSelCallEnc, request.ModuleTclVoiceMail, request.ModuleTrx);
+                var advanceSvxlinkChannel = new AdvanceSvxlinkChannel(advanceSvxlinkchannelGuid, request.Name, sound.Id, request.SvxlinkConf, request.ModuleDtmfRepeater, request.ModuleEchoLink, request.ModuleFrn, request.ModuleHelp, request.ModuleMetarInfo, request.ModuleParrot, request.ModulePropagationMonitor, request.ModuleSelCallEnc, request.ModuleTclVoiceMail, request.ModuleTrx);
 
                 config.AddAdvanceSvxlinkChannel(advanceSvxlinkChannel);
 

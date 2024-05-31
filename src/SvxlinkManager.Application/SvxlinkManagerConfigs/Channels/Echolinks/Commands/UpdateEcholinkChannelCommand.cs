@@ -39,13 +39,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
 
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
-                var soundGuid = Guid.NewGuid();
-                var sound = new Sound(soundGuid, request.Name, request.SoundFile);
+                var sound = new Sound($"$/sounds/{request.Name}.wav", request.Name, request.SoundFile);
                 await soundRepository.CreateAsyc(sound);
 
                 config.DeleteEcholinkChannel(request.ChannelId);
 
-                var echolinkChannel = new EcholinkChannel(request.ChannelId, request.Name, soundGuid, request.Host, request.CallSign, request.Password, request.SysopName, request.Location, request.MaxQso, request.Description);
+                var echolinkChannel = new EcholinkChannel(request.ChannelId, request.Name, sound.Id, request.Host, request.CallSign, request.Password, request.SysopName, request.Location, request.MaxQso, request.Description);
 
                 config.AddEcholinkChannel(echolinkChannel);
 
