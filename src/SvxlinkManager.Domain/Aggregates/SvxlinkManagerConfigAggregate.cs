@@ -1,4 +1,5 @@
 ﻿using SvxlinkManager.Domain.Entities;
+using SvxlinkManager.Domain.Exceptions;
 
 using System.Text;
 
@@ -52,6 +53,9 @@ namespace SvxlinkManager.Domain.Aggregates
         /// <param name="svxlinkChannel">Le canal Svxlink à ajouter.</param>
         public void AddSvxlinkChannel(SvxlinkChannel svxlinkChannel)
         {
+            if(svxlinkChannels.Any(c => c.Name == svxlinkChannel.Name))
+                throw new DomainException("Un canal Svxlink avec le même nom existe déjà.");
+
             svxlinkChannels.Add(svxlinkChannel);
         }
 
@@ -81,6 +85,9 @@ namespace SvxlinkManager.Domain.Aggregates
         /// <param name="echolinkChannel">Le canal Echolink à ajouter.</param>
         public void AddEcholinkChannel(EcholinkChannel echolinkChannel)
         {
+            if (echolinkChannels.Any(c => c.Name == echolinkChannel.Name))
+                throw new DomainException("Un canal Echolink avec le même nom existe déjà.");
+
             echolinkChannels.Add(echolinkChannel);
         }
 
@@ -110,6 +117,9 @@ namespace SvxlinkManager.Domain.Aggregates
         /// <param name="reflector">Le réflecteur à ajouter.</param>
         public void AddReflector(Reflector reflector)
         {
+            if(reflectors.Any(r => r.Name == reflector.Name))
+                throw new DomainException("Un réflecteur avec le même nom existe déjà.");
+
             reflectors.Add(reflector);
         }
 
@@ -139,6 +149,9 @@ namespace SvxlinkManager.Domain.Aggregates
         /// <param name="radioProfil">Le profil radio à ajouter.</param>
         public void AddRadioProfil(RadioProfil radioProfil)
         {
+            if(radioProfils.Any(rp => rp.Name == radioProfil.Name))
+                throw new DomainException("Un profil radio avec le même nom existe déjà.");
+
             radioProfils.Add(radioProfil);
         }
 
@@ -176,6 +189,9 @@ namespace SvxlinkManager.Domain.Aggregates
         /// <param name="advanceSvxlinkChannel">Le canal Svxlink avancé à ajouter.</param>
         public void AddAdvanceSvxlinkChannel(AdvanceSvxlinkChannel advanceSvxlinkChannel)
         {
+            if (advanceSvxlinkChannels.Any(c => c.Name == advanceSvxlinkChannel.Name))
+                throw new DomainException("Un canal Svxlink avancé avec le même nom existe déjà.");
+
             advanceSvxlinkChannels.Add(advanceSvxlinkChannel);
         }
 
