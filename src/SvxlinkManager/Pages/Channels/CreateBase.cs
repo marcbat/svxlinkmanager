@@ -28,17 +28,17 @@ namespace SvxlinkManager.Pages.Channels
             switch (Channel)
             {
                 case SvxlinkChannel svxlinkChannel:
-                    await Mediatr.Send(new AddSvxlinkChannelCommand(Options.Value.ConfigId, svxlinkChannel.Name, svxlinkChannel.Host, svxlinkChannel.CallSign, svxlinkChannel.AuthKey, svxlinkChannel.Port, svxlinkChannel.ReportCallSign, svxlinkChannel.Sound.SoundFile), CancellationToken.None);
+                    await Mediatr.Send(new AddSvxlinkChannelCommand(Options.Value.ConfigId, svxlinkChannel.Name, svxlinkChannel.Host, svxlinkChannel.CallSign, svxlinkChannel.AuthKey, svxlinkChannel.Port, svxlinkChannel.ReportCallSign, svxlinkChannel.Sound.SoundName, svxlinkChannel.Sound.SoundFile), CancellationToken.None);
 
                     break;
 
                 case EcholinkChannel echolinkChannel:
-                    await Mediatr.Send(new AddEcholinkChannelCommand(Options.Value.ConfigId, echolinkChannel.Name, echolinkChannel.Host, echolinkChannel.CallSign, echolinkChannel.Password, echolinkChannel.SysopName, echolinkChannel.Location, echolinkChannel.MaxQso, echolinkChannel.Description, echolinkChannel.Sound.SoundFile), CancellationToken.None);
+                    await Mediatr.Send(new AddEcholinkChannelCommand(Options.Value.ConfigId, echolinkChannel.Name, echolinkChannel.Host, echolinkChannel.CallSign, echolinkChannel.Password, echolinkChannel.SysopName, echolinkChannel.Location, echolinkChannel.MaxQso, echolinkChannel.Description, echolinkChannel.Sound.SoundName, echolinkChannel.Sound.SoundFile), CancellationToken.None);
 
                     break;
 
                 case AdvanceSvxlinkChannel advanceChannel:
-                    await Mediatr.Send(new AddAdvanceSvxlinkChannelCommand(Options.Value.ConfigId, advanceChannel.Name, advanceChannel.SvxlinkConf, advanceChannel.ModuleDtmfRepeater, advanceChannel.ModuleEchoLink, advanceChannel.ModuleFrn, advanceChannel.ModuleHelp, advanceChannel.ModuleMetarInfo, advanceChannel.ModuleParrot, advanceChannel.ModulePropagationMonitor, advanceChannel.ModuleSelCallEnc, advanceChannel.ModuleTclVoiceMail, advanceChannel.ModuleTrx, advanceChannel.Sound.SoundFile), CancellationToken.None);
+                    await Mediatr.Send(new AddAdvanceSvxlinkChannelCommand(Options.Value.ConfigId, advanceChannel.Name, advanceChannel.SvxlinkConf, advanceChannel.ModuleDtmfRepeater, advanceChannel.ModuleEchoLink, advanceChannel.ModuleFrn, advanceChannel.ModuleHelp, advanceChannel.ModuleMetarInfo, advanceChannel.ModuleParrot, advanceChannel.ModulePropagationMonitor, advanceChannel.ModuleSelCallEnc, advanceChannel.ModuleTclVoiceMail, advanceChannel.ModuleTrx, advanceChannel.Sound.SoundName, advanceChannel.Sound.SoundFile), CancellationToken.None);
 
                     break;
 

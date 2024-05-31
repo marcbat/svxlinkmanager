@@ -25,7 +25,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
                                         string ModulePropagationMonitor,
                                         string ModuleSelCallEnc,
                                         string ModuleTclVoiceMail,
-                                        string ModuleTrx, byte[] SoundFile) : IRequest<Unit>;
+                                        string ModuleTrx, string SoundName, byte[] SoundFile) : IRequest<Unit>;
 
     internal class UpdateAdvanceSvxlinkChannelCommandHandler : IRequestHandler<UpdateAdvanceSvxlinkChannelCommand, Unit>
     {
@@ -50,7 +50,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
 
                 var config = await _svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
-                var sound = new Sound($"$/sounds/{request.Name}.wav", request.Name, request.SoundFile);
+                var sound = new Sound($"$/sounds/{request.SoundName}.wav", request.Name, request.SoundFile);
                 await _soundRepository.CreateAsyc(sound);
 
                 config.DeleteAdvanceSvxlinkChannel(request.ChannelId);

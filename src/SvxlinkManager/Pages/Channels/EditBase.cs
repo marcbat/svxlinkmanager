@@ -38,7 +38,7 @@ namespace SvxlinkManager.Pages.Channels
             switch (Channel)
             {
                 case SvxlinkChannel svxlinkChannel:
-                    await Mediatr.Send(new UpdateSvxlinkChannelCommand(Options.Value.ConfigId, svxlinkChannel.Id, svxlinkChannel.Name,svxlinkChannel.Host, svxlinkChannel.CallSign, svxlinkChannel.AuthKey, svxlinkChannel.Port, svxlinkChannel.ReportCallSign, svxlinkChannel.Sound.SoundFile), CancellationToken.None);
+                    await Mediatr.Send(new UpdateSvxlinkChannelCommand(Options.Value.ConfigId, svxlinkChannel.Id, svxlinkChannel.Name,svxlinkChannel.Host, svxlinkChannel.CallSign, svxlinkChannel.AuthKey, svxlinkChannel.Port, svxlinkChannel.ReportCallSign, svxlinkChannel.Sound.SoundName, svxlinkChannel.Sound.SoundFile), CancellationToken.None);
 
                     break;
 

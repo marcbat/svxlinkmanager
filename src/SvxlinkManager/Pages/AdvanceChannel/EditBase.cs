@@ -10,7 +10,7 @@ namespace SvxlinkManager.Pages.AdvanceChannel
     {
         public override async Task HandleValidSubmit(string redirect)
         {
-            await Mediatr.Send(new UpdateAdvanceSvxlinkChannelCommand(Options.Value.ConfigId, Channel.Id, Channel.Name, Channel.SvxlinkConf, Channel.ModuleDtmfRepeater, Channel.ModuleEchoLink, Channel.ModuleFrn, Channel.ModuleHelp, Channel.ModuleMetarInfo, Channel.ModuleParrot, Channel.ModulePropagationMonitor, Channel.ModuleSelCallEnc, Channel.ModuleTclVoiceMail, Channel.ModuleTrx, Channel.Sound.SoundFile));
+            await Mediatr.Send(new UpdateAdvanceSvxlinkChannelCommand(Options.Value.ConfigId, Channel.Id, Channel.Name, Channel.SvxlinkConf, Channel.ModuleDtmfRepeater, Channel.ModuleEchoLink, Channel.ModuleFrn, Channel.ModuleHelp, Channel.ModuleMetarInfo, Channel.ModuleParrot, Channel.ModulePropagationMonitor, Channel.ModuleSelCallEnc, Channel.ModuleTclVoiceMail, Channel.ModuleTrx, Channel.Sound.SoundName, Channel.Sound.SoundFile));
 
             StateHasChanged();
 

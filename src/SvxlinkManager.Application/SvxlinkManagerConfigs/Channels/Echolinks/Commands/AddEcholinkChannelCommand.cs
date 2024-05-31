@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Commands
 {
-    public record AddEcholinkChannelCommand(Guid ConfigId, string Name, string Host, string CallSign, string Password, string SysopName, string Location, int MaxQso, string Description, byte[] SoundFile) : IRequest<Guid>;
+    public record AddEcholinkChannelCommand(Guid ConfigId, string Name, string Host, string CallSign, string Password, string SysopName, string Location, int MaxQso, string Description, string SoundName, byte[] SoundFile) : IRequest<Guid>;
 
 
     internal class AddEcholinkChannelCommandHandler : IRequestHandler<AddEcholinkChannelCommand, Guid>
@@ -41,7 +41,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
                 SvxlinkManagerConfigAggregate config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
              
-                var sound = new Sound($"$/sounds/{request.Name}.wav", request.Name, request.SoundFile);
+                var sound = new Sound($"$/sounds/{request.SoundName}.wav", request.Name, request.SoundFile);
                 await soundRepository.CreateAsyc(sound);
 
                 var echolinkChannelGuid = Guid.NewGuid();

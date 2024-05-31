@@ -26,7 +26,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
                                         string ModulePropagationMonitor,
                                         string ModuleSelCallEnc,
                                         string ModuleTclVoiceMail,
-                                        string ModuleTrx, byte[] SoundFile) : IRequest<Guid>;
+                                        string ModuleTrx, string SoundName, byte[] SoundFile) : IRequest<Guid>;
 
     internal class AddAdvanceSvxlinkChannelCommandHandler : IRequestHandler<AddAdvanceSvxlinkChannelCommand, Guid>
     {
@@ -51,7 +51,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
 
                 SvxlinkManagerConfigAggregate config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
-                var sound = new Sound($"$/sounds/{request.Name}.wav", request.Name, request.SoundFile);
+                var sound = new Sound($"$/sounds/{request.SoundName}.wav", request.Name, request.SoundFile);
                 await soundRepository.CreateAsyc(sound);
 
                 var advanceSvxlinkchannelGuid = Guid.NewGuid();

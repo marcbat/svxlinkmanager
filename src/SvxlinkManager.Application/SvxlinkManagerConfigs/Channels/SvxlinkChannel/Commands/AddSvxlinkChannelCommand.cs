@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Commands
 {
-    public record AddSvxlinkChannelCommand(Guid ConfigId, string Name, string Host, string CallSign, string AuthKey, int Port, string ReportCallSign, byte[] SoundFile) : IRequest<Guid>;
+    public record AddSvxlinkChannelCommand(Guid ConfigId, string Name, string Host, string CallSign, string AuthKey, int Port, string ReportCallSign, string SoundName, byte[] SoundFile) : IRequest<Guid>;
 
     internal class AddSvxlinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,
                                                          ISoundRepository soundRepository,
@@ -31,7 +31,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
 
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
-                var sound = new Sound($"$/sounds/{request.Name}.wav", request.Name, request.SoundFile);
+                var sound = new Sound($"$/sounds/{request.SoundName}.wav", request.Name, request.SoundFile);
                 await soundRepository.CreateAsyc(sound);
 
                 var svxlinkchannelGuid = Guid.NewGuid();
