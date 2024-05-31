@@ -4,6 +4,10 @@
     {
         private string txCtcss;
         private string rxCtCss;
+        private string name;
+        private string rxFequency;
+        private string txFrequency;
+        private string squelch;
 
         public RadioProfil(Guid id,
                            string name,
@@ -33,22 +37,64 @@
 
         public bool HasSa818 { get; set; } = true;
 
-        public string Name { get; }
-        public string RxFequency { get; }
-        public string TxFrequency { get; }
-        public string Squelch { get; }
+        public string Name
+        {
+            get => name; set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("Le nom du profil radio ne peut pas être vide.", nameof(value));
 
-        public string TxCtcss { 
-            get {
+                name = value;
+            }
+        }
+
+        public string RxFequency
+        {
+            get => rxFequency; set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("La fréquence de réception ne peut pas être vide.", nameof(value));
+
+                rxFequency = value;
+            }
+        }
+
+        public string TxFrequency
+        {
+            get => txFrequency; set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("La fréquence de transmission ne peut pas être vide.", nameof(value));
+
+                txFrequency = value;
+            }
+        }
+
+        public string Squelch
+        {
+            get => squelch; set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("Le squelch ne peut pas être vide.", nameof(value));
+
+                squelch = value;
+            }
+        }
+
+        public string TxCtcss
+        {
+            get
+            {
                 return Ctcss[txCtcss];
-            } 
-            private set {
+            }
+            private set
+            {
                 var ctcss = Ctcss.SingleOrDefault(x => x.Value == value);
                 if (ctcss.Key == null)
                     throw new ArgumentException("Invalid value for TxCtcss");
 
                 txCtcss = ctcss.Key;
-            } 
+            }
         }
 
         public string RxCtCss
@@ -111,12 +157,18 @@
           {"0038","250.3"}
         };
 
-        public string Volume { get; }
-        public string PreEmph { get; }
-        public string HightPass { get; }
-        public string LowPass { get; }
-        public string SquelchDetection { get; }
+        public string Volume { get; set; }
+
+        public string PreEmph { get; set; }
+
+        public string HightPass { get; set; }
+
+        public string LowPass { get; set; }
+
+        public string SquelchDetection { get; set; }
+
         public bool Enable { get; set; }
+
         public bool IsActive { get; set; }
     }
 }

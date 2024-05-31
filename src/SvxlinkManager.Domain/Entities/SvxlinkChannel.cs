@@ -1,11 +1,31 @@
 ﻿namespace SvxlinkManager.Domain.Entities
 {
-    public class SvxlinkChannel(Guid id, string name, string host, int port, string callSign, string authKey, string reportCallSign) : Channel(id, name, host, callSign)
+    public class SvxlinkChannel : Channel
     {
-        public string? AuthKey { get; } = authKey;
+        private string reportCallSign;
 
-        public int Port { get; } = port;
+        public SvxlinkChannel(Guid id, string name, string host, int port, string callSign, string authKey, string reportCallSign) : base(id, name, host, callSign)
+        {
+            AuthKey = authKey;
+            Port = port;
+            ReportCallSign = reportCallSign;
+        }
 
-        public string ReportCallSign { get; set; } = reportCallSign;
+        public string? AuthKey { get; set; }
+
+        public int Port { get; set; }
+
+        public string ReportCallSign
+        {
+            get => reportCallSign; set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Le nom du reportCallSign ne peut pas être vide.", nameof(value));
+                }
+
+                reportCallSign = value;
+            }
+        }
     }
 }
