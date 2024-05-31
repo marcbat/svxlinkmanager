@@ -8,7 +8,7 @@ namespace SvxlinkManager.Domain.Entities
 {
     public class EcholinkChannel : Channel
     {
-        public EcholinkChannel(Guid id, string name, string soundGuid, string host, string callSign, string password, string sysopName, string location, int maxQso, string description) : base(id, name, soundGuid, host, callSign)
+        public EcholinkChannel(Guid id, string name, string host, string callSign, string password, string sysopName, string location, int maxQso, string description) : base(id, name, host, callSign)
         {
             Password = password;
             SysopName = sysopName;

@@ -2,9 +2,9 @@
 {
     public abstract class ManagedChannel : ChannelBase
     {
-        protected ManagedChannel(Guid id, string name, string soundGuid) : base(id, name)
+        protected ManagedChannel(Guid id, string name) : base(id, name)
         {
-            SoundGuid = soundGuid;
+            
         }
 
         public bool IsDefault { get; set; }
@@ -15,6 +15,8 @@
 
         public bool IsActive { get; set; }
 
-        public string SoundGuid { get; }
+        public string? SoundGuid { get; set; }
+
+
     }
 }

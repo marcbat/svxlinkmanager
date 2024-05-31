@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Commands
 {
-    public record UpdateSvxlinkChannelCommand(Guid ConfigId, Guid ChannelId, string Name, string Host, string CallSign, string AuthKey, int Port, string ReportCallSign, string SoundName, byte[] SoundFile) : IRequest<Unit>;
+    public record UpdateSvxlinkChannelCommand(Guid ConfigId, Guid ChannelId, string Name, string Host, string CallSign, string AuthKey, int Port, string ReportCallSign, string? SoundName, byte[]? SoundFile) : IRequest<Unit>;
 
     internal class UpdateSvxlinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,
                                                          ISoundRepository soundRepository,
@@ -31,12 +31,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
 
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
-                var sound = new Sound($"$/sounds/{request.SoundName}.wav", request.Name, request.SoundFile);
-                await soundRepository.CreateAsyc(sound);
-
                 config.DeleteSvxlinkChannel(request.ChannelId);
 
-                var svxlinkChannel = new Domain.Entities.SvxlinkChannel(request.ChannelId, request.Name, sound.Id, request.Host, request.Port, request.CallSign, request.AuthKey, request.ReportCallSign);
+                var svxlinkChannel = new Domain.Entities.SvxlinkChannel(request.ChannelId, request.Name, request.Host, request.Port, request.CallSign, request.AuthKey, request.ReportCallSign);
 
                 config.AddSvxlinkChannel(svxlinkChannel);
 
@@ -53,6 +50,4 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
             }
         }
     }
-
-
 }

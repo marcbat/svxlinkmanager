@@ -41,11 +41,11 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
                 SvxlinkManagerConfigAggregate config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
              
-                var sound = new Sound($"$/sounds/{request.SoundName}.wav", request.Name, request.SoundFile);
+                var sound = new Sound($"$/sounds/{request.SoundName}", request.SoundName, request.SoundFile);
                 await soundRepository.CreateAsyc(sound);
 
                 var echolinkChannelGuid = Guid.NewGuid();
-                var echolinkChannel = new EcholinkChannel(echolinkChannelGuid, request.Name, sound.Id, request.Host, request.CallSign, request.Password, request.SysopName, request.Location, request.MaxQso, request.Description);
+                var echolinkChannel = new EcholinkChannel(echolinkChannelGuid, request.Name, request.Host, request.CallSign, request.Password, request.SysopName, request.Location, request.MaxQso, request.Description);
 
                 config.AddEcholinkChannel(echolinkChannel);
 

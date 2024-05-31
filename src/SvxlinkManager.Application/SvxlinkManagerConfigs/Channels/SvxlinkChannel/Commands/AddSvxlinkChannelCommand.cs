@@ -31,11 +31,11 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
 
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
-                var sound = new Sound($"$/sounds/{request.SoundName}.wav", request.Name, request.SoundFile);
+                var sound = new Sound($"$/sounds/{request.SoundName}", request.SoundName, request.SoundFile);
                 await soundRepository.CreateAsyc(sound);
 
                 var svxlinkchannelGuid = Guid.NewGuid();
-                var svxlinkChannel = new Domain.Entities.SvxlinkChannel(svxlinkchannelGuid, request.Name, sound.Id, request.Host, request.Port, request.CallSign, request.AuthKey, request.ReportCallSign);
+                var svxlinkChannel = new Domain.Entities.SvxlinkChannel(svxlinkchannelGuid, request.Name, request.Host, request.Port, request.CallSign, request.AuthKey, request.ReportCallSign);
 
                 config.AddSvxlinkChannel(svxlinkChannel);
 

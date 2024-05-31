@@ -10,8 +10,9 @@
       <InputText @bind-Value="Channel.Name" type="text" class="form-control" id="inputName" placeholder="Nom du salon" />
     </div>
     <div class="form-group col-md-6">
-      <label data-toggle="tooltip" title="Un fichier .wav qui sera joué lors de l'activation du salon.">Annonce vocal @CurrentSoundName</label>
+      <label data-toggle="tooltip" title="Un fichier .wav qui sera joué lors de l'activation du salon.">Annonce vocal @Channel?.Sound?.SoundName</label>
       <InputFile OnChange="@OnInputFileChange" class="form-control" id="inputName" />
+      <button type="button" @onclick="(() => Channel.Sound = null)" class="btn btn-danger">Supprimer</button>
     </div>
   </div>
   <div class="form-row">
@@ -119,20 +120,4 @@
   {
     Channel.SoundBrowserFile = eventArgs.File;
   }
-
-  public string CurrentSoundName
-  {
-    get
-    {
-      // if (!string.IsNullOrEmpty(Channel.Sound.SoundName))
-      // {
-      //   return $"({Channel.Sound.SoundName})";
-      // }
-      // else
-      //   return string.Empty;
-
-      return string.Empty;
-    }
-  }
-
 }

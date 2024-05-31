@@ -50,12 +50,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
 
                 var config = await _svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
-                var sound = new Sound($"$/sounds/{request.SoundName}.wav", request.Name, request.SoundFile);
+                var sound = new Sound($"$/sounds/{request.SoundName}", request.SoundName, request.SoundFile);
                 await _soundRepository.CreateAsyc(sound);
 
                 config.DeleteAdvanceSvxlinkChannel(request.ChannelId);
 
-                var advanceSvxlinkChannel = new AdvanceSvxlinkChannel(request.ChannelId, request.Name, sound.Id, request.SvxlinkConf, request.ModuleDtmfRepeater, request.ModuleEchoLink, request.ModuleFrn, request.ModuleHelp, request.ModuleMetarInfo, request.ModuleParrot, request.ModulePropagationMonitor, request.ModuleSelCallEnc, request.ModuleTclVoiceMail, request.ModuleTrx);
+                var advanceSvxlinkChannel = new AdvanceSvxlinkChannel(request.ChannelId, request.Name, request.SvxlinkConf, request.ModuleDtmfRepeater, request.ModuleEchoLink, request.ModuleFrn, request.ModuleHelp, request.ModuleMetarInfo, request.ModuleParrot, request.ModulePropagationMonitor, request.ModuleSelCallEnc, request.ModuleTclVoiceMail, request.ModuleTrx);
 
                 config.AddAdvanceSvxlinkChannel(advanceSvxlinkChannel);
 
