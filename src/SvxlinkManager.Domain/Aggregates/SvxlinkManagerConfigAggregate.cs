@@ -71,6 +71,41 @@ namespace SvxlinkManager.Domain.Aggregates
         }
 
         /// <summary>
+        /// Met à jour un canal Svxlink.
+        /// </summary>
+        /// <param name="channelId">L'identifiant du canal à mettre à jour.</param>
+        /// <param name="name">Le nouveau nom du canal.</param>
+        /// <param name="host">Le nouvel hôte du canal.</param>
+        /// <param name="callSign">Le nouvel indicatif d'appel du canal.</param>
+        /// <param name="authKey">La nouvelle clé d'authentification du canal.</param>
+        /// <param name="port">Le nouveau port du canal.</param>
+        /// <param name="reportCallSign">Le nouvel indicatif d'appel de rapport du canal.</param>
+        public void UpdateSvxlinkChannel(Guid channelId, string name, string host, string callSign, string authKey, int port, string reportCallSign)
+        {
+            var svxlinkChannel = svxlinkChannels.FirstOrDefault(x => x.Id == channelId) ?? throw new Exception("Canal Svxlink introuvable");
+
+            svxlinkChannel.Name = name;
+            svxlinkChannel.Host = host;
+            svxlinkChannel.CallSign = callSign;
+            svxlinkChannel.AuthKey = authKey;
+            svxlinkChannel.Port = port;
+            svxlinkChannel.ReportCallSign = reportCallSign;
+        }
+
+        /// <summary>
+        /// Met à jour le son d'un canal Svxlink.
+        /// </summary>
+        /// <param name="channelId"></param>
+        /// <param name="soundId"></param>
+        /// <exception cref="Exception"></exception>
+        public void UpdateSvxlinkChannelSound(Guid channelId, string soundId)
+        {
+            var svxlinkChannel = svxlinkChannels.FirstOrDefault(x => x.Id == channelId) ?? throw new Exception("Canal Svxlink introuvable");
+
+            svxlinkChannel.SoundGuid = soundId;
+        }
+
+        /// <summary>
         /// Obtient la liste des canaux Echolink.
         /// </summary>
         public IReadOnlyCollection<EcholinkChannel> EcholinkChannels

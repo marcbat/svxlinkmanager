@@ -31,11 +31,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
 
                 var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
 
-                config.DeleteSvxlinkChannel(request.ChannelId);
+                config.UpdateSvxlinkChannel(request.ChannelId, request.Name, request.Host, request.CallSign, request.AuthKey, request.Port, request.ReportCallSign);
 
-                var svxlinkChannel = new Domain.Entities.SvxlinkChannel(request.ChannelId, request.Name, request.Host, request.Port, request.CallSign, request.AuthKey, request.ReportCallSign);
-
-                config.AddSvxlinkChannel(svxlinkChannel);
+                //config.UpdateSvxlinkChannelSound(request.ChannelId, );
 
                 await svxlinkManagerConfigRepository.UpdateAsync(config);
 
