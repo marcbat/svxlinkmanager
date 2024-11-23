@@ -2,8 +2,8 @@
 {
     public class RadioProfil : Entity<Guid>
     {
-        private string txCtcss;
-        private string rxCtCss;
+        private string? txCtcss;
+        private string? rxCtCss;
         private string name;
         private string rxFequency;
         private string txFrequency;
@@ -81,14 +81,23 @@
             }
         }
 
-        public string TxCtcss
+        public string? TxCtcss
         {
             get
             {
+                if (txCtcss is null)
+                    return txCtcss;
+
                 return Ctcss[txCtcss];
             }
             private set
             {
+                if (string.IsNullOrEmpty(value))
+                {
+                    txCtcss = null;
+                    return;
+                }
+
                 var ctcss = Ctcss.SingleOrDefault(x => x.Value == value);
                 if (ctcss.Key == null)
                     throw new ArgumentException("Invalid value for TxCtcss");
@@ -97,15 +106,24 @@
             }
         }
 
-        public string RxCtCss
+        public string? RxCtCss
         {
             get
             {
+                if (rxCtCss is null)
+                    return rxCtCss;
+
                 return Ctcss[rxCtCss];
             }
 
             private set
             {
+                if (string.IsNullOrEmpty(value))
+                {
+                    rxCtCss = null;
+                    return;
+                }
+
                 var ctcss = Ctcss.SingleOrDefault(x => x.Value == value);
                 if (ctcss.Key == null)
                     throw new ArgumentException("Invalid value for RxCtCss");

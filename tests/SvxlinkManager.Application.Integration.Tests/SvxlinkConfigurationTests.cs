@@ -45,7 +45,7 @@ namespace SvxlinkManager.Application.Integration.Tests
             if(!Directory.Exists("db"))
                 Directory.CreateDirectory("db");
 
-            db = Path.Combine("db", $"{TestContext.CurrentContext.Test.ClassName}.{TestContext.CurrentContext.Test.Name}.db");
+            db = Path.Combine("db", $"{TestContext.CurrentContext.Test.ClassName}.{TestContext.CurrentContext.Test.MethodName}.db");
 
             services.AddSingleton<IOptions<SvxlinkManagerOptions>>(x => new FakeOptions(db));
 
@@ -329,8 +329,10 @@ namespace SvxlinkManager.Application.Integration.Tests
             }
         }
 
-        [Test]
-        public async Task AddRadioProfilCommand_WhenIsValid_ShouldAddNewRadioProfil()
+        [TestCase("123.45", "543.21", "5", "67", "67", "10", "0.5", "100", "10000", "true")]
+        [TestCase("123.45", "543.21", "5", null, "67", "10", "0.5", "100", "10000", "true")]
+        [TestCase("123.45", "543.21", "5", "67", null, "10", "0.5", "100", "10000", "true")]
+        public async Task AddRadioProfilCommand_WhenIsValid_ShouldAddNewRadioProfil(string rxFrequency, string txFrequency, string squelch, string? txCtcss, string? rxCtCss, string volume, string preEmph, string highPass, string lowPass, string squelchDetection)
         {
             try
             {
@@ -338,16 +340,6 @@ namespace SvxlinkManager.Application.Integration.Tests
 
                 // Arrange
                 var name = "Fake Name";
-                var rxFrequency = "123.45";
-                var txFrequency = "543.21";
-                var squelch = "5";
-                var txCtcss = "67";
-                var rxCtCss = "67";
-                var volume = "10";
-                var preEmph = "0.5";
-                var highPass = "100";
-                var lowPass = "10000";
-                var squelchDetection = "true";
 
                 var radioProfilId = await mediatr.Send(new AddRadioProfilCommand(configGuid, name,
                                rxFrequency,
