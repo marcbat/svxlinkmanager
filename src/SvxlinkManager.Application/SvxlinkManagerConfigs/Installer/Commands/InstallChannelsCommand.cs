@@ -4,6 +4,9 @@ using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Queries;
+using SvxlinkManager.Domain.Entities;
+
+using System.Threading.Channels;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
 {
@@ -26,28 +29,30 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
         {
             try
             {
-                logger.LogInformation("Début de l'installation des canaux.");
+                //logger.LogInformation("Début de l'installation des canaux.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfig(request.ConfigId);
+                //var config = svxlinkManagerConfigRepository.GetConfig(request.ConfigId);
 
-                var channels = await mediator.Send(new GetAllOriginalChannelsCommand(), cancellationToken);
+                //var toto = svxlinkManagerConfigRepository.GetAllOriginalChannels()
+                //    .Map(x => x.Where(y => request.InstallChannels.Contains(y.Id)))
+                //    .Select(x => x.Iter(r=> config.AddSvxlinkChannel(r)));
 
-                foreach (var channelId in request.InstallChannels)
-                {
-                    var channel = channels.FirstOrDefault(c => c.Id == channelId);
-                    if (channel is not null)
-                    {
-                        channel.CallSign = request.CallSign;
-                        channel.ReportCallSign = request.AnnonceCallSign;
+                //foreach (var channelId in request.InstallChannels)
+                //{
+                //    var channel = channels.FirstOrDefault(c => c.Id == channelId);
+                //    if (channel is not null)
+                //    {
+                //        channel.CallSign = request.CallSign;
+                //        channel.ReportCallSign = request.AnnonceCallSign;
 
-                        config.AddSvxlinkChannel(channel);
-                        logger.LogInformation("Le canal {channelName} a été installé avec succès.", channel.Name);
-                    }
-                }
+                //        config.AddSvxlinkChannel(channel);
+                //        logger.LogInformation("Le canal {channelName} a été installé avec succès.", channel.Name);
+                //    }
+                //}
 
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
+                //await svxlinkManagerConfigRepository.UpdateAsync(config);
 
-                logger.LogInformation("Les canaux ont été installés avec succès.");
+                //logger.LogInformation("Les canaux ont été installés avec succès.");
 
                 return Unit.Value;
             }

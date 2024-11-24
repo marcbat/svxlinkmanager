@@ -6,8 +6,8 @@ namespace SvxlinkManager.Domain.Entities
 {
     public class RadioProfil : Entity<Guid>
     {
-        private Option<string> txCtcss;
-        private Option<string> rxCtCss;
+        private string txCtcss;
+        private string rxCtCss;
         private string name;
         private string rxFequency;
         private string txFrequency;
@@ -18,8 +18,8 @@ namespace SvxlinkManager.Domain.Entities
                            string rxFequency,
                            string txFrequency,
                            string squelch,
-                           Option<string> txCtcss,
-                           Option<string> rxCtCss,
+                           string txCtcss,
+                           string rxCtCss,
                            string volume,
                            string preEmph,
                            string hightPass,
@@ -119,21 +119,12 @@ namespace SvxlinkManager.Domain.Entities
             }
         }
 
-        public Option<string> TxCtcss
-        {
-            get
-            {
-                return txCtcss.Match(
-                    Some: x => Ctcss[x],
-                    None: () => txCtcss
-                );
-            }
-        }
+        public string TxCtcss => txCtcss;
 
-        internal static Validation<Error, Option<string>> ValidateTxCtcss(string txCtcss)
+        internal static Validation<Error, string> ValidateTxCtcss(string txCtcss)
         {
             if (string.IsNullOrWhiteSpace(txCtcss))
-                return Option<string>.None;
+                return Error.New("Le ton de CTCSS de transmission ne peut pas être vide.");
 
             var valueExist = Ctcss.ContainsValue(txCtcss);
 
@@ -142,28 +133,18 @@ namespace SvxlinkManager.Domain.Entities
 
             var keyvalue = Ctcss.Single(x => x.Value == txCtcss);
 
-            return Some(keyvalue.Key);
+            return keyvalue.Key;
         }
 
-        public Validation<Error, Option<string>> SetTxCtcss(string txCtcss) =>
+        public Validation<Error, string> SetTxCtcss(string txCtcss) =>
             ValidateTxCtcss(txCtcss).Map(x => this.txCtcss = x); 
 
-        public Option<string> RxCtCss
-        {
-            get
-            {
-                return rxCtCss.Match(
-                    Some: x => Ctcss[x],
-                    None: () => rxCtCss
-                );
+        public string RxCtCss => rxCtCss;
 
-            }
-        }
-
-        internal static Validation<Error, Option<string>> ValidateRxCtCss(string rxCtCss)
+        internal static Validation<Error, string> ValidateRxCtCss(string rxCtCss)
         {
             if (string.IsNullOrWhiteSpace(rxCtCss))
-                return Option<string>.None;
+                return Error.New("Le ton de CTCSS de réception ne peut pas être vide.");
 
             var valueExist = Ctcss.ContainsValue(rxCtCss);
 
@@ -172,10 +153,10 @@ namespace SvxlinkManager.Domain.Entities
 
             var keyvalue = Ctcss.Single(x => x.Value == rxCtCss);
 
-            return Some(keyvalue.Key);
+            return keyvalue.Key;
         }
 
-        public Validation<Error, Option<string>> SetRxCtCss(string rxCtCss) =>
+        public Validation<Error, string> SetRxCtCss(string rxCtCss) =>
             ValidateRxCtCss(rxCtCss).Map(x => this.rxCtCss = x);
 
         private static Dictionary<string, string> Ctcss => new Dictionary<string, string>

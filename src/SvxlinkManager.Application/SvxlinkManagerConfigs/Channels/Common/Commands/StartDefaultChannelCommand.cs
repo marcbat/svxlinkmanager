@@ -1,14 +1,19 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Application.Interfaces;
 
+using System.Linq;
+
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Commands
 {
-    public record StartDefaultChannelCommand(Guid ConfigId) : IRequest<Unit>;
+    public record StartDefaultChannelCommand(Guid ConfigId) : IRequest<Validation<Error, Guid>>;
 
-    internal class StartDefaultChannelCommandHandler : IRequestHandler<StartDefaultChannelCommand, Unit>
+    internal class StartDefaultChannelCommandHandler : IRequestHandler<StartDefaultChannelCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ISvxlinkServiceBase svxlinkService;
@@ -21,30 +26,22 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(StartDefaultChannelCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(StartDefaultChannelCommand request, CancellationToken cancellationToken)
         {
             try
             {
                 logger.LogInformation("Starting default channel.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfig(request.ConfigId);
-
-                var channel = config.GetManagedChannels().Where(c => c.IsDefault).SingleOrDefault();
-
-                if (channel is null)
-                {
-                    logger.LogWarning("No default channel found.");
-
-                    svxlinkService.StopSvxlink();
-
-                    return Unit.Value;
-                }
-
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
+                var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                             from channel in config.GetDefaultChannel()
+                             where channel.IsNone
+                             from _ in svxlinkService.StopSvxlink()
+                             from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                             select config.Id;
 
                 logger.LogInformation("Starting default channel.");
 
-                return Unit.Value;
+                return Task.FromResult(result);
             }
             catch (Exception ex)
             {

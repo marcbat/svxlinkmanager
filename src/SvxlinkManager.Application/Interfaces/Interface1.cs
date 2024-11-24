@@ -1,4 +1,7 @@
-﻿using System;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +15,6 @@ namespace SvxlinkManager.Application.Interfaces
 
         string? FindConfigValueInString(string ini, string key);
 
-        void ReplaceConfig(string filePath, Dictionary<string, Dictionary<string, string>> parameters);
+        Validation<Error, Unit> ReplaceConfig(string filePath, Dictionary<string, Dictionary<string, string>> parameters);
     }
 }

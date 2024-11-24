@@ -26,7 +26,7 @@ namespace SvxlinkManager.Infrastructure
             this.logger = logger;
         }
 
-        public Task Create(SvxlinkManagerConfigAggregate config)
+        public Validation<Error, Guid> Create(SvxlinkManagerConfigAggregate config)
         {
             using var db = new LiteDatabase(options.LiteDbFile);
 
@@ -36,7 +36,7 @@ namespace SvxlinkManager.Infrastructure
 
             collection.Insert(config);
 
-            return Task.CompletedTask;
+            return config.Id;
         }
 
         public Validation<Error, SvxlinkManagerConfigAggregate> GetConfig(Guid configId)
@@ -61,9 +61,32 @@ namespace SvxlinkManager.Infrastructure
                 logger.LogError("Erreur lors de la récupération de la configuration.");
                 return Error.New("Erreur lors de la récupération de la configuration.");
             }
-            
-                
         
+        }
+
+        public Validation<Error, Option<SvxlinkManagerConfigAggregate>> FindConfig(Guid configId)
+        {
+            try
+            {
+                using var db = new LiteDatabase(options.LiteDbFile);
+
+                var collection = db.GetCollection<SvxlinkManagerConfigAggregate>("svxlinkManagerConfigs");
+
+                collection.EnsureIndex(x => x.Id, true);
+
+                var config = collection.FindById(configId);
+
+                if (config is null)
+                    return Option<SvxlinkManagerConfigAggregate>.None;
+
+                return Option<SvxlinkManagerConfigAggregate>.Some(config);
+            }
+            catch (Exception)
+            {
+                logger.LogError("Erreur lors de la récupération de la configuration.");
+                return Error.New("Erreur lors de la récupération de la configuration.");
+            }
+
         }
 
         public Validation<Error, Unit> UpdateAsync(SvxlinkManagerConfigAggregate config)

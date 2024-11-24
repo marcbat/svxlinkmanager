@@ -14,9 +14,11 @@ namespace SvxlinkManager.Application.Interfaces
 {
     public interface ISvxlinkManagerConfigRepository
     {
-        Task Create(SvxlinkManagerConfigAggregate config);
+        Validation<Error, Guid> Create(SvxlinkManagerConfigAggregate config);
 
         Validation<Error, SvxlinkManagerConfigAggregate> GetConfig(Guid configId);
+
+        Validation<Error, Option<SvxlinkManagerConfigAggregate>> FindConfig(Guid configId);
 
         Validation<Error, Unit> UpdateAsync(SvxlinkManagerConfigAggregate config);
 

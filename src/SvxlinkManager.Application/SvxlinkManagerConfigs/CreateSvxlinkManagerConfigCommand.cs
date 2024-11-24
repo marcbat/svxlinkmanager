@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -13,9 +16,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs
 {
-    public record CreateSvxlinkManagerConfigCommand(Guid ConfigId) : IRequest<Guid>;
+    public record CreateSvxlinkManagerConfigCommand(Guid ConfigId) : IRequest<Validation<Error, Guid>>;
 
-    internal class CreateSvxlinkManagerConfigCommandHandler : IRequestHandler<CreateSvxlinkManagerConfigCommand, Guid>
+    internal class CreateSvxlinkManagerConfigCommandHandler : IRequestHandler<CreateSvxlinkManagerConfigCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<CreateSvxlinkManagerConfigCommandHandler> logger;
@@ -26,30 +29,21 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs
             this.logger = logger;
         }
 
-        public async Task<Guid> Handle(CreateSvxlinkManagerConfigCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(CreateSvxlinkManagerConfigCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Création d'un nouveau svxlink manager config.");
-                var config = svxlinkManagerConfigRepository.GetConfig(request.ConfigId);
 
-                if (config is null)
-                {
-                    logger.LogInformation("Création d'un nouveau svxlink manager config.");
+            logger.LogInformation("Création d'un nouveau svxlink manager config.");
 
-                    config = SvxlinkManagerConfigAggregate.Create(request.ConfigId);
-                    await svxlinkManagerConfigRepository.Create(config);
-                }
+            var result = from config in svxlinkManagerConfigRepository.FindConfig(request.ConfigId)
+                         where config.IsNone
+                         from newConfig in SvxlinkManagerConfigAggregate.Create(request.ConfigId)
+                         from id in svxlinkManagerConfigRepository.Create(newConfig)
+                         select id;
 
-                logger.LogInformation("Création d'un nouveau svxlink manager config réussie.");
+            logger.LogInformation("Création d'un nouveau svxlink manager config réussie.");
 
-                return config.Id;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Impossible de créer un nouveau svxlink manager config.");
-                throw new SvxlinkManagerException("Impossible de créer un nouveau svxlink manager config.", ex);
-            }
+            return Task.FromResult(result);
+
         }
     }
 }

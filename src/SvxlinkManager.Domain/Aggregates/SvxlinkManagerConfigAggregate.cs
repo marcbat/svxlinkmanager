@@ -28,7 +28,7 @@ namespace SvxlinkManager.Domain.Aggregates
         /// <summary>
         /// Initialise une nouvelle instance de la classe <see cref="SvxlinkManagerConfigAggregate"/>.
         /// </summary>
-        public SvxlinkManagerConfigAggregate()
+        internal SvxlinkManagerConfigAggregate()
         {
         }
 
@@ -37,7 +37,7 @@ namespace SvxlinkManager.Domain.Aggregates
         /// </summary>
         /// <param name="id">L'identifiant de l'agrégat.</param>
         /// <returns>Une nouvelle instance de la classe <see cref="SvxlinkManagerConfigAggregate"/>.</returns>
-        public static SvxlinkManagerConfigAggregate Create(Guid id)
+        public static Validation<Error, SvxlinkManagerConfigAggregate> Create(Guid id)
         {
             return new SvxlinkManagerConfigAggregate(id);
         }
@@ -603,17 +603,26 @@ namespace SvxlinkManager.Domain.Aggregates
             return Unit.Default;
         }
 
-        public RadioProfil GetActiveRadioProfile()
+        public Validation<Error, RadioProfil> GetActiveRadioProfile()
         {
-            try
-            {
-                var profil = radioProfils.FirstOrDefault(x => x.IsActive) ?? throw new Exception("Profil radio non trouvé.");
-                return profil;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Impossible de trouver le profil radio actif.", ex);
-            }
+
+            var profil = radioProfils.FirstOrDefault(x => x.IsActive);
+
+            if(profil is null)
+                return Error.New("Profil radio introuvable.");
+
+            return profil;
+            
+        }
+
+        public Validation<Error,Option<ManagedChannel>> GetDefaultChannel()
+        {
+            var channel = GetManagedChannels().SingleOrDefault(x => x.IsDefault);
+
+            if (channel is null)
+                return Option<ManagedChannel>.None;
+
+            return Option<ManagedChannel>.Some(channel);
         }
     }
 }

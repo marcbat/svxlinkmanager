@@ -16,10 +16,10 @@ namespace SvxlinkManager.Application.Interfaces
 
         Validation<Error, Unit> StartReflector(Reflector reflector, bool runAsDaemon = false, string logFile = null, string configFile = null, string pidFile = null, string runAs = null);
 
-        void StartSvxlink(ChannelBase channel, bool runAsDaemon = false, string? logFile = null, string? configFile = null, string? pidFile = null, string? runAs = null);
+        Validation<Error, Unit> StartSvxlink(ChannelBase channel, bool runAsDaemon = false, string? logFile = null, string? configFile = null, string? pidFile = null, string? runAs = null);
 
         Validation<Error, Unit> StopReflector(Reflector reflector);
 
-        void StopSvxlink();
+        Validation<Error, Unit> StopSvxlink();
     }
 }
