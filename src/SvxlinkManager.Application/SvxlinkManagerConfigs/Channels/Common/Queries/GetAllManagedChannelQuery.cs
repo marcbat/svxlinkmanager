@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -13,9 +16,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queries
 {
-    public record GetAllManagedChannelQuery(Guid ConfigId) : IRequest<IEnumerable<ManagedChannel>>;
+    public record GetAllManagedChannelQuery(Guid ConfigId) : IRequest<Validation<Error, IEnumerable<ManagedChannel>>>;
 
-    internal class GetAllManagedChannelQueryHandler : IRequestHandler<GetAllManagedChannelQuery, IEnumerable<ManagedChannel>>
+    internal class GetAllManagedChannelQueryHandler : IRequestHandler<GetAllManagedChannelQuery, Validation<Error, IEnumerable<ManagedChannel>>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetAllManagedChannelQueryHandler> logger;
@@ -26,23 +29,18 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queri
             this.logger = logger;
         }
 
-        public async Task<IEnumerable<ManagedChannel>> Handle(GetAllManagedChannelQuery request, CancellationToken cancellationToken)
+        public Task<Validation<Error, IEnumerable<ManagedChannel>>> Handle(GetAllManagedChannelQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Récupération de tous les canaux managés.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            logger.LogInformation("Récupération de tous les canaux managés.");
 
-                logger.LogInformation("Récupération de tous les canaux managés réussie.");
+            var result = svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                .Bind(config => config.GetSvxlinkAndEcholinkChannels());
 
-                return config.GetSvxlinkAndEcholinkChannels();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("Erreur lors de la récupération des cannaux managés.");
-                throw new Exception("Erreur lors de la récupération des cannaux managés.", ex);
-            }
+            logger.LogInformation("Récupération de tous les canaux managés réussie.");
+
+            return Task.FromResult(result);
+
         }
     }
 }

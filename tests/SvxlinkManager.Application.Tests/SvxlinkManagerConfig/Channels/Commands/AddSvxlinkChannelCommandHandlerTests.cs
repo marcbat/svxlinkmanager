@@ -57,7 +57,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfig.Channels.Commands.Test
             var command = new AddSvxlinkChannelCommand(configId, name, host, callSign, password, port, reportCallSign, soundName, soundFile);
 
             var config = SvxlinkManagerConfigAggregate.Create(Guid.NewGuid());
-            _svxlinkManagerConfigRepository.GetConfigAsync(configId).Returns(config);
+            _svxlinkManagerConfigRepository.GetConfig(configId).Returns(config);
 
             var sound = new Sound(string.Empty, name, soundFile);
             _soundRepository.CreateAsyc(Arg.Any<Sound>()).Returns(Task.FromResult(sound));
@@ -96,7 +96,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfig.Channels.Commands.Test
 
             var command = new AddSvxlinkChannelCommand(configId, name, host, callSign, password, port, reportCallSign, soundName, soundFile);
 
-            _svxlinkManagerConfigRepository.GetConfigAsync(configId).Throws(new Exception("Test Exception"));
+            _svxlinkManagerConfigRepository.GetConfig(configId).Throws(new Exception("Test Exception"));
 
             // Act
             Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);

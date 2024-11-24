@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 using SvxlinkManager.Application.Interfaces;
@@ -14,10 +17,10 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Commands
 {
-    public record AddEcholinkChannelCommand(Guid ConfigId, string Name, string Host, string CallSign, string Password, string SysopName, string Location, int MaxQso, string Description, string SoundName, byte[] SoundFile) : IRequest<Guid>;
+    public record AddEcholinkChannelCommand(Guid ConfigId, string Name, string Host, string CallSign, string Password, string SysopName, string Location, int MaxQso, string Description, string SoundName, byte[] SoundFile) : IRequest<Validation<Error, Guid>>;
 
 
-    internal class AddEcholinkChannelCommandHandler : IRequestHandler<AddEcholinkChannelCommand, Guid>
+    internal class AddEcholinkChannelCommandHandler : IRequestHandler<AddEcholinkChannelCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ISoundRepository soundRepository;
@@ -32,34 +35,28 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
             this.logger = logger;
         }
 
-        public async Task<Guid> Handle(AddEcholinkChannelCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(AddEcholinkChannelCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Ajout d'un nouveau echolink channel.");
 
-                SvxlinkManagerConfigAggregate config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            logger.LogInformation("Ajout d'un nouveau echolink channel.");
 
-             
-                var sound = new Sound($"$/sounds/{request.SoundName}", request.SoundName, request.SoundFile);
-                await soundRepository.CreateAsyc(sound);
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                         from Sound in CreateSound(request.SoundName, request.SoundFile)
+                         from channel in EcholinkChannel.Create(Guid.NewGuid(), request.Name, request.Host, request.CallSign, request.Password, request.SysopName, request.Location, request.MaxQso, request.Description)
+                         from _ in config.AddEcholinkChannel(channel)
+                         from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                         select config.Id;
 
-                var echolinkChannelGuid = Guid.NewGuid();
-                var echolinkChannel = new EcholinkChannel(echolinkChannelGuid, request.Name, request.Host, request.CallSign, request.Password, request.SysopName, request.Location, request.MaxQso, request.Description);
+            logger.LogInformation("Un nouveau echolink channel a été ajouté avec succès.");
 
-                config.AddEcholinkChannel(echolinkChannel);
+            return Task.FromResult(result);
 
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
+        }
 
-                logger.LogInformation("Un nouveau echolink channel a été ajouté avec succès.");
-
-                return echolinkChannelGuid;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Impossible d'ajouter un nouveau echolink channel.");
-                throw new SvxlinkManagerException("Impossible d'ajouter un nouveau echolink channel.", ex);
-            }
+        private Validation<Error, LanguageExt.Unit> CreateSound(string soundName, byte[] soundFile)
+        {
+            return Sound.Create($"$/sounds/{soundName}", soundName, soundFile)
+                .Bind(soundRepository.CreateAsyc);
         }
     }
 }

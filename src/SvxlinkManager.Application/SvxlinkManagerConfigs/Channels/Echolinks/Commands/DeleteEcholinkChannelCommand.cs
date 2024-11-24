@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -11,9 +14,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Commands
 {
-    public record DeleteEcholinkChannelCommand(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Unit>;
+    public record DeleteEcholinkChannelCommand(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Validation<Error, Guid>>;
 
-    internal class DeleteEcholinkChannelCommandHandler : IRequestHandler<DeleteEcholinkChannelCommand, Unit>
+    internal class DeleteEcholinkChannelCommandHandler : IRequestHandler<DeleteEcholinkChannelCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<DeleteEcholinkChannelCommandHandler> logger;
@@ -24,29 +27,21 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(DeleteEcholinkChannelCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(DeleteEcholinkChannelCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Suppression du echolink channel.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
+            logger.LogInformation("Suppression du echolink channel.");
 
-                var channel = config.EcholinkChannels.SingleOrDefault(c => c.Id == request.ChannelGuid) ?? throw new SvxlinkManagerException("Impossible de trouver le echolink channel.");
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
+                         from channel in config.GetEcholinkChannel(request.ChannelGuid)
+                         from _ in config.DeleteEcholinkChannel(request.ChannelGuid)
+                         from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                         select config.Id;
 
-                config.DeleteEcholinkChannel(request.ChannelGuid);
+            logger.LogInformation("Echolink channel supprimé.");
 
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
+            return Task.FromResult(result);
 
-                logger.LogInformation("Echolink channel supprimé.");
-
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur lors de la suppression du echolink channel.");
-                throw new SvxlinkManagerException("Impossible de supprimer le echolink channel.", ex);
-            }
         }
     }
 }

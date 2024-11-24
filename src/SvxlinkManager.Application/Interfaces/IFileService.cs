@@ -1,4 +1,7 @@
-﻿using SvxlinkManager.Domain.Entities;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using SvxlinkManager.Domain.Entities;
 
 using System;
 using System.Collections.Generic;
@@ -10,6 +13,6 @@ namespace SvxlinkManager.Application.Interfaces
 {
     public interface IFileService
     {
-        void WriteReflectorConfig(Reflector reflector);
+        Validation<Error, Unit> WriteReflectorConfig(Reflector reflector);
     }
 }

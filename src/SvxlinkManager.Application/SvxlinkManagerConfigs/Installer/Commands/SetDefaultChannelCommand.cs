@@ -1,48 +1,45 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Application.Interfaces;
+using SvxlinkManager.Domain.Entities;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
 {
-    public record SetDefaultChannelCommand(Guid ConfigId, Guid ChannelId) : IRequest<Unit>;
+    public record SetDefaultChannelCommand(Guid ConfigId, Guid ChannelId) : IRequest<Validation<Error, Guid>>;
 
-    internal class SetDefaultChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<SetDefaultChannelCommandHandler> logger) : IRequestHandler<SetDefaultChannelCommand, Unit>
+    internal class SetDefaultChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<SetDefaultChannelCommandHandler> logger) : IRequestHandler<SetDefaultChannelCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
         private readonly ILogger<SetDefaultChannelCommandHandler> logger = logger;
 
-        public async Task<Unit> Handle(SetDefaultChannelCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(SetDefaultChannelCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Début de la configuration du channel par defaut.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            logger.LogInformation("Début de la configuration du channel par defaut.");
 
-                var channel = config.SvxlinkChannels.FirstOrDefault(c => c.Id == request.ChannelId);
-                if (channel is null)
-                {
-                    logger.LogWarning("Channel not found.");
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                         from channel in config.GetSvxlinkChannel(request.ChannelId)
+                         from _ in SetAsDefault(channel)
+                         from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                         select config.Id;
 
-                    return Unit.Value;
-                }
+            logger.LogInformation("Le channel par defaut a été configuré.");
 
-                channel.IsDefault = true;
-                channel.IsTemporized = false;
+            return Task.FromResult(result);
 
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
+        }
 
-                logger.LogInformation("Le channel par defaut a été configuré.");
+        private static Validation<Error, LanguageExt.Unit> SetAsDefault(SvxlinkChannel channel)
+        {
+            channel.IsDefault = true;
+            channel.IsTemporized = false;
 
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur de la configuration du channel par defaut.");
-                throw new Exception("Erreur de la configuration du channel par defaut.", ex);
-            }
+            return LanguageExt.Unit.Default;
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -24,9 +27,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
                                string PreEmph,
                                string HighPass,
                                string LowPass,
-                               string SquelchDetection) : IRequest<Unit>;
+                               string SquelchDetection) : IRequest<Validation<Error, Guid>>;
 
-    internal class UpdateRadioProfilCommandHandler : IRequestHandler<UpdateRadioProfilCommand, Unit>
+    internal class UpdateRadioProfilCommandHandler : IRequestHandler<UpdateRadioProfilCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository _svxlinkManagerConfigRepository;
         private readonly ISoundRepository _soundRepository;
@@ -41,31 +44,22 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(UpdateRadioProfilCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error,Guid>> Handle(UpdateRadioProfilCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
+           
                 logger.LogInformation("Mise à jour d'un profil radio.");
 
-                var config = await _svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
-
-                config.DeleteRadioProfil(request.ProfilId);
-
-                var radioProfil = new RadioProfil(request.ProfilId, request.Name, request.RxFrequency, request.TxFrequency, request.Squelch, request.TxCtcss, request.RxCtCss, request.Volume, request.PreEmph, request.HighPass, request.LowPass, request.SquelchDetection);
-
-                config.AddRadioProfil(radioProfil);
-
-                await _svxlinkManagerConfigRepository.UpdateAsync(config);
+                var result = from config in _svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                             from _ in config.DeleteRadioProfil(request.ProfilId)
+                             from radioProfil in RadioProfil.Create(request.ProfilId, request.Name, request.RxFrequency, request.TxFrequency, request.Squelch, request.TxCtcss, request.RxCtCss, request.Volume, request.PreEmph, request.HighPass, request.LowPass, request.SquelchDetection)
+                             from __ in config.AddRadioProfil(radioProfil)
+                             from ___ in _svxlinkManagerConfigRepository.UpdateAsync(config)
+                             select config.Id;
 
                 logger.LogInformation("Un profil radio a été mis à jour avec succès.");
 
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Impossible de mettre à jour un profil radio.");
-                throw new SvxlinkManagerException("Impossible de mettre à jour un profil radio.", ex);
-            }
+                return Task.FromResult(result);
+            
         }
     }
 }

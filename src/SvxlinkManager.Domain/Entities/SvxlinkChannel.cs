@@ -1,31 +1,42 @@
-﻿namespace SvxlinkManager.Domain.Entities
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+namespace SvxlinkManager.Domain.Entities
 {
     public class SvxlinkChannel : Channel
     {
         private string reportCallSign;
 
-        public SvxlinkChannel(Guid id, string name, string host, int port, string callSign, string authKey, string reportCallSign) : base(id, name, host, callSign)
+        internal SvxlinkChannel(Guid id, string name, string host, int port, string callSign, string authKey, string reportCallSign) : base(id, name, host, callSign)
         {
             AuthKey = authKey;
             Port = port;
-            ReportCallSign = reportCallSign;
+            this.reportCallSign = reportCallSign;
+        }
+
+        public static Validation<Error, SvxlinkChannel> Create(Guid id, string name, string host, int port, string callSign, string authKey, string reportCallSign)
+        {
+            return (ValidateReportCallSign(reportCallSign), ValidateHost(host))
+                .Apply((vreportCallSign, vhost) => new SvxlinkChannel(id, name, vhost, port, callSign, authKey, vreportCallSign));
         }
 
         public string? AuthKey { get; set; }
 
         public int Port { get; set; }
 
-        public string ReportCallSign
-        {
-            get => reportCallSign; set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentException("Le nom du reportCallSign ne peut pas être vide.", nameof(value));
-                }
+        public string ReportCallSign => reportCallSign;
 
-                reportCallSign = value;
-            }
+        public Validation<Error, string> SetReportCallSign(string reportCallSign)
+        {
+            return ValidateReportCallSign(reportCallSign).Map(v => this.reportCallSign = v);
+        }
+
+        public static Validation<Error, string> ValidateReportCallSign(string reportCallSign)
+        {
+            if (string.IsNullOrWhiteSpace(reportCallSign))
+                return Error.New("Le nom du reportCallSign ne peut pas être vide.");
+
+            return reportCallSign;
         }
     }
 }

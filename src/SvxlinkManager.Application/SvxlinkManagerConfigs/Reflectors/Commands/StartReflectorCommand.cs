@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -12,9 +15,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
 {
-    public record StartReflectorCommand(Guid ConfigId, Guid ReflectorId) : IRequest<Unit>;
+    public record StartReflectorCommand(Guid ConfigId, Guid ReflectorId) : IRequest<Validation<Error, Guid>>;
 
-    internal class StartReflectorCommandHandler : IRequestHandler<StartReflectorCommand, Unit>
+    internal class StartReflectorCommandHandler : IRequestHandler<StartReflectorCommand, Validation<Error, Guid>>
     {
         private readonly string applicationPath = Directory.GetCurrentDirectory();
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
@@ -30,41 +33,28 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(StartReflectorCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(StartReflectorCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
+            
                 logger.LogInformation("Démarrage du reflector.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+                var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                             from reflector in config.GetReflector(request.ReflectorId)
+                             from _ in EnableReflector(reflector)
+                             from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                             from ___ in fileService.WriteReflectorConfig(reflector)
+                             from ____ in svxlinkService.StartReflector(reflector, pidFile: $"/var/run/reflector-{reflector.Id}.pid", runAs: "root", configFile: $"{applicationPath}/SvxlinkConfig/svxreflector-{reflector.Id}.conf")
+                             select config.Id;
 
-                var reflector = config.Reflectors.FirstOrDefault(x => x.Id == request.ReflectorId);
+            return Task.FromResult(result);
 
-                if (reflector is null)
-                {
-                    logger.LogError("Impossible de démarrer le reflector. Le reflector n'existe pas.");
-                    throw new SvxlinkManagerException("Impossible de démarrer le reflector. Le reflector n'existe pas.");
-                }
+        }
 
-                reflector.Enable = true;
+        private static Validation<Error, LanguageExt.Unit> EnableReflector(Domain.Entities.Reflector reflector)
+        {
+            reflector.Enable = true;
 
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
-
-                fileService.WriteReflectorConfig(reflector);
-
-                logger.LogInformation("Le fichier de configuration du reflector a été écrit avec succès.");
-
-                svxlinkService.StartReflector(reflector, pidFile: $"/var/run/reflector-{reflector.Id}.pid", runAs: "root", configFile: $"{applicationPath}/SvxlinkConfig/svxreflector-{reflector.Id}.conf");
-
-                logger.LogInformation("Le reflector a été démarré avec succès.");
-
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur lors du démarrage du reflector.");
-                throw new Exception("Erreur lors du démarrage du reflector.", ex);
-            }
+            return LanguageExt.Unit.Default;
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +11,15 @@ namespace SvxlinkManager.Domain.Entities
 {
     public class Reflector : Entity<Guid>
     {
-        public Reflector(Guid id, string name, string config) : base(id)
+        internal Reflector(Guid id, string name, string config) : base(id)
         {
             Name = name;
             Config = config;
+        }
+
+        public static Validation<Error, Reflector> Create(Guid id, string name, string config)
+        {
+            return new Reflector(id, name, config);
         }
 
         public string Name { get; }

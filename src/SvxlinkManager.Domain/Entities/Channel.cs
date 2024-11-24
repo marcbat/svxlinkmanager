@@ -1,4 +1,7 @@
-﻿namespace SvxlinkManager.Domain.Entities
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+namespace SvxlinkManager.Domain.Entities
 {
     public abstract class Channel : ManagedChannel
     {
@@ -7,35 +10,38 @@
 
         public Channel(Guid id, string name, string host, string callSign) : base(id, name)
         {
-
-            Host = host;
-            CallSign = callSign;
+            this.callSign = callSign;
+            this.host = host;
         }
 
-        public string Host
-        {
-            get => host; set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentException("Le nom du host ne peut pas être vide.", nameof(value));
-                }
+        public string Host => host;
 
-                host = value;
-            }
+        public static Validation<Error, string> ValidateHost(string host)
+        {
+            if (string.IsNullOrWhiteSpace(host))
+                return Error.New("Le nom du host ne peut pas être vide.");
+
+            return host;
         }
 
-        public string CallSign
+        public Validation<Error, string> SetHost(string host)
         {
-            get => callSign; set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentException("Le nom du callSign ne peut pas être vide.", nameof(value));
-                }
+            return ValidateHost(host).Map(v => this.host = v);
+        }
 
-                callSign = value;
-            }
+        public string CallSign => callSign;
+
+        public Validation<Error, string> ValidateCallSign(string callSign)
+        {
+            if (string.IsNullOrWhiteSpace(callSign))
+                return Error.New("Le nom du callSign ne peut pas être vide.");
+
+            return callSign;
+        }
+
+        public Validation<Error, string> SetCallSign(string callSign)
+        {
+            return ValidateCallSign(callSign).Map(v => this.callSign = v);
         }
     }
 }

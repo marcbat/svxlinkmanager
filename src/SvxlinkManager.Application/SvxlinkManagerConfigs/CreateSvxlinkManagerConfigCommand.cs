@@ -31,7 +31,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs
             try
             {
                 logger.LogInformation("Création d'un nouveau svxlink manager config.");
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+                var config = svxlinkManagerConfigRepository.GetConfig(request.ConfigId);
 
                 if (config is null)
                 {

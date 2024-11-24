@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -14,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Queries
 {
-    public record GetAllRadioProfilQuery(Guid ConfigId) : IRequest<IEnumerable<RadioProfil>>;
+    public record GetAllRadioProfilQuery(Guid ConfigId) : IRequest<Validation<Error, IReadOnlyCollection<RadioProfil>>>;
 
-    internal class GetAllRadioProfilQueryHandler : IRequestHandler<GetAllRadioProfilQuery, IEnumerable<RadioProfil>>
+    internal class GetAllRadioProfilQueryHandler : IRequestHandler<GetAllRadioProfilQuery, Validation<Error, IReadOnlyCollection<RadioProfil>>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetAllRadioProfilQueryHandler> logger;
@@ -27,22 +30,18 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Queries
             this.logger = logger;
         }
 
-        public async Task<IEnumerable<RadioProfil>> Handle(GetAllRadioProfilQuery request, CancellationToken cancellationToken)
+        public Task<Validation<Error, IReadOnlyCollection<RadioProfil>>> Handle(GetAllRadioProfilQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
+            
                 logger.LogInformation("Récupération de tous les profils radio.");
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+
+                var result = svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                             .Map(config => config.RadioProfiles);
 
                 logger.LogInformation("Tous les profils radio ont été récupérés avec succès.");
 
-                return config.RadioProfils;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur lors de la récupération de tous les profils radio.");
-                throw new Exception("Erreur lors de la récupération de tous les profils radio.", ex);
-            }
+                return Task.FromResult(result);
+           
         }
     }
 }

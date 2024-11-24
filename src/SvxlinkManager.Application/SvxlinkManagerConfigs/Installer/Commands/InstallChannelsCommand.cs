@@ -28,7 +28,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
             {
                 logger.LogInformation("Début de l'installation des canaux.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+                var config = await svxlinkManagerConfigRepository.GetConfig(request.ConfigId);
 
                 var channels = await mediator.Send(new GetAllOriginalChannelsCommand(), cancellationToken);
 

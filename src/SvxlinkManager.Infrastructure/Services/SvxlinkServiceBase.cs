@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Domain.Entities;
@@ -214,7 +217,7 @@ namespace SvxlinkManager.Infrastructure.Services
         /// <param name="configFile">Specify which configuration file to use.</param>
         /// <param name="pidFile">Specify a pid file to write the process ID into.</param>
         /// <param name="runAs">Start SvxReflector as the specified user. The switch to the new user will happen after the log and pid files has been opened.</param>
-        public void StartReflector(Reflector reflector, bool runAsDaemon = false, string logFile = null, string configFile = null, string pidFile = null, string runAs = null)
+        public Validation<Error, Unit> StartReflector(Reflector reflector, bool runAsDaemon = false, string logFile = null, string configFile = null, string pidFile = null, string runAs = null)
         {
             var parameters = new List<string>();
 
@@ -262,9 +265,11 @@ namespace SvxlinkManager.Infrastructure.Services
             reflectorshell.BeginOutputReadLine();
 
             reflectorshells.Add(reflector.Id, reflectorshell);
+
+            return Unit.Default;
         }
 
-        public virtual void StopReflector(Reflector reflector)
+        public virtual Validation<Error, Unit> StopReflector(Reflector reflector)
         {
             var pid = File.ReadAllText($"/var/run/reflector-{reflector.Id}.pid");
 
@@ -272,11 +277,13 @@ namespace SvxlinkManager.Infrastructure.Services
                 ExecuteCommand($"kill {pid}");
 
             if (!reflectorshells.ContainsKey(reflector.Id))
-                return;
+                return Unit.Default;
 
             reflectorshells[reflector.Id].Dispose();
 
             reflectorshells.Remove(reflector.Id);
+
+            return Unit.Default;
         }
 
         /// <summary>

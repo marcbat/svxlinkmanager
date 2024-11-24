@@ -1,15 +1,45 @@
-﻿namespace SvxlinkManager.Domain.Entities
+﻿using LanguageExt;
+using static LanguageExt.Prelude;
+using LanguageExt.Common;
+
+namespace SvxlinkManager.Domain.Entities
 {
     public class RadioProfil : Entity<Guid>
     {
-        private string? txCtcss;
-        private string? rxCtCss;
+        private Option<string> txCtcss;
+        private Option<string> rxCtCss;
         private string name;
         private string rxFequency;
         private string txFrequency;
         private string squelch;
 
-        public RadioProfil(Guid id,
+        internal RadioProfil(Guid id,
+                           string name,
+                           string rxFequency,
+                           string txFrequency,
+                           string squelch,
+                           Option<string> txCtcss,
+                           Option<string> rxCtCss,
+                           string volume,
+                           string preEmph,
+                           string hightPass,
+                           string lowPass,
+                           string squelchDetection) : base(id)
+        {
+            this.name = name;
+            this.rxFequency = rxFequency;
+            this.txFrequency = txFrequency;
+            Squelch = squelch;
+            this.txCtcss = txCtcss;
+            this.rxCtCss = rxCtCss;
+            Volume = volume;
+            PreEmph = preEmph;
+            HightPass = hightPass;
+            LowPass = lowPass;
+            SquelchDetection = squelchDetection;
+        }
+
+        public static Validation<Error, RadioProfil> Create(Guid id,
                            string name,
                            string rxFequency,
                            string txFrequency,
@@ -20,55 +50,63 @@
                            string preEmph,
                            string hightPass,
                            string lowPass,
-                           string squelchDetection) : base(id)
+                           string squelchDetection)
         {
-            Name = name;
-            RxFequency = rxFequency;
-            TxFrequency = txFrequency;
-            Squelch = squelch;
-            TxCtcss = txCtcss;
-            RxCtCss = rxCtCss;
-            Volume = volume;
-            PreEmph = preEmph;
-            HightPass = hightPass;
-            LowPass = lowPass;
-            SquelchDetection = squelchDetection;
+            return (ValidateName(name), ValidateRxCtCss(rxCtCss), ValidateRxFequency(rxFequency), ValidateTxCtcss(txCtcss), ValidateTxFrequency(txFrequency))
+                .Apply((vname, vrxCtCss, vrxFequency, vtxCtcss, vtxFrequency) => new RadioProfil(id,
+                           vname,
+                           vrxFequency,
+                           vtxFrequency,
+                           squelch,
+                           vtxCtcss,
+                           vrxCtCss,
+                           volume,
+                           preEmph,
+                           hightPass,
+                           lowPass,
+                           squelchDetection));
         }
 
         public bool HasSa818 { get; set; } = true;
 
-        public string Name
-        {
-            get => name; set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException("Le nom du profil radio ne peut pas être vide.", nameof(value));
+        public string Name => name;
 
-                name = value;
-            }
+        internal static Validation<Error, string> ValidateName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return Error.New("Le nom du profil radio ne peut pas être vide.");
+
+            return name;
         }
 
-        public string RxFequency
-        {
-            get => rxFequency; set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException("La fréquence de réception ne peut pas être vide.", nameof(value));
+        public Validation<Error,string> SetName(string name) =>
+            ValidateName(name).Map(vname => this.name = vname);
 
-                rxFequency = value;
-            }
+        public string RxFequency => rxFequency;
+
+        internal static Validation<Error, string> ValidateRxFequency(string rxFequency)
+        {
+            if (string.IsNullOrWhiteSpace(rxFequency))
+                return Error.New("La fréquence de réception ne peut pas être vide.");
+
+            return rxFequency;
         }
 
-        public string TxFrequency
-        {
-            get => txFrequency; set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException("La fréquence de transmission ne peut pas être vide.", nameof(value));
+        public Validation<Error, string> SetRxFequency(string rxFequency) =>
+            ValidateRxFequency(rxFequency).Map(vrxFequency => this.rxFequency = vrxFequency);
 
-                txFrequency = value;
-            }
+        public string TxFrequency => txFrequency;
+
+        internal static Validation<Error, string> ValidateTxFrequency(string txFrequency)
+        {
+            if (string.IsNullOrWhiteSpace(txFrequency))
+                return Error.New("La fréquence de transmission ne peut pas être vide.");
+
+            return txFrequency;
         }
+
+        public Validation<Error, string> SetTxFrequency(string txFrequency) =>
+            ValidateTxFrequency(txFrequency).Map(vtxFrequency => this.txFrequency = vtxFrequency);
 
         public string Squelch
         {
@@ -81,58 +119,66 @@
             }
         }
 
-        public string? TxCtcss
+        public Option<string> TxCtcss
         {
             get
             {
-                if (txCtcss is null)
-                    return txCtcss;
-
-                return Ctcss[txCtcss];
-            }
-            private set
-            {
-                if (string.IsNullOrEmpty(value))
-                {
-                    txCtcss = null;
-                    return;
-                }
-
-                var ctcss = Ctcss.SingleOrDefault(x => x.Value == value);
-                if (ctcss.Key == null)
-                    throw new ArgumentException("Invalid value for TxCtcss");
-
-                txCtcss = ctcss.Key;
+                return txCtcss.Match(
+                    Some: x => Ctcss[x],
+                    None: () => txCtcss
+                );
             }
         }
 
-        public string? RxCtCss
+        internal static Validation<Error, Option<string>> ValidateTxCtcss(string txCtcss)
+        {
+            if (string.IsNullOrWhiteSpace(txCtcss))
+                return Option<string>.None;
+
+            var valueExist = Ctcss.ContainsValue(txCtcss);
+
+            if(!valueExist)
+                return Error.New("Le ton de CTCSS de transmission n'est pas valide.");
+
+            var keyvalue = Ctcss.Single(x => x.Value == txCtcss);
+
+            return Some(keyvalue.Key);
+        }
+
+        public Validation<Error, Option<string>> SetTxCtcss(string txCtcss) =>
+            ValidateTxCtcss(txCtcss).Map(x => this.txCtcss = x); 
+
+        public Option<string> RxCtCss
         {
             get
             {
-                if (rxCtCss is null)
-                    return rxCtCss;
+                return rxCtCss.Match(
+                    Some: x => Ctcss[x],
+                    None: () => rxCtCss
+                );
 
-                return Ctcss[rxCtCss];
-            }
-
-            private set
-            {
-                if (string.IsNullOrEmpty(value))
-                {
-                    rxCtCss = null;
-                    return;
-                }
-
-                var ctcss = Ctcss.SingleOrDefault(x => x.Value == value);
-                if (ctcss.Key == null)
-                    throw new ArgumentException("Invalid value for RxCtCss");
-
-                rxCtCss = ctcss.Key;
             }
         }
 
-        private Dictionary<string, string> Ctcss => new Dictionary<string, string>
+        internal static Validation<Error, Option<string>> ValidateRxCtCss(string rxCtCss)
+        {
+            if (string.IsNullOrWhiteSpace(rxCtCss))
+                return Option<string>.None;
+
+            var valueExist = Ctcss.ContainsValue(rxCtCss);
+
+            if (!valueExist)
+                return Error.New("Le ton de CTCSS de réception n'est pas valide.");
+
+            var keyvalue = Ctcss.Single(x => x.Value == rxCtCss);
+
+            return Some(keyvalue.Key);
+        }
+
+        public Validation<Error, Option<string>> SetRxCtCss(string rxCtCss) =>
+            ValidateRxCtCss(rxCtCss).Map(x => this.rxCtCss = x);
+
+        private static Dictionary<string, string> Ctcss => new Dictionary<string, string>
         {
           {"0000", "Pas de tone" },
           {"0001","67"},

@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -10,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
 {
-    public record DeleteRadioProfilCommand(Guid ConfigGuid, Guid RadioProfilGuid) : IRequest<Unit>;
+    public record DeleteRadioProfilCommand(Guid ConfigGuid, Guid RadioProfilGuid) : IRequest<Validation<Error, Guid>>;
 
-    internal class DeleteRadioProfilCommandHandler : IRequestHandler<DeleteRadioProfilCommand, Unit>
+    internal class DeleteRadioProfilCommandHandler : IRequestHandler<DeleteRadioProfilCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<DeleteRadioProfilCommandHandler> logger;
@@ -23,29 +26,21 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(DeleteRadioProfilCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(DeleteRadioProfilCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Suppression du profil radio.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
+            logger.LogInformation("Suppression du profil radio.");
 
-                var radioProfil = config.RadioProfils.SingleOrDefault(rp => rp.Id == request.RadioProfilGuid) ?? throw new SvxlinkManagerException("Impossible de trouver le profil radio.");
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
+                         from radioProfil in config.GetRadioProfil(request.RadioProfilGuid)
+                         from _ in config.DeleteRadioProfil(request.RadioProfilGuid)
+                         from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                         select config.Id;
 
-                config.DeleteRadioProfil(request.RadioProfilGuid);
+            logger.LogInformation("Profil radio supprimé.");
 
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
+            return Task.FromResult(result);
 
-                logger.LogInformation("Profil radio supprimé.");
-
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur lors de la suppression du profil radio.");
-                throw new SvxlinkManagerException("Impossible de supprimer le profil radio.", ex);
-            }
         }
     }
 }

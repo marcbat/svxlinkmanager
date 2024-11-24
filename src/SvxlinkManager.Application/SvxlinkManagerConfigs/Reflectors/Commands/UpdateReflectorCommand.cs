@@ -54,15 +54,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
             {
                 logger.LogInformation("Mise à jour d'un réflecteur.");
 
-                var config = await _svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
-
-                config.DeleteReflector(request.ReflectorId);
-
-                var reflector = new Reflector(request.ReflectorId, request.Name, request.Config);
-
-                config.AddReflector(reflector);
-
-                await _svxlinkManagerConfigRepository.UpdateAsync(config);
+                var result = from config in _svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                             from _ in config.DeleteReflector(request.ReflectorId)
+                             from reflector in Reflector.Create(request.ReflectorId, request.Name, request.Config)
+                             from __ in config.AddReflector(reflector)
+                             from ___ in _svxlinkManagerConfigRepository.UpdateAsync(config)
+                             select config.Id;
 
                 logger.LogInformation("Un réflecteur a été mis à jour avec succès.");
 

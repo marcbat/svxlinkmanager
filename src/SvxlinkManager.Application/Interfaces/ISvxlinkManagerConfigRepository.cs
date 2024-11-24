@@ -1,4 +1,7 @@
-﻿using SvxlinkManager.Domain.Aggregates;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using SvxlinkManager.Domain.Aggregates;
 using SvxlinkManager.Domain.Entities;
 
 using System;
@@ -13,11 +16,11 @@ namespace SvxlinkManager.Application.Interfaces
     {
         Task Create(SvxlinkManagerConfigAggregate config);
 
-        Task<SvxlinkManagerConfigAggregate> GetConfigAsync(Guid configId);
+        Validation<Error, SvxlinkManagerConfigAggregate> GetConfig(Guid configId);
 
-        Task UpdateAsync(SvxlinkManagerConfigAggregate config);
+        Validation<Error, Unit> UpdateAsync(SvxlinkManagerConfigAggregate config);
 
-        Task<IEnumerable<SvxlinkChannel>> GetAllOriginalChannels();
+        Validation<Error, List<SvxlinkChannel>> GetAllOriginalChannels();
 
         string GetDefaultSvxlinkConfig();
     }

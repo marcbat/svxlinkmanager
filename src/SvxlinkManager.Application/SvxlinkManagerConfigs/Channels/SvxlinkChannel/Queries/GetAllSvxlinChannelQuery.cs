@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -13,9 +16,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Queries
 {
-    public record GetAllSvxlinChannelQuery(Guid ConfigId): IRequest<IEnumerable<Domain.Entities.SvxlinkChannel>>;
+    public record GetAllSvxlinChannelQuery(Guid ConfigId): IRequest<Validation<Error, IReadOnlyCollection<Domain.Entities.SvxlinkChannel>>>;
 
-    internal class GetAllSvxlinChannelQueryHandler : IRequestHandler<GetAllSvxlinChannelQuery, IEnumerable<Domain.Entities.SvxlinkChannel>>
+    internal class GetAllSvxlinChannelQueryHandler : IRequestHandler<GetAllSvxlinChannelQuery, Validation<Error, IReadOnlyCollection<Domain.Entities.SvxlinkChannel>>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetAllSvxlinChannelQueryHandler> logger;
@@ -26,23 +29,17 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
             this.logger = logger;
         }
 
-        public async Task<IEnumerable<Domain.Entities.SvxlinkChannel>> Handle(GetAllSvxlinChannelQuery request, CancellationToken cancellationToken)
+        public Task<Validation<Error, IReadOnlyCollection<Domain.Entities.SvxlinkChannel>>> Handle(GetAllSvxlinChannelQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
                 logger.LogInformation("Récupération de tous les canaux Svxlink.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+                var result = svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                    .Map(config => config.SvxlinkChannels);
 
                 logger.LogInformation("Récupération de tous les canaux Svxlink réussie.");
 
-                return config.SvxlinkChannels;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex,"Erreur lors de la récupération de tous les canaux Svxlink.");
-                throw new Exception("Erreur lors de la récupération de tous les canaux Svxlink.", ex);
-            }
+                return Task.FromResult(result);
+            
         }
     }
 }

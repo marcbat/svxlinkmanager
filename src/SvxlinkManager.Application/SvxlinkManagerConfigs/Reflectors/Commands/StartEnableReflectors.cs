@@ -29,31 +29,17 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
 
         public async Task<Unit> Handle(StartEnableReflectors request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Starting default reflector.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            logger.LogInformation("Starting default reflector.");
 
-                var reflectors = config.Reflectors.Where(r => r.Enable).ToList();
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                         from optionReflector in config.GetEnableReflector()
+                         select config.Id;
 
-                if (!reflectors.Any())
-                {
-                    logger.LogWarning("No default reflector found.");
+            logger.LogInformation("Starting default reflector ok.");
 
-                    return Unit.Value;
-                }
+            return Unit.Value;
 
-                logger.LogInformation("Starting default reflector ok.");
-
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error starting default reflector.");
-
-                throw new Exception("Error starting default reflector.", ex);
-            }
         }
     }
 }

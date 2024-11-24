@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -23,9 +26,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
                                string PreEmph,
                                string HighPass,
                                string LowPass,
-                               string SquelchDetection) : IRequest<Guid>;
+                               string SquelchDetection) : IRequest<Validation<Error, RadioProfil>>;
 
-    internal class CreateRadioProfilCommandHandler : IRequestHandler<CreateRadioProfilCommand, Guid>
+    internal class CreateRadioProfilCommandHandler : IRequestHandler<CreateRadioProfilCommand, Validation<Error, RadioProfil>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ISa818Service sa818Service;
@@ -38,38 +41,31 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
             this.logger = logger;
         }
 
-        public async Task<Guid> Handle(CreateRadioProfilCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, RadioProfil>> Handle(CreateRadioProfilCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
+            
                 logger.LogInformation("Début de la création d'un nouveau profil radio.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
-
-                config.DeleteAllRadioProfils();
-
-                var radioProfilGuid = Guid.NewGuid();
-                var radioProfil = new RadioProfil(radioProfilGuid, request.Name, request.RxFrequency, request.TxFrequency, request.Squelch, request.TxCtcss, request.RxCtCss, request.Volume, request.PreEmph, request.HighPass, request.LowPass, request.SquelchDetection);
-
-                radioProfil.Enable = true;
-
-                config.AddRadioProfil(radioProfil);
-
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
-
-                logger.LogInformation("Un nouveau profil radio a été ajouté avec succès.");
-
-                sa818Service.WriteRadioProfile(radioProfil);
-
+                var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                             from _ in config.DeleteAllRadioProfils()
+                             from radioProfile in RadioProfil.Create(Guid.NewGuid(), request.Name, request.RxFrequency, request.TxFrequency, request.Squelch, request.TxCtcss, request.RxCtCss, request.Volume, request.PreEmph, request.HighPass, request.LowPass, request.SquelchDetection)
+                             from __ in EnableRadioProfile(radioProfile)
+                             from ___ in config.AddRadioProfil(radioProfile)
+                             from ____ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                             from _____ in sa818Service.WriteRadioProfile(radioProfile)
+                             select radioProfile;
+                
                 logger.LogInformation("Le profil radio a été écrit avec succès.");
 
-                return radioProfilGuid;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Une erreur s'est produite lors de la création du profil radio.");
-                throw new SvxlinkManagerException("Une erreur s'est produite lors de la création du profil radio.", ex);
-            }
+                return Task.FromResult(result);
+           
+        }
+
+        private static Validation<Error, LanguageExt.Unit> EnableRadioProfile(RadioProfil radioProfil)
+        {
+            radioProfil.Enable = true;
+
+            return LanguageExt.Unit.Default;
         }
     }
 }

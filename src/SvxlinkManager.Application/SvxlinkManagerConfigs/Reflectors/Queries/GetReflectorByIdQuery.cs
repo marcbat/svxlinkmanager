@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -14,12 +17,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries
     /// <summary>
     /// Représente une requête pour obtenir un réflecteur par son identifiant.
     /// </summary>
-    public record GetReflectorByIdQuery(Guid ConfigGuid, Guid ReflectorGuid) : IRequest<Reflector>;
+    public record GetReflectorByIdQuery(Guid ConfigGuid, Guid ReflectorGuid) : IRequest<Validation<Error, Reflector>>;
 
     /// <summary>
     /// Gère la requête pour obtenir un réflecteur par son identifiant.
     /// </summary>
-    internal class GetReflectorByIdQueryHandler : IRequestHandler<GetReflectorByIdQuery, Reflector>
+    internal class GetReflectorByIdQueryHandler : IRequestHandler<GetReflectorByIdQuery, Validation<Error, Reflector>>
     {
         private readonly ISvxlinkManagerConfigRepository _svxlinkManagerConfigRepository;
         private readonly ILogger<GetReflectorByIdQueryHandler> logger;
@@ -40,28 +43,19 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries
         /// <param name="request">La requête pour obtenir un réflecteur.</param>
         /// <param name="cancellationToken">Le jeton d'annulation.</param>
         /// <returns>Le réflecteur correspondant à l'identifiant spécifié.</returns>
-        public async Task<Reflector> Handle(GetReflectorByIdQuery request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Reflector>> Handle(GetReflectorByIdQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Récupération du réflecteur.");
 
-                var config = await _svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
+            logger.LogInformation("Récupération du réflecteur.");
 
-                var reflector = config.Reflectors.SingleOrDefault(r => r.Id == request.ReflectorGuid);
+            var result = from config in _svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
+                         from reflector in config.GetReflector(request.ReflectorGuid)
+                         select reflector;
 
-                if (reflector is null)
-                    throw new SvxlinkManagerException("Impossible de trouver le réflecteur.");
+            logger.LogInformation("Réflecteur trouvé.");
 
-                logger.LogInformation("Réflecteur trouvé.");
+            return Task.FromResult(result);
 
-                return reflector;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur lors de la récupération du réflecteur.");
-                throw new SvxlinkManagerException("Impossible de récupérer le réflecteur.", ex);
-            }
         }
     }
 }

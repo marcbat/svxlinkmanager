@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -14,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlinkChannels.Queries
 {
-    public record GetAvanceSvxlinkChannelByIdQuery(Guid ConfigGuid, Guid ChannelGuid) : IRequest<AdvanceSvxlinkChannel>;
+    public record GetAvanceSvxlinkChannelByIdQuery(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Validation<Error, AdvanceSvxlinkChannel>>;
 
-    internal class GetAvanceSvxlinkChannelQueryHandler : IRequestHandler<GetAvanceSvxlinkChannelByIdQuery, AdvanceSvxlinkChannel>
+    internal class GetAvanceSvxlinkChannelQueryHandler : IRequestHandler<GetAvanceSvxlinkChannelByIdQuery, Validation<Error, AdvanceSvxlinkChannel>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetAvanceSvxlinkChannelQueryHandler> logger;
@@ -27,22 +30,19 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
             this.logger = logger;
         }
 
-        public async Task<AdvanceSvxlinkChannel> Handle(GetAvanceSvxlinkChannelByIdQuery request, CancellationToken cancellationToken)
+        public Task<Validation<Error, AdvanceSvxlinkChannel>> Handle(GetAvanceSvxlinkChannelByIdQuery request, CancellationToken cancellationToken)
         {
             try
             {
                 logger.LogInformation("Récupération du canal avancé Svxlink.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
-
-                var channel = config.AdvanceSvxlinkChannels.SingleOrDefault(c => c.Id == request.ChannelGuid);
-
-                if (channel is null)
-                    throw new SvxlinkManagerException("Impossible de trouver le canal avancé Svxlink.");
+                var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
+                             from channel in config.GetAdvanceSvxlinkChannel(request.ChannelGuid)
+                             select channel;
 
                 logger.LogInformation("Récupération du canal avancé Svxlink réussie.");
 
-                return channel;
+                return Task.FromResult(result);
             }
             catch (Exception ex)
             {

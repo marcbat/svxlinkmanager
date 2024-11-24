@@ -17,7 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4B9BC748
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManager.Application.Tests", "tests\SvxlinkManager.Application.Tests\SvxlinkManager.Application.Tests.csproj", "{978DC95E-673B-43E3-A0F1-FFF93964D25D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvxlinkManager.Application.Integration.Tests", "tests\SvxlinkManager.Application.Integration.Tests\SvxlinkManager.Application.Integration.Tests.csproj", "{431E1EB7-019C-46B6-AA12-1C8550CB0895}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvxlinkManager.Application.Integration.Tests", "tests\SvxlinkManager.Application.Integration.Tests\SvxlinkManager.Application.Integration.Tests.csproj", "{431E1EB7-019C-46B6-AA12-1C8550CB0895}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvxlinkManager.DomainTests", "src\SvxlinkManager.DomainTests\SvxlinkManager.DomainTests.csproj", "{C78E83BB-773D-493A-B751-1CC270B5354E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{431E1EB7-019C-46B6-AA12-1C8550CB0895}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{431E1EB7-019C-46B6-AA12-1C8550CB0895}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{431E1EB7-019C-46B6-AA12-1C8550CB0895}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C78E83BB-773D-493A-B751-1CC270B5354E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C78E83BB-773D-493A-B751-1CC270B5354E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C78E83BB-773D-493A-B751-1CC270B5354E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C78E83BB-773D-493A-B751-1CC270B5354E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

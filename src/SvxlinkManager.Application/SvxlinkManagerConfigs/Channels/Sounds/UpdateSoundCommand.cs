@@ -35,7 +35,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Sounds
             {
                 logger.LogInformation("Execution du handler de la commande UpdateSoundCommand");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+                var config = svxlinkManagerConfigRepository.GetConfig(request.ConfigId);
 
 
 

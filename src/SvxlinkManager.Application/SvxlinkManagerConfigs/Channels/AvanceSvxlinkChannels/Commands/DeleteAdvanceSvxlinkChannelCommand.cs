@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -11,9 +14,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlinkChannels.Commands
 {
-    public record DeleteAdvanceSvxlinkChannelCommand(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Unit>;
+    public record DeleteAdvanceSvxlinkChannelCommand(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Validation<Error, Guid>>;
 
-    internal class DeleteAdvanceSvxlinkChannelCommandHandler : IRequestHandler<DeleteAdvanceSvxlinkChannelCommand, Unit>
+    internal class DeleteAdvanceSvxlinkChannelCommandHandler : IRequestHandler<DeleteAdvanceSvxlinkChannelCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<DeleteAdvanceSvxlinkChannelCommandHandler> logger;
@@ -24,29 +27,21 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(DeleteAdvanceSvxlinkChannelCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(DeleteAdvanceSvxlinkChannelCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Suppression du canal avancé Svxlink.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
+            logger.LogInformation("Suppression du canal avancé Svxlink.");
 
-                var channel = config.AdvanceSvxlinkChannels.SingleOrDefault(c => c.Id == request.ChannelGuid) ?? throw new SvxlinkManagerException("Impossible de trouver le canal avancé Svxlink.");
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
+                         from channel in config.GetAdvanceSvxlinkChannel(request.ChannelGuid)
+                         from _ in config.DeleteAdvanceSvxlinkChannel(request.ChannelGuid)
+                         from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                         select config.Id;
 
-                config.DeleteAdvanceSvxlinkChannel(request.ChannelGuid);
+            logger.LogInformation("Canal avancé Svxlink supprimé.");
 
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
+            return Task.FromResult(result);
 
-                logger.LogInformation("Canal avancé Svxlink supprimé.");
-
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur lors de la suppression du canal avancé Svxlink.");
-                throw new SvxlinkManagerException("Impossible de supprimer le canal avancé Svxlink.", ex);
-            }
         }
     }
 }

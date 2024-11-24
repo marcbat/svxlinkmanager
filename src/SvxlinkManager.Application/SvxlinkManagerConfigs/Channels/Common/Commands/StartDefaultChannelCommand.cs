@@ -27,7 +27,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
             {
                 logger.LogInformation("Starting default channel.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+                var config = await svxlinkManagerConfigRepository.GetConfig(request.ConfigId);
 
                 var channel = config.GetManagedChannels().Where(c => c.IsDefault).SingleOrDefault();
 

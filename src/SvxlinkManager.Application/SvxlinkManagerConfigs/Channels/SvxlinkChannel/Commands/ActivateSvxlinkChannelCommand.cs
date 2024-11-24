@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -15,9 +18,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Commands
 {
-    public record ActivateSvxlinkChannelCommand(Guid ConfigId, Guid ChannelId) : IRequest<Unit>;
+    public record ActivateSvxlinkChannelCommand(Guid ConfigId, Guid ChannelId) : IRequest<Validation<Error, Guid>>;
 
-    internal class ActivateSvxlinkChannelCommandHandler : IRequestHandler<ActivateSvxlinkChannelCommand, Unit>
+    internal class ActivateSvxlinkChannelCommandHandler : IRequestHandler<ActivateSvxlinkChannelCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<ActivateSvxlinkChannelCommandHandler> logger;
@@ -29,27 +32,20 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(ActivateSvxlinkChannelCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error,Guid>> Handle(ActivateSvxlinkChannelCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
+           
                 logger.LogInformation("Activating Svxlink channel.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+                var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                             from _ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                             select config.Id;
 
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
 
                 logger.LogInformation("Svxlink channel activated successfully.");
 
-                logger.LogInformation("Svxlink channel activated successfully.");
-
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Failed to activate Svxlink channel.");
-                throw new SvxlinkManagerException("Failed to activate Svxlink channel.", ex);
-            }
+                return Task.FromResult(result);
+           
         }
     }
 }
