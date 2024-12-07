@@ -19,7 +19,11 @@ namespace SvxlinkManager.Domain.Entities
             this.host = host;
         }
 
-        public string Host => host;
+        public string Host
+        {
+            get => host;
+            protected set => host = value;
+        }
 
         public static Validation<Error, string> ValidateHost(string host)
         {
@@ -34,7 +38,10 @@ namespace SvxlinkManager.Domain.Entities
             return ValidateHost(host).Map(v => this.host = v);
         }
 
-        public string CallSign => callSign;
+        public string CallSign {
+            get => callSign;
+            protected set => callSign = value;
+        }
 
         public static Validation<Error, string> ValidateCallSign(string callSign)
         {

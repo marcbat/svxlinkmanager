@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
+using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Application.SvxlinkManagerConfigs;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlinkChannels.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlinkChannels.Queries;
@@ -19,6 +20,7 @@ using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Comman
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Queries;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Queries;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Queries;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands;
@@ -34,6 +36,7 @@ namespace SvxlinkManager.Application.Integration.Tests
     public class SvxlinkConfigurationTests
     {
         private IMediator mediatr;
+        private ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private string db;
 
         [SetUp]
@@ -56,8 +59,19 @@ namespace SvxlinkManager.Application.Integration.Tests
             var serviceProvider = services.BuildServiceProvider();
 
             mediatr = serviceProvider.GetRequiredService<IMediator>();
+            svxlinkManagerConfigRepository = serviceProvider.GetRequiredService<ISvxlinkManagerConfigRepository>();
 
             //var mapper = BsonMapper.Global;
+
+            //mapper.Entity<SvxlinkChannel>()
+            //    .Id(x => x.Id)
+            //    .Field(x => x.Name, "Name")
+            //    .Field(x => x.Host, "Host")
+            //    .Field(x => x.CallSign, "CallSign")
+            //    .Field(x => x.AuthKey, "AuthKey")
+            //    .Field(x => x.Port, "Port")
+            //    .Field(x => x.ReportCallSign, "ReportCallSign")
+            //    .Field(x => x.SoundGuid, "SoundGuid");
 
             //mapper.Entity<SvxlinkManagerConfigAggregate>()
             //    .Field(x => x.SvxlinkChannels, "SvxlinkChannels");
@@ -70,21 +84,68 @@ namespace SvxlinkManager.Application.Integration.Tests
             {
 
                 // arrange 
-                var id = Guid.NewGuid();
-                Guid channId = Guid.Empty;
-                var createConfig = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(id));
-                var addChannel = await mediatr.Send(new AddSvxlinkChannelCommand(id, "Fake channel", "Fake Host", "Fake callSign", "Fake Password", 80, "Fake report callSign", "SoundTest", new byte[] { 0x01, 0x02, 0x03 }));
+                var configGuid = Guid.NewGuid();
+                var createConfig = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(configGuid));
+                var addChannel = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", "Fake Password", 80, "Fake report callSign", "SoundTest", new byte[] { 0x01, 0x02, 0x03 }));
 
                 // act
                 var result = from configId in createConfig
                              from channelId in addChannel
                              select (configId, channelId);
 
-                _ = result.Map(x => channId = x.channelId);
+                // assert
+                var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
+                await Verify(new
+                {
+                    result,
+                    config
+                });
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+            }
+        }
+
+        [Test]
+        public async Task InstallChannelsCommand_WhenIsValid_ShouldInstallChannels()
+        {
+            try
+            {
+                // arrange
+                var configGuid = Guid.NewGuid();
+                var createConfig = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(configGuid));
+
+                var installChannels = new List<Guid> {
+                    Guid.Parse("235a4521-15a1-4e02-a540-91ee600452ac"),
+                    Guid.Parse("1f2e87b8-d984-4c05-8a4a-ffad65c829a9"),
+                    Guid.Parse("0f669a03-dcf1-4277-9b07-54f6a0fd3037"),
+                    Guid.Parse("a749ffe5-16c7-45da-809d-c048908f115c"),
+                    Guid.Parse("dd03fd9e-aeed-457e-97bf-973837a5fcec"),
+                    Guid.Parse("d4c59d86-947c-4b1d-831a-807c1877d426"),
+                    Guid.Parse("9f99b18b-96ea-453d-b07a-7923c09c939f"),
+                    Guid.Parse("dcc5afa2-790f-40ca-b24d-bf91e90b1ac7")
+                };
+
+                var command = new InstallChannelsCommand(configGuid, installChannels, "Fake CallSign", "Fake AnnonceCallSign");
+                var install = await mediatr.Send(command);
+
+                // act
+                var result = createConfig
+                    .Bind(x => install);
 
                 // assert
-                var GetSvxlinkChannel = await mediatr.Send(new GetSvxlinkChannelByIdQuery(id, channId));
-                await Verify(GetSvxlinkChannel);
+                var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
+                await Verify(new
+                {
+                    result,
+                     config
+                });
+
             }
             catch (Exception ex)
             {

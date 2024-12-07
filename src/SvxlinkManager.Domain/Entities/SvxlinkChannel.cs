@@ -29,7 +29,11 @@ namespace SvxlinkManager.Domain.Entities
 
         public int Port { get; set; }
 
-        public string ReportCallSign => reportCallSign;
+        public string ReportCallSign
+        {
+            get => reportCallSign;
+            protected set => reportCallSign = value;
+        }
 
         public Validation<Error, string> SetReportCallSign(string reportCallSign)
         {

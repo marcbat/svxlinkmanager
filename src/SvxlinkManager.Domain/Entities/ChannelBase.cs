@@ -16,7 +16,11 @@ namespace SvxlinkManager.Domain.Entities
             this.name = name;
         }
 
-        public string Name => name;
+        public string Name
+        {
+            get => name;
+            protected set => name = value;
+        }
 
         protected static Validation<Error, string> ValidateName(string name)
         {

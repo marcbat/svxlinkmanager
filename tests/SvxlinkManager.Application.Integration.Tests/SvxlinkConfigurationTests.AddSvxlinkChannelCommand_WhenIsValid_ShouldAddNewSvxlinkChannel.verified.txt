@@ -1,15 +1,36 @@
-﻿[
-  {
-    State: Success,
-    Success: {
-      AuthKey: Fake Password,
-      Port: 80,
-      IsDefault: false,
-      IsTemporized: false,
-      TimerDelay: 180,
-      IsActive: false,
-      Id: Guid_1
-    },
-    Fail: null
-  }
-]
+﻿{
+  result: [
+    {
+      State: Success,
+      Success: {
+        Item1: Guid_1,
+        Item2: Guid_2
+      },
+      Fail: null
+    }
+  ],
+  config: [
+    {
+      State: Success,
+      Success: {
+        SvxlinkChannels: [
+          {
+            AuthKey: Fake Password,
+            Port: 80,
+            ReportCallSign: Fake report callSign,
+            Host: Fake Host,
+            CallSign: Fake callSign,
+            IsDefault: false,
+            IsTemporized: false,
+            TimerDelay: 180,
+            IsActive: false,
+            Name: Fake channel,
+            Id: Guid_2
+          }
+        ],
+        Id: Guid_1
+      },
+      Fail: null
+    }
+  ]
+}

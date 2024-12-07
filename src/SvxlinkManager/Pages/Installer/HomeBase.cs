@@ -178,8 +178,6 @@ namespace SvxlinkManager.Pages.Installer
                 await InstallChannelsAsync();
                 await SetDefaultChannelAsync();
 
-
-
                 var result  = await CreateRadioProfileAsync();
 
                 await result.Match(
