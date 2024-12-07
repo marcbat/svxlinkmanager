@@ -1,5 +1,8 @@
 ﻿using AspNetCore.Identity.LiteDB.Models;
 
+using LanguageExt;
+using LanguageExt.Common;
+
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -61,13 +64,25 @@ namespace SvxlinkManager.Pages.Installer
         {
             if (UserManager.Users.Any())
                 NavigationManager.NavigateTo("Identity/Account/Login", true);
-
             base.OnInitialized();
 
-            InstallerModel = new InstallerModel
-            {
-                Channels = await LoadChannelsAsync()
-            };
+            var result = await LoadChannelsAsync();
+
+            result.Match(
+                Fail: async error =>
+                {
+                    await ShowErrorToastAsync("Erreur", error.ToFullString());
+                },
+                Succ: success =>
+                {
+                    InstallerModel = new InstallerModel
+                    {
+                        Channels = success
+                    };
+                }
+            );
+
+            
         }
 
         [Inject]
@@ -85,11 +100,11 @@ namespace SvxlinkManager.Pages.Installer
         [Inject]
         public ISvxlinkServiceBase SvxLinkService { get; set; }
 
-        private async Task<List<Models.SvxlinkChannel>> LoadChannelsAsync()
+        private async Task<Validation<LanguageExt.Common.Error, List<Models.SvxlinkChannel>>> LoadChannelsAsync()
         {
-            var channels = await Mediatr.Send(new GetAllOriginalChannelsCommand());
+            return from channels in await Mediatr.Send(new GetAllOriginalChannelsCommand())
+                         select channels.Select<Domain.Entities.SvxlinkChannel, Models.SvxlinkChannel>(c => c).ToList();
 
-            return channels.Select<Domain.Entities.SvxlinkChannel, Models.SvxlinkChannel>(c=> c).ToList();
         }
 
         private Release LoadLastRelease() => UpdaterService.GetLastRelease();
@@ -162,8 +177,20 @@ namespace SvxlinkManager.Pages.Installer
                 SeedUser();
                 await InstallChannelsAsync();
                 await SetDefaultChannelAsync();
-                var radioGuid = await CreateRadioProfileAsync();
-                await ApplyRadioProfilAsync(radioGuid);
+
+
+
+                var result  = await CreateRadioProfileAsync();
+
+                await result.Match(
+                Fail: async error =>
+                {
+                    await ShowErrorToastAsync("Erreur", error.ToFullString());
+                },
+                    Succ: ApplyRadioProfilAsync
+                );
+
+                
                 if (InstallerModel.UpdateToLastRelease)
                     Update();
                 else
@@ -195,13 +222,12 @@ namespace SvxlinkManager.Pages.Installer
 
         /// <summary>Crée le profil radio et programme le SA818 si necessaire</summary>
         /// <exception cref="Exception">Impossible de créer le profil radio</exception>
-        private async Task<Guid> CreateRadioProfileAsync()
+        private async Task<Validation<LanguageExt.Common.Error, Guid>> CreateRadioProfileAsync()
         {
-            try
-            {
+           
                 Logger.LogInformation("Installation du profil radio.");
 
-                var radioGuid = await Mediatr.Send(new CreateRadioProfilCommand(
+                var result = from radioProfil in await Mediatr.Send(new CreateRadioProfilCommand(
                     Options.Value.ConfigId,
                     InstallerModel.RadioProfile.Name,
                     InstallerModel.RadioProfile.RxFequ,
@@ -214,17 +240,14 @@ namespace SvxlinkManager.Pages.Installer
                     InstallerModel.RadioProfile.HightPass,
                     InstallerModel.RadioProfile.LowPass,
                     InstallerModel.RadioProfile.SquelchDetection
-                ));
+                ))
+                           select radioProfil.Id;
 
-                OnCreateRadioProfile?.Invoke();
 
-                return radioGuid;
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e, "Impossible de créer le profil radio");
-                throw new Exception("Impossible de créer le profil radio", e);
-            }
+                if(result.IsSuccess)
+                    OnCreateRadioProfile?.Invoke();
+
+                return result;
         }
 
         /// <summary>Définition du salon par défaut</summary>

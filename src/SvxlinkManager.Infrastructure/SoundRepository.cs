@@ -20,10 +20,10 @@ namespace SvxlinkManager.Infrastructure
 {
     public class SoundRepository : ISoundRepository
     {
-        private readonly Logger<SoundRepository> logger;
+        private readonly ILogger<SoundRepository> logger;
         private SvxlinkManagerOptions options;
 
-        public SoundRepository(IOptions<SvxlinkManagerOptions> options, Logger<SoundRepository> logger)
+        public SoundRepository(IOptions<SvxlinkManagerOptions> options, ILogger<SoundRepository> logger)
         {
             this.options = options.Value;
             this.logger = logger;

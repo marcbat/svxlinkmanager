@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LanguageExt.Common;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
 using SvxlinkManager.Application.Interfaces;
@@ -58,7 +60,16 @@ namespace SvxlinkManager.Pages.Channels
     {
         protected override async void OnInitialized()
         {
-            Channel = await Mediatr.Send(new GetSvxlinkChannelByIdQuery(Options.Value.ConfigId, Guid.Parse(Id)));
+            var result =  await Mediatr.Send(new GetSvxlinkChannelByIdQuery(Options.Value.ConfigId, Guid.Parse(Id)));
+
+            result.Match(
+                Fail: async error =>
+                {
+                    await ShowErrorToastAsync("Erreur", error.ToFullString());
+                },
+                Succ: success => Channel = success
+            );
+
         }
     }
 
@@ -66,15 +77,33 @@ namespace SvxlinkManager.Pages.Channels
     {
         protected override async void OnInitialized()
         {
-            Channel = await Mediatr.Send(new GetEchoLinkChannelByIdQuery(Options.Value.ConfigId, Guid.Parse(Id)));
+            var result  = await Mediatr.Send(new GetEchoLinkChannelByIdQuery(Options.Value.ConfigId, Guid.Parse(Id)));
+
+            result.Match(
+                Fail: async error =>
+                {
+                    await ShowErrorToastAsync("Erreur", error.ToFullString());
+                },
+                Succ: success => Channel = success
+            );
         }
+
+
     }
 
     public class EditAdvanceSvxlinkChannelBase : EditBase<AdvanceSvxlinkChannel>
     {
         protected override async void OnInitialized()
         {
-            Channel = await Mediatr.Send(new GetAvanceSvxlinkChannelByIdQuery(Options.Value.ConfigId, Guid.Parse(Id)));
+            var result = await Mediatr.Send(new GetAvanceSvxlinkChannelByIdQuery(Options.Value.ConfigId, Guid.Parse(Id)));
+
+            result.Match(
+                Fail: async error =>
+                {
+                    await ShowErrorToastAsync("Erreur", error.ToFullString());
+                },
+                Succ: success => Channel = success
+            );
         }
     }
 }

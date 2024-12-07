@@ -177,21 +177,34 @@ namespace SvxlinkManager.Pages
 
         private async Task LoadChannelsAsync()
         {
-            foreach (var channel in await Mediatr.Send(new GetAllManagedChannelQuery(Options.Value.ConfigId)))
-            {
-                switch (channel)
-                {
-                    case Domain.Entities.SvxlinkChannel svxlinkChannel:
-                        Channels.Add((SvxlinkChannel)svxlinkChannel);
-                        break;
-                    case Domain.Entities.AdvanceSvxlinkChannel advanceSvxlinkChannel:
-                        Channels.Add((AdvanceSvxlinkChannel)advanceSvxlinkChannel);
-                        break;
-                    default:
-                        throw new Exception("Channel type not supported");
-                }
+            var result = await Mediatr.Send(new GetAllManagedChannelQuery(Options.Value.ConfigId));
 
-            }
+            result.Match(
+                Fail: async error =>
+                {
+                    await ShowErrorToastAsync("Erreur", error.ToFullString());
+                },
+                Succ: channels =>
+                {
+                    foreach (var channel in channels)
+                    {
+                        switch (channel)
+                        {
+                            case Domain.Entities.SvxlinkChannel svxlinkChannel:
+                                Channels.Add((SvxlinkChannel)svxlinkChannel);
+                                break;
+                            case Domain.Entities.AdvanceSvxlinkChannel advanceSvxlinkChannel:
+                                Channels.Add((AdvanceSvxlinkChannel)advanceSvxlinkChannel);
+                                break;
+                            default:
+                                throw new Exception("Channel type not supported");
+                        }
+
+                    }
+                }
+            );
+
+            
         }
 
         private async void SvxLinkService_Error(string t, string b)

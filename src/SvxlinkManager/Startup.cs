@@ -27,6 +27,8 @@ using SvxlinkManager.Infrastructure.Services;
 using SvxlinkManager.Service;
 using SvxlinkManager.ServiceMockup;
 
+using Serilog;
+
 using System.IO;
 
 namespace SvxlinkManager
@@ -46,7 +48,7 @@ namespace SvxlinkManager
         {
             services.Configure<SvxlinkManagerOptions>(Configuration.GetSection("SvxlinkManager"));
 
-            services.AddLogging(b => b.AddConsole());
+            services.AddSerilog();
 
             services.AddSingleton<ILiteDbContext, LiteDbContext>();
 
@@ -94,6 +96,10 @@ namespace SvxlinkManager
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .CreateLogger();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
