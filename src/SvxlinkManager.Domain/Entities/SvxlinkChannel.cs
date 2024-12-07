@@ -7,6 +7,11 @@ namespace SvxlinkManager.Domain.Entities
     {
         private string reportCallSign;
 
+        public SvxlinkChannel()
+        {
+            
+        }
+
         internal SvxlinkChannel(Guid id, string name, string host, int port, string callSign, string authKey, string reportCallSign) : base(id, name, host, callSign)
         {
             AuthKey = authKey;
@@ -16,8 +21,8 @@ namespace SvxlinkManager.Domain.Entities
 
         public static Validation<Error, SvxlinkChannel> Create(Guid id, string name, string host, int port, string callSign, string authKey, string reportCallSign)
         {
-            return (ValidateReportCallSign(reportCallSign), ValidateHost(host))
-                .Apply((vreportCallSign, vhost) => new SvxlinkChannel(id, name, vhost, port, callSign, authKey, vreportCallSign));
+            return (ValidateName(name), ValidateCallSign(callSign), ValidateReportCallSign(reportCallSign), ValidateHost(host))
+                .Apply((vname, vcallSign, vreportCallSign, vhost) => new SvxlinkChannel(id, vname, vhost, port, vcallSign, authKey, vreportCallSign));
         }
 
         public string? AuthKey { get; set; }

@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -12,9 +15,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
 {
-    public record StartEnableReflectors(Guid ConfigId): IRequest<Unit>;
+    public record StartEnableReflectors(Guid ConfigId): IRequest<Validation<Error, Guid>>;
 
-    internal class StartEnableReflectorsHandler : IRequestHandler<StartEnableReflectors, Unit>
+    internal class StartEnableReflectorsHandler : IRequestHandler<StartEnableReflectors, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ISvxlinkServiceBase svxlinkService;
@@ -27,7 +30,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(StartEnableReflectors request, CancellationToken cancellationToken)
+        public async Task<Validation<Error, Guid>> Handle(StartEnableReflectors request, CancellationToken cancellationToken)
         {
 
             logger.LogInformation("Starting default reflector.");
@@ -38,7 +41,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
 
             logger.LogInformation("Starting default reflector ok.");
 
-            return Unit.Value;
+            return result;
 
         }
     }

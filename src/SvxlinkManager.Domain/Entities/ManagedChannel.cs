@@ -2,6 +2,11 @@
 {
     public abstract class ManagedChannel : ChannelBase
     {
+        protected ManagedChannel()
+        {
+            
+        }
+
         protected ManagedChannel(Guid id, string name) : base(id, name)
         {
             

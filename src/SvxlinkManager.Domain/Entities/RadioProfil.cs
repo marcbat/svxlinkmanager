@@ -13,6 +13,10 @@ namespace SvxlinkManager.Domain.Entities
         private string txFrequency;
         private string squelch;
 
+        public RadioProfil()
+        {
+        }
+
         internal RadioProfil(Guid id,
                            string name,
                            string rxFequency,

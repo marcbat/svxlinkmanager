@@ -31,8 +31,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
             var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
                        from channel in Domain.Entities.SvxlinkChannel.Create(Guid.NewGuid(), request.Name, request.Host, request.Port, request.CallSign, request.AuthKey, request.ReportCallSign)
                        from sound in CreateSound(request.SoundName, request.SoundFile)
+                       from __ in config.AddSvxlinkChannel(channel)
                        from _ in svxlinkManagerConfigRepository.UpdateAsync(config)
-                       select config.Id;
+                       select channel.Id;
 
             return Task.FromResult(result);
         }

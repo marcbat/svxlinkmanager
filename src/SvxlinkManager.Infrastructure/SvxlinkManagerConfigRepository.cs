@@ -56,10 +56,10 @@ namespace SvxlinkManager.Infrastructure
 
                 return config;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                logger.LogError("Erreur lors de la récupération de la configuration.");
-                return Error.New("Erreur lors de la récupération de la configuration.");
+                logger.LogError(ex,"Erreur lors de la récupération de la configuration.");
+                return Error.New("Erreur lors de la récupération de la configuration.", ex);
             }
         
         }
@@ -81,10 +81,10 @@ namespace SvxlinkManager.Infrastructure
 
                 return Option<SvxlinkManagerConfigAggregate>.Some(config);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                logger.LogError("Erreur lors de la récupération de la configuration.");
-                return Error.New("Erreur lors de la récupération de la configuration.");
+                logger.LogError(ex,"Erreur lors de la récupération de la configuration.");
+                return Error.New("Erreur lors de la récupération de la configuration.",ex);
             }
 
         }
@@ -106,7 +106,7 @@ namespace SvxlinkManager.Infrastructure
             catch (Exception ex)
             {
                 logger.LogError(ex, "Erreur lors de la mise à jour de la configuration.");
-                return Error.New("Erreur lors de la mise à jour de la configuration.");
+                return Error.New("Erreur lors de la mise à jour de la configuration.", ex);
             }
         }
 

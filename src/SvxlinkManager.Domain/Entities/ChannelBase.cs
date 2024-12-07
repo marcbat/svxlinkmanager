@@ -7,6 +7,10 @@ namespace SvxlinkManager.Domain.Entities
     {
         private string name;
 
+        protected ChannelBase()
+        {
+            
+        }
         public ChannelBase(Guid id, string name) : base(id)
         {
             this.name = name;

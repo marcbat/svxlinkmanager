@@ -8,7 +8,12 @@ namespace SvxlinkManager.Domain.Entities
         private string host;
         private string callSign;
 
-        public Channel(Guid id, string name, string host, string callSign) : base(id, name)
+        protected Channel()
+        {
+            
+        }
+
+        protected Channel(Guid id, string name, string host, string callSign) : base(id, name)
         {
             this.callSign = callSign;
             this.host = host;
@@ -31,7 +36,7 @@ namespace SvxlinkManager.Domain.Entities
 
         public string CallSign => callSign;
 
-        public Validation<Error, string> ValidateCallSign(string callSign)
+        public static Validation<Error, string> ValidateCallSign(string callSign)
         {
             if (string.IsNullOrWhiteSpace(callSign))
                 return Error.New("Le nom du callSign ne peut pas être vide.");

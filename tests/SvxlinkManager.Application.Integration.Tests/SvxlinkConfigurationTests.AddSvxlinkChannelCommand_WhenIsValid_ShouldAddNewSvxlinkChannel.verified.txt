@@ -1,0 +1,15 @@
+﻿[
+  {
+    State: Success,
+    Success: {
+      AuthKey: Fake Password,
+      Port: 80,
+      IsDefault: false,
+      IsTemporized: false,
+      TimerDelay: 180,
+      IsActive: false,
+      Id: Guid_1
+    },
+    Fail: null
+  }
+]

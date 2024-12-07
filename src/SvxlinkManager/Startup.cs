@@ -116,14 +116,27 @@ namespace SvxlinkManager
                 var mediatr = serviceScope.ServiceProvider.GetRequiredService<IMediator>();
                 var options = serviceScope.ServiceProvider.GetRequiredService<IOptions<SvxlinkManagerOptions>>();
 
+
                 // Seed default config if not exists
-                await mediatr.Send(new CreateSvxlinkManagerConfigCommand(options.Value.ConfigId));
+                var result1 = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(options.Value.ConfigId));
 
                 // start default channel
-                await mediatr.Send(new StartDefaultChannelCommand(options.Value.ConfigId));
+                var result2 = await mediatr.Send(new StartDefaultChannelCommand(options.Value.ConfigId));
+
 
                 // start enable reflector
-                await mediatr.Send(new StartEnableReflectors(options.Value.ConfigId));
+                var result3 = await mediatr.Send(new StartEnableReflectors(options.Value.ConfigId));
+
+                var result = from create in result1
+                             from start in result2
+                             from enable in result3
+                             select enable;
+
+                if (result.IsFail)
+                {
+                    var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Startup>>();
+                    result.FailToList().ToList().ForEach(e => logger.LogError(e.Message));
+                                    }
             }
 
             app.UseHttpsRedirection();
