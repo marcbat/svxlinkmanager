@@ -70,7 +70,7 @@ namespace SvxlinkManager.Infrastructure
             {
                 using var db = new LiteDatabase(options.LiteDbFile);
 
-                if(db.CollectionExists("svxlinkManagerConfigs"))
+                if(!db.CollectionExists("svxlinkManagerConfigs"))
                     return Option<SvxlinkManagerConfigAggregate>.None;
 
                 var collection = db.GetCollection<SvxlinkManagerConfigAggregate>("svxlinkManagerConfigs");

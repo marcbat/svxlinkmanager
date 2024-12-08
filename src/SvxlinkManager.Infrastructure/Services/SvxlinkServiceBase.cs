@@ -125,8 +125,6 @@ namespace SvxlinkManager.Infrastructure.Services
             return Unit.Default;
         }
 
-
-
         /// <summary>
         /// Parse the Svxlink logs
         /// </summary>

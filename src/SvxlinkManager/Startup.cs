@@ -118,8 +118,8 @@ namespace SvxlinkManager
                 var options = serviceScope.ServiceProvider.GetRequiredService<IOptions<SvxlinkManagerOptions>>();
 
 
-                var result = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(options.Value.ConfigId))
-                    .Bind(_ => mediatr.Send(new StartDefaultChannelCommand(options.Value.ConfigId)));
+                var result = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(options.Value.ConfigId));
+                     //.Bind(_ => mediatr.Send(new StartDefaultChannelCommand(options.Value.ConfigId)))
                     //.Bind(_ => mediatr.Send(new StartEnableReflectors(options.Value.ConfigId)));
 
                 if (result.IsFail)
