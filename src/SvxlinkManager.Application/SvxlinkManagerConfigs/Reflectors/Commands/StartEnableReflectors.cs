@@ -36,7 +36,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
             logger.LogInformation("Starting default reflector.");
 
             var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
-                         from optionReflector in config.GetEnableReflector()
+                         from optionReflector in config.FindEnableReflector()
                          select config.Id;
 
             logger.LogInformation("Starting default reflector ok.");

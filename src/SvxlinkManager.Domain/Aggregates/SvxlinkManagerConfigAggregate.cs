@@ -204,12 +204,12 @@ namespace SvxlinkManager.Domain.Aggregates
             return reflector;
         }
 
-        public Validation<Error, Option<Reflector>> GetEnableReflector()
+        public Validation<Error, Option<Reflector>> FindEnableReflector()
         {
             var reflector = reflectors.FirstOrDefault(x => x.Enable);
 
             if (reflector is null)
-                return Error.New("Réflecteur introuvable.");
+                return Option<Reflector>.None;
 
             return Option<Reflector>.Some(reflector);
         }

@@ -30,6 +30,7 @@ using SvxlinkManager.ServiceMockup;
 using Serilog;
 
 using System.IO;
+using LanguageExt;
 
 namespace SvxlinkManager
 {
@@ -117,26 +118,15 @@ namespace SvxlinkManager
                 var options = serviceScope.ServiceProvider.GetRequiredService<IOptions<SvxlinkManagerOptions>>();
 
 
-                // Seed default config if not exists
-                var result1 = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(options.Value.ConfigId));
-
-                // start default channel
-                var result2 = await mediatr.Send(new StartDefaultChannelCommand(options.Value.ConfigId));
-
-
-                // start enable reflector
-                var result3 = await mediatr.Send(new StartEnableReflectors(options.Value.ConfigId));
-
-                var result = from create in result1
-                             from start in result2
-                             from enable in result3
-                             select enable;
+                var result = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(options.Value.ConfigId))
+                    .Bind(_ => mediatr.Send(new StartDefaultChannelCommand(options.Value.ConfigId)))
+                    .Bind(_ => mediatr.Send(new StartEnableReflectors(options.Value.ConfigId)));
 
                 if (result.IsFail)
                 {
                     var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Startup>>();
-                    result.FailToList().ToList().ForEach(e => logger.LogError(e.Message));
-                                    }
+                    logger.LogError(result.FailToList().ToFullArrayString());
+                }
             }
 
             app.UseHttpsRedirection();
