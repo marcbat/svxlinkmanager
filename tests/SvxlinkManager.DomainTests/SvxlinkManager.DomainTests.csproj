@@ -14,13 +14,15 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
     <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
-    <PackageReference Include="NUnit" Version="3.13.3" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />
+    <PackageReference Include="NUnit" Version="4.2.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="5.0.0-beta.5" />
+    <PackageReference Include="Verify.NUnit" Version="28.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SvxlinkManager.Domain\SvxlinkManager.Domain.csproj" />
+    <ProjectReference Include="..\..\src\SvxlinkManager.Domain\SvxlinkManager.Domain.csproj" />
   </ItemGroup>
+
 
   <ItemGroup>
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />

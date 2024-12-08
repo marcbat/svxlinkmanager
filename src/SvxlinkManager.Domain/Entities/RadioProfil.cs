@@ -144,7 +144,7 @@ namespace SvxlinkManager.Domain.Entities
         internal static Validation<Error, string> ValidateTxCtcss(string txCtcss)
         {
             if (string.IsNullOrWhiteSpace(txCtcss))
-                return Error.New("Le ton de CTCSS de transmission ne peut pas être vide.");
+                return string.Empty;
 
             var valueExist = Ctcss.ContainsKey(txCtcss);
 
@@ -157,7 +157,16 @@ namespace SvxlinkManager.Domain.Entities
         public Validation<Error, string> SetTxCtcss(string txCtcss) =>
             ValidateTxCtcss(txCtcss).Map(x => this.txCtcss = x); 
 
-        public string InternalTxCtcss => Ctcss[txCtcss];
+        public string InternalTxCtcss
+        {
+            get
+            {
+                if(string.IsNullOrEmpty(txCtcss))
+                    return "0000";
+
+                return Ctcss[txCtcss];
+            }
+        }
 
         public string RxCtCss
         {
@@ -168,7 +177,7 @@ namespace SvxlinkManager.Domain.Entities
         internal static Validation<Error, string> ValidateRxCtCss(string rxCtCss)
         {
             if (string.IsNullOrWhiteSpace(rxCtCss))
-                return Error.New("Le ton de CTCSS de réception ne peut pas être vide.");
+                return string.Empty;
 
             var valueExist = Ctcss.ContainsKey(rxCtCss);
 
@@ -181,11 +190,19 @@ namespace SvxlinkManager.Domain.Entities
         public Validation<Error, string> SetRxCtCss(string rxCtCss) =>
             ValidateRxCtCss(rxCtCss).Map(x => this.rxCtCss = x);
 
-        public string InternalRxCtCss => Ctcss[rxCtCss];
+        public string InternalRxCtCss
+        {
+            get
+            {
+                if(string.IsNullOrEmpty(rxCtCss))
+                    return "0000";
+
+                return Ctcss[rxCtCss];
+            }
+        }
 
         private static Dictionary<string, string> Ctcss => new()
         {
-            { "Pas de tone", "0000" },
             { "67", "0001" },
             { "71.9", "0002" },
             { "74.4", "0003" },
