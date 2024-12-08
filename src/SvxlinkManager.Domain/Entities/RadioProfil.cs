@@ -73,7 +73,11 @@ namespace SvxlinkManager.Domain.Entities
 
         public bool HasSa818 { get; set; } = true;
 
-        public string Name => name;
+        public string Name
+        {
+            get => name;
+            protected set => name = value;
+        }
 
         internal static Validation<Error, string> ValidateName(string name)
         {
@@ -86,7 +90,11 @@ namespace SvxlinkManager.Domain.Entities
         public Validation<Error,string> SetName(string name) =>
             ValidateName(name).Map(vname => this.name = vname);
 
-        public string RxFequency => rxFequency;
+        public string RxFequency
+        {
+            get => rxFequency;
+            protected set => rxFequency = value;
+        }
 
         internal static Validation<Error, string> ValidateRxFequency(string rxFequency)
         {
@@ -99,7 +107,11 @@ namespace SvxlinkManager.Domain.Entities
         public Validation<Error, string> SetRxFequency(string rxFequency) =>
             ValidateRxFequency(rxFequency).Map(vrxFequency => this.rxFequency = vrxFequency);
 
-        public string TxFrequency => txFrequency;
+        public string TxFrequency
+        {
+            get => txFrequency;
+            protected set => txFrequency = value;
+        }
 
         internal static Validation<Error, string> ValidateTxFrequency(string txFrequency)
         {
@@ -123,7 +135,11 @@ namespace SvxlinkManager.Domain.Entities
             }
         }
 
-        public string TxCtcss => txCtcss;
+        public string TxCtcss
+        {
+            get => txCtcss;
+            protected set => txCtcss = value;
+        }
 
         internal static Validation<Error, string> ValidateTxCtcss(string txCtcss)
         {
@@ -143,7 +159,11 @@ namespace SvxlinkManager.Domain.Entities
         public Validation<Error, string> SetTxCtcss(string txCtcss) =>
             ValidateTxCtcss(txCtcss).Map(x => this.txCtcss = x); 
 
-        public string RxCtCss => rxCtCss;
+        public string RxCtCss
+        {
+            get => rxCtCss;
+            protected set => rxCtCss = value;
+        }
 
         internal static Validation<Error, string> ValidateRxCtCss(string rxCtCss)
         {
@@ -163,7 +183,7 @@ namespace SvxlinkManager.Domain.Entities
         public Validation<Error, string> SetRxCtCss(string rxCtCss) =>
             ValidateRxCtCss(rxCtCss).Map(x => this.rxCtCss = x);
 
-        private static Dictionary<string, string> Ctcss => new Dictionary<string, string>
+        private static Dictionary<string, string> Ctcss => new()
         {
           {"0000", "Pas de tone" },
           {"0001","67"},

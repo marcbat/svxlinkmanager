@@ -26,6 +26,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 namespace SvxlinkManager.Pages.Installer
 {
     public enum InstallationStatus
@@ -175,20 +177,27 @@ namespace SvxlinkManager.Pages.Installer
                 Logger.LogInformation("Installation de SvxlinkManager.");
 
                 SeedUser();
-                await InstallChannelsAsync();
-                await SetDefaultChannelAsync();
 
-                var result  = await CreateRadioProfileAsync();
+                var command = new InstallCommand(Options.Value.ConfigId,
+                                                 InstallerModel.ChannelsToPreserved.Select(c => c.Id),
+                                                 InstallerModel.CallSign,
+                                                 InstallerModel.AnnonceCallSign,
+                                                 InstallerModel.DefaultChannel.Id,
+                                                 InstallerModel.RadioProfile.Name,
+                                                 InstallerModel.RadioProfile.RxFequ,
+                                                 InstallerModel.RadioProfile.TxFrequ,
+                                                 InstallerModel.RadioProfile.Squelch,
+                                                 InstallerModel.RadioProfile.TxTone,
+                                                 InstallerModel.RadioProfile.RxTone,
+                                                 InstallerModel.RadioProfile.Volume,
+                                                 InstallerModel.RadioProfile.PreEmph,
+                                                 InstallerModel.RadioProfile.HightPass,
+                                                 InstallerModel.RadioProfile.LowPass,
+                                                 InstallerModel.RadioProfile.SquelchDetection);
+                var result = await Mediatr.Send(command);
 
-                await result.Match(
-                Fail: async error =>
-                {
-                    await ShowErrorToastAsync("Erreur", error.ToFullString());
-                },
-                    Succ: ApplyRadioProfilAsync
-                );
+                _ = result.MapFail(async error => await ShowErrorToastAsync("Erreur", error.Message));
 
-                
                 if (InstallerModel.UpdateToLastRelease)
                     Update();
                 else
@@ -200,87 +209,6 @@ namespace SvxlinkManager.Pages.Installer
             catch (Exception e)
             {
                 Logger.LogError($"Erreur lors de l'intallation. {e.Message}");
-            }
-        }
-
-        private async Task ApplyRadioProfilAsync(Guid radioGuid)
-        {
-            try
-            {
-                Logger.LogInformation("Application du profil radio.");
-
-                await Mediatr.Send(new ApplyRadioProfilCommand(Options.Value.ConfigId, radioGuid));
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, "Impossible d'appliquer le profil radio.");
-                throw new Exception("Impossible d'appliquer le profil radio.", ex);
-            }
-        }
-
-        /// <summary>Crée le profil radio et programme le SA818 si necessaire</summary>
-        /// <exception cref="Exception">Impossible de créer le profil radio</exception>
-        private async Task<Validation<LanguageExt.Common.Error, Guid>> CreateRadioProfileAsync()
-        {
-           
-                Logger.LogInformation("Installation du profil radio.");
-
-                var result = from radioProfil in await Mediatr.Send(new CreateRadioProfilCommand(
-                    Options.Value.ConfigId,
-                    InstallerModel.RadioProfile.Name,
-                    InstallerModel.RadioProfile.RxFequ,
-                    InstallerModel.RadioProfile.TxFrequ,
-                    InstallerModel.RadioProfile.Squelch,
-                    InstallerModel.RadioProfile.TxTone,
-                    InstallerModel.RadioProfile.RxTone,
-                    InstallerModel.RadioProfile.Volume,
-                    InstallerModel.RadioProfile.PreEmph,
-                    InstallerModel.RadioProfile.HightPass,
-                    InstallerModel.RadioProfile.LowPass,
-                    InstallerModel.RadioProfile.SquelchDetection
-                ))
-                           select radioProfil.Id;
-
-
-                if(result.IsSuccess)
-                    OnCreateRadioProfile?.Invoke();
-
-                return result;
-        }
-
-        /// <summary>Définition du salon par défaut</summary>
-        /// <exception cref="Exception">Impossible de définir le salon par défaut.</exception>
-        private async Task SetDefaultChannelAsync()
-        {
-            try
-            {
-                Logger.LogInformation("Configuration du salon par défaut.");
-
-                await Mediatr.Send(new SetDefaultChannelCommand(Options.Value.ConfigId, InstallerModel.DefaultChannel.Id));
-
-                OnSetDefaultChannel?.Invoke();
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Impossible de définir le salon par défaut.", e);
-            }
-        }
-
-        /// <summary>Installe les salons</summary>
-        /// <exception cref="Exception">Impossible de définir les salons à installer</exception>
-        private async Task InstallChannelsAsync()
-        {
-            try
-            {
-                Logger.LogInformation("Installation des salons.");
-
-                await Mediatr.Send(new InstallChannelsCommand(Options.Value.ConfigId, InstallerModel.ChannelsToPreserved.Select(c => c.Id), InstallerModel.CallSign, InstallerModel.AnnonceCallSign));
-
-                OnInstallChannels?.Invoke();
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Impossible de définir les salons à installer", e);
             }
         }
 

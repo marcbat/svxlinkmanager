@@ -19,13 +19,11 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
     internal class InstallChannelsCommandHandler : IRequestHandler<InstallChannelsCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
-        private readonly IMediator mediator;
         private readonly ILogger<InstallChannelsCommandHandler> logger;
 
-        public InstallChannelsCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, IMediator mediator, ILogger<InstallChannelsCommandHandler> logger)
+        public InstallChannelsCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,  ILogger<InstallChannelsCommandHandler> logger)
         {
             this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
-            this.mediator = mediator;
             this.logger = logger;
         }
 

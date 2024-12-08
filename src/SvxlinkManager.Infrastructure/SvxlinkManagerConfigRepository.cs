@@ -32,9 +32,9 @@ namespace SvxlinkManager.Infrastructure
 
             var collection = db.GetCollection<SvxlinkManagerConfigAggregate>("svxlinkManagerConfigs");
 
-            collection.EnsureIndex(x => x.Id, true);
-
             collection.Insert(config);
+
+            collection.EnsureIndex(x => x.Id, true);
 
             return config.Id;
         }
@@ -69,6 +69,9 @@ namespace SvxlinkManager.Infrastructure
             try
             {
                 using var db = new LiteDatabase(options.LiteDbFile);
+
+                if(db.CollectionExists("svxlinkManagerConfigs"))
+                    return Option<SvxlinkManagerConfigAggregate>.None;
 
                 var collection = db.GetCollection<SvxlinkManagerConfigAggregate>("svxlinkManagerConfigs");
 
