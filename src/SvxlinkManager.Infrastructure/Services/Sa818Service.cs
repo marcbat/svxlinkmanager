@@ -38,7 +38,7 @@ namespace SvxlinkManager.Infrastructure.Services
 
                 logger.LogInformation($"Application du profil {radioProfile.Name}.");
 
-                WriteModule($"AT+DMOSETGROUP={mode},{radioProfile.TxFrequency}0,{radioProfile.RxFequency}0,{radioProfile.TxCtcss},{radioProfile.Squelch},{radioProfile.RxCtCss}\r\n");
+                WriteModule($"AT+DMOSETGROUP={mode},{radioProfile.TxFrequency}0,{radioProfile.RxFequency}0,{radioProfile.InternalTxCtcss},{radioProfile.Squelch},{radioProfile.InternalRxCtCss}\r\n");
                 WriteModule($"AT+DMOSETVOLUME={radioProfile.Volume}\r\n");
                 WriteModule($"AT+SETFILTER={radioProfile.PreEmph},{radioProfile.HightPass},{radioProfile.LowPass}\r\n");
 
