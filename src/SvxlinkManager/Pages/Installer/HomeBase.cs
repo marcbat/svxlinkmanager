@@ -201,15 +201,19 @@ namespace SvxlinkManager.Pages.Installer
                         NavigationManager.NavigateTo("Identity/Account/Login", true);
                         return ShowSuccessToastAsync("Installation", "Installation reussie.");
                     },
-                    Fail: error => ShowErrorToastAsync("Erreur", error.ToFullArrayString()));
+                    Fail: error => 
+                    {
+                        return ShowErrorToastAsync("Erreur", error.ToFullArrayString());
+                    }
+                 );
 
-                if (InstallerModel.UpdateToLastRelease)
-                    Update();
-                else
-                {
-                    var resultStart = await Mediatr.Send(new StartDefaultChannelCommand(Options.Value.ConfigId));
-                    NavigationManager.NavigateTo("Identity/Account/Login", true);
-                }
+                //if (InstallerModel.UpdateToLastRelease)
+                //    Update();
+                //else
+                //{
+                //    var resultStart = await Mediatr.Send(new StartDefaultChannelCommand(Options.Value.ConfigId));
+                //    NavigationManager.NavigateTo("Identity/Account/Login", true);
+                //}
             }
             catch (Exception e)
             {

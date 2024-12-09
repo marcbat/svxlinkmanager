@@ -36,60 +36,128 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer
             this.logger = logger;
         }
 
+        
+        ///<summary>
+        /// Installe le gestionnaire Svxlink avec les paramètres spécifiés.
+        /// </summary>
+        /// <param name="userName">Le nom d'utilisateur pour l'authentification.</param>
+        /// <param name="password">Le mot de passe pour l'authentification.</param>
+        /// <param name="configId">L'identifiant de la configuration.</param>
+        /// <param name="installChannels">Les identifiants des canaux à installer.</param>
+        /// <param name="callSign">L'indicatif d'appel.</param>
+        /// <param name="annonceCallSign">L'indicatif d'appel d'annonce.</param>
+        /// <param name="defaultChannelId">L'identifiant du canal par défaut.</param>
+        /// <param name="name">Le nom du profil radio.</param>
+        /// <param name="rxFrequency">La fréquence de réception.</param>
+        /// <param name="txFrequency">La fréquence de transmission.</param>
+        /// <param name="squelch">Le squelch.</param>
+        /// <param name="txCtcss">Le CTCSS de transmission.</param>
+        /// <param name="rxCtCss">Le CTCSS de réception.</param>
+        /// <param name="volume">Le volume.</param>
+        /// <param name="preEmph">La pré-accentuation.</param>
+        /// <param name="highPass">Le filtre passe-haut.</param>
+        /// <param name="lowPass">Le filtre passe-bas.</param>
+        /// <param name="squelchDetection">La détection de squelch.</param>
+        /// <returns>Un objet Validation contenant l'identifiant de la configuration ou une erreur.</returns>
         public Validation<Error, Guid> InstallSvxlinkManager(
                                  string userName,
                                  string password,
-                                 Guid ConfigId,
+                                 Guid configId,
                                  IEnumerable<Guid> installChannels,
-                                 string CallSign,
-                                 string AnnonceCallSign,
-                                 Guid DefaultChannel,
-                                 string Name,
-                                 string RxFrequency,
-                                 string TxFrequency,
-                                 string Squelch,
-                                 string TxCtcss,
-                                 string RxCtCss,
-                                 string Volume,
-                                 string PreEmph,
-                                 string HighPass,
-                                 string LowPass,
-                                 string SquelchDetection)
+                                 string callSign,
+                                 string annonceCallSign,
+                                 Guid defaultChannelId,
+                                 string name,
+                                 string rxFrequency,
+                                 string txFrequency,
+                                 string squelch,
+                                 string txCtcss,
+                                 string rxCtCss,
+                                 string volume,
+                                 string preEmph,
+                                 string highPass,
+                                 string lowPass,
+                                 string squelchDetection)
         {
             var result = from userGuid in authentificationService.SeedUser(userName, password)
-                         from configId in CreateDefaultConfig(ConfigId, installChannels, CallSign, AnnonceCallSign, DefaultChannel, Name, RxFrequency, TxFrequency, Squelch, TxCtcss, RxCtCss, Volume, PreEmph, HighPass, LowPass, SquelchDetection)
-                         from _ in channelService.StartDefaultChannel(configId)
+                         from _ in CreateEmptyConfiguration(configId)
+                         from __ in SetupConfiguration(configId, installChannels, callSign, annonceCallSign, defaultChannelId, name, rxFrequency, txFrequency, squelch, txCtcss, rxCtCss, volume, preEmph, highPass, lowPass, squelchDetection)
+                         from ___ in channelService.StartDefaultChannel(configId)
                          select configId;
 
             return result;
         }
 
-        private Validation<Error, Guid> CreateDefaultConfig(Guid ConfigId,
-                                 IEnumerable<Guid> installChannels,
-                                 string CallSign,
-                                 string AnnonceCallSign,
-                                 Guid DefaultChannel,
-                                 string Name,
-                                 string RxFrequency,
-                                 string TxFrequency,
-                                 string Squelch,
-                                 string TxCtcss,
-                                 string RxCtCss,
-                                 string Volume,
-                                 string PreEmph,
-                                 string HighPass,
-                                 string LowPass,
-                                 string SquelchDetection)
+        /// <summary>
+        /// Crée une configuration vide avec l'identifiant spécifié.
+        /// </summary>
+        /// <param name="configId">L'identifiant de la configuration.</param>
+        /// <returns>Un objet Validation contenant l'identifiant de la configuration ou une erreur.</returns>
+        private Validation<Error, Guid> CreateEmptyConfiguration(Guid configId)
         {
-            var result = from install in InstallChannels(ConfigId, installChannels.ToList(), CallSign, AnnonceCallSign)
-                         from _ in SetDefaultChannel(ConfigId, DefaultChannel)
-                         from radioProfil in CreateRadioProfil(ConfigId, Name, RxFrequency, TxFrequency, Squelch, TxCtcss, RxCtCss, Volume, PreEmph, HighPass, LowPass, SquelchDetection)
-                         from ___ in ApplyRadioProfile(ConfigId, radioProfil.Id)
+            var result = from config in svxlinkManagerConfigRepository.FindConfig(configId)
+                         where config.IsNone
+                         from newConfig in SvxlinkManagerConfigAggregate.Create(configId)
+                         from id in svxlinkManagerConfigRepository.Create(newConfig)
+                         select id;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Configure la configuration avec les paramètres spécifiés.
+        /// </summary>
+        /// <param name="configId">L'identifiant de la configuration.</param>
+        /// <param name="installChannels">Les identifiants des canaux à installer.</param>
+        /// <param name="callSign">L'indicatif d'appel.</param>
+        /// <param name="annonceCallSign">L'indicatif d'appel d'annonce.</param>
+        /// <param name="defaultChannelId">L'identifiant du canal par défaut.</param>
+        /// <param name="name">Le nom du profil radio.</param>
+        /// <param name="rxFrequency">La fréquence de réception.</param>
+        /// <param name="txFrequency">La fréquence de transmission.</param>
+        /// <param name="squelch">Le squelch.</param>
+        /// <param name="txCtcss">Le CTCSS de transmission.</param>
+        /// <param name="rxCtCss">Le CTCSS de réception.</param>
+        /// <param name="volume">Le volume.</param>
+        /// <param name="preEmph">La pré-accentuation.</param>
+        /// <param name="highPass">Le filtre passe-haut.</param>
+        /// <param name="lowPass">Le filtre passe-bas.</param>
+        /// <param name="squelchDetection">La détection de squelch.</param>
+        /// <returns>Un objet Validation contenant l'identifiant de la configuration ou une erreur.</returns>
+        private Validation<Error, Guid> SetupConfiguration(Guid configId,
+                                 IEnumerable<Guid> installChannels,
+                                 string callSign,
+                                 string annonceCallSign,
+                                 Guid defaultChannelId,
+                                 string name,
+                                 string rxFrequency,
+                                 string txFrequency,
+                                 string squelch,
+                                 string txCtcss,
+                                 string rxCtCss,
+                                 string volume,
+                                 string preEmph,
+                                 string highPass,
+                                 string lowPass,
+                                 string squelchDetection)
+        {
+            var result = from install in InstallChannels(configId, installChannels.ToList(), callSign, annonceCallSign)
+                         from _ in SetDefaultChannel(configId, defaultChannelId)
+                         from radioProfil in CreateRadioProfil(configId, name, rxFrequency, txFrequency, squelch, txCtcss, rxCtCss, volume, preEmph, highPass, lowPass, squelchDetection)
+                         from ___ in ApplyRadioProfile(configId, radioProfil.Id)
                          select install;
 
             return result;
         }
 
+        /// <summary>
+        /// Installe les canaux spécifiés dans la configuration.
+        /// </summary>
+        /// <param name="configId">L'identifiant de la configuration.</param>
+        /// <param name="installChannels">La liste des identifiants des canaux à installer.</param>
+        /// <param name="callSign">L'indicatif d'appel.</param>
+        /// <param name="annonceCallSign">L'indicatif d'appel d'annonce.</param>
+        /// <returns>Un objet Validation contenant l'identifiant de la configuration ou une erreur.</returns>
         private Validation<Error, Guid> InstallChannels(Guid configId, List<Guid> installChannels, string callSign, string annonceCallSign)
         {
             try
@@ -97,8 +165,8 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer
                 logger.LogInformation("Début de l'installation des canaux.");
                 var result = from config in svxlinkManagerConfigRepository.GetConfig(configId)
                              from originalChannels in svxlinkManagerConfigRepository.GetAllOriginalChannels()
-                             from existingChannels in FilterExisting(originalChannels, installChannels)
-                             from channels in AddDefaultCall(existingChannels, callSign, annonceCallSign)
+                             from existingChannels in FilterChannelsToKeep(originalChannels, installChannels)
+                             from channels in AddCallSignsToChannels(existingChannels, callSign, annonceCallSign)
                              from _ in UpdateChannelsInConfig(config, channels)
                              from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
                              select config.Id;
@@ -115,7 +183,13 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer
             }
         }
 
-        private static Validation<Error, List<SvxlinkChannel>> FilterExisting(List<SvxlinkChannel> svxlinkChannels, IEnumerable<Guid> guids)
+        /// <summary>
+        /// Filtre les canaux à conserver en fonction des identifiants spécifiés.
+        /// </summary>
+        /// <param name="svxlinkChannels">La liste des canaux Svxlink disponibles.</param>
+        /// <param name="guids">Les identifiants des canaux à conserver.</param>
+        /// <returns>Une liste des canaux filtrés ou une erreur.</returns>
+        private static Validation<Error, List<SvxlinkChannel>> FilterChannelsToKeep(List<SvxlinkChannel> svxlinkChannels, IEnumerable<Guid> guids)
         {
             var existingChannels = new List<SvxlinkChannel>();
 
@@ -131,7 +205,14 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer
             return existingChannels;
         }
 
-        private static Validation<Error, List<SvxlinkChannel>> AddDefaultCall(List<SvxlinkChannel> svxlinkChannels, string callSign, string annonceCallSign)
+        /// <summary>
+        /// Ajoute les indicatifs d'appel aux canaux spécifiés.
+        /// </summary>
+        /// <param name="svxlinkChannels">La liste des canaux Svxlink.</param>
+        /// <param name="callSign">L'indicatif d'appel.</param>
+        /// <param name="annonceCallSign">L'indicatif d'appel d'annonce.</param>
+        /// <returns>Une liste des canaux avec les indicatifs d'appel mis à jour ou une erreur.</returns>
+        private static Validation<Error, List<SvxlinkChannel>> AddCallSignsToChannels(List<SvxlinkChannel> svxlinkChannels, string callSign, string annonceCallSign)
         {
             foreach (var channel in svxlinkChannels)
             {
@@ -141,15 +222,27 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer
             return svxlinkChannels;
         }
 
+        /// <summary>
+        /// Met à jour les canaux dans la configuration spécifiée.
+        /// </summary>
+        /// <param name="config">L'agrégat de configuration du gestionnaire Svxlink.</param>
+        /// <param name="channels">La liste des canaux à ajouter à la configuration.</param>
+        /// <returns>Un objet Validation contenant Unit ou une erreur.</returns>
         private static Validation<Error, Unit> UpdateChannelsInConfig(SvxlinkManagerConfigAggregate config, List<SvxlinkChannel> channels)
         {
             foreach (var channel in channels)
             {
                 config.AddSvxlinkChannel(channel);
             }
-            return LanguageExt.Unit.Default;
+            return Unit.Default;
         }
 
+        /// <summary>
+        /// Configure le canal par défaut avec l'identifiant spécifié.
+        /// </summary>
+        /// <param name="configId">L'identifiant de la configuration.</param>
+        /// <param name="channelId">L'identifiant du canal à définir comme canal par défaut.</param>
+        /// <returns>Un objet Validation contenant l'identifiant de la configuration ou une erreur.</returns>
         private Validation<Error, Guid> SetDefaultChannel(Guid configId, Guid channelId)
         {
             logger.LogInformation("Début de la configuration du channel par defaut.");
@@ -165,14 +258,35 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer
             return result;
         }
 
+        /// <summary>
+        /// Définit le canal comme canal par défaut.
+        /// </summary>
+        /// <param name="channel">Le canal à définir comme canal par défaut.</param>
+        /// <returns>Un objet Validation contenant Unit ou une erreur.</returns>
         private static Validation<Error, Unit> SetAsDefault(SvxlinkChannel channel)
         {
             channel.IsDefault = true;
             channel.IsTemporized = false;
 
-            return LanguageExt.Unit.Default;
+            return Unit.Default;
         }
 
+        /// <summary>
+        /// Crée un nouveau profil radio avec les paramètres spécifiés.
+        /// </summary>
+        /// <param name="configId">L'identifiant de la configuration.</param>
+        /// <param name="name">Le nom du profil radio.</param>
+        /// <param name="rxFrequency">La fréquence de réception.</param>
+        /// <param name="txFrequency">La fréquence de transmission.</param>
+        /// <param name="squelch">Le squelch.</param>
+        /// <param name="txCtcss">Le CTCSS de transmission.</param>
+        /// <param name="rxCtCss">Le CTCSS de réception.</param>
+        /// <param name="volume">Le volume.</param>
+        /// <param name="preEmph">La pré-accentuation.</param>
+        /// <param name="highPass">Le filtre passe-haut.</param>
+        /// <param name="lowPass">Le filtre passe-bas.</param>
+        /// <param name="squelchDetection">La détection de squelch.</param>
+        /// <returns>Un objet Validation contenant le profil radio ou une erreur.</returns>
         private Validation<Error, RadioProfil> CreateRadioProfil(Guid configId, string name,
                                string rxFrequency,
                                string txFrequency,
@@ -193,12 +307,17 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer
                          from __ in EnableRadioProfile(radioProfile)
                          from ___ in config.AddRadioProfil(radioProfile)
                          from ____ in svxlinkManagerConfigRepository.UpdateAsync(config)
-                         from _____ in WriteRadioProfil(radioProfile)
+                         from _____ in WriteRadioProfilInSa818(radioProfile)
                          select radioProfile;
 
             return result;
         }
 
+        /// <summary>
+        /// Active le profil radio spécifié.
+        /// </summary>
+        /// <param name="radioProfil">Le profil radio à activer.</param>
+        /// <returns>Un objet Validation contenant Unit ou une erreur.</returns>
         private static Validation<Error, Unit> EnableRadioProfile(RadioProfil radioProfil)
         {
             radioProfil.Enable = true;
@@ -206,13 +325,19 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer
             return LanguageExt.Unit.Default;
         }
 
-        private Validation<Error, Guid> ApplyRadioProfile(Guid ConfigId, Guid RadioProfilId)
+        /// <summary>
+        /// Applique le profil radio spécifié à la configuration.
+        /// </summary>
+        /// <param name="configId">L'identifiant de la configuration.</param>
+        /// <param name="radioProfilId">L'identifiant du profil radio à appliquer.</param>
+        /// <returns>Un objet Validation contenant l'identifiant de la configuration ou une erreur.</returns>
+        private Validation<Error, Guid> ApplyRadioProfile(Guid configId, Guid radioProfilId)
         {
             logger.LogInformation("Application du profil radio.");
 
-            var result = from config in svxlinkManagerConfigRepository.GetConfig(ConfigId)
-                         from radioProfile in config.GetRadioProfil(RadioProfilId)
-                         from _ in WriteRadioProfil(radioProfile)
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(configId)
+                         from radioProfile in config.GetRadioProfil(radioProfilId)
+                         from _ in WriteRadioProfilInSa818(radioProfile)
                          from __ in config.SetActiveRadioProfile(radioProfile.Id)
                          from ___ in svxlinkManagerConfigRepository.UpdateAsync(config)
                          select config.Id;
@@ -220,7 +345,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer
             return result;
         }
 
-        private Validation<Error, LanguageExt.Unit> WriteRadioProfil(RadioProfil radioProfil)
+        /// <summary>
+        /// Écrit le profil radio dans le SA818 si applicable.
+        /// </summary>
+        /// <param name="radioProfil">Le profil radio à écrire.</param>
+        /// <returns>Un objet Validation contenant Unit ou une erreur.</returns>
+        private Validation<Error, Unit> WriteRadioProfilInSa818(RadioProfil radioProfil)
         {
             if (radioProfil.HasSa818)
                 return sa818Service.WriteRadioProfile(radioProfil);

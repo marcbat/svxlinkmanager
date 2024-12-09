@@ -54,10 +54,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
 
         public Task<Validation<Error, Guid>> Handle(InstallCommand request, CancellationToken cancellationToken)
         {
-            
-                logger.LogInformation("Execution du handler de la commande InstallCommand");
+            logger.LogInformation("Execution du handler de la commande InstallCommand");
 
-               return Task.FromResult(installerService.InstallSvxlinkManager(
+               return installerService.InstallSvxlinkManager(
                                 request.UserName,
                                 request.Password,
                                 request.ConfigId,
@@ -75,7 +74,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands
                                  request.PreEmph,
                                  request.HighPass,
                                  request.LowPass,
-                                 request.SquelchDetection));
+                                 request.SquelchDetection).AsTask();
             
         }
 
