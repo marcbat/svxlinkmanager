@@ -301,7 +301,6 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer
                          from __ in EnableRadioProfile(radioProfile)
                          from ___ in config.AddRadioProfil(radioProfile)
                          from ____ in svxlinkManagerConfigRepository.UpdateAsync(config)
-                         from _____ in WriteRadioProfilInSa818(radioProfile)
                          select radioProfile;
 
             return result;

@@ -145,7 +145,6 @@
   calls: [
     {
       name: SeedUser,
-      sequence: -9223372036854775806,
       arguments: [
         marcbat79@gmail.com,
         Pa$$w0rd
@@ -153,32 +152,6 @@
     },
     {
       name: WriteRadioProfile,
-      sequence: -9223372036854775805,
-      arguments: [
-        {
-          HasSa818: true,
-          Name: Fake Name,
-          RxFequency: 123.450,
-          TxFrequency: 543.210,
-          Squelch: 5,
-          TxCtcss: 67,
-          InternalTxCtcss: 0001,
-          RxCtCss: 88.5,
-          InternalRxCtCss: 0008,
-          Volume: 10,
-          PreEmph: 0.5,
-          HightPass: 100,
-          LowPass: 10000,
-          SquelchDetection: true,
-          Enable: true,
-          IsActive: false,
-          Id: Guid_10
-        }
-      ]
-    },
-    {
-      name: WriteRadioProfile,
-      sequence: -9223372036854775804,
       arguments: [
         {
           HasSa818: true,
@@ -202,12 +175,10 @@
       ]
     },
     {
-      name: StopSvxlink,
-      sequence: -9223372036854775803
+      name: StopSvxlink
     },
     {
       name: StartSvxlink,
-      sequence: -9223372036854775802,
       arguments: [
         {
           AuthKey: Magnifique123456789!,
