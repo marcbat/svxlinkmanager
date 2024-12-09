@@ -18,6 +18,8 @@ namespace SvxlinkManager.Application.Integration.Tests
 {
     public class ActivateSvxlinkChannelCommandTests : BaseTest
     {
+        private readonly string applicationPath = Directory.GetCurrentDirectory();
+
         [Test]
         public async Task ActivateSvxlinkChannelCommand_WhenIsValid_ShouldActivateSvxlinkChannel()
         {
@@ -49,6 +51,37 @@ namespace SvxlinkManager.Application.Integration.Tests
             finally
             {
                 File.Delete(db);
+            }
+
+        }
+
+        [Test]
+        public async Task ActivateSvxlinkChannelCommand_WhenIsValid_ShouldWriteSvxlinkConf()
+        {
+            try
+            {
+                // Arrange
+                var install = await CreateDefaultConfigAsync();
+
+                var toto = svxlinkManagerConfigRepository.GetConfig(configGuid)
+                    .Map(config => new ApplyRadioProfilCommand(configGuid, config.RadioProfiles.First().Id))
+                    .Map(async x => await mediatr.Send(x));
+
+                // Act
+                var command = new ActivateSvxlinkChannelCommand(configGuid, Guid.Parse("235a4521-15a1-4e02-a540-91ee600452ac"));
+                var result = await mediatr.Send(command);
+
+                // Assert
+                await VerifyFile($"{applicationPath}/SvxlinkConfig/svxlink.conf");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            finally
+            {
+                File.Delete(db);
+                File.Delete($"{applicationPath}/SvxlinkConfig/svxlink.conf");
             }
 
         }
