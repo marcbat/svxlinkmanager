@@ -35,4 +35,25 @@
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="InstallCommandTests.AddSvxlinkChannelCommand_WhenIsValid_ShouldAddNewSvxlinkChannel.verified.txt">
+      <DependentUpon>InstallCommandTests.cs</DependentUpon>
+    </None>
+    <None Update="InstallCommandTests.CreateRadioProfilCommand_WhenValid_ShouldCreateRadioProfil.received.txt">
+      <DependentUpon>InstallCommandTests.cs</DependentUpon>
+    </None>
+    <None Update="InstallCommandTests.CreateRadioProfilCommand_WhenValid_ShouldCreateRadioProfil.verified.txt">
+      <DependentUpon>InstallCommandTests.cs</DependentUpon>
+    </None>
+    <None Update="InstallCommandTests.InstallChannelsCommand_WhenIsValid_ShouldInstallChannels.verified.txt">
+      <DependentUpon>InstallCommandTests.cs</DependentUpon>
+    </None>
+    <None Update="InstallCommandTests.InstallCommand_WhenValid_ShouldInstall.verified.txt">
+      <DependentUpon>InstallCommandTests.cs</DependentUpon>
+    </None>
+    <None Update="InstallCommandTests.SetDefaultChannelCommand_WhenIsValid_ShoudSetDefaultChannel.verified.txt">
+      <DependentUpon>InstallCommandTests.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+
 </Project>

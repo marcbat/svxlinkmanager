@@ -33,13 +33,13 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
 
             var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
                          from channel in config.GetSvxlinkChannel(request.IdSvxlinkChannel)
-                         from _ in svxlinkService.StopSvxlink()
+                         from a in svxlinkService.StopSvxlink()
                          from radioProfile in config.GetActiveRadioProfile()
-                         from __ in WriteDefaultSvxlinkConfig()
+                         from b in WriteDefaultSvxlinkConfig()
                          from parameters in CreateParametersDictionnary(channel, radioProfile)
-                         from ___ in iniService.ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.conf", parameters)
-                         from ____ in ReplaceSoundFile(channel)
-                         from _____ in svxlinkService.StartSvxlink(channel, pidFile: "/var/run/svxlink.pid", runAs: "root", configFile: $"{applicationPath}/SvxlinkConfig/svxlink.conf")
+                         from c in iniService.ReplaceConfig($"{applicationPath}/SvxlinkConfig/svxlink.conf", parameters)
+                         from d in ReplaceSoundFile(channel)
+                         from e in svxlinkService.StartSvxlink(channel, pidFile: "/var/run/svxlink.pid", runAs: "root", configFile: $"{applicationPath}/SvxlinkConfig/svxlink.conf")
                          select config.Id;
 
 
@@ -119,8 +119,6 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
             {
                 return Error.New("Erreur lors de la création du répertoire de son.");
             }
-
-            
 
         }
 

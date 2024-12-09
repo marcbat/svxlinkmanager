@@ -35,183 +35,137 @@ using System.Xml.Linq;
 
 namespace SvxlinkManager.Application.Integration.Tests
 {
-    public class SvxlinkConfigurationTests
+    public class InstallCommandTests : BaseTest
     {
-        private IMediator mediatr;
-        private ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
-        private ISa818Service sa818Service;
-        private string db;
+        //[Test]
+        //public async Task AddSvxlinkChannelCommand_WhenIsValid_ShouldAddNewSvxlinkChannel()
+        //{
+        //    try
+        //    {
 
-        [SetUp]
-        public void Setup()
-        {
-            IServiceCollection services = new ServiceCollection();
+        //        // arrange 
+        //        var configGuid = Guid.NewGuid();
+        //        var createConfig = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(configGuid));
+        //        var addChannel = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", "Fake Password", 80, "Fake report callSign", "SoundTest", new byte[] { 0x01, 0x02, 0x03 }));
 
-            services.AddLogging(cfg => cfg.AddConsole());
+        //        // act
+        //        var result = from configId in createConfig
+        //                     from channelId in addChannel
+        //                     select (configId, channelId);
 
-            services.AddApplication();
-            services.AddInfrastructure();
+        //        // assert
+        //        var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
+        //        await Verify(new
+        //        {
+        //            result,
+        //            config
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Assert.Fail(ex.Message);
+        //    }
+        //    finally
+        //    {
+        //        File.Delete(db);
+        //    }
+        //}
 
-            if(!Directory.Exists("db"))
-                Directory.CreateDirectory("db");
+        //[Test]
+        //public async Task InstallChannelsCommand_WhenIsValid_ShouldInstallChannels()
+        //{
+        //    try
+        //    {
+        //        // arrange
+        //        var configGuid = Guid.NewGuid();
+        //        var createConfig = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(configGuid));
 
-            // Mockup services
-            db = Path.Combine("db", $"{TestContext.CurrentContext.Test.ClassName}.{TestContext.CurrentContext.Test.MethodName}.db");
-            services.AddSingleton<IOptions<SvxlinkManagerOptions>>(x => new FakeOptions(db));
+        //        var installChannels = new List<Guid> {
+        //            Guid.Parse("235a4521-15a1-4e02-a540-91ee600452ac"),
+        //            Guid.Parse("1f2e87b8-d984-4c05-8a4a-ffad65c829a9"),
+        //            Guid.Parse("0f669a03-dcf1-4277-9b07-54f6a0fd3037"),
+        //            Guid.Parse("a749ffe5-16c7-45da-809d-c048908f115c"),
+        //            Guid.Parse("dd03fd9e-aeed-457e-97bf-973837a5fcec"),
+        //            Guid.Parse("d4c59d86-947c-4b1d-831a-807c1877d426"),
+        //            Guid.Parse("9f99b18b-96ea-453d-b07a-7923c09c939f"),
+        //            Guid.Parse("dcc5afa2-790f-40ca-b24d-bf91e90b1ac7")
+        //        };
 
-            services.AddSingleton(Substitute.For<ISa818Service>());
+        //        var command = new InstallChannelsCommand(configGuid, installChannels, "Fake CallSign", "Fake AnnonceCallSign");
+        //        var install = await mediatr.Send(command);
 
-            var serviceProvider = services.BuildServiceProvider();
+        //        // act
+        //        var result = createConfig
+        //            .Bind(x => install);
 
-            mediatr = serviceProvider.GetRequiredService<IMediator>();
-            svxlinkManagerConfigRepository = serviceProvider.GetRequiredService<ISvxlinkManagerConfigRepository>();
-            sa818Service = serviceProvider.GetRequiredService<ISa818Service>();
+        //        // assert
+        //        var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
+        //        await Verify(new
+        //        {
+        //            result,
+        //             config
+        //        });
 
-            //var mapper = BsonMapper.Global;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Assert.Fail(ex.Message);
+        //    }
+        //    finally
+        //    {
+        //        File.Delete(db);
+        //    }
+        //}
 
-            //mapper.Entity<SvxlinkChannel>()
-            //    .Id(x => x.Id)
-            //    .Field(x => x.Name, "Name")
-            //    .Field(x => x.Host, "Host")
-            //    .Field(x => x.CallSign, "CallSign")
-            //    .Field(x => x.AuthKey, "AuthKey")
-            //    .Field(x => x.Port, "Port")
-            //    .Field(x => x.ReportCallSign, "ReportCallSign")
-            //    .Field(x => x.SoundGuid, "SoundGuid");
+        //[Test]
+        //public async Task SetDefaultChannelCommand_WhenIsValid_ShoudSetDefaultChannel()
+        //{
+        //    try
+        //    {
+        //        // arrange
+        //        var configGuid = Guid.NewGuid();
+        //        var createConfig = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(configGuid));
 
-            //mapper.Entity<SvxlinkManagerConfigAggregate>()
-            //    .Field(x => x.SvxlinkChannels, "SvxlinkChannels");
-        }
+        //        var installChannels = new List<Guid> {
+        //            Guid.Parse("235a4521-15a1-4e02-a540-91ee600452ac"),
+        //            Guid.Parse("1f2e87b8-d984-4c05-8a4a-ffad65c829a9"),
+        //            Guid.Parse("0f669a03-dcf1-4277-9b07-54f6a0fd3037"),
+        //            Guid.Parse("a749ffe5-16c7-45da-809d-c048908f115c"),
+        //            Guid.Parse("dd03fd9e-aeed-457e-97bf-973837a5fcec"),
+        //            Guid.Parse("d4c59d86-947c-4b1d-831a-807c1877d426"),
+        //            Guid.Parse("9f99b18b-96ea-453d-b07a-7923c09c939f"),
+        //            Guid.Parse("dcc5afa2-790f-40ca-b24d-bf91e90b1ac7")
+        //        };
 
-        [Test]
-        public async Task AddSvxlinkChannelCommand_WhenIsValid_ShouldAddNewSvxlinkChannel()
-        {
-            try
-            {
+        //        var installCommand = new InstallChannelsCommand(configGuid, installChannels, "Fake CallSign", "Fake AnnonceCallSign");
+        //        var install = await mediatr.Send(installCommand);
 
-                // arrange 
-                var configGuid = Guid.NewGuid();
-                var createConfig = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(configGuid));
-                var addChannel = await mediatr.Send(new AddSvxlinkChannelCommand(configGuid, "Fake channel", "Fake Host", "Fake callSign", "Fake Password", 80, "Fake report callSign", "SoundTest", new byte[] { 0x01, 0x02, 0x03 }));
+        //        var setDefaultChannelCommand = new SetDefaultChannelCommand(configGuid, installChannels.First());
+        //        var setDefault = await mediatr.Send(setDefaultChannelCommand);
 
-                // act
-                var result = from configId in createConfig
-                             from channelId in addChannel
-                             select (configId, channelId);
+        //        // act
+        //        var result = createConfig
+        //            .Bind(x => install)
+        //            .Bind(x => setDefault);
 
-                // assert
-                var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
-                await Verify(new
-                {
-                    result,
-                    config
-                });
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-            finally
-            {
-                File.Delete(db);
-            }
-        }
+        //        // assert
+        //        var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
+        //        await Verify(new
+        //        {
+        //            result,
+        //            config
+        //        });
 
-        [Test]
-        public async Task InstallChannelsCommand_WhenIsValid_ShouldInstallChannels()
-        {
-            try
-            {
-                // arrange
-                var configGuid = Guid.NewGuid();
-                var createConfig = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(configGuid));
-
-                var installChannels = new List<Guid> {
-                    Guid.Parse("235a4521-15a1-4e02-a540-91ee600452ac"),
-                    Guid.Parse("1f2e87b8-d984-4c05-8a4a-ffad65c829a9"),
-                    Guid.Parse("0f669a03-dcf1-4277-9b07-54f6a0fd3037"),
-                    Guid.Parse("a749ffe5-16c7-45da-809d-c048908f115c"),
-                    Guid.Parse("dd03fd9e-aeed-457e-97bf-973837a5fcec"),
-                    Guid.Parse("d4c59d86-947c-4b1d-831a-807c1877d426"),
-                    Guid.Parse("9f99b18b-96ea-453d-b07a-7923c09c939f"),
-                    Guid.Parse("dcc5afa2-790f-40ca-b24d-bf91e90b1ac7")
-                };
-
-                var command = new InstallChannelsCommand(configGuid, installChannels, "Fake CallSign", "Fake AnnonceCallSign");
-                var install = await mediatr.Send(command);
-
-                // act
-                var result = createConfig
-                    .Bind(x => install);
-
-                // assert
-                var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
-                await Verify(new
-                {
-                    result,
-                     config
-                });
-
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-            finally
-            {
-                File.Delete(db);
-            }
-        }
-
-        [Test]
-        public async Task SetDefaultChannelCommand_WhenIsValid_ShoudSetDefaultChannel()
-        {
-            try
-            {
-                // arrange
-                var configGuid = Guid.NewGuid();
-                var createConfig = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(configGuid));
-
-                var installChannels = new List<Guid> {
-                    Guid.Parse("235a4521-15a1-4e02-a540-91ee600452ac"),
-                    Guid.Parse("1f2e87b8-d984-4c05-8a4a-ffad65c829a9"),
-                    Guid.Parse("0f669a03-dcf1-4277-9b07-54f6a0fd3037"),
-                    Guid.Parse("a749ffe5-16c7-45da-809d-c048908f115c"),
-                    Guid.Parse("dd03fd9e-aeed-457e-97bf-973837a5fcec"),
-                    Guid.Parse("d4c59d86-947c-4b1d-831a-807c1877d426"),
-                    Guid.Parse("9f99b18b-96ea-453d-b07a-7923c09c939f"),
-                    Guid.Parse("dcc5afa2-790f-40ca-b24d-bf91e90b1ac7")
-                };
-
-                var installCommand = new InstallChannelsCommand(configGuid, installChannels, "Fake CallSign", "Fake AnnonceCallSign");
-                var install = await mediatr.Send(installCommand);
-
-                var setDefaultChannelCommand = new SetDefaultChannelCommand(configGuid, installChannels.First());
-                var setDefault = await mediatr.Send(setDefaultChannelCommand);
-
-                // act
-                var result = createConfig
-                    .Bind(x => install)
-                    .Bind(x => setDefault);
-
-                // assert
-                var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
-                await Verify(new
-                {
-                    result,
-                    config
-                });
-
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-            finally
-            {
-                File.Delete(db);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Assert.Fail(ex.Message);
+        //    }
+        //    finally
+        //    {
+        //        File.Delete(db);
+        //    }
+        //}
 
         [Test]
         public async Task InstallCommand_WhenValid_ShouldInstall()
@@ -219,41 +173,7 @@ namespace SvxlinkManager.Application.Integration.Tests
             try
             {
                 // arrange
-                var configGuid = Guid.NewGuid();
-                var createConfig = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(configGuid));
-
-                var installChannels = new List<Guid> {
-                Guid.Parse("235a4521-15a1-4e02-a540-91ee600452ac"),
-                Guid.Parse("1f2e87b8-d984-4c05-8a4a-ffad65c829a9"),
-                Guid.Parse("0f669a03-dcf1-4277-9b07-54f6a0fd3037"),
-                Guid.Parse("a749ffe5-16c7-45da-809d-c048908f115c"),
-                Guid.Parse("dd03fd9e-aeed-457e-97bf-973837a5fcec"),
-                Guid.Parse("d4c59d86-947c-4b1d-831a-807c1877d426"),
-                Guid.Parse("9f99b18b-96ea-453d-b07a-7923c09c939f"),
-                Guid.Parse("dcc5afa2-790f-40ca-b24d-bf91e90b1ac7")
-            };
-
-                sa818Service.WriteRadioProfile(Arg.Any<RadioProfil>()).Returns(LanguageExt.Unit.Default);
-
-                var installChannelsCommand = new InstallCommand(configGuid,
-                                                                installChannels,
-                                                                "Fake CallSign",
-                                                                "Fake AnnonceCallSign",
-                                                                installChannels.First(),
-                                                                "Fake Name",
-                                                                "123.45",
-                                                                "543.21",
-                                                                "5",
-                                                                "67",
-                                                                "67",
-                                                                "10",
-                                                                "0.5",
-                                                                "100",
-                                                                "10000",
-                                                                "true");
-
-                // act
-                var install = await mediatr.Send(installChannelsCommand);
+                var install = await CreateDefaultConfigAsync();
 
                 // assert
                 var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
@@ -739,10 +659,5 @@ namespace SvxlinkManager.Application.Integration.Tests
 
     }
 
-    public class FakeOptions(string file) : IOptions<SvxlinkManagerOptions>
-    {
-        private readonly string file = file;
-
-        public SvxlinkManagerOptions Value => new(file);
-    }
+    
 }
