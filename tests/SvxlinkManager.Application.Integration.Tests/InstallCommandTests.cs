@@ -30,6 +30,7 @@ using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries;
 using SvxlinkManager.Domain.Aggregates;
 using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Infrastructure;
+using SvxlinkManager.Infrastructure.Services;
 
 using System.Xml.Linq;
 
@@ -181,7 +182,7 @@ namespace SvxlinkManager.Application.Integration.Tests
                 await Verify(new
                 {
                     install,
-                    config
+                    config,
                 });
             }
             catch (Exception ex)

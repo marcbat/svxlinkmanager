@@ -1,1 +1,16 @@
-﻿
+﻿[
+  {
+    State: Success,
+    Success: {
+      Status: RanToCompletion,
+      Result: [
+        {
+          State: Success,
+          Success: Guid_1,
+          Fail: null
+        }
+      ]
+    },
+    Fail: null
+  }
+]

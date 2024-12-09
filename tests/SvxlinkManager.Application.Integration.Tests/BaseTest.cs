@@ -29,6 +29,7 @@ namespace SvxlinkManager.Application.Integration.Tests
         protected ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         protected ISa818Service sa818Service;
         protected ISvxlinkServiceBase svxlinkService;
+        protected IAuthentificationService authentificationService;
         protected string db;
 
         [SetUp]
@@ -49,6 +50,7 @@ namespace SvxlinkManager.Application.Integration.Tests
             services.AddSingleton<IOptions<SvxlinkManagerOptions>>(x => new FakeOptions(db));
             services.AddSingleton(Substitute.For<ISa818Service>());
             services.AddSingleton(Substitute.For<ISvxlinkServiceBase>());
+            services.AddScoped(x => Substitute.For<IAuthentificationService>());
 
             var serviceProvider = services.BuildServiceProvider();
 
@@ -56,16 +58,16 @@ namespace SvxlinkManager.Application.Integration.Tests
             svxlinkManagerConfigRepository = serviceProvider.GetRequiredService<ISvxlinkManagerConfigRepository>();
             sa818Service = serviceProvider.GetRequiredService<ISa818Service>();
             svxlinkService = serviceProvider.GetRequiredService<ISvxlinkServiceBase>();
+            authentificationService = serviceProvider.GetRequiredService<IAuthentificationService>();
 
             sa818Service.WriteRadioProfile(Arg.Any<RadioProfil>()).Returns(LanguageExt.Unit.Default);
             svxlinkService.StopSvxlink().Returns(LanguageExt.Unit.Default);
             svxlinkService.StartSvxlink(Arg.Any<SvxlinkChannel>(), false, null,Arg.Any<string>(),Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(LanguageExt.Unit.Default);
+            authentificationService.SeedUser(Arg.Any<string>(), Arg.Any<string>()).Returns(string.Empty);
         }
 
         protected async Task<Validation<Error, Guid>> CreateDefaultConfigAsync()
         {
-            var createConfig = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(configGuid));
-
             var installChannels = new List<Guid> {
                 Guid.Parse("235a4521-15a1-4e02-a540-91ee600452ac"),
                 Guid.Parse("1f2e87b8-d984-4c05-8a4a-ffad65c829a9"),
@@ -77,24 +79,26 @@ namespace SvxlinkManager.Application.Integration.Tests
                 Guid.Parse("dcc5afa2-790f-40ca-b24d-bf91e90b1ac7")
             };
 
-            var installChannelsCommand = new InstallCommand(configGuid,
-                                                               installChannels,
-                                                               "Fake CallSign",
-                                                               "Fake AnnonceCallSign",
-                                                               installChannels.First(),
-                                                               "Fake Name",
-                                                               "123.450",
-                                                               "543.210",
-                                                               "5",
-                                                               "67", 
-                                                               "88.5",
-                                                               "10",
-                                                               "0.5",
-                                                               "100",
-                                                               "10000",
-                                                               "true");
+            var installSvxlinkCommand = new InstallCommand("marcbat79@gmail.com",
+                                                            "Pa$$w0rd",
+                                                            configGuid,
+                                                            installChannels,
+                                                            "Fake CallSign",
+                                                            "Fake AnnonceCallSign",
+                                                            installChannels.First(),
+                                                            "Fake Name",
+                                                            "123.450",
+                                                            "543.210",
+                                                            "5",
+                                                            "67",
+                                                            "88.5",
+                                                            "10",
+                                                            "0.5",
+                                                            "100",
+                                                            "10000",
+                                                            "true");
 
-            return await mediatr.Send(installChannelsCommand);
+            return await mediatr.Send(installSvxlinkCommand);
         }
     }
 

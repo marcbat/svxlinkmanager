@@ -160,27 +160,21 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer
         /// <returns>Un objet Validation contenant l'identifiant de la configuration ou une erreur.</returns>
         private Validation<Error, Guid> InstallChannels(Guid configId, List<Guid> installChannels, string callSign, string annonceCallSign)
         {
-            try
-            {
-                logger.LogInformation("Début de l'installation des canaux.");
-                var result = from config in svxlinkManagerConfigRepository.GetConfig(configId)
-                             from originalChannels in svxlinkManagerConfigRepository.GetAllOriginalChannels()
-                             from existingChannels in FilterChannelsToKeep(originalChannels, installChannels)
-                             from channels in AddCallSignsToChannels(existingChannels, callSign, annonceCallSign)
-                             from _ in UpdateChannelsInConfig(config, channels)
-                             from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
-                             select config.Id;
 
-                logger.LogInformation("Les canaux ont été installés avec succès.");
+            logger.LogInformation("Début de l'installation des canaux.");
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(configId)
+                         from originalChannels in svxlinkManagerConfigRepository.GetAllOriginalChannels()
+                         from existingChannels in FilterChannelsToKeep(originalChannels, installChannels)
+                         from channels in AddCallSignsToChannels(existingChannels, callSign, annonceCallSign)
+                         from _ in UpdateChannelsInConfig(config, channels)
+                         from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                         select config.Id;
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur lors de l'installation des canaux.");
+            logger.LogInformation("Les canaux ont été installés avec succès.");
 
-                throw new Exception("Erreur lors de l'installation des canaux.", ex);
-            }
+            return result;
+
+
         }
 
         /// <summary>
@@ -322,7 +316,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer
         {
             radioProfil.Enable = true;
 
-            return LanguageExt.Unit.Default;
+            return Unit.Default;
         }
 
         /// <summary>
