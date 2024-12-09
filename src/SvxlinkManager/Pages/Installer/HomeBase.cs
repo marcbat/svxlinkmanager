@@ -176,9 +176,8 @@ namespace SvxlinkManager.Pages.Installer
             try { 
                 Logger.LogInformation("Installation de SvxlinkManager.");
 
-                SeedUser();
-
-                var command = new InstallCommand(Options.Value.ConfigId,
+                var command = new InstallCommand(
+                    InstallerModel.UserName,InstallerModel.Password, Options.Value.ConfigId,
                                                  InstallerModel.ChannelsToPreserved.Select(c => c.Id),
                                                  InstallerModel.CallSign,
                                                  InstallerModel.AnnonceCallSign,
@@ -196,46 +195,25 @@ namespace SvxlinkManager.Pages.Installer
                                                  InstallerModel.RadioProfile.SquelchDetection);
                 var result = await Mediatr.Send(command);
 
-                _ = result.MapFail(async error => await ShowErrorToastAsync("Erreur", error.Message));
+                await result.MatchAsync(
+                    SuccAsync: async success =>
+                    {
+                        NavigationManager.NavigateTo("Identity/Account/Login", true);
+                        return ShowSuccessToastAsync("Installation", "Installation reussie.");
+                    },
+                    Fail: error => ShowErrorToastAsync("Erreur", error.ToFullArrayString()));
 
                 if (InstallerModel.UpdateToLastRelease)
                     Update();
                 else
                 {
-                    await Mediatr.Send(new StartDefaultChannelCommand(Options.Value.ConfigId));
+                    var resultStart = await Mediatr.Send(new StartDefaultChannelCommand(Options.Value.ConfigId));
                     NavigationManager.NavigateTo("Identity/Account/Login", true);
                 }
             }
             catch (Exception e)
             {
                 Logger.LogError($"Erreur lors de l'intallation. {e.Message}");
-            }
-        }
-
-        /// <summary>Ajout l'utilisateur admin</summary>
-        /// <exception cref="Exception">Impossible de créer l'utilisateur par défaut.</exception>
-        private void SeedUser()
-        {
-            try
-            {
-                Logger.LogInformation("Installation de l'utilisateur par défaut.");
-
-                var user = new ApplicationUser
-                {
-                    UserName = InstallerModel.UserName,
-                    Email = InstallerModel.UserName
-                };
-
-                var result = UserManager.CreateAsync(user, InstallerModel.Password).Result;
-
-                if (result.Succeeded)
-                    UserManager.AddToRoleAsync(user, "Admin").Wait();
-
-                OnSetUser?.Invoke();
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Impossible de créer l'utilisateur par défaut.", e);
             }
         }
 

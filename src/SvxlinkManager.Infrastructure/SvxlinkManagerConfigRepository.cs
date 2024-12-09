@@ -32,9 +32,9 @@ namespace SvxlinkManager.Infrastructure
 
             var collection = db.GetCollection<SvxlinkManagerConfigAggregate>("svxlinkManagerConfigs");
 
-            collection.Insert(config);
-
             collection.EnsureIndex(x => x.Id, true);
+
+            collection.Insert(config);
 
             return config.Id;
         }

@@ -15,14 +15,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
 
     internal class StartDefaultChannelCommandHandler : IRequestHandler<StartDefaultChannelCommand, Validation<Error, Guid>>
     {
-        private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
-        private readonly ISvxlinkServiceBase svxlinkService;
+        private readonly ChannelService channelService;
         private readonly ILogger<StartDefaultChannelCommandHandler> logger;
 
-        public StartDefaultChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ISvxlinkServiceBase svxlinkService, ILogger<StartDefaultChannelCommandHandler> logger)
+        public StartDefaultChannelCommandHandler(ChannelService channelService, ILogger<StartDefaultChannelCommandHandler> logger)
         {
-            this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
-            this.svxlinkService = svxlinkService;
+            this.channelService = channelService;
             this.logger = logger;
         }
 
@@ -32,14 +30,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
             {
                 logger.LogInformation("Starting default channel.");
 
-                var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
-                             from channel in config.GetDefaultChannel()
-                             where channel.IsNone
-                             from _ in svxlinkService.StopSvxlink()
-                             from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
-                             select config.Id;
-
-                logger.LogInformation("Starting default channel.");
+                var result = channelService.StartDefaultChannel(request.ConfigId);
 
                 return Task.FromResult(result);
             }
