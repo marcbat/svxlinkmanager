@@ -1,38 +1,4 @@
-﻿using FluentAssertions;
-
-using LanguageExt;
-using LanguageExt.ClassInstances;
-using LanguageExt.Common;
-
-using LiteDB;
-
-using MediatR;
-
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-
-using NSubstitute;
-
-using SvxlinkManager.Application.Interfaces;
-using SvxlinkManager.Application.SvxlinkManagerConfigs;
-using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlinkChannels.Commands;
-using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlinkChannels.Queries;
-using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Commands;
-using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Queries;
-using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Commands;
-using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Queries;
-using SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands;
-using SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands;
-using SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Queries;
-using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands;
-using SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries;
-using SvxlinkManager.Domain.Aggregates;
-using SvxlinkManager.Domain.Entities;
-using SvxlinkManager.Infrastructure;
-using SvxlinkManager.Infrastructure.Services;
-
-using System.Xml.Linq;
+﻿using NSubstitute;
 
 namespace SvxlinkManager.Application.Integration.Tests
 {
@@ -178,11 +144,20 @@ namespace SvxlinkManager.Application.Integration.Tests
 
                 // assert
                 var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
-                
+
+                //authentificationService.Received(1).SeedUser(Arg.Any<string>(), Arg.Any<string>());
+
+                var calls = authentificationService.ReceivedCalls()
+                    .Concat(sa818Service.ReceivedCalls())
+                    .Concat(svxlinkService.ReceivedCalls())
+                    .Select(x => new { name = x.GetMethodInfo().Name, sequence = x.GetSequenceNumber(), arguments = x.GetArguments() })
+                    .OrderBy(x => x.sequence);
+
                 await Verify(new
                 {
                     install,
                     config,
+                    calls
                 });
             }
             catch (Exception ex)
