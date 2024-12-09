@@ -1,6 +1,7 @@
 ﻿using LanguageExt;
 using static LanguageExt.Prelude;
 using LanguageExt.Common;
+using System.Text.RegularExpressions;
 
 namespace SvxlinkManager.Domain.Entities
 {
@@ -9,9 +10,11 @@ namespace SvxlinkManager.Domain.Entities
         private string txCtcss;
         private string rxCtCss;
         private string name;
-        private string rxFequency;
+        private string rxFrequency;
         private string txFrequency;
         private string squelch;
+
+        private static string frequencyPattern = @"[0-9]{3}\.[0-9]{3}";
 
         public RadioProfil()
         {
@@ -19,7 +22,7 @@ namespace SvxlinkManager.Domain.Entities
 
         internal RadioProfil(Guid id,
                            string name,
-                           string rxFequency,
+                           string rxFrequency,
                            string txFrequency,
                            string squelch,
                            string txCtcss,
@@ -31,7 +34,7 @@ namespace SvxlinkManager.Domain.Entities
                            string squelchDetection) : base(id)
         {
             this.name = name;
-            this.rxFequency = rxFequency;
+            this.rxFrequency = rxFrequency;
             this.txFrequency = txFrequency;
             Squelch = squelch;
             this.txCtcss = txCtcss;
@@ -92,8 +95,8 @@ namespace SvxlinkManager.Domain.Entities
 
         public string RxFequency
         {
-            get => rxFequency;
-            protected set => rxFequency = value;
+            get => rxFrequency;
+            protected set => rxFrequency = value;
         }
 
         internal static Validation<Error, string> ValidateRxFequency(string rxFequency)
@@ -101,11 +104,16 @@ namespace SvxlinkManager.Domain.Entities
             if (string.IsNullOrWhiteSpace(rxFequency))
                 return Error.New("La fréquence de réception ne peut pas être vide.");
 
+            bool isMatch = Regex.IsMatch(rxFequency, frequencyPattern);
+
+            if (!isMatch)
+                return Error.New("La fréquence de réception n'est pas au format attendu.");
+
             return rxFequency;
         }
 
         public Validation<Error, string> SetRxFequency(string rxFequency) =>
-            ValidateRxFequency(rxFequency).Map(vrxFequency => this.rxFequency = vrxFequency);
+            ValidateRxFequency(rxFequency).Map(vrxFequency => this.rxFrequency = vrxFequency);
 
         public string TxFrequency
         {
@@ -117,6 +125,11 @@ namespace SvxlinkManager.Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(txFrequency))
                 return Error.New("La fréquence de transmission ne peut pas être vide.");
+
+            bool isMatch = Regex.IsMatch(txFrequency, frequencyPattern);
+
+            if (!isMatch)
+                return Error.New("La fréquence de transmission n'est pas au format attendu.");
 
             return txFrequency;
         }

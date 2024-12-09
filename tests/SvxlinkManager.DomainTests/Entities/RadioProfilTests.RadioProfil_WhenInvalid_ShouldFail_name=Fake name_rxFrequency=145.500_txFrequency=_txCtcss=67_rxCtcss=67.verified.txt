@@ -1,0 +1,9 @@
+﻿[
+  {
+    Fail: [
+      {
+        Message: La fréquence de transmission ne peut pas être vide.
+      }
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+﻿[
+  {
+    Fail: [
+      {
+        Message: Le nom du profil radio ne peut pas être vide.
+      }
+    ]
+  }
+]

@@ -177,6 +177,7 @@ namespace SvxlinkManager.Application.Integration.Tests
 
                 // assert
                 var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
+                
                 await Verify(new
                 {
                     install,
