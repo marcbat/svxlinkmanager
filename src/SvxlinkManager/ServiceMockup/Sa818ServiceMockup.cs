@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Service;
@@ -19,6 +22,11 @@ namespace SvxlinkManager.ServiceMockup
       this.logger = logger;
     }
 
-    public void WriteRadioProfile(Domain.Entities.RadioProfil radioProfile) => logger.LogInformation($"Write {radioProfile.Name} radio profile.");
+        public Validation<Error, Unit> WriteRadioProfile(Domain.Entities.RadioProfil radioProfile) { 
+            logger.LogInformation($"Write {radioProfile.Name} radio profile.");
+
+            return Unit.Default;
+
+        }
   }
 }

@@ -1,0 +1,9 @@
+﻿[
+  {
+    Fail: [
+      {
+        Message: La fréquence de transmission n'est pas au format attendu.
+      }
+    ]
+  }
+]

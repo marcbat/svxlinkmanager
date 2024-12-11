@@ -1,9 +1,12 @@
-﻿using SvxlinkManager.Domain.Entities;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using SvxlinkManager.Domain.Entities;
 
 namespace SvxlinkManager.Application.Interfaces
 {
     public interface ISa818Service
     {
-        void WriteRadioProfile(RadioProfil radioProfile);
+        Validation<Error, Unit> WriteRadioProfile(RadioProfil radioProfile);
     }
 }

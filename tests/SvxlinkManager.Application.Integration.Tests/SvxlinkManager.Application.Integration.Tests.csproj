@@ -15,9 +15,14 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="NUnit" Version="3.14.0" />
-    <PackageReference Include="NUnit.Analyzers" Version="3.9.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageReference Include="NSubstitute" Version="5.3.0" />
+    <PackageReference Include="NUnit" Version="4.2.2" />
+    <PackageReference Include="NUnit.Analyzers" Version="4.4.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageReference Include="Verify.NUnit" Version="28.4.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +33,27 @@
 
   <ItemGroup>
     <Using Include="NUnit.Framework" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="InstallCommandTests.AddSvxlinkChannelCommand_WhenIsValid_ShouldAddNewSvxlinkChannel.verified.txt">
+      <DependentUpon>InstallCommandTests.cs</DependentUpon>
+    </None>
+    <None Update="InstallCommandTests.CreateRadioProfilCommand_WhenValid_ShouldCreateRadioProfil.received.txt">
+      <DependentUpon>InstallCommandTests.cs</DependentUpon>
+    </None>
+    <None Update="InstallCommandTests.CreateRadioProfilCommand_WhenValid_ShouldCreateRadioProfil.verified.txt">
+      <DependentUpon>InstallCommandTests.cs</DependentUpon>
+    </None>
+    <None Update="InstallCommandTests.InstallChannelsCommand_WhenIsValid_ShouldInstallChannels.verified.txt">
+      <DependentUpon>InstallCommandTests.cs</DependentUpon>
+    </None>
+    <None Update="InstallCommandTests.InstallCommand_WhenValid_ShouldInstall.verified.txt">
+      <DependentUpon>InstallCommandTests.cs</DependentUpon>
+    </None>
+    <None Update="InstallCommandTests.SetDefaultChannelCommand_WhenIsValid_ShoudSetDefaultChannel.verified.txt">
+      <DependentUpon>InstallCommandTests.cs</DependentUpon>
+    </None>
   </ItemGroup>
 
 </Project>

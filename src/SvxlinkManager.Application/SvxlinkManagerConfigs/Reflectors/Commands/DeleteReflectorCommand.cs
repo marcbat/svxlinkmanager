@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -16,12 +19,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
     /// <summary>
     /// Représente une commande pour supprimer un réflecteur.
     /// </summary>
-    public record DeleteReflectorCommand(Guid ConfigGuid, Guid ReflectorGuid) : IRequest<Unit>;
+    public record DeleteReflectorCommand(Guid ConfigGuid, Guid ReflectorGuid) : IRequest<Validation<Error, Guid>>;
 
     /// <summary>
     /// Gère la commande de suppression d'un réflecteur.
     /// </summary>
-    internal class DeleteReflectorCommandHandler : IRequestHandler<DeleteReflectorCommand, Unit>
+    internal class DeleteReflectorCommandHandler : IRequestHandler<DeleteReflectorCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<DeleteReflectorCommandHandler> logger;
@@ -42,29 +45,19 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
         /// <param name="request">La commande de suppression du réflecteur.</param>
         /// <param name="cancellationToken">Le jeton d'annulation.</param>
         /// <returns>Une tâche qui représente l'exécution asynchrone de la commande.</returns>
-        public async Task<Unit> Handle(DeleteReflectorCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(DeleteReflectorCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Suppression du réflecteur.");
+            logger.LogInformation("Suppression du réflecteur.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
+                         from _ in config.DeleteReflector(request.ReflectorGuid)
+                         from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                         select config.Id;
 
-                var reflector = config.Reflectors.SingleOrDefault(r => r.Id == request.ReflectorGuid) ?? throw new SvxlinkManagerException("Impossible de trouver le réflecteur.");
+            logger.LogInformation("Réflecteur supprimé.");
 
-                config.DeleteReflector(request.ReflectorGuid);
+            return Task.FromResult(result);
 
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
-
-                logger.LogInformation("Réflecteur supprimé.");
-
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur lors de la suppression du réflecteur.");
-                throw new SvxlinkManagerException("Impossible de supprimer le réflecteur.", ex);
-            }
         }
     }
 }

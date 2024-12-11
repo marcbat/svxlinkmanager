@@ -1,4 +1,7 @@
-﻿using SvxlinkManager.Domain.Entities;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using SvxlinkManager.Domain.Entities;
 
 namespace SvxlinkManager.Application.Interfaces
 {
@@ -11,12 +14,12 @@ namespace SvxlinkManager.Application.Interfaces
 
         ChannelBase? ActiveChannel { get; }
 
-        void StartReflector(Reflector reflector, bool runAsDaemon = false, string logFile = null, string configFile = null, string pidFile = null, string runAs = null);
+        Validation<Error, Unit> StartReflector(Reflector reflector, bool runAsDaemon = false, string logFile = null, string configFile = null, string pidFile = null, string runAs = null);
 
-        void StartSvxlink(ChannelBase channel, bool runAsDaemon = false, string? logFile = null, string? configFile = null, string? pidFile = null, string? runAs = null);
+        Validation<Error, Unit> StartSvxlink(ChannelBase channel, bool runAsDaemon = false, string? logFile = null, string? configFile = null, string? pidFile = null, string? runAs = null);
 
-        void StopReflector(Reflector reflector);
+        Validation<Error, Unit> StopReflector(Reflector reflector);
 
-        void StopSvxlink();
+        Validation<Error, Unit> StopSvxlink();
     }
 }

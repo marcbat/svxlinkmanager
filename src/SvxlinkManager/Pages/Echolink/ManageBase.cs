@@ -13,7 +13,14 @@ namespace SvxlinkManager.Pages.Echolink
         {
             var channels = await Mediatr.Send(new GetAllEcholinkChannelsQuery(Options.Value.ConfigId));
 
-            Channels = channels.Select<Domain.Entities.EcholinkChannel, Models.EcholinkChannel>(c=>c).ToList();
+            channels.Match(
+                Fail: async error => { 
+                    
+                    await ShowErrorToastAsync("Erreur", error.ToFullString()); 
+                },
+                Succ: success => Channels = success.Select<Domain.Entities.EcholinkChannel, Models.EcholinkChannel>(c => c).ToList()
+            );
+
         }
     }
 }

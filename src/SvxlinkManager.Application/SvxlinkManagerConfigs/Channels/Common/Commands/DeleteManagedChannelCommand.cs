@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -13,9 +16,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Commands
 {
-    public record DeleteManagedChannelCommand(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Unit>;
+    public record DeleteManagedChannelCommand(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Validation<Error, Guid>>;
 
-    internal class DeleteManagedChannelCommandHandler : IRequestHandler<DeleteManagedChannelCommand, Unit>
+    internal class DeleteManagedChannelCommandHandler : IRequestHandler<DeleteManagedChannelCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<DeleteManagedChannelCommandHandler> logger;
@@ -26,27 +29,20 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Comma
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(DeleteManagedChannelCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(DeleteManagedChannelCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
+            
                 logger.LogInformation("Suppression du managed channel.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
-
-                config.DeleteManagedChannel(request.ChannelGuid);
-
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
+                var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
+                             from _ in config.DeleteManagedChannel(request.ChannelGuid)
+                             from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                             select config.Id;
 
                 logger.LogInformation("Managed channel supprimé.");
 
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Impossible de supprimer le managed channel.");
-                throw new SvxlinkManagerException("Impossible de supprimer le managed channel.", ex);
-            }
+                return Task.FromResult(result);
+            
         }
     }
 }

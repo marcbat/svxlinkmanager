@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -14,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlinkChannels.Queries
 {
-    public record GetAllAdvanceChannelsQuery(Guid ConfigId) : IRequest<IEnumerable<AdvanceSvxlinkChannel>>;
+    public record GetAllAdvanceChannelsQuery(Guid ConfigId) : IRequest<Validation<Error, IReadOnlyCollection<AdvanceSvxlinkChannel>>>;
 
-    internal class GetAllAdvanceChannelsQueryHandler : IRequestHandler<GetAllAdvanceChannelsQuery, IEnumerable<AdvanceSvxlinkChannel>>
+    internal class GetAllAdvanceChannelsQueryHandler : IRequestHandler<GetAllAdvanceChannelsQuery, Validation<Error, IReadOnlyCollection<AdvanceSvxlinkChannel>>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetAllAdvanceChannelsQueryHandler> logger;
@@ -27,23 +30,18 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
             this.logger = logger;
         }
 
-        public async Task<IEnumerable<AdvanceSvxlinkChannel>> Handle(GetAllAdvanceChannelsQuery request, CancellationToken cancellationToken)
+        public Task<Validation<Error, IReadOnlyCollection<AdvanceSvxlinkChannel>>> Handle(GetAllAdvanceChannelsQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Récupération de tous les canaux avancés Svxlink.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            logger.LogInformation("Récupération de tous les canaux avancés Svxlink.");
 
-                logger.LogInformation("Récupération de tous les canaux avancés Svxlink réussie.");
+            Validation<Error, IReadOnlyCollection<AdvanceSvxlinkChannel>> result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                                                                                   select config.AdvanceSvxlinkChannels;
 
-                return config.AdvanceSvxlinkChannels;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur lors de la récupération de tous les canaux avancés Svxlink.");
-                throw new Exception("Erreur lors de la récupération de tous les canaux avancés Svxlink.", ex) ;
-            }
+            logger.LogInformation("Récupération de tous les canaux avancés Svxlink réussie.");
+
+            return Task.FromResult(result);
+
         }
     }
 }

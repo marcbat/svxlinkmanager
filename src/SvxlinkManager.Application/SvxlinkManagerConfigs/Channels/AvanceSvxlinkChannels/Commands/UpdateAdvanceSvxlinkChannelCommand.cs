@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 using SvxlinkManager.Application.Interfaces;
@@ -25,9 +28,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
                                         string ModulePropagationMonitor,
                                         string ModuleSelCallEnc,
                                         string ModuleTclVoiceMail,
-                                        string ModuleTrx, string SoundName, byte[] SoundFile) : IRequest<Unit>;
+                                        string ModuleTrx, string SoundName, byte[] SoundFile) : IRequest<Validation<Error, Guid>>;
 
-    internal class UpdateAdvanceSvxlinkChannelCommandHandler : IRequestHandler<UpdateAdvanceSvxlinkChannelCommand, Unit>
+    internal class UpdateAdvanceSvxlinkChannelCommandHandler : IRequestHandler<UpdateAdvanceSvxlinkChannelCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository _svxlinkManagerConfigRepository;
         private readonly ISoundRepository _soundRepository;
@@ -42,34 +45,29 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.AvanceSvxlin
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(UpdateAdvanceSvxlinkChannelCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(UpdateAdvanceSvxlinkChannelCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Mise à jour d'un canal avancé Svxlink.");
 
-                var config = await _svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            logger.LogInformation("Mise à jour d'un canal avancé Svxlink.");
 
-                var sound = new Sound($"$/sounds/{request.SoundName}", request.SoundName, request.SoundFile);
-                await _soundRepository.CreateAsyc(sound);
+            var result = from config in _svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                         from sound in CreateSound(request.SoundName, request.SoundFile)
+                         from _ in config.DeleteAdvanceSvxlinkChannel(request.ChannelId)
+                         from channel in AdvanceSvxlinkChannel.Create(request.ChannelId, request.Name, request.SvxlinkConf, request.ModuleDtmfRepeater, request.ModuleEchoLink, request.ModuleFrn, request.ModuleHelp, request.ModuleMetarInfo, request.ModuleParrot, request.ModulePropagationMonitor, request.ModuleSelCallEnc, request.ModuleTclVoiceMail, request.ModuleTrx)
+                         from __ in config.AddAdvanceSvxlinkChannel(channel)
+                         from ___ in _svxlinkManagerConfigRepository.UpdateAsync(config)
+                         select config.Id;
 
-                config.DeleteAdvanceSvxlinkChannel(request.ChannelId);
+            logger.LogInformation("Un canal avancé Svxlink a été mis à jour avec succès.");
 
-                var advanceSvxlinkChannel = new AdvanceSvxlinkChannel(request.ChannelId, request.Name, request.SvxlinkConf, request.ModuleDtmfRepeater, request.ModuleEchoLink, request.ModuleFrn, request.ModuleHelp, request.ModuleMetarInfo, request.ModuleParrot, request.ModulePropagationMonitor, request.ModuleSelCallEnc, request.ModuleTclVoiceMail, request.ModuleTrx);
+            return Task.FromResult(result);
 
-                config.AddAdvanceSvxlinkChannel(advanceSvxlinkChannel);
+        }
 
-                await _svxlinkManagerConfigRepository.UpdateAsync(config);
-
-                logger.LogInformation("Un canal avancé Svxlink a été mis à jour avec succès.");
-
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Impossible de mettre à jour un canal avancé Svxlink.");
-                throw new SvxlinkManagerException("Impossible de mettre à jour un canal avancé Svxlink.", ex);
-            }
+        private Validation<Error, LanguageExt.Unit> CreateSound(string soundName, byte[] soundFile)
+        {
+            return Sound.Create($"$/sounds/{soundName}", soundName, soundFile)
+                .Bind(_soundRepository.CreateAsyc);
         }
     }
 }

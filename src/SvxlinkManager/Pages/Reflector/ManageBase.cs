@@ -30,7 +30,14 @@ namespace SvxlinkManager.Pages.Reflector
         {
             var reflectors = await Mediatr.Send(new GetAllReflectorQuery(Options.Value.ConfigId));
 
-            Reflectors =  reflectors.Select<Domain.Entities.Reflector, Models.Reflector>(r => r).ToList();
+            reflectors.Match(
+                Fail: async error =>
+                {
+                    await ShowErrorToastAsync("Erreur", error.ToFullString());
+                },
+                Succ: success => Reflectors = success.Select<Domain.Entities.Reflector, Models.Reflector>(r => r).ToList()
+            );
+
         }
 
         [Inject]

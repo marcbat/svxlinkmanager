@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -11,9 +14,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Queries
 {
-    public record GetAllEcholinkChannelsQuery(Guid ConfigId) : IRequest<IEnumerable<EcholinkChannel>>;
+    public record GetAllEcholinkChannelsQuery(Guid ConfigId) : IRequest<Validation<Error, IReadOnlyCollection<EcholinkChannel>>>;
 
-    internal class GetAllEcholinkChannelsQueryHandler : IRequestHandler<GetAllEcholinkChannelsQuery, IEnumerable<EcholinkChannel>>
+    internal class GetAllEcholinkChannelsQueryHandler : IRequestHandler<GetAllEcholinkChannelsQuery, Validation<Error, IReadOnlyCollection<EcholinkChannel>>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetAllEcholinkChannelsQueryHandler> logger;
@@ -24,23 +27,18 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Qu
             this.logger = logger;
         }
 
-        public async Task<IEnumerable<EcholinkChannel>> Handle(GetAllEcholinkChannelsQuery request, CancellationToken cancellationToken)
+        public Task<Validation<Error, IReadOnlyCollection<EcholinkChannel>>> Handle(GetAllEcholinkChannelsQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Récupération de tous les canaux Echolink.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            logger.LogInformation("Récupération de tous les canaux Echolink.");
 
-                logger.LogInformation("Récupération de tous les canaux Echolink réussie.");
+            var result = svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                                    .Map(config => config.EcholinkChannels);
 
-                return config.EcholinkChannels;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex,"Erreur lors de la récupération de tous les canaux Echolink.");
-                throw new Exception("Erreur lors de la récupération de tous les canaux Echolink.",ex);
-            }
+            logger.LogInformation("Récupération de tous les canaux Echolink réussie.");
+
+            return Task.FromResult(result);
+
         }
     }
 }

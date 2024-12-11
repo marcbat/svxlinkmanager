@@ -13,7 +13,14 @@ namespace SvxlinkManager.Pages.AdvanceChannel
         {
             var channels = await Mediatr.Send(new GetAllAdvanceChannelsQuery(Options.Value.ConfigId));
 
-            Channels = channels.Select<Domain.Entities.AdvanceSvxlinkChannel, Models.AdvanceSvxlinkChannel>(c=>c).ToList();
+            channels.Match(
+                Fail: async error =>
+                {
+                    await ShowErrorToastAsync("Erreur", error.ToFullString());
+                },
+                Succ: success => Channels = success.Select<Domain.Entities.AdvanceSvxlinkChannel, Models.AdvanceSvxlinkChannel>(c => c).ToList()
+            );
+
         }
     }
 }

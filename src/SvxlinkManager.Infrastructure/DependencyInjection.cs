@@ -18,6 +18,7 @@ namespace SvxlinkManager.Infrastructure
             services.AddSingleton<ISa818Service, Sa818Service>();
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<IIniService, IniService>();
+            services.AddScoped<IAuthentificationService, AuthentificationService>();
 
             return services;
         }

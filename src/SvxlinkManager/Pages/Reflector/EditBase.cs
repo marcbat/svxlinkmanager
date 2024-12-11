@@ -1,4 +1,6 @@
 ﻿
+using LanguageExt.Common;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
@@ -15,7 +17,15 @@ namespace SvxlinkManager.Pages.Reflector
     {
         protected override async void OnInitialized()
         {
-            Reflector = await Mediatr.Send(new GetReflectorByIdQuery(Guid.NewGuid(), Guid.Parse(Id)));
+            var result = await Mediatr.Send(new GetReflectorByIdQuery(Guid.NewGuid(), Guid.Parse(Id)));
+
+            result.Match(
+                Fail: async error =>
+                {
+                    await ShowErrorToastAsync("Erreur", error.ToFullString());
+                },
+                Succ: success => Reflector = success
+            );
         }
 
         [Parameter]

@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -16,9 +19,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
     /// <summary>
     /// Represents a command to get all original channels.
     /// </summary>
-    public record GetAllOriginalChannelsCommand : IRequest<IEnumerable<Domain.Entities.SvxlinkChannel>>;
+    public record GetAllOriginalChannelsCommand : IRequest<Validation<Error, List<Domain.Entities.SvxlinkChannel>>>;
 
-    internal class GetAllOriginalChannelsCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<GetAllOriginalChannelsCommand> logger) : IRequestHandler<GetAllOriginalChannelsCommand, IEnumerable<Domain.Entities.SvxlinkChannel>>
+    internal class GetAllOriginalChannelsCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<GetAllOriginalChannelsCommand> logger) : IRequestHandler<GetAllOriginalChannelsCommand, Validation<Error, List<Domain.Entities.SvxlinkChannel>>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
         private readonly ILogger<GetAllOriginalChannelsCommand> logger = logger;
@@ -29,16 +32,16 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
         /// <param name="request">The GetAllOriginalChannelsCommand request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The list of original channels.</returns>
-        public async Task<IEnumerable<Domain.Entities.SvxlinkChannel>> Handle(GetAllOriginalChannelsCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, List<Domain.Entities.SvxlinkChannel>>> Handle(GetAllOriginalChannelsCommand request, CancellationToken cancellationToken)
         {
             try
             {
                 logger.LogInformation("Recupéreation des configuration de Channel originals");
 
-                var channels = await svxlinkManagerConfigRepository.GetAllOriginalChannels();
+                var result = svxlinkManagerConfigRepository.GetAllOriginalChannels();
 
                 logger.LogInformation("Recupération des configuration de Channel originals réussie.");
-                return channels;
+                return Task.FromResult(result);
             }
             catch (Exception ex)
             {

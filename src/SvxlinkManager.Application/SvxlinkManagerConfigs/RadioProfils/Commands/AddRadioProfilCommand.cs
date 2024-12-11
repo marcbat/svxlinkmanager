@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -24,9 +27,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
                                string PreEmph,
                                string HighPass,
                                string LowPass,
-                               string SquelchDetection) : IRequest<Guid>;
+                               string SquelchDetection) : IRequest<Validation<Error, Guid>>;
 
-    internal class AddRadioProfilCommandHandler : IRequestHandler<AddRadioProfilCommand, Guid>
+    internal class AddRadioProfilCommandHandler : IRequestHandler<AddRadioProfilCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<AddRadioProfilCommandHandler> logger;
@@ -38,30 +41,19 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
             this.logger = logger;
         }
 
-        public async Task<Guid> Handle(AddRadioProfilCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(AddRadioProfilCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Ajout d'un nouveau profil radio.");
+            logger.LogInformation("Ajout d'un nouveau profil radio.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                         from radioProfil in RadioProfil.Create(Guid.NewGuid(), request.Name, request.RxFrequency, request.TxFrequency, request.Squelch, request.TxCtcss, request.RxCtCss, request.Volume, request.PreEmph, request.HighPass, request.LowPass, request.SquelchDetection)
+                         from _ in config.AddRadioProfil(radioProfil)
+                         from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                         select radioProfil.Id;
 
-                var radioProfilGuid = Guid.NewGuid();
-                var radioProfil = new RadioProfil(radioProfilGuid, request.Name, request.RxFrequency, request.TxFrequency, request.Squelch, request.TxCtcss, request.RxCtCss, request.Volume, request.PreEmph, request.HighPass, request.LowPass, request.SquelchDetection);
+            logger.LogInformation("Un nouveau profil radio a été ajouté avec succès.");
 
-                config.AddRadioProfil(radioProfil);
-
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
-
-                logger.LogInformation("Un nouveau profil radio a été ajouté avec succès.");
-
-                return radioProfilGuid;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Impossible d'ajouter un nouveau profil radio.");
-                throw new SvxlinkManagerException("Impossible d'ajouter un nouveau profil radio.", ex);
-            }
+            return Task.FromResult(result);
         }
     }
 }

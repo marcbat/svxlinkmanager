@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -17,12 +20,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
     /// <summary>
     /// Command to add a new reflector.
     /// </summary>
-    public record AddReflectorCommand(Guid ConfigId, string Name, string Config) : IRequest<Guid>;
+    public record AddReflectorCommand(Guid ConfigId, string Name, string Config) : IRequest<Validation<Error, Guid>>;
 
     /// <summary>
     /// Handler for the AddReflectorCommand.
     /// </summary>
-    internal class AddReflectorCommandHandler : IRequestHandler<AddReflectorCommand, Guid>
+    internal class AddReflectorCommandHandler : IRequestHandler<AddReflectorCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<AddReflectorCommandHandler> logger;
@@ -45,30 +48,21 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
         /// <param name="request">The AddReflectorCommand.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The Guid of the newly added reflector.</returns>
-        public async Task<Guid> Handle(AddReflectorCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(AddReflectorCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Ajout d'un nouveau réflecteur.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            logger.LogInformation("Ajout d'un nouveau réflecteur.");
 
-                var reflectorGuid = Guid.NewGuid();
-                var reflector = new Reflector(reflectorGuid, request.Name, request.Config);
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                         from reflector in Reflector.Create(Guid.NewGuid(), request.Name, request.Config)
+                         from _ in config.AddReflector(reflector)
+                         from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                         select reflector.Id;
 
-                config.AddReflector(reflector);
+            logger.LogInformation("Un nouveau réflecteur a été ajouté avec succès.");
 
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
+            return Task.FromResult(result);
 
-                logger.LogInformation("Un nouveau réflecteur a été ajouté avec succès.");
-
-                return reflectorGuid;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Impossible d'ajouter un nouveau réflecteur.");
-                throw new SvxlinkManagerException("Unable to add a new reflector.", ex);
-            }
         }
     }
 }

@@ -29,7 +29,11 @@ namespace SvxlinkManager.Pages.RadioProfile
         {
             var radiosProfil = await Mediatr.Send(new GetAllRadioProfilQuery(Options.Value.ConfigId));
 
-            RadioProfiles = radiosProfil.Select<Domain.Entities.RadioProfil, Models.RadioProfile>(r => r).ToList();
+            radiosProfil.Match(Fail: async error => 
+                { 
+                    await ShowErrorToastAsync("Erreur", error.ToFullString()); 
+                }, Succ: success => RadioProfiles = success.Select<Domain.Entities.RadioProfil, Models.RadioProfile>(r => r).ToList()
+            );
         }
 
         [Inject]

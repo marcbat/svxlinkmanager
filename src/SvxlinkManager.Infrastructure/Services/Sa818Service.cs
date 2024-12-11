@@ -1,4 +1,7 @@
 ﻿
+using LanguageExt;
+using LanguageExt.Common;
+
 using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Application.Interfaces;
@@ -28,20 +31,23 @@ namespace SvxlinkManager.Infrastructure.Services
         /// Writes the radio profile into the serial port of SA818 module
         /// </summary>
         /// <param name="radioProfile">Selected radio profile</param>
-        public void WriteRadioProfile(RadioProfil radioProfile)
+        public Validation<Error, Unit> WriteRadioProfile(RadioProfil radioProfile)
         {
             try
             {
 
                 logger.LogInformation($"Application du profil {radioProfile.Name}.");
 
-                WriteModule($"AT+DMOSETGROUP={mode},{radioProfile.TxFrequency}0,{radioProfile.RxFequency}0,{radioProfile.TxCtcss},{radioProfile.Squelch},{radioProfile.RxCtCss}\r\n");
+                WriteModule($"AT+DMOSETGROUP={mode},{radioProfile.TxFrequency}0,{radioProfile.RxFequency}0,{radioProfile.InternalTxCtcss},{radioProfile.Squelch},{radioProfile.InternalRxCtCss}\r\n");
                 WriteModule($"AT+DMOSETVOLUME={radioProfile.Volume}\r\n");
                 WriteModule($"AT+SETFILTER={radioProfile.PreEmph},{radioProfile.HightPass},{radioProfile.LowPass}\r\n");
+
+                return Unit.Default;
             }
             catch (Exception e)
             {
                 logger.LogError(e, "Erreur lors de l'écriture du profil radio.");
+                return Error.New("Erreur lors de l'écriture du profil radio.");
             }
         }
 

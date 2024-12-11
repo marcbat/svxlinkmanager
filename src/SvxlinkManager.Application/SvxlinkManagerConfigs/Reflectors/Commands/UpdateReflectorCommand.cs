@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -18,12 +21,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
     /// <summary>
     /// Command to update a reflector.
     /// </summary>
-    public record UpdateReflectorCommand(Guid ConfigId, Guid ReflectorId, string Name, string Config) : IRequest<Unit>;
+    public record UpdateReflectorCommand(Guid ConfigId, Guid ReflectorId, string Name, string Config) : IRequest<Validation<Error, LanguageExt.Unit>>;
 
     /// <summary>
     /// Handler for the <see cref="UpdateReflectorCommand"/>.
     /// </summary>
-    internal class UpdateReflectorCommandHandler : IRequestHandler<UpdateReflectorCommand, Unit>
+    internal class UpdateReflectorCommandHandler : IRequestHandler<UpdateReflectorCommand, Validation<Error, LanguageExt.Unit>>
     {
         private readonly ISvxlinkManagerConfigRepository _svxlinkManagerConfigRepository;
         private readonly ISvxlinkServiceBase svxlinkServiceBase;
@@ -48,36 +51,26 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
         /// <param name="request">The update reflector command.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        public async Task<Unit> Handle(UpdateReflectorCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, LanguageExt.Unit>> Handle(UpdateReflectorCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
+            
                 logger.LogInformation("Mise à jour d'un réflecteur.");
 
-                var config = await _svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+                var updateReflector = from config in _svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                             from _ in config.DeleteReflector(request.ReflectorId)
+                             from reflector in Reflector.Create(request.ReflectorId, request.Name, request.Config)
+                             from __ in config.AddReflector(reflector)
+                             from ___ in _svxlinkManagerConfigRepository.UpdateAsync(config)
+                             select reflector;
 
-                config.DeleteReflector(request.ReflectorId);
-
-                var reflector = new Reflector(request.ReflectorId, request.Name, request.Config);
-
-                config.AddReflector(reflector);
-
-                await _svxlinkManagerConfigRepository.UpdateAsync(config);
-
-                logger.LogInformation("Un réflecteur a été mis à jour avec succès.");
-
-                if(reflector.Enable)
-                    svxlinkServiceBase.StartReflector(reflector);
+                var startIfEnable = updateReflector
+                    .Where(x => x.Enable)
+                    .Bind(x => svxlinkServiceBase.StartReflector(x));
 
                 logger.LogInformation("Le réflecteur a été démarré avec succès.");
 
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Impossible de mettre à jour un réflecteur.");
-                throw new SvxlinkManagerException("Impossible de mettre à jour un réflecteur.", ex);
-            }
+                return Task.FromResult(startIfEnable);
+            
         }
     }
 }

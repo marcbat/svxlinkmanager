@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -13,9 +16,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Queries
 {
-    public record GetSvxlinkChannelByIdQuery(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Domain.Entities.SvxlinkChannel>;
+    public record GetSvxlinkChannelByIdQuery(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Validation<Error, Domain.Entities.SvxlinkChannel>>;
 
-    internal class GetSvxlinkChannelByIdQueryHandler : IRequestHandler<GetSvxlinkChannelByIdQuery, Domain.Entities.SvxlinkChannel>
+    internal class GetSvxlinkChannelByIdQueryHandler : IRequestHandler<GetSvxlinkChannelByIdQuery, Validation<Error, Domain.Entities.SvxlinkChannel>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetSvxlinkChannelByIdQueryHandler> logger;
@@ -26,28 +29,18 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
             this.logger = logger;
         }
 
-        public async Task<Domain.Entities.SvxlinkChannel> Handle(GetSvxlinkChannelByIdQuery request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Domain.Entities.SvxlinkChannel>> Handle(GetSvxlinkChannelByIdQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
+           
                 logger.LogInformation("Récupération du svxlink channel.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
-
-                var channel = config.SvxlinkChannels.SingleOrDefault(c => c.Id == request.ChannelGuid);
-
-                if (channel is null)
-                    throw new SvxlinkManagerException("Impossible de trouver le svxlink channel.");
+                var result = svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
+                    .Bind(config => config.GetSvxlinkChannel(request.ChannelGuid));
 
                 logger.LogInformation("Svxlink channel trouvé.");
 
-                return channel;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur lors de la récupération du svxlink channel.");
-                throw new SvxlinkManagerException("Impossible de récupérer le svxlink channel.", ex);
-            }
+                return Task.FromResult(result);
+           
         }
     }
 }

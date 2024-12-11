@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -13,9 +16,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queries
 {
-    public record GetManagedChannelByIdQuery(Guid ConfigId, Guid ChannelId): IRequest<ManagedChannel>;
+    public record GetManagedChannelByIdQuery(Guid ConfigId, Guid ChannelId) : IRequest<Validation<Error, Option<ManagedChannel>>>;
 
-    internal class GetManagedChannelByIdCommandHandler : IRequestHandler<GetManagedChannelByIdQuery, ManagedChannel>
+    internal class GetManagedChannelByIdCommandHandler : IRequestHandler<GetManagedChannelByIdQuery, Validation<Error, Option<ManagedChannel>>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetManagedChannelByIdCommandHandler> logger;
@@ -26,31 +29,19 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Common.Queri
             this.logger = logger;
         }
 
-        public async Task<ManagedChannel> Handle(GetManagedChannelByIdQuery request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Option<ManagedChannel>>> Handle(GetManagedChannelByIdQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Récupération de canal managé.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            logger.LogInformation("Récupération de canal managé.");
 
-                var channel = config.GetManagedChannel(request.ChannelId);
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                         from channel in config.GetManagedChannel(request.ChannelId)
+                         select channel;
 
-                if (channel is null)
-                {
-                    logger.LogError("Channel not found.");
-                    throw new SvxlinkManagerException("Channel not found.");
-                }
+            logger.LogInformation("Channel found.");
 
-                logger.LogInformation("Channel found.");
+            return Task.FromResult(result);
 
-                return channel;
-            }
-            catch (Exception ex)
-            {
-               logger.LogError(ex, "Error while getting managed channel.");
-                throw new Exception("");
-            }
         }
     }
 }

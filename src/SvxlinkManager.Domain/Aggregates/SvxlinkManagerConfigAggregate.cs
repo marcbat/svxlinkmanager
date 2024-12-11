@@ -1,6 +1,10 @@
-﻿using SvxlinkManager.Domain.Entities;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Domain.Exceptions;
 
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace SvxlinkManager.Domain.Aggregates
@@ -24,7 +28,7 @@ namespace SvxlinkManager.Domain.Aggregates
         /// <summary>
         /// Initialise une nouvelle instance de la classe <see cref="SvxlinkManagerConfigAggregate"/>.
         /// </summary>
-        public SvxlinkManagerConfigAggregate()
+        internal SvxlinkManagerConfigAggregate()
         {
         }
 
@@ -33,7 +37,7 @@ namespace SvxlinkManager.Domain.Aggregates
         /// </summary>
         /// <param name="id">L'identifiant de l'agrégat.</param>
         /// <returns>Une nouvelle instance de la classe <see cref="SvxlinkManagerConfigAggregate"/>.</returns>
-        public static SvxlinkManagerConfigAggregate Create(Guid id)
+        public static Validation<Error, SvxlinkManagerConfigAggregate> Create(Guid id)
         {
             return new SvxlinkManagerConfigAggregate(id);
         }
@@ -47,27 +51,44 @@ namespace SvxlinkManager.Domain.Aggregates
             private set => svxlinkChannels = value.ToList();
         }
 
+        public Validation<Error, SvxlinkChannel> GetSvxlinkChannel(Guid channelId)
+        {
+            var channel = svxlinkChannels.FirstOrDefault(x => x.Id == channelId);
+
+            if (channel is null)
+                return Error.New("Canal Svxlink introuvable.");
+
+            return channel;
+        }
+
         /// <summary>
         /// Ajoute un canal Svxlink.
         /// </summary>
         /// <param name="svxlinkChannel">Le canal Svxlink à ajouter.</param>
-        public void AddSvxlinkChannel(SvxlinkChannel svxlinkChannel)
+        public Validation<Error, SvxlinkChannel> AddSvxlinkChannel(SvxlinkChannel svxlinkChannel)
         {
             if(svxlinkChannels.Any(c => c.Name == svxlinkChannel.Name))
-                throw new DomainException("Un canal Svxlink avec le même nom existe déjà.");
+                return Error.New("Un canal Svxlink avec le même nom existe déjà.");
 
             svxlinkChannels.Add(svxlinkChannel);
+
+            return svxlinkChannel;
         }
 
         /// <summary>
         /// Supprime un canal Svxlink.
         /// </summary>
         /// <param name="channelId">L'identifiant du canal à supprimer.</param>
-        public void DeleteSvxlinkChannel(Guid channelId)
+        public Validation<Error, Unit> DeleteSvxlinkChannel(Guid channelId)
         {
-            var svxlinkChannel = svxlinkChannels.FirstOrDefault(x => x.Id == channelId) ?? throw new Exception("Canal Svxlink introuvable");
+            var svxlinkChannel = svxlinkChannels.FirstOrDefault(x => x.Id == channelId);
+
+            if (svxlinkChannel is null)
+                return Error.New("Canal Svxlink introuvable");
 
             svxlinkChannels.Remove(svxlinkChannel);
+
+            return Unit.Default;
         }
 
         /// <summary>
@@ -80,16 +101,21 @@ namespace SvxlinkManager.Domain.Aggregates
         /// <param name="authKey">La nouvelle clé d'authentification du canal.</param>
         /// <param name="port">Le nouveau port du canal.</param>
         /// <param name="reportCallSign">Le nouvel indicatif d'appel de rapport du canal.</param>
-        public void UpdateSvxlinkChannel(Guid channelId, string name, string host, string callSign, string authKey, int port, string reportCallSign)
+        public Validation<Error, Unit> UpdateSvxlinkChannel(Guid channelId, string name, string host, string callSign, string authKey, int port, string reportCallSign)
         {
-            var svxlinkChannel = svxlinkChannels.FirstOrDefault(x => x.Id == channelId) ?? throw new Exception("Canal Svxlink introuvable");
+            var svxlinkChannel = svxlinkChannels.FirstOrDefault(x => x.Id == channelId);
 
-            svxlinkChannel.Name = name;
-            svxlinkChannel.Host = host;
-            svxlinkChannel.CallSign = callSign;
+            if (svxlinkChannel is null)
+                return Error.New("Canal Svxlink introuvable");
+
+            svxlinkChannel.SetName(name);
+            svxlinkChannel.SetHost(host);
+            svxlinkChannel.SetCallSign(callSign);
             svxlinkChannel.AuthKey = authKey;
             svxlinkChannel.Port = port;
-            svxlinkChannel.ReportCallSign = reportCallSign;
+            svxlinkChannel.SetReportCallSign(reportCallSign);
+
+            return Unit.Default;
         }
 
         /// <summary>
@@ -98,11 +124,16 @@ namespace SvxlinkManager.Domain.Aggregates
         /// <param name="channelId"></param>
         /// <param name="soundId"></param>
         /// <exception cref="Exception"></exception>
-        public void UpdateSvxlinkChannelSound(Guid channelId, string soundId)
+        public Validation<Error, Unit> UpdateSvxlinkChannelSound(Guid channelId, string soundId)
         {
-            var svxlinkChannel = svxlinkChannels.FirstOrDefault(x => x.Id == channelId) ?? throw new Exception("Canal Svxlink introuvable");
+            var svxlinkChannel = svxlinkChannels.FirstOrDefault(x => x.Id == channelId);
+
+            if (svxlinkChannel is null)
+                return Error.New("Canal Svxlink introuvable");
 
             svxlinkChannel.SoundGuid = soundId;
+
+            return Unit.Default;
         }
 
         /// <summary>
@@ -114,27 +145,44 @@ namespace SvxlinkManager.Domain.Aggregates
             private set => echolinkChannels = value.ToList();
         }
 
+        public Validation<Error, EcholinkChannel> GetEcholinkChannel(Guid channelId)
+        {
+            var channel = echolinkChannels.FirstOrDefault(x => x.Id == channelId);
+
+            if (channel is null)
+                return Error.New("Canal Echolink introuvable.");
+
+            return channel;
+        }
+
         /// <summary>
         /// Ajoute un canal Echolink.
         /// </summary>
         /// <param name="echolinkChannel">Le canal Echolink à ajouter.</param>
-        public void AddEcholinkChannel(EcholinkChannel echolinkChannel)
+        public Validation<Error, Unit> AddEcholinkChannel(EcholinkChannel echolinkChannel)
         {
             if (echolinkChannels.Any(c => c.Name == echolinkChannel.Name))
-                throw new DomainException("Un canal Echolink avec le même nom existe déjà.");
+                return Error.New("Un canal Echolink avec le même nom existe déjà.");
 
             echolinkChannels.Add(echolinkChannel);
+
+            return Unit.Default;
         }
 
         /// <summary>
         /// Supprime un canal Echolink.
         /// </summary>
         /// <param name="channelId">L'identifiant du canal à supprimer.</param>
-        public void DeleteEcholinkChannel(Guid channelId)
+        public Validation<Error, Unit> DeleteEcholinkChannel(Guid channelId)
         {
             var echolinkChannel = echolinkChannels.FirstOrDefault(x => x.Id == channelId) ?? throw new Exception("Canal Echolink introuvable");
 
+            if(echolinkChannel is null)
+                return Error.New("Canal Echolink introuvable");
+
             echolinkChannels.Remove(echolinkChannel);
+
+            return Unit.Default;
         }
 
         /// <summary>
@@ -146,67 +194,113 @@ namespace SvxlinkManager.Domain.Aggregates
             private set => reflectors = value.ToList();
         }
 
+        public Validation<Error, Reflector> GetReflector(Guid reflectorId)
+        {
+            var reflector = reflectors.FirstOrDefault(x => x.Id == reflectorId);
+
+            if(reflector is null)
+                return Error.New("Réflecteur introuvable.");
+
+            return reflector;
+        }
+
+        public Validation<Error, Option<Reflector>> FindEnableReflector()
+        {
+            var reflector = reflectors.FirstOrDefault(x => x.Enable);
+
+            if (reflector is null)
+                return Option<Reflector>.None;
+
+            return Option<Reflector>.Some(reflector);
+        }
+
         /// <summary>
         /// Ajoute un réflecteur.
         /// </summary>
         /// <param name="reflector">Le réflecteur à ajouter.</param>
-        public void AddReflector(Reflector reflector)
+        public Validation<Error, Unit> AddReflector(Reflector reflector)
         {
             if(reflectors.Any(r => r.Name == reflector.Name))
-                throw new DomainException("Un réflecteur avec le même nom existe déjà.");
+                return Error.New("Un réflecteur avec le même nom existe déjà.");
 
             reflectors.Add(reflector);
+
+            return Unit.Default;
         }
 
         /// <summary>
         /// Supprime un réflecteur.
         /// </summary>
         /// <param name="reflectorId">L'identifiant du réflecteur à supprimer.</param>
-        public void DeleteReflector(Guid reflectorId)
+        public Validation<Error,Unit> DeleteReflector(Guid reflectorId)
         {
-            var reflector = reflectors.FirstOrDefault(x => x.Id == reflectorId) ?? throw new Exception("Réflecteur introuvable");
+            var reflector = reflectors.FirstOrDefault(x => x.Id == reflectorId);
+
+            if(reflector is null)
+                return Error.New("Réflecteur introuvable.");
 
             reflectors.Remove(reflector);
+
+            return Unit.Default;
         }
 
         /// <summary>
         /// Obtient la liste des profils radio.
         /// </summary>
-        public IReadOnlyCollection<RadioProfil> RadioProfils
+        public IReadOnlyCollection<RadioProfil> RadioProfiles
         {
             get => radioProfils.AsReadOnly();
             private set => radioProfils = value.ToList();
+        }
+
+        public Validation<Error, RadioProfil> GetRadioProfil(Guid radioProfilId)
+        {
+            var radioProfil = radioProfils.FirstOrDefault(x => x.Id == radioProfilId);
+
+            if (radioProfil is null)
+                return Error.New("Profil radio introuvable.");
+
+            return radioProfil;
         }
 
         /// <summary>
         /// Ajoute un profil radio.
         /// </summary>
         /// <param name="radioProfil">Le profil radio à ajouter.</param>
-        public void AddRadioProfil(RadioProfil radioProfil)
+        public Validation<Error, Unit> AddRadioProfil(RadioProfil radioProfil)
         {
             if(radioProfils.Any(rp => rp.Name == radioProfil.Name))
-                throw new DomainException("Un profil radio avec le même nom existe déjà.");
+                return Error.New("Un profil radio avec le même nom existe déjà.");
 
             radioProfils.Add(radioProfil);
+
+            return Unit.Default;
         }
 
         /// <summary>
         /// Supprime un profil radio.
         /// </summary>
         /// <param name="radioProfilId">L'identifiant du profil radio à supprimer.</param>
-        public void DeleteRadioProfil(Guid radioProfilId)
+        public Validation<Error, Unit> DeleteRadioProfil(Guid radioProfilId)
         {
-            var radioProfil = radioProfils.FirstOrDefault(x => x.Id == radioProfilId) ?? throw new Exception("Profil radio introuvable");
+            var radioProfil = radioProfils.FirstOrDefault(x => x.Id == radioProfilId);
+
+            if(radioProfil is null)
+                return Error.New("Profil radio introuvable.");
 
             radioProfils.Remove(radioProfil);
+
+            return Unit.Default;
         }
 
         /// <summary>
         /// Supprime tous les profils radio.
         /// </summary>
-        public void DeleteAllRadioProfils()
+        public Validation<Error, Unit> DeleteAllRadioProfils()
         {
             radioProfils.Clear();
+
+            return Unit.Default;
         }
 
         /// <summary>
@@ -218,49 +312,72 @@ namespace SvxlinkManager.Domain.Aggregates
             private set => advanceSvxlinkChannels = value.ToList();
         }
 
+        public Validation<Error, AdvanceSvxlinkChannel> GetAdvanceSvxlinkChannel(Guid channelId)
+        {
+            var channel = advanceSvxlinkChannels.FirstOrDefault(x => x.Id == channelId);
+
+            if(channel is null)
+                return Error.New("Canal Svxlink avancé introuvable.");
+
+            return channel;
+        }
+
         /// <summary>
         /// Ajoute un canal Svxlink avancé.
         /// </summary>
         /// <param name="advanceSvxlinkChannel">Le canal Svxlink avancé à ajouter.</param>
-        public void AddAdvanceSvxlinkChannel(AdvanceSvxlinkChannel advanceSvxlinkChannel)
+        public Validation<Error, Unit> AddAdvanceSvxlinkChannel(AdvanceSvxlinkChannel advanceSvxlinkChannel)
         {
             if (advanceSvxlinkChannels.Any(c => c.Name == advanceSvxlinkChannel.Name))
-                throw new DomainException("Un canal Svxlink avancé avec le même nom existe déjà.");
+                return Error.New("Un canal Svxlink avancé avec le même nom existe déjà.");
 
             advanceSvxlinkChannels.Add(advanceSvxlinkChannel);
+
+            return Unit.Default;
         }
 
         /// <summary>
         /// Supprime un canal Svxlink avancé.
         /// </summary>
         /// <param name="channelId">L'identifiant du canal à supprimer.</param>
-        public void DeleteAdvanceSvxlinkChannel(Guid channelId)
+        public Validation<Error, Unit> DeleteAdvanceSvxlinkChannel(Guid channelId)
         {
             var avanceSvxlinkChannel = advanceSvxlinkChannels.FirstOrDefault(x => x.Id == channelId) ?? throw new Exception("Canal Svxlink avancé introuvable");
 
+            if(advanceSvxlinkChannels is null)
+                return Error.New("Canal Svxlink avancé introuvable");
+
             advanceSvxlinkChannels.Remove(avanceSvxlinkChannel);
+
+            return Unit.Default;
         }
 
         /// <summary>
         /// Supprime un canal géré.
         /// </summary>
         /// <param name="channelId">L'identifiant du canal à supprimer.</param>
-        public void DeleteManagedChannel(Guid channelId)
+        public Validation<Error, Unit> DeleteManagedChannel(Guid channelId)
         {
-            var managedChannel = GetManagedChannel(channelId) ?? throw new Exception("Canal géré introuvable");
+            var managedChannel = GetManagedChannels().FirstOrDefault(x => x.Id == channelId);
 
-            if (managedChannel is SvxlinkChannel)
-            {
-                DeleteSvxlinkChannel(channelId);
-            }
-            else if (managedChannel is EcholinkChannel)
-            {
-                DeleteEcholinkChannel(channelId);
-            }
-            else if (managedChannel is AdvanceSvxlinkChannel)
-            {
-                DeleteAdvanceSvxlinkChannel(channelId);
-            }
+            if (managedChannel is null)
+                return Error.New("Canal introuvable.");
+
+           
+                if (managedChannel is SvxlinkChannel)
+                {
+                    return DeleteSvxlinkChannel(managedChannel.Id);
+                }
+                else if (managedChannel is EcholinkChannel)
+                {
+                    return DeleteEcholinkChannel(managedChannel.Id);
+                }
+                else if (managedChannel is AdvanceSvxlinkChannel)
+                {
+                    return DeleteAdvanceSvxlinkChannel(managedChannel.Id);
+                }
+            
+                return Error.New("Type de canal non supporté.");
         }
 
         /// <summary>
@@ -282,7 +399,7 @@ namespace SvxlinkManager.Domain.Aggregates
         /// Obtient la liste des canaux Svxlink et Echolink.
         /// </summary>
         /// <returns>La liste des canaux Svxlink et Echolink.</returns>
-        public IEnumerable<ManagedChannel> GetSvxlinkAndEcholinkChannels()
+        public Validation<Error, IEnumerable<ManagedChannel>> GetSvxlinkAndEcholinkChannels()
         {
             var managedChannels = new List<ManagedChannel>();
 
@@ -297,9 +414,14 @@ namespace SvxlinkManager.Domain.Aggregates
         /// </summary>
         /// <param name="channelId">L'identifiant du canal géré.</param>
         /// <returns>Le canal géré correspondant à l'identifiant spécifié, ou null si aucun canal n'est trouvé.</returns>
-        public ManagedChannel? GetManagedChannel(Guid channelId)
+        public Validation<Error,Option<ManagedChannel>> GetManagedChannel(Guid channelId)
         {
-            return GetManagedChannels().FirstOrDefault(x => x.Id == channelId);
+            var channel = GetManagedChannels().FirstOrDefault(x => x.Id == channelId);
+
+            if (channel is null)
+                return Option<ManagedChannel>.None;
+
+            return Option<ManagedChannel>.Some(channel);
         }
 
         /// <summary>
@@ -444,55 +566,63 @@ namespace SvxlinkManager.Domain.Aggregates
         /// </summary>
         /// <param name="id">L'identifiant du canal à définir comme actif.</param>
         /// <exception cref="Exception">Le canal spécifié est introuvable.</exception>
-        public void SetActiveChannel(Guid id)
-        {
-            try
-            {
-                foreach (var channel in GetManagedChannels())
-                    channel.IsActive = false;
+        //public void SetActiveChannel(Guid id)
+        //{
+        //    try
+        //    {
+        //        foreach (var channel in GetManagedChannels())
+        //            channel.IsActive = false;
 
-                var activeChannel = GetManagedChannel(id) ?? throw new Exception("Canal introuvable");
-                activeChannel.IsActive = true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Impossible de définir le canal actif.", ex);
-            }
-        }
+        //        var activeChannel = GetManagedChannel(id) ?? throw new Exception("Canal introuvable");
+        //        activeChannel.IsActive = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Impossible de définir le canal actif.", ex);
+        //    }
+        //}
 
         public ManagedChannel GetActiveChannel()
         {
             return GetManagedChannels().Single(x => x.IsActive);
         }
 
-        public void SetActiveRadioProfile(Guid id)
+        public Validation<Error, Unit> SetActiveRadioProfile(Guid id)
         {
-            try
-            {
-                foreach (var radioProfil in radioProfils)
-                    radioProfil.IsActive = false;
 
-                var activeRadioProfil = radioProfils.FirstOrDefault(x => x.Id == id) ?? throw new Exception("Profil radio introuvable");
-                activeRadioProfil.IsActive = true;
-            }
-            catch (Exception ex)
-            {
+            foreach (var radioProfil in radioProfils)
+                radioProfil.IsActive = false;
 
-                throw new Exception("Impossible de setter le radio profil par defaut.", ex);
-            }
+            var activeRadioProfil = radioProfils.FirstOrDefault(x => x.Id == id);
+
+            if (activeRadioProfil is null)
+                return Error.New("Profil radio introuvable.");
+
+            activeRadioProfil.IsActive = true;
+
+            return Unit.Default;
         }
 
-        public RadioProfil GetActiveRadioProfile()
+        public Validation<Error, RadioProfil> GetActiveRadioProfile()
         {
-            try
-            {
-                var profil = radioProfils.FirstOrDefault(x => x.IsActive) ?? throw new Exception("Profil radio non trouvé.");
-                return profil;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Impossible de trouver le profil radio actif.", ex);
-            }
+
+            var profil = radioProfils.FirstOrDefault(x => x.IsActive);
+
+            if(profil is null)
+                return Error.New("Profil radio introuvable.");
+
+            return profil;
+            
+        }
+
+        public Validation<Error,Option<ManagedChannel>> GetDefaultChannel()
+        {
+            var channel = GetManagedChannels().SingleOrDefault(x => x.IsDefault);
+
+            if (channel is null)
+                return Option<ManagedChannel>.None;
+
+            return Option<ManagedChannel>.Some(channel);
         }
     }
 }

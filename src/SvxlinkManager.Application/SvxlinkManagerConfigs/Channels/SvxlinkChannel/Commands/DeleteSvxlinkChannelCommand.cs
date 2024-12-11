@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -11,9 +14,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Commands
 {
-    public record DeleteSvxlinkChannelCommand(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Unit>;
+    public record DeleteSvxlinkChannelCommand(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Validation<Error, Guid>>;
 
-    internal class DeleteSvxlinkChannelCommandHandler : IRequestHandler<DeleteSvxlinkChannelCommand, Unit>
+    internal class DeleteSvxlinkChannelCommandHandler : IRequestHandler<DeleteSvxlinkChannelCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<DeleteSvxlinkChannelCommandHandler> logger;
@@ -24,29 +27,19 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(DeleteSvxlinkChannelCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(DeleteSvxlinkChannelCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
+            
                 logger.LogInformation("Suppression du svxlink channel.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
-
-                var channel = config.SvxlinkChannels.SingleOrDefault(c => c.Id == request.ChannelGuid) ?? throw new SvxlinkManagerException("Impossible de trouver le svxlink channel.");
-
-                config.DeleteSvxlinkChannel(request.ChannelGuid);
-
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
+                var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
+                             from channel in config.GetSvxlinkChannel(request.ChannelGuid)
+                             from _ in config.DeleteSvxlinkChannel(request.ChannelGuid)
+                             select config.Id;
 
                 logger.LogInformation("Svxlink channel supprimé.");
 
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur lors de la suppression du svxlink channel.");
-                throw new SvxlinkManagerException("Impossible de supprimer le svxlink channel.", ex);
-            }
+                return Task.FromResult(result);
         }
     }
 

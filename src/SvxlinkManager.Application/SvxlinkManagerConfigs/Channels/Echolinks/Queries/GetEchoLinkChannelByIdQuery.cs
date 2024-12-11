@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -13,9 +16,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Queries
 {
-    public record GetEchoLinkChannelByIdQuery(Guid ConfigGuid, Guid ChannelGuid) : IRequest<EcholinkChannel>;
+    public record GetEchoLinkChannelByIdQuery(Guid ConfigGuid, Guid ChannelGuid) : IRequest<Validation<Error, EcholinkChannel>>;
 
-    internal class GetEchoLinkChannelByIdQueryHandler : IRequestHandler<GetEchoLinkChannelByIdQuery, EcholinkChannel>
+    internal class GetEchoLinkChannelByIdQueryHandler : IRequestHandler<GetEchoLinkChannelByIdQuery, Validation<Error, EcholinkChannel>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetEchoLinkChannelByIdQueryHandler> logger;
@@ -26,28 +29,19 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Qu
             this.logger = logger;
         }
 
-        public async Task<EcholinkChannel> Handle(GetEchoLinkChannelByIdQuery request, CancellationToken cancellationToken)
+        public Task<Validation<Error, EcholinkChannel>> Handle(GetEchoLinkChannelByIdQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Récupération du EchoLink channel.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
+            logger.LogInformation("Récupération du EchoLink channel.");
 
-                var channel = config.EcholinkChannels.SingleOrDefault(c => c.Id == request.ChannelGuid);
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
+                         from channel in config.GetEcholinkChannel(request.ChannelGuid)
+                         select channel;
 
-                if (channel is null)
-                    throw new SvxlinkManagerException("Impossible de trouver le EchoLink channel.");
+            logger.LogInformation("EchoLink channel trouvé.");
 
-                logger.LogInformation("EchoLink channel trouvé.");
+            return Task.FromResult(result);
 
-                return channel;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur lors de la récupération du EchoLink channel.");
-                throw new SvxlinkManagerException("Impossible de récupérer le EchoLink channel.", ex);
-            }
         }
     }
 }

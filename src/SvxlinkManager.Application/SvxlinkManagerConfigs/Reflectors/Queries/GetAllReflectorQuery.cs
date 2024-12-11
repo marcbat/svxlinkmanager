@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -14,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries
 {
-    public record GetAllReflectorQuery(Guid ConfigId) : IRequest<IEnumerable<Reflector>>;
+    public record GetAllReflectorQuery(Guid ConfigId) : IRequest<Validation<Error, IReadOnlyCollection<Reflector>>>;
 
-    internal class GetAllReflectorQueryHandler : IRequestHandler<GetAllReflectorQuery, IEnumerable<Reflector>>
+    internal class GetAllReflectorQueryHandler : IRequestHandler<GetAllReflectorQuery, Validation<Error, IReadOnlyCollection<Reflector>>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetAllReflectorQueryHandler> logger;
@@ -27,23 +30,18 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Queries
             this.logger = logger;
         }
 
-        public async Task<IEnumerable<Reflector>> Handle(GetAllReflectorQuery request, CancellationToken cancellationToken)
+        public Task<Validation<Error, IReadOnlyCollection<Reflector>>> Handle(GetAllReflectorQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Récupération de tous les réflecteurs.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            logger.LogInformation("Récupération de tous les réflecteurs.");
 
-                logger.LogInformation("Tous les réflecteurs ont été récupérés avec succès.");
+            var result = svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                         .Map(config => config.Reflectors);
 
-                return config.Reflectors;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur lors de la récupération de tous les réflecteurs.");
-                throw new Exception("Erreur lors de la récupération de tous les réflecteurs.", ex);
-            }
+            logger.LogInformation("Tous les réflecteurs ont été récupérés avec succès.");
+
+            return Task.FromResult(result);
+
         }
     }
 }

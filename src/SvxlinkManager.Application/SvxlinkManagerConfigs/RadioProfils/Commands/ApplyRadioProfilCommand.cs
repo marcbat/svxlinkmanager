@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -15,9 +18,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
 {
-    public record ApplyRadioProfilCommand(Guid ConfigId, Guid RadioProfilId) : IRequest<Unit>;
+    public record ApplyRadioProfilCommand(Guid ConfigId, Guid RadioProfilId) : IRequest<Validation<Error, Guid>>;
 
-    internal class ApplyRadioProfilCommandHandler : IRequestHandler<ApplyRadioProfilCommand, Unit>
+    internal class ApplyRadioProfilCommandHandler : IRequestHandler<ApplyRadioProfilCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ISa818Service sa818Service;
@@ -33,37 +36,29 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(ApplyRadioProfilCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(ApplyRadioProfilCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Application du profil radio.");
+            logger.LogInformation("Application du profil radio.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                         from radioProfile in config.GetRadioProfil(request.RadioProfilId)
+                         from _ in WriteRadioProfil(radioProfile)
+                         from __ in config.SetActiveRadioProfile(radioProfile.Id)
+                         from ___ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                         select config.Id;
 
-                var radioProfil = config.RadioProfils.FirstOrDefault(rp => rp.Id == request.RadioProfilId) ?? throw new SvxlinkManagerException("Le profil radio spécifié n'existe pas.");
-                
-                if (radioProfil.HasSa818)
-                    sa818Service.WriteRadioProfile(radioProfil);
+            logger.LogInformation("Le profil radio a été appliqué avec succès.");
 
-                radioProfil.Enable = true;
+            return Task.FromResult(result);
 
-                config.SetActiveRadioProfile(radioProfil.Id);
-                
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
+        }
 
-                //if(svxlinkService.ActiveChannel is null)
-                //    await svxlinkService.
+        private Validation<Error, LanguageExt.Unit> WriteRadioProfil(RadioProfil radioProfil)
+        {
+            if (radioProfil.HasSa818)
+                return sa818Service.WriteRadioProfile(radioProfil);
 
-                logger.LogInformation("Le profil radio a été appliqué avec succès.");
-
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Impossible d'appliquer le profil radio.");
-                throw new SvxlinkManagerException("Impossible d'appliquer le profil radio.", ex);
-            }
+            return LanguageExt.Unit.Default;
         }
     }
 }

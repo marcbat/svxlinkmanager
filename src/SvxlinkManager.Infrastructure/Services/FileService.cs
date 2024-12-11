@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using Microsoft.Extensions.Logging;
 
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Domain.Entities;
@@ -21,10 +24,22 @@ namespace SvxlinkManager.Infrastructure.Services
             this.logger = logger;
         }
 
-        public void WriteReflectorConfig(Reflector reflector)
+        public Validation<Error, Unit> WriteReflectorConfig(Reflector reflector)
         {
-            File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxreflector-{reflector.Id}.conf", reflector.Config);
-            logger.LogInformation("Le fichier de configuration du reflector a été écrit avec succès.");
+            try
+            {
+                File.WriteAllText($"{applicationPath}/SvxlinkConfig/svxreflector-{reflector.Id}.conf", reflector.Config);
+                logger.LogInformation("Le fichier de configuration du reflector a été écrit avec succès.");
+
+                return Unit.Default;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erreur lors de l'ecriture du fichier de configuration du reflecteur.");
+                return Error.New("Erreur lors de l'ecriture du fichier de configuration du reflecteur.", ex);
+            }
+
+           
         }
     }
 }

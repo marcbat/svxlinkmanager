@@ -1,0 +1,9 @@
+﻿[
+  {
+    Fail: [
+      {
+        Message: Le ton de CTCSS de transmission n'est pas valide.
+      }
+    ]
+  }
+]

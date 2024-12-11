@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -11,9 +14,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Queries
 {
-    public record GetRadioProfilByIdQuery(Guid ConfigGuid, Guid ProfilGuid) : IRequest<RadioProfil>;
+    public record GetRadioProfilByIdQuery(Guid ConfigGuid, Guid ProfilGuid) : IRequest<Validation<Error, RadioProfil>>;
 
-    internal class GetRadioProfilByIdQueryHandler : IRequestHandler<GetRadioProfilByIdQuery, RadioProfil>
+    internal class GetRadioProfilByIdQueryHandler : IRequestHandler<GetRadioProfilByIdQuery, Validation<Error, RadioProfil>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ILogger<GetRadioProfilByIdQueryHandler> logger;
@@ -24,28 +27,19 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Queries
             this.logger = logger;
         }
 
-        public async Task<RadioProfil> Handle(GetRadioProfilByIdQuery request, CancellationToken cancellationToken)
+        public Task<Validation<Error, RadioProfil>> Handle(GetRadioProfilByIdQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Récupération du profil radio.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigGuid);
+            logger.LogInformation("Récupération du profil radio.");
 
-                var profil = config.RadioProfils.SingleOrDefault(p => p.Id == request.ProfilGuid);
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
+                         from radioProfil in config.GetRadioProfil(request.ProfilGuid)
+                         select radioProfil;
 
-                if (profil is null)
-                    throw new SvxlinkManagerException("Impossible de trouver le profil radio.");
+            logger.LogInformation("Profil radio trouvé.");
 
-                logger.LogInformation("Profil radio trouvé.");
+            return Task.FromResult(result);
 
-                return profil;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erreur lors de la récupération du profil radio.");
-                throw new SvxlinkManagerException("Impossible de récupérer le profil radio.", ex);
-            }
         }
     }
 }

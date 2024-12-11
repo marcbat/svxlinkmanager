@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -12,9 +15,9 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
 {
-    public record StartEnableReflectors(Guid ConfigId): IRequest<Unit>;
+    public record StartEnableReflectors(Guid ConfigId): IRequest<Validation<Error, Guid>>;
 
-    internal class StartEnableReflectorsHandler : IRequestHandler<StartEnableReflectors, Unit>
+    internal class StartEnableReflectorsHandler : IRequestHandler<StartEnableReflectors, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
         private readonly ISvxlinkServiceBase svxlinkService;
@@ -27,33 +30,19 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Reflectors.Commands
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(StartEnableReflectors request, CancellationToken cancellationToken)
+        public async Task<Validation<Error, Guid>> Handle(StartEnableReflectors request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Starting default reflector.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            logger.LogInformation("Starting default reflector.");
 
-                var reflectors = config.Reflectors.Where(r => r.Enable).ToList();
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                         from optionReflector in config.FindEnableReflector()
+                         select config.Id;
 
-                if (!reflectors.Any())
-                {
-                    logger.LogWarning("No default reflector found.");
+            logger.LogInformation("Starting default reflector ok.");
 
-                    return Unit.Value;
-                }
+            return result;
 
-                logger.LogInformation("Starting default reflector ok.");
-
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error starting default reflector.");
-
-                throw new Exception("Error starting default reflector.", ex);
-            }
         }
     }
 }

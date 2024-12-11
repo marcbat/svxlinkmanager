@@ -1,17 +1,28 @@
-﻿namespace SvxlinkManager.Domain.Entities
+﻿using LanguageExt;
+using static LanguageExt.Prelude;
+using LanguageExt.Common;
+using System.Text.RegularExpressions;
+
+namespace SvxlinkManager.Domain.Entities
 {
     public class RadioProfil : Entity<Guid>
     {
-        private string? txCtcss;
-        private string? rxCtCss;
+        private string txCtcss;
+        private string rxCtCss;
         private string name;
-        private string rxFequency;
+        private string rxFrequency;
         private string txFrequency;
         private string squelch;
 
-        public RadioProfil(Guid id,
+        private static string frequencyPattern = @"[0-9]{3}\.[0-9]{3}";
+
+        public RadioProfil()
+        {
+        }
+
+        internal RadioProfil(Guid id,
                            string name,
-                           string rxFequency,
+                           string rxFrequency,
                            string txFrequency,
                            string squelch,
                            string txCtcss,
@@ -22,12 +33,12 @@
                            string lowPass,
                            string squelchDetection) : base(id)
         {
-            Name = name;
-            RxFequency = rxFequency;
-            TxFrequency = txFrequency;
+            this.name = name;
+            this.rxFrequency = rxFrequency;
+            this.txFrequency = txFrequency;
             Squelch = squelch;
-            TxCtcss = txCtcss;
-            RxCtCss = rxCtCss;
+            this.txCtcss = txCtcss;
+            this.rxCtCss = rxCtCss;
             Volume = volume;
             PreEmph = preEmph;
             HightPass = hightPass;
@@ -35,40 +46,96 @@
             SquelchDetection = squelchDetection;
         }
 
+        public static Validation<Error, RadioProfil> Create(Guid id,
+                           string name,
+                           string rxFequency,
+                           string txFrequency,
+                           string squelch,
+                           string txCtcss,
+                           string rxCtCss,
+                           string volume,
+                           string preEmph,
+                           string hightPass,
+                           string lowPass,
+                           string squelchDetection)
+        {
+            return (ValidateName(name), ValidateRxCtCss(rxCtCss), ValidateRxFequency(rxFequency), ValidateTxCtcss(txCtcss), ValidateTxFrequency(txFrequency))
+                .Apply((vname, vrxCtCss, vrxFequency, vtxCtcss, vtxFrequency) => new RadioProfil(id,
+                           vname,
+                           vrxFequency,
+                           vtxFrequency,
+                           squelch,
+                           vtxCtcss,
+                           vrxCtCss,
+                           volume,
+                           preEmph,
+                           hightPass,
+                           lowPass,
+                           squelchDetection));
+        }
+
         public bool HasSa818 { get; set; } = true;
 
         public string Name
         {
-            get => name; set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException("Le nom du profil radio ne peut pas être vide.", nameof(value));
-
-                name = value;
-            }
+            get => name;
+            protected set => name = value;
         }
+
+        internal static Validation<Error, string> ValidateName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return Error.New("Le nom du profil radio ne peut pas être vide.");
+
+            return name;
+        }
+
+        public Validation<Error,string> SetName(string name) =>
+            ValidateName(name).Map(vname => this.name = vname);
 
         public string RxFequency
         {
-            get => rxFequency; set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException("La fréquence de réception ne peut pas être vide.", nameof(value));
-
-                rxFequency = value;
-            }
+            get => rxFrequency;
+            protected set => rxFrequency = value;
         }
+
+        internal static Validation<Error, string> ValidateRxFequency(string rxFequency)
+        {
+            if (string.IsNullOrWhiteSpace(rxFequency))
+                return Error.New("La fréquence de réception ne peut pas être vide.");
+
+            bool isMatch = Regex.IsMatch(rxFequency, frequencyPattern);
+
+            if (!isMatch)
+                return Error.New("La fréquence de réception n'est pas au format attendu.");
+
+            return rxFequency;
+        }
+
+        public Validation<Error, string> SetRxFequency(string rxFequency) =>
+            ValidateRxFequency(rxFequency).Map(vrxFequency => this.rxFrequency = vrxFequency);
 
         public string TxFrequency
         {
-            get => txFrequency; set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException("La fréquence de transmission ne peut pas être vide.", nameof(value));
-
-                txFrequency = value;
-            }
+            get => txFrequency;
+            protected set => txFrequency = value;
         }
+
+        internal static Validation<Error, string> ValidateTxFrequency(string txFrequency)
+        {
+            if (string.IsNullOrWhiteSpace(txFrequency))
+                return Error.New("La fréquence de transmission ne peut pas être vide.");
+
+            bool isMatch = Regex.IsMatch(txFrequency, frequencyPattern);
+
+            if (!isMatch)
+                return Error.New("La fréquence de transmission n'est pas au format attendu.");
+
+            return txFrequency;
+        }
+
+        public Validation<Error, string> SetTxFrequency(string txFrequency) =>
+            ValidateTxFrequency(txFrequency).Map(vtxFrequency => this.txFrequency = vtxFrequency);
 
         public string Squelch
         {
@@ -81,98 +148,112 @@
             }
         }
 
-        public string? TxCtcss
+        public string TxCtcss
+        {
+            get => txCtcss;
+            protected set => txCtcss = value;
+        }
+
+        internal static Validation<Error, string> ValidateTxCtcss(string txCtcss)
+        {
+            if (string.IsNullOrWhiteSpace(txCtcss))
+                return string.Empty;
+
+            var valueExist = Ctcss.ContainsKey(txCtcss);
+
+            if(!valueExist)
+                return Error.New("Le ton de CTCSS de transmission n'est pas valide.");
+
+            return txCtcss;
+        }
+
+        public Validation<Error, string> SetTxCtcss(string txCtcss) =>
+            ValidateTxCtcss(txCtcss).Map(x => this.txCtcss = x); 
+
+        public string InternalTxCtcss
         {
             get
             {
-                if (txCtcss is null)
-                    return txCtcss;
+                if(string.IsNullOrEmpty(txCtcss))
+                    return "0000";
 
                 return Ctcss[txCtcss];
             }
-            private set
-            {
-                if (string.IsNullOrEmpty(value))
-                {
-                    txCtcss = null;
-                    return;
-                }
-
-                var ctcss = Ctcss.SingleOrDefault(x => x.Value == value);
-                if (ctcss.Key == null)
-                    throw new ArgumentException("Invalid value for TxCtcss");
-
-                txCtcss = ctcss.Key;
-            }
         }
 
-        public string? RxCtCss
+        public string RxCtCss
+        {
+            get => rxCtCss;
+            protected set => rxCtCss = value;
+        }
+
+        internal static Validation<Error, string> ValidateRxCtCss(string rxCtCss)
+        {
+            if (string.IsNullOrWhiteSpace(rxCtCss))
+                return string.Empty;
+
+            var valueExist = Ctcss.ContainsKey(rxCtCss);
+
+            if (!valueExist)
+                return Error.New("Le ton de CTCSS de réception n'est pas valide.");
+
+            return rxCtCss;
+        }
+
+        public Validation<Error, string> SetRxCtCss(string rxCtCss) =>
+            ValidateRxCtCss(rxCtCss).Map(x => this.rxCtCss = x);
+
+        public string InternalRxCtCss
         {
             get
             {
-                if (rxCtCss is null)
-                    return rxCtCss;
+                if(string.IsNullOrEmpty(rxCtCss))
+                    return "0000";
 
                 return Ctcss[rxCtCss];
             }
-
-            private set
-            {
-                if (string.IsNullOrEmpty(value))
-                {
-                    rxCtCss = null;
-                    return;
-                }
-
-                var ctcss = Ctcss.SingleOrDefault(x => x.Value == value);
-                if (ctcss.Key == null)
-                    throw new ArgumentException("Invalid value for RxCtCss");
-
-                rxCtCss = ctcss.Key;
-            }
         }
 
-        private Dictionary<string, string> Ctcss => new Dictionary<string, string>
+        private static Dictionary<string, string> Ctcss => new()
         {
-          {"0000", "Pas de tone" },
-          {"0001","67"},
-          {"0002","71.9"},
-          {"0003","74.4"},
-          {"0004","77"},
-          {"0005","79.7"},
-          {"0006","82.5"},
-          {"0007","85.4"},
-          {"0008","88.5"},
-          {"0009","91.5"},
-          {"0010","94.8"},
-          {"0011","97.4"},
-          {"0012","100"},
-          {"0013","103.5"},
-          {"0014","107.2"},
-          {"0015","110.9"},
-          {"0016","114.8"},
-          {"0017","118.8"},
-          {"0018","123"},
-          {"0019","127.3"},
-          {"0020","131.8"},
-          {"0021","136.5"},
-          {"0022","141.3"},
-          {"0023","146.2"},
-          {"0024","151.4"},
-          {"0025","156.7"},
-          {"0026","162.2"},
-          {"0027","167.9"},
-          {"0028","173.8"},
-          {"0029","179.9"},
-          {"0030","186.2"},
-          {"0031","192.8"},
-          {"0032","203.5"},
-          {"0033","210.7"},
-          {"0034","218.1"},
-          {"0035","225.7"},
-          {"0036","233.6"},
-          {"0037","241.8"},
-          {"0038","250.3"}
+            { "67", "0001" },
+            { "71.9", "0002" },
+            { "74.4", "0003" },
+            { "77", "0004" },
+            { "79.7", "0005" },
+            { "82.5", "0006" },
+            { "85.4", "0007" },
+            { "88.5", "0008" },
+            { "91.5", "0009" },
+            { "94.8", "0010" },
+            { "97.4", "0011" },
+            { "100", "0012" },
+            { "103.5", "0013" },
+            { "107.2", "0014" },
+            { "110.9", "0015" },
+            { "114.8", "0016" },
+            { "118.8", "0017" },
+            { "123", "0018" },
+            { "127.3", "0019" },
+            { "131.8", "0020" },
+            { "136.5", "0021" },
+            { "141.3", "0022" },
+            { "146.2", "0023" },
+            { "151.4", "0024" },
+            { "156.7", "0025" },
+            { "162.2", "0026" },
+            { "167.9", "0027" },
+            { "173.8", "0028" },
+            { "179.9", "0029" },
+            { "186.2", "0030" },
+            { "192.8", "0031" },
+            { "203.5", "0032" },
+            { "210.7", "0033" },
+            { "218.1", "0034" },
+            { "225.7", "0035" },
+            { "233.6", "0036" },
+            { "241.8", "0037" },
+            { "250.3", "0038" }
         };
 
         public string Volume { get; set; }

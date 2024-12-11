@@ -53,7 +53,14 @@ namespace SvxlinkManager.Pages.Channels
         {
             var channels = await Mediatr.Send(new GetAllSvxlinChannelQuery(Options.Value.ConfigId));
 
-            Channels = channels.Select<Domain.Entities.SvxlinkChannel, Models.SvxlinkChannel>(c=>c).ToList();
+            channels.Match(
+                Fail: async error =>
+                {
+                    await ShowErrorToastAsync("Erreur", error.ToFullString());
+                },
+                Succ: success => Channels = success.Select<Domain.Entities.SvxlinkChannel, Models.SvxlinkChannel>(c => c).ToList()
+            );
+
         }
     }
 

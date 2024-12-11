@@ -27,7 +27,10 @@ using SvxlinkManager.Infrastructure.Services;
 using SvxlinkManager.Service;
 using SvxlinkManager.ServiceMockup;
 
+using Serilog;
+
 using System.IO;
+using LanguageExt;
 
 namespace SvxlinkManager
 {
@@ -46,7 +49,7 @@ namespace SvxlinkManager
         {
             services.Configure<SvxlinkManagerOptions>(Configuration.GetSection("SvxlinkManager"));
 
-            services.AddLogging(b => b.AddConsole());
+            services.AddSerilog();
 
             services.AddSingleton<ILiteDbContext, LiteDbContext>();
 
@@ -94,6 +97,10 @@ namespace SvxlinkManager
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .CreateLogger();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -110,14 +117,17 @@ namespace SvxlinkManager
                 var mediatr = serviceScope.ServiceProvider.GetRequiredService<IMediator>();
                 var options = serviceScope.ServiceProvider.GetRequiredService<IOptions<SvxlinkManagerOptions>>();
 
-                // Seed default config if not exists
-                await mediatr.Send(new CreateSvxlinkManagerConfigCommand(options.Value.ConfigId));
+                var runDefaultChannel = await mediatr.Send(new StartDefaultChannelCommand(options.Value.ConfigId));
 
-                // start default channel
-                await mediatr.Send(new StartDefaultChannelCommand(options.Value.ConfigId));
+                //var result = await mediatr.Send(new CreateSvxlinkManagerConfigCommand(options.Value.ConfigId));
+                //.Bind(_ => mediatr.Send(new StartDefaultChannelCommand(options.Value.ConfigId)))
+                //.Bind(_ => mediatr.Send(new StartEnableReflectors(options.Value.ConfigId)));
 
-                // start enable reflector
-                await mediatr.Send(new StartEnableReflectors(options.Value.ConfigId));
+                if (runDefaultChannel.IsFail)
+                {
+                    var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Startup>>();
+                    logger.LogError(runDefaultChannel.FailToList().ToFullArrayString());
+                }
             }
 
             app.UseHttpsRedirection();

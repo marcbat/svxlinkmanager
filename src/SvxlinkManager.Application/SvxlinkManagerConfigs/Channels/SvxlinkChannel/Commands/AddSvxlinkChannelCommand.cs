@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 using SvxlinkManager.Application.Interfaces;
@@ -13,43 +16,32 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Commands
 {
-    public record AddSvxlinkChannelCommand(Guid ConfigId, string Name, string Host, string CallSign, string AuthKey, int Port, string ReportCallSign, string SoundName, byte[] SoundFile) : IRequest<Guid>;
+    public record AddSvxlinkChannelCommand(Guid ConfigId, string Name, string Host, string CallSign, string AuthKey, int Port, string ReportCallSign, string SoundName, byte[] SoundFile) : IRequest<Validation<Error, Guid>>;
 
     internal class AddSvxlinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,
                                                          ISoundRepository soundRepository,
-                                                         ILogger<AddSvxlinkChannelCommandHandler> logger) : IRequestHandler<AddSvxlinkChannelCommand, Guid>
+                                                         ILogger<AddSvxlinkChannelCommandHandler> logger) : IRequestHandler<AddSvxlinkChannelCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
         private readonly ISoundRepository soundRepository = soundRepository;
         private readonly ILogger<AddSvxlinkChannelCommandHandler> logger = logger;
 
-        public async Task<Guid> Handle(AddSvxlinkChannelCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(AddSvxlinkChannelCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Ajout d'un nouveau svxlink channel.");
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                       from channel in Domain.Entities.SvxlinkChannel.Create(Guid.NewGuid(), request.Name, request.Host, request.Port, request.CallSign, request.AuthKey, request.ReportCallSign)
+                       from sound in CreateSound(request.SoundName, request.SoundFile)
+                       from __ in config.AddSvxlinkChannel(channel)
+                       from _ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                       select channel.Id;
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            return Task.FromResult(result);
+        }
 
-                var sound = new Sound($"$/sounds/{request.SoundName}", request.SoundName, request.SoundFile);
-                await soundRepository.CreateAsyc(sound);
-
-                var svxlinkchannelGuid = Guid.NewGuid();
-                var svxlinkChannel = new Domain.Entities.SvxlinkChannel(svxlinkchannelGuid, request.Name, request.Host, request.Port, request.CallSign, request.AuthKey, request.ReportCallSign);
-
-                config.AddSvxlinkChannel(svxlinkChannel);
-
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
-
-                logger.LogInformation("Un nouveau svxlink channel a été ajouté avec succès.");
-
-                return svxlinkchannelGuid;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Impossible d'ajouter un nouveau svxlink channel.");
-                throw new SvxlinkManagerException("Impossible d'ajouter un nouveau svxlink channel.", ex);
-            }
+        private Validation<Error, LanguageExt.Unit> CreateSound(string soundName, byte[] soundFile)
+        {
+            return Sound.Create($"$/sounds/{soundName}", soundName, soundFile)
+                .Bind(soundRepository.CreateAsyc);
         }
     }
 }

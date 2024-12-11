@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using LanguageExt.Common;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 using SvxlinkManager.Application.Interfaces;
@@ -13,39 +16,30 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Commands
 {
-    public record UpdateSvxlinkChannelCommand(Guid ConfigId, Guid ChannelId, string Name, string Host, string CallSign, string AuthKey, int Port, string ReportCallSign, string? SoundName, byte[]? SoundFile) : IRequest<Unit>;
+    public record UpdateSvxlinkChannelCommand(Guid ConfigId, Guid ChannelId, string Name, string Host, string CallSign, string AuthKey, int Port, string ReportCallSign, string? SoundName, byte[]? SoundFile) : IRequest<Validation<Error, Guid>>;
 
     internal class UpdateSvxlinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,
                                                          ISoundRepository soundRepository,
-                                                         ILogger<AddSvxlinkChannelCommandHandler> logger) : IRequestHandler<UpdateSvxlinkChannelCommand, Unit>
+                                                         ILogger<AddSvxlinkChannelCommandHandler> logger) : IRequestHandler<UpdateSvxlinkChannelCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
         private readonly ISoundRepository soundRepository = soundRepository;
         private readonly ILogger<AddSvxlinkChannelCommandHandler> logger = logger;
 
-        public async Task<Unit> Handle(UpdateSvxlinkChannelCommand request, CancellationToken cancellationToken)
+        public Task<Validation<Error, Guid>> Handle(UpdateSvxlinkChannelCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                logger.LogInformation("Mise à jour d'un svxlink channel.");
 
-                var config = await svxlinkManagerConfigRepository.GetConfigAsync(request.ConfigId);
+            logger.LogInformation("Mise à jour d'un svxlink channel.");
 
-                config.UpdateSvxlinkChannel(request.ChannelId, request.Name, request.Host, request.CallSign, request.AuthKey, request.Port, request.ReportCallSign);
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
+                         from _ in config.UpdateSvxlinkChannel(request.ChannelId, request.Name, request.Host, request.CallSign, request.AuthKey, request.Port, request.ReportCallSign)
+                         from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                         select config.Id;
 
-                //config.UpdateSvxlinkChannelSound(request.ChannelId, );
+            logger.LogInformation("Un svxlink channel a été mis à jour avec succès.");
 
-                await svxlinkManagerConfigRepository.UpdateAsync(config);
+            return Task.FromResult(result);
 
-                logger.LogInformation("Un svxlink channel a été mis à jour avec succès.");
-
-                return Unit.Value;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Impossible de mettre à jour un svxlink channel.");
-                throw new SvxlinkManagerException("Impossible de mettre à jour un svxlink channel.", ex);
-            }
         }
     }
 }

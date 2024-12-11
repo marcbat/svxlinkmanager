@@ -1,4 +1,6 @@
 ﻿
+using LanguageExt.Common;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
@@ -15,10 +17,18 @@ namespace SvxlinkManager.Pages.RadioProfile
   [Authorize]
   public class EditBase : AddEditBase
   {
-    protected override async void OnInitialized()
-    {
-      RadioProfile = await Mediatr.Send(new GetRadioProfilByIdQuery(Options.Value.ConfigId, Guid.Parse(Id)));
-    }
+        protected override async void OnInitialized()
+        {
+            var result = await Mediatr.Send(new GetRadioProfilByIdQuery(Options.Value.ConfigId, Guid.Parse(Id)));
+
+            result.Match(
+                Fail: async error =>
+                {
+                    await ShowErrorToastAsync("Erreur", error.ToFullString());
+                },
+                Succ: success => RadioProfile = success
+            );
+        }
 
     [Parameter]
     public string Id { get; set; }

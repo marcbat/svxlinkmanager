@@ -1,0 +1,25 @@
+﻿[
+  {
+    State: Success,
+    Success: {
+      HasSa818: true,
+      Name: RadioProfil,
+      RxFequency: 145.500,
+      TxFrequency: 145.500,
+      Squelch: 1,
+      TxCtcss: 67,
+      InternalTxCtcss: 0001,
+      RxCtCss: 85.4,
+      InternalRxCtCss: 0007,
+      Volume: 50,
+      PreEmph: 1,
+      HightPass: 1,
+      LowPass: 1,
+      SquelchDetection: 1,
+      Enable: false,
+      IsActive: false,
+      Id: Guid_1
+    },
+    Fail: null
+  }
+]

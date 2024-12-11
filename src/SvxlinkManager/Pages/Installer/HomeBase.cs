@@ -1,5 +1,8 @@
 ﻿using AspNetCore.Identity.LiteDB.Models;
 
+using LanguageExt;
+using LanguageExt.Common;
+
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -22,6 +25,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SvxlinkManager.Pages.Installer
 {
@@ -61,13 +66,25 @@ namespace SvxlinkManager.Pages.Installer
         {
             if (UserManager.Users.Any())
                 NavigationManager.NavigateTo("Identity/Account/Login", true);
-
             base.OnInitialized();
 
-            InstallerModel = new InstallerModel
-            {
-                Channels = await LoadChannelsAsync()
-            };
+            var result = await LoadChannelsAsync();
+
+            result.Match(
+                Fail: async error =>
+                {
+                    await ShowErrorToastAsync("Erreur", error.ToFullString());
+                },
+                Succ: success =>
+                {
+                    InstallerModel = new InstallerModel
+                    {
+                        Channels = success
+                    };
+                }
+            );
+
+            
         }
 
         [Inject]
@@ -85,11 +102,11 @@ namespace SvxlinkManager.Pages.Installer
         [Inject]
         public ISvxlinkServiceBase SvxLinkService { get; set; }
 
-        private async Task<List<Models.SvxlinkChannel>> LoadChannelsAsync()
+        private async Task<Validation<LanguageExt.Common.Error, List<Models.SvxlinkChannel>>> LoadChannelsAsync()
         {
-            var channels = await Mediatr.Send(new GetAllOriginalChannelsCommand());
+            return from channels in await Mediatr.Send(new GetAllOriginalChannelsCommand())
+                         select channels.Select<Domain.Entities.SvxlinkChannel, Models.SvxlinkChannel>(c => c).ToList();
 
-            return channels.Select<Domain.Entities.SvxlinkChannel, Models.SvxlinkChannel>(c=> c).ToList();
         }
 
         private Release LoadLastRelease() => UpdaterService.GetLastRelease();
@@ -159,134 +176,48 @@ namespace SvxlinkManager.Pages.Installer
             try { 
                 Logger.LogInformation("Installation de SvxlinkManager.");
 
-                SeedUser();
-                await InstallChannelsAsync();
-                await SetDefaultChannelAsync();
-                var radioGuid = await CreateRadioProfileAsync();
-                await ApplyRadioProfilAsync(radioGuid);
-                if (InstallerModel.UpdateToLastRelease)
-                    Update();
-                else
-                {
-                    await Mediatr.Send(new StartDefaultChannelCommand(Options.Value.ConfigId));
-                    NavigationManager.NavigateTo("Identity/Account/Login", true);
-                }
+                var command = new InstallCommand(
+                    InstallerModel.UserName,InstallerModel.Password, Options.Value.ConfigId,
+                                                 InstallerModel.ChannelsToPreserved.Select(c => c.Id),
+                                                 InstallerModel.CallSign,
+                                                 InstallerModel.AnnonceCallSign,
+                                                 InstallerModel.DefaultChannel.Id,
+                                                 InstallerModel.RadioProfile.Name,
+                                                 InstallerModel.RadioProfile.RxFequ,
+                                                 InstallerModel.RadioProfile.TxFrequ,
+                                                 InstallerModel.RadioProfile.Squelch,
+                                                 InstallerModel.RadioProfile.TxTone,
+                                                 InstallerModel.RadioProfile.RxTone,
+                                                 InstallerModel.RadioProfile.Volume,
+                                                 InstallerModel.RadioProfile.PreEmph,
+                                                 InstallerModel.RadioProfile.HightPass,
+                                                 InstallerModel.RadioProfile.LowPass,
+                                                 InstallerModel.RadioProfile.SquelchDetection);
+                var result = await Mediatr.Send(command);
+
+                await result.MatchAsync(
+                    SuccAsync: async success =>
+                    {
+                        NavigationManager.NavigateTo("Identity/Account/Login", true);
+                        return ShowSuccessToastAsync("Installation", "Installation reussie.");
+                    },
+                    Fail: error => 
+                    {
+                        return ShowErrorToastAsync("Erreur", error.ToFullArrayString());
+                    }
+                 );
+
+                //if (InstallerModel.UpdateToLastRelease)
+                //    Update();
+                //else
+                //{
+                //    var resultStart = await Mediatr.Send(new StartDefaultChannelCommand(Options.Value.ConfigId));
+                //    NavigationManager.NavigateTo("Identity/Account/Login", true);
+                //}
             }
             catch (Exception e)
             {
                 Logger.LogError($"Erreur lors de l'intallation. {e.Message}");
-            }
-        }
-
-        private async Task ApplyRadioProfilAsync(Guid radioGuid)
-        {
-            try
-            {
-                Logger.LogInformation("Application du profil radio.");
-
-                await Mediatr.Send(new ApplyRadioProfilCommand(Options.Value.ConfigId, radioGuid));
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, "Impossible d'appliquer le profil radio.");
-                throw new Exception("Impossible d'appliquer le profil radio.", ex);
-            }
-        }
-
-        /// <summary>Crée le profil radio et programme le SA818 si necessaire</summary>
-        /// <exception cref="Exception">Impossible de créer le profil radio</exception>
-        private async Task<Guid> CreateRadioProfileAsync()
-        {
-            try
-            {
-                Logger.LogInformation("Installation du profil radio.");
-
-                var radioGuid = await Mediatr.Send(new CreateRadioProfilCommand(
-                    Options.Value.ConfigId,
-                    InstallerModel.RadioProfile.Name,
-                    InstallerModel.RadioProfile.RxFequ,
-                    InstallerModel.RadioProfile.TxFrequ,
-                    InstallerModel.RadioProfile.Squelch,
-                    InstallerModel.RadioProfile.TxTone,
-                    InstallerModel.RadioProfile.RxTone,
-                    InstallerModel.RadioProfile.Volume,
-                    InstallerModel.RadioProfile.PreEmph,
-                    InstallerModel.RadioProfile.HightPass,
-                    InstallerModel.RadioProfile.LowPass,
-                    InstallerModel.RadioProfile.SquelchDetection
-                ));
-
-                OnCreateRadioProfile?.Invoke();
-
-                return radioGuid;
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e, "Impossible de créer le profil radio");
-                throw new Exception("Impossible de créer le profil radio", e);
-            }
-        }
-
-        /// <summary>Définition du salon par défaut</summary>
-        /// <exception cref="Exception">Impossible de définir le salon par défaut.</exception>
-        private async Task SetDefaultChannelAsync()
-        {
-            try
-            {
-                Logger.LogInformation("Configuration du salon par défaut.");
-
-                await Mediatr.Send(new SetDefaultChannelCommand(Options.Value.ConfigId, InstallerModel.DefaultChannel.Id));
-
-                OnSetDefaultChannel?.Invoke();
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Impossible de définir le salon par défaut.", e);
-            }
-        }
-
-        /// <summary>Installe les salons</summary>
-        /// <exception cref="Exception">Impossible de définir les salons à installer</exception>
-        private async Task InstallChannelsAsync()
-        {
-            try
-            {
-                Logger.LogInformation("Installation des salons.");
-
-                await Mediatr.Send(new InstallChannelsCommand(Options.Value.ConfigId, InstallerModel.ChannelsToPreserved.Select(c => c.Id), InstallerModel.CallSign, InstallerModel.AnnonceCallSign));
-
-                OnInstallChannels?.Invoke();
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Impossible de définir les salons à installer", e);
-            }
-        }
-
-        /// <summary>Ajout l'utilisateur admin</summary>
-        /// <exception cref="Exception">Impossible de créer l'utilisateur par défaut.</exception>
-        private void SeedUser()
-        {
-            try
-            {
-                Logger.LogInformation("Installation de l'utilisateur par défaut.");
-
-                var user = new ApplicationUser
-                {
-                    UserName = InstallerModel.UserName,
-                    Email = InstallerModel.UserName
-                };
-
-                var result = UserManager.CreateAsync(user, InstallerModel.Password).Result;
-
-                if (result.Succeeded)
-                    UserManager.AddToRoleAsync(user, "Admin").Wait();
-
-                OnSetUser?.Invoke();
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Impossible de créer l'utilisateur par défaut.", e);
             }
         }
 
