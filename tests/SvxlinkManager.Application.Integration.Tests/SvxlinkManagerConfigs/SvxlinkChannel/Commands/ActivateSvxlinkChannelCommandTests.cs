@@ -27,8 +27,9 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
             {
                 // Arrange
                 var install = await CreateDefaultConfigAsync();
+                ClearReceivedCalls();
 
-                var toto = svxlinkManagerConfigRepository.GetConfig(configGuid)
+               _ = svxlinkManagerConfigRepository.GetConfig(configGuid)
                     .Map(config => new ApplyRadioProfilCommand(configGuid, config.RadioProfiles.First().Id))
                     .Map(async x => await mediatr.Send(x));
 
@@ -38,10 +39,14 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
 
                 // Assert
                 var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
+
+                var calls = GetReceivedCalls();
+
                 await Verify(new
                 {
                     result,
-                    config
+                    config, 
+                    calls
                 });
             }
             catch (Exception ex)
@@ -63,7 +68,7 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
                 // Arrange
                 var install = await CreateDefaultConfigAsync();
 
-                var toto = svxlinkManagerConfigRepository.GetConfig(configGuid)
+                _ = svxlinkManagerConfigRepository.GetConfig(configGuid)
                     .Map(config => new ApplyRadioProfilCommand(configGuid, config.RadioProfiles.First().Id))
                     .Map(async x => await mediatr.Send(x));
 

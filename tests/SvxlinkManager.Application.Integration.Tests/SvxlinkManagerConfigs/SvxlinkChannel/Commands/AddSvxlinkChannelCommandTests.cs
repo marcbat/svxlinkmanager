@@ -21,21 +21,23 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
                 var soundFile = FileToByteArray(Path.Combine(assemblyPath, "assets", "StarWars3.wav"));
 
                 var install = await CreateDefaultConfigAsync();
-                var addSvxlinkChannelCommand = new AddSvxlinkChannelCommand(configGuid, "Test", "localhost", "Test", "Test", 8080, "Test", "Test", soundFile);
+                ClearReceivedCalls();
 
-                sa818Service.ClearReceivedCalls();
-                svxlinkService.ClearReceivedCalls();
-
+                var command = new AddSvxlinkChannelCommand(configGuid, "Test", "localhost", "Test", "Test", 8080, "Test", "Test", soundFile);
+                
                 // act
-                var result = await mediatr.Send(addSvxlinkChannelCommand);
-               
+                var result = await mediatr.Send(command);
+
                 // assert
                 var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
+
+                var calls = GetReceivedCalls();
 
                 await Verify(new
                 {
                     result,
-                    config
+                    config,
+                    calls
                 });
             }
             catch (Exception ex)
@@ -47,8 +49,6 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
                File.Delete(db);
             }
         }
-        
-
 
     }
 }

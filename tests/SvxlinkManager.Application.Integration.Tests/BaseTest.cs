@@ -62,23 +62,26 @@ namespace SvxlinkManager.Application.Integration.Tests
             // Mockup services
             db = Path.Combine("db", $"{TestContext.CurrentContext.Test.ClassName}.{TestContext.CurrentContext.Test.MethodName}.db");
             services.AddSingleton<IOptions<SvxlinkManagerOptions>>(x => new FakeOptions(db));
+            
             services.AddSingleton(Substitute.For<ISa818Service>());
             services.AddSingleton(Substitute.For<ISvxlinkServiceBase>());
             services.AddScoped(x => Substitute.For<IAuthentificationService>());
 
+            // build service provider
             var serviceProvider = services.BuildServiceProvider();
 
+            // get services
             mediatr = serviceProvider.GetRequiredService<IMediator>();
             svxlinkManagerConfigRepository = serviceProvider.GetRequiredService<ISvxlinkManagerConfigRepository>();
             sa818Service = serviceProvider.GetRequiredService<ISa818Service>();
             svxlinkService = serviceProvider.GetRequiredService<ISvxlinkServiceBase>();
             authentificationService = serviceProvider.GetRequiredService<IAuthentificationService>();
 
+            // configure services
             sa818Service.WriteRadioProfile(Arg.Any<RadioProfil>()).Returns(LanguageExt.Unit.Default);
             svxlinkService.StopSvxlink().Returns(LanguageExt.Unit.Default);
-            svxlinkService.StartSvxlink(Arg.Any<SvxlinkChannel>(), false, null, Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(LanguageExt.Unit.Default);
+            svxlinkService.StartSvxlink(Arg.Any<Domain.Entities.SvxlinkChannel>(), false, null, Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(LanguageExt.Unit.Default);
             authentificationService.SeedUser(Arg.Any<string>(), Arg.Any<string>()).Returns(string.Empty);
-
         }
 
         protected async Task<Validation<Error, Guid>> CreateDefaultConfigAsync()
@@ -113,6 +116,24 @@ namespace SvxlinkManager.Application.Integration.Tests
             }
 
             return File.ReadAllBytes(filePath);
+        }
+
+        protected IEnumerable<object> GetReceivedCalls()
+        {
+            return authentificationService.ReceivedCalls()
+                                .Concat(sa818Service.ReceivedCalls())
+                                .Concat(svxlinkService.ReceivedCalls())
+                                .Where(x => !x.GetMethodInfo().IsSpecialName)
+                                .Select(x => new { reflected = x.GetMethodInfo().ReflectedType?.Name, name = x.GetMethodInfo().Name, sequence = x.GetSequenceNumber(), arguments = x.GetArguments() })
+                                .OrderBy(x => x.sequence)
+                                .Select(x => new { x.reflected, x.name, x.arguments });
+        }
+
+        protected void ClearReceivedCalls()
+        {
+            authentificationService.ClearReceivedCalls();
+            sa818Service.ClearReceivedCalls();
+            svxlinkService.ClearReceivedCalls();
         }
     }
 

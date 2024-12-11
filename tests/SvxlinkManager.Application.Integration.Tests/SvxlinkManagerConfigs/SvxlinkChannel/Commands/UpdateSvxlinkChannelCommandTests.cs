@@ -21,6 +21,7 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
                 // arrange
                 var soundFile = FileToByteArray(Path.Combine(assemblyPath, "assets", "StarWars3.wav"));
                 var install = await CreateDefaultConfigAsync();
+                ClearReceivedCalls();
 
                 var command = new UpdateSvxlinkChannelCommand(configGuid, installChannels.First(), "TestUpdate", "localhostUpdate", "CallsignUpdate", "AuthUpdated", 5050, "ReportCallUpdated", "SoudNameUpdated", soundFile);
 
@@ -30,10 +31,7 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
                 // assert
                 var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
 
-                var calls = svxlinkService.ReceivedCalls()
-                    .Select(x => new { name = x.GetMethodInfo().Name, sequence = x.GetSequenceNumber(), arguments = x.GetArguments() })
-                    .OrderBy(x => x.sequence)
-                    .Select(x => new { x.name, x.arguments });
+                var calls = GetReceivedCalls();
 
                 await Verify(new
                 {

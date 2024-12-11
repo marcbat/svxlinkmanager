@@ -144,6 +144,7 @@
   ],
   calls: [
     {
+      reflected: IAuthentificationService,
       name: SeedUser,
       arguments: [
         marcbat79@gmail.com,
@@ -151,6 +152,7 @@
       ]
     },
     {
+      reflected: ISa818Service,
       name: WriteRadioProfile,
       arguments: [
         {
@@ -175,9 +177,11 @@
       ]
     },
     {
+      reflected: ISvxlinkServiceBase,
       name: StopSvxlink
     },
     {
+      reflected: ISvxlinkServiceBase,
       name: StartSvxlink,
       arguments: [
         {

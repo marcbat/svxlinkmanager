@@ -20,6 +20,7 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
             {
                 // arrange
                 var install = await CreateDefaultConfigAsync();
+                ClearReceivedCalls();
 
                 var command = new DeleteSvxlinkChannelCommand(configGuid, installChannels[1]);
 
@@ -29,10 +30,13 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
                 // assert
                 var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
 
+                var calls = GetReceivedCalls();
+
                 await Verify(new
                 {
                     result,
-                    config
+                    config,
+                    calls
                 });
             }
             catch (Exception ex)

@@ -1,5 +1,7 @@
 ﻿using NSubstitute;
 
+using SvxlinkManager.Domain.Entities;
+
 namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Installer
 {
     public class InstallCommandTests : BaseTest
@@ -15,12 +17,7 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Ins
                 // assert
                 var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
 
-                var calls = authentificationService.ReceivedCalls()
-                    .Concat(sa818Service.ReceivedCalls())
-                    .Concat(svxlinkService.ReceivedCalls())
-                    .Select(x => new { name = x.GetMethodInfo().Name, sequence = x.GetSequenceNumber(), arguments = x.GetArguments() })
-                    .OrderBy(x => x.sequence)
-                    .Select(x => new { x.name, x.arguments });
+                IEnumerable<object> calls = GetReceivedCalls();
 
                 await Verify(new
                 {
@@ -38,6 +35,8 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Ins
                 File.Delete(db);
             }
         }
+
+        
     }
 
 
