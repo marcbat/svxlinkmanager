@@ -19,11 +19,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
     public record UpdateSvxlinkChannelCommand(Guid ConfigId, Guid ChannelId, string Name, string Host, string CallSign, string AuthKey, int Port, string ReportCallSign, string? SoundName, byte[]? SoundFile) : IRequest<Validation<Error, Guid>>;
 
     internal class UpdateSvxlinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,
-                                                         ISoundRepository soundRepository,
+                                                         ISoundRepository soundRepository, ChannelService channelService,
                                                          ILogger<AddSvxlinkChannelCommandHandler> logger) : IRequestHandler<UpdateSvxlinkChannelCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
         private readonly ISoundRepository soundRepository = soundRepository;
+        private readonly ChannelService channelService = channelService;
         private readonly ILogger<AddSvxlinkChannelCommandHandler> logger = logger;
 
         public Task<Validation<Error, Guid>> Handle(UpdateSvxlinkChannelCommand request, CancellationToken cancellationToken)
@@ -34,6 +35,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
             var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
                          from _ in config.UpdateSvxlinkChannel(request.ChannelId, request.Name, request.Host, request.CallSign, request.AuthKey, request.Port, request.ReportCallSign)
                          from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                         from ___ in channelService.ActivateChannel(config.Id,request.ChannelId)
                          select config.Id;
 
             logger.LogInformation("Un svxlink channel a été mis à jour avec succès.");

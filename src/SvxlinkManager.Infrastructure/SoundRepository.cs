@@ -52,5 +52,37 @@ namespace SvxlinkManager.Infrastructure
             
 
         }
+
+        public Validation<Error, Unit> DeleteAsync(string name)
+        {
+            try
+            {
+                using var db = new LiteDatabase(options.LiteDbFile);
+
+                var fs = db.FileStorage;
+
+                fs.Delete($"$/sounds/{name}");
+
+                return Unit.Default;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erreur lors de la suppression du fichier son.");
+                return Error.New("Erreur lors de la suppression du fichier son.");
+            }
+        }
+
+        public Validation<Error, Unit> UpdateAsyc(string name, Sound sound)
+        {
+            try
+            {
+               throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erreur lors de la mise à jour du fichier son.");
+                return Error.New("Erreur lors de la mise à jour du fichier son.");
+            }
+        }
     }
 }

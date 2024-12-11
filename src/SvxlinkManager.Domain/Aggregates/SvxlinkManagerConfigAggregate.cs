@@ -86,6 +86,12 @@ namespace SvxlinkManager.Domain.Aggregates
             if (svxlinkChannel is null)
                 return Error.New("Canal Svxlink introuvable");
 
+            if(svxlinkChannel.IsDefault)
+                return Error.New("Impossible de supprimer le canal par défaut.");
+
+            if(svxlinkChannel.IsActive)
+                return Error.New("Impossible de supprimer le canal actif.");
+
             svxlinkChannels.Remove(svxlinkChannel);
 
             return Unit.Default;

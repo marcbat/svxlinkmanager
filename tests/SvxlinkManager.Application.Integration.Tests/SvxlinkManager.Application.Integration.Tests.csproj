@@ -36,6 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="assets\StarWars3.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="InstallCommandTests.AddSvxlinkChannelCommand_WhenIsValid_ShouldAddNewSvxlinkChannel.verified.txt">
       <DependentUpon>InstallCommandTests.cs</DependentUpon>
     </None>
@@ -48,7 +51,7 @@
     <None Update="InstallCommandTests.InstallChannelsCommand_WhenIsValid_ShouldInstallChannels.verified.txt">
       <DependentUpon>InstallCommandTests.cs</DependentUpon>
     </None>
-    <None Update="InstallCommandTests.InstallCommand_WhenValid_ShouldInstall.verified.txt">
+    <None Update="SvxlinkManagerConfigs\Installer\InstallCommandTests.InstallCommand_WhenValid_ShouldInstall.verified.txt">
       <DependentUpon>InstallCommandTests.cs</DependentUpon>
     </None>
     <None Update="InstallCommandTests.SetDefaultChannelCommand_WhenIsValid_ShoudSetDefaultChannel.verified.txt">

@@ -12,16 +12,16 @@
       Success: {
         SvxlinkChannels: [
           {
-            AuthKey: Magnifique123456789!,
-            Port: 5300,
-            ReportCallSign: Fake AnnonceCallSign,
-            Host: rrf2.f5nlg.ovh,
-            CallSign: Fake CallSign,
+            AuthKey: AuthUpdated,
+            Port: 5050,
+            ReportCallSign: ReportCallUpdated,
+            Host: localhostUpdate,
+            CallSign: CallsignUpdate,
             IsDefault: true,
             IsTemporized: false,
             TimerDelay: 180,
             IsActive: false,
-            Name: Réseau des Répéteurs Francophones,
+            Name: TestUpdate,
             Id: Guid_2
           },
           {
@@ -140,6 +140,60 @@
         Id: Guid_1
       },
       Fail: null
+    }
+  ],
+  calls: [
+    {
+      name: StopSvxlink
+    },
+    {
+      name: StartSvxlink,
+      arguments: [
+        {
+          AuthKey: Magnifique123456789!,
+          Port: 5300,
+          ReportCallSign: Fake AnnonceCallSign,
+          Host: rrf2.f5nlg.ovh,
+          CallSign: Fake CallSign,
+          IsDefault: true,
+          IsTemporized: false,
+          TimerDelay: 180,
+          IsActive: false,
+          Name: Réseau des Répéteurs Francophones,
+          Id: Guid_2
+        },
+        false,
+        null,
+        {CurrentDirectory}/SvxlinkConfig/svxlink.conf,
+        /var/run/svxlink.pid,
+        root
+      ]
+    },
+    {
+      name: StopSvxlink
+    },
+    {
+      name: StartSvxlink,
+      arguments: [
+        {
+          AuthKey: AuthUpdated,
+          Port: 5050,
+          ReportCallSign: ReportCallUpdated,
+          Host: localhostUpdate,
+          CallSign: CallsignUpdate,
+          IsDefault: true,
+          IsTemporized: false,
+          TimerDelay: 180,
+          IsActive: false,
+          Name: TestUpdate,
+          Id: Guid_2
+        },
+        false,
+        null,
+        {CurrentDirectory}/SvxlinkConfig/svxlink.conf,
+        /var/run/svxlink.pid,
+        root
+      ]
     }
   ]
 }

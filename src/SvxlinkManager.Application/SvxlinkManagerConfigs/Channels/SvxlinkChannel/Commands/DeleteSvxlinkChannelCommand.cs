@@ -19,28 +19,31 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChann
     internal class DeleteSvxlinkChannelCommandHandler : IRequestHandler<DeleteSvxlinkChannelCommand, Validation<Error, Guid>>
     {
         private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
+        private readonly ISoundRepository soundRepository;
         private readonly ILogger<DeleteSvxlinkChannelCommandHandler> logger;
 
-        public DeleteSvxlinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<DeleteSvxlinkChannelCommandHandler> logger)
+        public DeleteSvxlinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ISoundRepository soundRepository, ILogger<DeleteSvxlinkChannelCommandHandler> logger)
         {
             this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
+            this.soundRepository = soundRepository;
             this.logger = logger;
         }
 
         public Task<Validation<Error, Guid>> Handle(DeleteSvxlinkChannelCommand request, CancellationToken cancellationToken)
         {
-            
-                logger.LogInformation("Suppression du svxlink channel.");
 
-                var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
-                             from channel in config.GetSvxlinkChannel(request.ChannelGuid)
-                             from _ in config.DeleteSvxlinkChannel(request.ChannelGuid)
-                             select config.Id;
+            logger.LogInformation("Suppression du svxlink channel.");
 
-                logger.LogInformation("Svxlink channel supprimé.");
+            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
+                         from channel in config.GetSvxlinkChannel(request.ChannelGuid)
+                         from _ in config.DeleteSvxlinkChannel(request.ChannelGuid)
+                         from __ in soundRepository.DeleteAsync(channel.Name)
+                         from ___ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                         select config.Id;
 
-                return Task.FromResult(result);
+            logger.LogInformation("Svxlink channel supprimé.");
+
+            return Task.FromResult(result);
         }
     }
-
 }
