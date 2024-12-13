@@ -1,5 +1,5 @@
 ﻿{
-  result: [
+  install: [
     {
       State: Success,
       Success: Guid_1,
@@ -144,9 +144,15 @@
   ],
   calls: [
     {
-      reflected: ISa818Service,
-      name: WriteRadioProfile,
-      arguments: [
+      Method: IAuthentificationService.SeedUser(string userName, string password),
+      Arguments: [
+        marcbat79@gmail.com,
+        Pa$$w0rd
+      ]
+    },
+    {
+      Method: ISa818Service.WriteRadioProfile(RadioProfil radioProfile),
+      Arguments: [
         {
           HasSa818: true,
           Name: Fake Name,
@@ -169,13 +175,11 @@
       ]
     },
     {
-      reflected: ISvxlinkServiceBase,
-      name: StopSvxlink
+      Method: ISvxlinkServiceBase.StopSvxlink()
     },
     {
-      reflected: ISvxlinkServiceBase,
-      name: StartSvxlink,
-      arguments: [
+      Method: ISvxlinkServiceBase.StartSvxlink(ChannelBase channel, bool runAsDaemon, string logFile, string configFile, string pidFile, string runAs),
+      Arguments: [
         {
           AuthKey: Magnifique123456789!,
           Port: 5300,

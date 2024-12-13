@@ -38,7 +38,7 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
                     result,
                     config,
                     calls
-                });
+                }, settings);
             }
             catch (Exception ex)
             {

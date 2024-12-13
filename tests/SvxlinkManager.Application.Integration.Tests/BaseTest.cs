@@ -12,13 +12,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using System.Xml.XPath;
-using SvxlinkManager.Application.SvxlinkManagerConfigs;
 using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands;
 using LanguageExt;
 using LanguageExt.Common;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using NSubstitute.Core;
 
 namespace SvxlinkManager.Application.Integration.Tests
 {
@@ -46,9 +46,19 @@ namespace SvxlinkManager.Application.Integration.Tests
                 Guid.Parse("dcc5afa2-790f-40ca-b24d-bf91e90b1ac7")
             ];
 
+        protected VerifySettings settings;
+
+        [ModuleInitializer]
+        public static void Init() =>
+            VerifyNSubstitute.Initialize();
+
         [SetUp]
         public void Setup()
         {
+            settings = new VerifySettings();
+            settings.UseDirectory(Path.Combine("snapshots"));
+            //settings.AutoVerify();
+
             IServiceCollection services = new ServiceCollection();
 
             services.AddLogging(cfg => cfg.AddConsole());
@@ -118,15 +128,14 @@ namespace SvxlinkManager.Application.Integration.Tests
             return File.ReadAllBytes(filePath);
         }
 
-        protected IEnumerable<object> GetReceivedCalls()
+        protected IEnumerable<ICall> GetReceivedCalls()
         {
             return authentificationService.ReceivedCalls()
                                 .Concat(sa818Service.ReceivedCalls())
                                 .Concat(svxlinkService.ReceivedCalls())
                                 .Where(x => !x.GetMethodInfo().IsSpecialName)
-                                .Select(x => new { reflected = x.GetMethodInfo().ReflectedType?.Name, name = x.GetMethodInfo().Name, sequence = x.GetSequenceNumber(), arguments = x.GetArguments() })
-                                .OrderBy(x => x.sequence)
-                                .Select(x => new { x.reflected, x.name, x.arguments });
+                                .OrderBy(x => x.GetSequenceNumber());
+                                
         }
 
         protected void ClearReceivedCalls()

@@ -24,7 +24,7 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Ins
                     install,
                     config,
                     calls
-                });
+                }, settings);
             }
             catch (Exception ex)
             {

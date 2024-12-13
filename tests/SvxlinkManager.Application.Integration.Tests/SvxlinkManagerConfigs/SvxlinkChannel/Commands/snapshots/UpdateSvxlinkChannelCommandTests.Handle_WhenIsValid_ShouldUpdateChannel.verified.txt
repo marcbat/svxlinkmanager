@@ -144,13 +144,11 @@
   ],
   calls: [
     {
-      reflected: ISvxlinkServiceBase,
-      name: StopSvxlink
+      Method: ISvxlinkServiceBase.StopSvxlink()
     },
     {
-      reflected: ISvxlinkServiceBase,
-      name: StartSvxlink,
-      arguments: [
+      Method: ISvxlinkServiceBase.StartSvxlink(ChannelBase channel, bool runAsDaemon, string logFile, string configFile, string pidFile, string runAs),
+      Arguments: [
         {
           AuthKey: AuthUpdated,
           Port: 5050,
