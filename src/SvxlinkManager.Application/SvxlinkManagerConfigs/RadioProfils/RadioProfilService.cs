@@ -88,7 +88,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils
             if (radioProfil.HasSa818)
                 return sa818Service.WriteRadioProfile(radioProfil);
 
-            return Unit.Default;
+            return Unit.Default; 
         }
     }
 }

@@ -44,4 +44,5 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Queries
            
         }
     }
-}
+} 
+ 

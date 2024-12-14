@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Application.Integration.Tests.SMC.RP
+namespace SvxlinkManager.Application.Integration.Tests.SMC.RP.Commands
 {
     internal class DeleteRadioProfilCommandTests : BaseTest
     {

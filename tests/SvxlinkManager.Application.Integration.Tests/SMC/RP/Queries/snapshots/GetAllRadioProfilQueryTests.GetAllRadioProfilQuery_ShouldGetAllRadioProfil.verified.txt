@@ -1,11 +1,29 @@
 ﻿{
   result: [
     {
-      Fail: [
+      State: Success,
+      Success: [
         {
-          Message: Profil radio introuvable.
+          HasSa818: true,
+          Name: Fake Name,
+          RxFequency: 123.450,
+          TxFrequency: 543.210,
+          Squelch: 5,
+          TxCtcss: 67,
+          InternalTxCtcss: 0001,
+          RxCtCss: 88.5,
+          InternalRxCtCss: 0008,
+          Volume: 10,
+          PreEmph: 0.5,
+          HightPass: 100,
+          LowPass: 10000,
+          SquelchDetection: true,
+          Enable: true,
+          IsActive: true,
+          Id: Guid_1
         }
-      ]
+      ],
+      Fail: null
     }
   ],
   config: [
@@ -24,7 +42,7 @@
             TimerDelay: 180,
             IsActive: false,
             Name: Réseau des Répéteurs Francophones,
-            Id: Guid_1
+            Id: Guid_2
           },
           {
             AuthKey: xD9wW5gO7yD9hN5o,
@@ -37,7 +55,7 @@
             TimerDelay: 180,
             IsActive: false,
             Name: Salon Suisse Romand,
-            Id: Guid_2
+            Id: Guid_3
           },
           {
             AuthKey: FON-F1TZO,
@@ -50,7 +68,7 @@
             TimerDelay: 180,
             IsActive: false,
             Name: French Open Network,
-            Id: Guid_3
+            Id: Guid_4
           },
           {
             AuthKey: Magnifique123456789!,
@@ -63,7 +81,7 @@
             TimerDelay: 180,
             IsActive: false,
             Name: Salon Technique,
-            Id: Guid_4
+            Id: Guid_5
           },
           {
             AuthKey: Magnifique123456789!,
@@ -76,7 +94,7 @@
             TimerDelay: 180,
             IsActive: false,
             Name: Salon International,
-            Id: Guid_5
+            Id: Guid_6
           },
           {
             AuthKey: FON-F1TZO,
@@ -89,7 +107,7 @@
             TimerDelay: 180,
             IsActive: false,
             Name: Salon Bavardage,
-            Id: Guid_6
+            Id: Guid_7
           },
           {
             AuthKey: FON-F1TZO,
@@ -102,7 +120,7 @@
             TimerDelay: 180,
             IsActive: false,
             Name: Salon Local,
-            Id: Guid_7
+            Id: Guid_8
           },
           {
             AuthKey: Magnifique123456789!,
@@ -115,7 +133,7 @@
             TimerDelay: 180,
             IsActive: false,
             Name: Salon Expérimental,
-            Id: Guid_8
+            Id: Guid_9
           }
         ],
         RadioProfiles: [
@@ -136,7 +154,7 @@
             SquelchDetection: true,
             Enable: true,
             IsActive: true,
-            Id: Guid_9
+            Id: Guid_1
           }
         ],
         Id: Guid_10
