@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Installer;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils;
 
@@ -14,6 +15,7 @@ namespace SvxlinkManager.Application
             services.AddSingleton<ChannelService>();
             services.AddScoped<InstallerService>();
             services.AddScoped<RadioProfilService>();
+            services.AddScoped<EcholinkService>();
 
             return services;
         }

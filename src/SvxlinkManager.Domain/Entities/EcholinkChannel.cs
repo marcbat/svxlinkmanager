@@ -11,6 +11,11 @@ namespace SvxlinkManager.Domain.Entities
 {
     public class EcholinkChannel : Channel
     {
+        public EcholinkChannel() 
+        {
+            
+        }
+
         internal EcholinkChannel(Guid id, string name, string host, string callSign, string password, string sysopName, string location, int maxQso, string description) : base(id, name, host, callSign)
         {
             Password = password;

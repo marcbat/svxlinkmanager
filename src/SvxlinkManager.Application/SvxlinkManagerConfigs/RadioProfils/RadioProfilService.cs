@@ -1,6 +1,7 @@
 ﻿using LanguageExt;
 using LanguageExt.Common;
 using LanguageExt.Pipes;
+
 using SvxlinkManager.Application.Interfaces;
 using SvxlinkManager.Domain.Entities;
 
@@ -89,6 +90,13 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils
                 return sa818Service.WriteRadioProfile(radioProfil);
 
             return Unit.Default; 
+        }
+
+        public Validation<Error, RadioProfil> GetRadioProfilById(Guid configId, Guid profilId)
+        {
+            return from config in svxlinkManagerConfigRepository.GetConfig(configId)
+                   from radioProfil in config.GetRadioProfil(profilId)
+                   select radioProfil;
         }
     }
 }

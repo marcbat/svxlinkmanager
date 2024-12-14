@@ -22,16 +22,14 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
 
     internal class AddEcholinkChannelCommandHandler : IRequestHandler<AddEcholinkChannelCommand, Validation<Error, Guid>>
     {
-        private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
-        private readonly ISoundRepository soundRepository;
+        private readonly EcholinkService echolinkService;
         private readonly ILogger<AddEcholinkChannelCommandHandler> logger;
 
-        public AddEcholinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,
-                                                ISoundRepository soundRepository,
+        public AddEcholinkChannelCommandHandler(EcholinkService echolinkService,
                                                 ILogger<AddEcholinkChannelCommandHandler> logger)
         {
-            this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
-            this.soundRepository = soundRepository;
+           
+            this.echolinkService = echolinkService;
             this.logger = logger;
         }
 
@@ -40,12 +38,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
 
             logger.LogInformation("Ajout d'un nouveau echolink channel.");
 
-            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
-                         from Sound in CreateSound(request.SoundName, request.SoundFile)
-                         from channel in EcholinkChannel.Create(Guid.NewGuid(), request.Name, request.Host, request.CallSign, request.Password, request.SysopName, request.Location, request.MaxQso, request.Description)
-                         from _ in config.AddEcholinkChannel(channel)
-                         from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
-                         select config.Id;
+            var result = echolinkService.AddEcholink(request.ConfigId, request.SoundName, request.SoundFile, Guid.NewGuid(), request.Name, request.Host, request.CallSign, request.Password, request.SysopName, request.Location, request.MaxQso, request.Description);
 
             logger.LogInformation("Un nouveau echolink channel a été ajouté avec succès.");
 
@@ -53,10 +46,6 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
 
         }
 
-        private Validation<Error, LanguageExt.Unit> CreateSound(string soundName, byte[] soundFile)
-        {
-            return Sound.Create($"$/sounds/{soundName}", soundName, soundFile)
-                .Bind(soundRepository.CreateAsyc);
-        }
+       
     }
 }
