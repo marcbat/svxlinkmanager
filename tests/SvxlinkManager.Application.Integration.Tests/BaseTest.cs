@@ -14,11 +14,13 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SvxlinkManager.Domain.Entities;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Installer.Commands;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels;
 using LanguageExt;
 using LanguageExt.Common;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using NSubstitute.Core;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.Installer;
 
 namespace SvxlinkManager.Application.Integration.Tests
 {
@@ -33,6 +35,8 @@ namespace SvxlinkManager.Application.Integration.Tests
         protected ISa818Service sa818Service;
         protected ISvxlinkServiceBase svxlinkService;
         protected IAuthentificationService authentificationService;
+        private ChannelService channelService;
+        private InstallerService installerService;
         protected string db;
 
         protected List<Guid> installChannels = [
@@ -86,6 +90,8 @@ namespace SvxlinkManager.Application.Integration.Tests
             sa818Service = serviceProvider.GetRequiredService<ISa818Service>();
             svxlinkService = serviceProvider.GetRequiredService<ISvxlinkServiceBase>();
             authentificationService = serviceProvider.GetRequiredService<IAuthentificationService>();
+            channelService = serviceProvider.GetRequiredService<ChannelService>();
+            installerService = serviceProvider.GetRequiredService<InstallerService>();
 
             // configure services
             sa818Service.WriteRadioProfile(Arg.Any<RadioProfil>()).Returns(LanguageExt.Unit.Default);
@@ -94,9 +100,10 @@ namespace SvxlinkManager.Application.Integration.Tests
             authentificationService.SeedUser(Arg.Any<string>(), Arg.Any<string>()).Returns(string.Empty);
         }
 
-        protected async Task<Validation<Error, Guid>> CreateDefaultConfigAsync()
+        protected Validation<Error, Guid> CreateDefaultConfig()
         {
-            var installSvxlinkCommand = new InstallCommand("marcbat79@gmail.com",
+
+            return installerService.InstallSvxlinkManager("marcbat79@gmail.com",
                                                             "Pa$$w0rd",
                                                             configGuid,
                                                             installChannels,
@@ -115,7 +122,7 @@ namespace SvxlinkManager.Application.Integration.Tests
                                                             "10000",
                                                             "true");
 
-            return await mediatr.Send(installSvxlinkCommand);
+            
         }
 
         protected static byte[] FileToByteArray(string filePath)

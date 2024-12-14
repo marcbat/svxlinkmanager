@@ -2,7 +2,7 @@
 
 using SvxlinkManager.Domain.Entities;
 
-namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Installer
+namespace SvxlinkManager.Application.Integration.Tests.SMC.C.Installer
 {
     public class InstallCommandTests : BaseTest
     {
@@ -12,7 +12,7 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Ins
             try
             {
                 // arrange
-                var install = await CreateDefaultConfigAsync();
+                var install = CreateDefaultConfig();
 
                 // assert
                 var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
@@ -36,7 +36,7 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Ins
             }
         }
 
-        
+
     }
 
 

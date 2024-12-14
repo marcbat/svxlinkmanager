@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.SvxlinkChannel.Commands
+namespace SvxlinkManager.Application.Integration.Tests.SMC.Channles.SvxlinkChannel.Commands
 {
     public class ActivateSvxlinkChannelCommandTests : BaseTest
     {
@@ -26,12 +26,12 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
             try
             {
                 // Arrange
-                var install = await CreateDefaultConfigAsync();
+                var install = CreateDefaultConfig();
                 ClearReceivedCalls();
 
-               _ = svxlinkManagerConfigRepository.GetConfig(configGuid)
-                    .Map(config => new ApplyRadioProfilCommand(configGuid, config.RadioProfiles.First().Id))
-                    .Map(async x => await mediatr.Send(x));
+                _ = svxlinkManagerConfigRepository.GetConfig(configGuid)
+                     .Map(config => new ApplyRadioProfilCommand(configGuid, config.RadioProfiles.First().Id))
+                     .Map(async x => await mediatr.Send(x));
 
                 // Act
                 var command = new ActivateSvxlinkChannelCommand(configGuid, Guid.Parse("235a4521-15a1-4e02-a540-91ee600452ac"));
@@ -45,7 +45,7 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
                 await Verify(new
                 {
                     result,
-                    config, 
+                    config,
                     calls
                 }, settings);
             }
@@ -66,7 +66,7 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
             try
             {
                 // Arrange
-                var install = await CreateDefaultConfigAsync();
+                var install = CreateDefaultConfig();
 
                 _ = svxlinkManagerConfigRepository.GetConfig(configGuid)
                     .Map(config => new ApplyRadioProfilCommand(configGuid, config.RadioProfiles.First().Id))

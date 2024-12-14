@@ -294,6 +294,9 @@ namespace SvxlinkManager.Domain.Aggregates
             if(radioProfil is null)
                 return Error.New("Profil radio introuvable.");
 
+            if(radioProfil.IsActive)
+                return Error.New("Impossible de supprimer le profil radio actif.");
+
             radioProfils.Remove(radioProfil);
 
             return Unit.Default;
@@ -369,21 +372,26 @@ namespace SvxlinkManager.Domain.Aggregates
             if (managedChannel is null)
                 return Error.New("Canal introuvable.");
 
-           
-                if (managedChannel is SvxlinkChannel)
-                {
-                    return DeleteSvxlinkChannel(managedChannel.Id);
-                }
-                else if (managedChannel is EcholinkChannel)
-                {
-                    return DeleteEcholinkChannel(managedChannel.Id);
-                }
-                else if (managedChannel is AdvanceSvxlinkChannel)
-                {
-                    return DeleteAdvanceSvxlinkChannel(managedChannel.Id);
-                }
-            
-                return Error.New("Type de canal non supporté.");
+            if(managedChannel.IsActive)
+                return Error.New("Impossible de supprimer le canal actif.");
+
+            if (managedChannel.IsDefault)
+                return Error.New("Impossible de supprimer le canal par défaut.");
+
+            if (managedChannel is SvxlinkChannel)
+            {
+                return DeleteSvxlinkChannel(managedChannel.Id);
+            }
+            else if (managedChannel is EcholinkChannel)
+            {
+                return DeleteEcholinkChannel(managedChannel.Id);
+            }
+            else if (managedChannel is AdvanceSvxlinkChannel)
+            {
+                return DeleteAdvanceSvxlinkChannel(managedChannel.Id);
+            }
+
+            return Error.New("Type de canal non supporté.");
         }
 
         /// <summary>

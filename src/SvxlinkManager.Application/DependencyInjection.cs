@@ -2,6 +2,7 @@
 
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels;
 using SvxlinkManager.Application.SvxlinkManagerConfigs.Installer;
+using SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils;
 
 namespace SvxlinkManager.Application
 {
@@ -12,6 +13,7 @@ namespace SvxlinkManager.Application
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
             services.AddSingleton<ChannelService>();
             services.AddScoped<InstallerService>();
+            services.AddScoped<RadioProfilService>();
 
             return services;
         }

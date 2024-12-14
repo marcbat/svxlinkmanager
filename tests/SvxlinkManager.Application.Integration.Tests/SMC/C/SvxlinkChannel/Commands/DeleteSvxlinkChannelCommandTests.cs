@@ -8,23 +8,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.SvxlinkChannel.Commands
+namespace SvxlinkManager.Application.Integration.Tests.SMC.Channles.SvxlinkChannel.Commands
 {
-    internal class AddSvxlinkChannelCommandTests: BaseTest
+    internal class DeleteSvxlinkChannelCommandTests : BaseTest
     {
+
         [Test]
-        public async Task Handle_WhenValid_ShouldAddSvxlinkChannel()
+        public async Task Handle_WhenValid_ShouldDeleteChannel()
         {
             try
             {
                 // arrange
-                var soundFile = FileToByteArray(Path.Combine(assemblyPath, "assets", "StarWars3.wav"));
-
-                var install = await CreateDefaultConfigAsync();
+                var install = CreateDefaultConfig();
                 ClearReceivedCalls();
 
-                var command = new AddSvxlinkChannelCommand(configGuid, "Test", "localhost", "Test", "Test", 8080, "Test", "Test", soundFile);
-                
+                var command = new DeleteSvxlinkChannelCommand(configGuid, installChannels[1]);
+
                 // act
                 var result = await mediatr.Send(command);
 
@@ -46,9 +45,10 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
             }
             finally
             {
-               File.Delete(db);
+                File.Delete(db);
             }
-        }
 
+
+        }
     }
 }

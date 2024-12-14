@@ -17,12 +17,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
 
     internal class DeleteRadioProfilCommandHandler : IRequestHandler<DeleteRadioProfilCommand, Validation<Error, Guid>>
     {
-        private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
+        private readonly RadioProfilService radioProfilService;
         private readonly ILogger<DeleteRadioProfilCommandHandler> logger;
 
-        public DeleteRadioProfilCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<DeleteRadioProfilCommandHandler> logger)
+        public DeleteRadioProfilCommandHandler(RadioProfilService radioProfilService, ILogger<DeleteRadioProfilCommandHandler> logger)
         {
-            this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
+            this.radioProfilService = radioProfilService;
             this.logger = logger;
         }
 
@@ -31,11 +31,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
 
             logger.LogInformation("Suppression du profil radio.");
 
-            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
-                         from radioProfil in config.GetRadioProfil(request.RadioProfilGuid)
-                         from _ in config.DeleteRadioProfil(request.RadioProfilGuid)
-                         from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
-                         select config.Id;
+            var result = radioProfilService.DeleteRadioProfil(request.ConfigGuid, request.RadioProfilGuid);
 
             logger.LogInformation("Profil radio supprimé.");
 

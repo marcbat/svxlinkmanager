@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.SvxlinkChannel.Commands
+namespace SvxlinkManager.Application.Integration.Tests.SMC.Channles.SvxlinkChannel.Commands
 {
     internal class UpdateSvxlinkChannelCommandTests : BaseTest
     {
@@ -20,7 +20,7 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
 
                 // arrange
                 var soundFile = FileToByteArray(Path.Combine(assemblyPath, "assets", "StarWars3.wav"));
-                var install = await CreateDefaultConfigAsync();
+                var install = CreateDefaultConfig();
                 ClearReceivedCalls();
 
                 var command = new UpdateSvxlinkChannelCommand(configGuid, installChannels.First(), "TestUpdate", "localhostUpdate", "CallsignUpdate", "AuthUpdated", 5050, "ReportCallUpdated", "SoudNameUpdated", soundFile);

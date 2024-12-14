@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels
 {
-    internal class ChannelService
+    public class ChannelService
     {
         private readonly string applicationPath = Directory.GetCurrentDirectory();
 
@@ -35,7 +35,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels
             this.logger = logger;
         }
 
-        public Validation<Error, Guid> ActivateChannel(Guid configId, Guid channelId)
+        internal Validation<Error, Guid> ActivateChannel(Guid configId, Guid channelId)
         {
             return from config in svxlinkManagerConfigRepository.GetConfig(configId)
                          from channel in config.GetSvxlinkChannel(channelId)
@@ -124,7 +124,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels
 
         }
 
-        public Validation<Error,Guid> StartDefaultChannel(Guid configId)
+        internal Validation<Error,Guid> StartDefaultChannel(Guid configId)
         {
             return from config in svxlinkManagerConfigRepository.GetConfig(configId)
                          from channel in config.GetDefaultChannel()

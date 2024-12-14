@@ -23,6 +23,7 @@
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="SvxlinkManager.Application.Tests" />
+		<InternalsVisibleTo Include="SvxlinkManager.Application.Integration.Tests" />
 		<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
 	</ItemGroup>
 

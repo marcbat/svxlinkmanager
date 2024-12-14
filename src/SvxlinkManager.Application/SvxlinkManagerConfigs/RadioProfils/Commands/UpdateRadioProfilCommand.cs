@@ -27,20 +27,16 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
                                string PreEmph,
                                string HighPass,
                                string LowPass,
-                               string SquelchDetection) : IRequest<Validation<Error, Guid>>;
+                               string SquelchDetection) : IRequest<Validation<Error, Guid>>; 
 
     internal class UpdateRadioProfilCommandHandler : IRequestHandler<UpdateRadioProfilCommand, Validation<Error, Guid>>
     {
-        private readonly ISvxlinkManagerConfigRepository _svxlinkManagerConfigRepository;
-        private readonly ISoundRepository _soundRepository;
+        private readonly RadioProfilService radioProfilService;
         private readonly ILogger<UpdateRadioProfilCommandHandler> logger;
 
-        public UpdateRadioProfilCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository,
-                                               ISoundRepository soundRepository,
-                                               ILogger<UpdateRadioProfilCommandHandler> logger)
+        public UpdateRadioProfilCommandHandler(RadioProfilService radioProfilService,  ILogger<UpdateRadioProfilCommandHandler> logger)
         {
-            _svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
-            _soundRepository = soundRepository;
+            this.radioProfilService = radioProfilService;
             this.logger = logger;
         }
 
@@ -49,14 +45,9 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
            
                 logger.LogInformation("Mise à jour d'un profil radio.");
 
-                var result = from config in _svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
-                             from _ in config.DeleteRadioProfil(request.ProfilId)
-                             from radioProfil in RadioProfil.Create(request.ProfilId, request.Name, request.RxFrequency, request.TxFrequency, request.Squelch, request.TxCtcss, request.RxCtCss, request.Volume, request.PreEmph, request.HighPass, request.LowPass, request.SquelchDetection)
-                             from __ in config.AddRadioProfil(radioProfil)
-                             from ___ in _svxlinkManagerConfigRepository.UpdateAsync(config)
-                             select config.Id;
+                var result = radioProfilService.UpdateRadioProfil(request.ConfigId, request.ProfilId, request.Name, request.RxFrequency, request.TxFrequency, request.Squelch, request.TxCtcss, request.RxCtCss, request.Volume, request.PreEmph, request.HighPass, request.LowPass, request.SquelchDetection);
 
-                logger.LogInformation("Un profil radio a été mis à jour avec succès.");
+            logger.LogInformation("Un profil radio a été mis à jour avec succès.");
 
                 return Task.FromResult(result);
             

@@ -1,4 +1,4 @@
-﻿using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.SvxlinkChannel.Queries;
+﻿using SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands;
 
 using System;
 using System.Collections.Generic;
@@ -6,26 +6,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.SvxlinkChannel.Queries
+namespace SvxlinkManager.Application.Integration.Tests.SMC.RP
 {
-    internal class GetAllOriginalChannelsCommandTests : BaseTest
+    internal class AddRadioProfilCommandTests : BaseTest
     {
         [Test]
-        public async Task Handle_WhenIsValid_ShouldReturnOriginalChannels()
+        public async Task AddRadioProfilCommand_ShouldAddRadioProfil()
         {
             try
             {
-                // arrange
-                var install = await CreateDefaultConfigAsync();
+                // Arrange
+                var install = CreateDefaultConfig();
                 ClearReceivedCalls();
 
-                // act
-                var command = new GetAllOriginalChannelsCommand();
+                var command = new AddRadioProfilCommand(configGuid, "AddedRadioProfil", "145.500", "145.800", "1", "67", "88.5", "1", "1", "1", "1", "1");
+
+                // Act
                 var result = await mediatr.Send(command);
-                
-                // assert
+
+                // Assert
                 var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
                 var calls = GetReceivedCalls();
+
                 await Verify(new
                 {
                     result,
@@ -41,6 +43,7 @@ namespace SvxlinkManager.Application.Integration.Tests.SvxlinkManagerConfigs.Svx
             {
                 File.Delete(db);
             }
+
 
         }
     }
