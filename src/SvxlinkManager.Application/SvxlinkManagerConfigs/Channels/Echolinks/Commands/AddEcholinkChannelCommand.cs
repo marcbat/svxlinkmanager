@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Commands
 {
-    public record AddEcholinkChannelCommand(Guid ConfigId, string Name, string Host, string CallSign, string Password, string SysopName, string Location, int MaxQso, string Description, string SoundName, byte[] SoundFile) : IRequest<Validation<Error, Guid>>;
+    public record AddEcholinkChannelCommand(Guid ConfigId, string Name, string Host, string CallSign, string Password, string SysopName, string Location, int MaxQso, string Description) : IRequest<Validation<Error, Guid>>;
 
 
     internal class AddEcholinkChannelCommandHandler : IRequestHandler<AddEcholinkChannelCommand, Validation<Error, Guid>>
@@ -38,11 +38,11 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
 
             logger.LogInformation("Ajout d'un nouveau echolink channel.");
 
-            var result = echolinkService.AddEcholink(request.ConfigId, request.SoundName, request.SoundFile, Guid.NewGuid(), request.Name, request.Host, request.CallSign, request.Password, request.SysopName, request.Location, request.MaxQso, request.Description);
+            var result = echolinkService.AddEcholink(request.ConfigId, Guid.NewGuid(), request.Name, request.Host, request.CallSign, request.Password, request.SysopName, request.Location, request.MaxQso, request.Description);
 
             logger.LogInformation("Un nouveau echolink channel a été ajouté avec succès.");
 
-            return Task.FromResult(result);
+            return Task.FromResult(result); 
 
         }
 

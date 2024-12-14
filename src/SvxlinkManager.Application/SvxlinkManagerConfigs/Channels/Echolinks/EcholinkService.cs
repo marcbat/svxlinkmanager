@@ -24,20 +24,31 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks
             this.soundRepository = soundRepository;
         }
 
-        internal Validation<Error, Guid> AddEcholink(Guid configId, string soundName, byte[] soundFile, Guid id, string name, string host, string callSign, string password, string sysopName, string location, int maxQso, string description)
+        internal Validation<Error, Guid> AddEcholink(Guid configId, Guid id, string name, string host, string callSign, string password, string sysopName, string location, int maxQso, string description)
         {
             return from config in svxlinkManagerConfigRepository.GetConfig(configId)
-            from Sound in CreateSound(soundName, soundFile)
             from channel in EcholinkChannel.Create(Guid.NewGuid(), name, host, callSign, password, sysopName, location, maxQso, description)
             from _ in config.AddEcholinkChannel(channel)
             from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
                    select config.Id;
         }
 
-        private Validation<Error, Unit> CreateSound(string soundName, byte[] soundFile)
+        internal Validation<Error, Guid> UpdateEcholink(Guid configId, Guid channelId, string name, string host, string callSign, string password, string sysopName, string location, int maxQso, string description)
         {
-            return Sound.Create($"$/sounds/{soundName}", soundName, soundFile)
-                .Bind(soundRepository.CreateAsyc);
+            return from config in svxlinkManagerConfigRepository.GetConfig(configId)
+                   from channel in config.GetEcholinkChannel(channelId)
+                   from _ in config.UpdateEcholinkChannel(channelId, name, host, callSign, password, sysopName, location, maxQso, description)
+                   from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                   select config.Id;
+        } 
+
+        internal Validation<Error, Guid> DeleteEcholink(Guid configId, Guid channelId)
+        {
+            return from config in svxlinkManagerConfigRepository.GetConfig(configId)
+                   from channel in config.GetEcholinkChannel(channelId)
+                   from _ in config.DeleteEcholinkChannel(channelId)
+                   from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
+                   select config.Id;
         }
     }
 }

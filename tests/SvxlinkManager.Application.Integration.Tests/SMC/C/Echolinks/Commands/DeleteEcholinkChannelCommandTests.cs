@@ -1,4 +1,5 @@
 ﻿using SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Commands;
+using SvxlinkManager.Domain.Entities;
 
 using System;
 using System.Collections.Generic;
@@ -8,19 +9,26 @@ using System.Threading.Tasks;
 
 namespace SvxlinkManager.Application.Integration.Tests.SMC.C.Echolinks.Commands
 {
-    internal class AddEcholinkChannelCommandTests : BaseTest
+    internal class DeleteEcholinkChannelCommandTests : BaseTest
     {
-
         [Test]
-        public async Task AddEcholinkChannelCommand_ShouldAddEcholinkChannel()
+        public async Task DeleteEcholinkChannelCommand_ShouldDeleteEcholinkChannel()
         {
             try
             {
                 // Arrange
-                var install = CreateDefaultConfig();
+                var echolinkChannelGuid = Guid.NewGuid();
+
+                var install = from ___ in CreateDefaultConfig()
+                              from conf in svxlinkManagerConfigRepository.GetConfig(configGuid)
+                              from echolinkChannel in EcholinkChannel.Create(echolinkChannelGuid, "EcholinkChannelToDelete", "145.500", "145.800", "1", "67", "88.5", 1, "1")
+                              from _ in conf.AddEcholinkChannel(echolinkChannel)
+                              from __ in svxlinkManagerConfigRepository.UpdateAsync(conf)
+                              select conf;
+
                 ClearReceivedCalls();
 
-                var command = new AddEcholinkChannelCommand(configGuid, "EcholinkChannel", "localhost", "EcholinkCallSign", "1", "My name", "My location", 1, "my description");
+                var command = new DeleteEcholinkChannelCommand(configGuid, echolinkChannelGuid);
 
                 // Act
                 var result = await mediatr.Send(command);
@@ -31,6 +39,7 @@ namespace SvxlinkManager.Application.Integration.Tests.SMC.C.Echolinks.Commands
 
                 await Verify(new
                 {
+                    install,
                     result,
                     config,
                     calls

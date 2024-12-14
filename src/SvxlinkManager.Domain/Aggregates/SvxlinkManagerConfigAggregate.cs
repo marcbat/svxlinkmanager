@@ -124,6 +124,24 @@ namespace SvxlinkManager.Domain.Aggregates
             return Unit.Default;
         }
 
+        public Validation<Error, Unit> UpdateEcholinkChannel(Guid channelId, string name, string host, string callSign, string password, string sysopName, string location, int maxQso, string description)
+        {
+            var echolinkChannel = echolinkChannels.FirstOrDefault(x => x.Id == channelId);
+            if (echolinkChannel is null)
+                return Error.New("Canal Echolink introuvable.");
+
+            echolinkChannel.SetName(name);
+            echolinkChannel.SetHost(host);
+            echolinkChannel.SetCallSign(callSign);
+            echolinkChannel.SetPassword(password);
+            echolinkChannel.SetSysopName(sysopName);
+            echolinkChannel.SetLocation(location);
+            echolinkChannel.SetMaxQso(maxQso);
+            echolinkChannel.Description = description;
+
+            return Unit.Default;
+        }
+
         /// <summary>
         /// Met à jour le son d'un canal Svxlink.
         /// </summary>
