@@ -22,17 +22,14 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
 
     internal class ApplyRadioProfilCommandHandler : IRequestHandler<ApplyRadioProfilCommand, Validation<Error, Guid>>
     {
-        private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
-        private readonly ISa818Service sa818Service;
-        private readonly ISvxlinkServiceBase svxlinkService;
+
+        private readonly RadioProfilService radioProfilService;
         private readonly ILogger<ApplyRadioProfilCommandHandler> logger;
 
-        public ApplyRadioProfilCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ISa818Service sa818Service, ISvxlinkServiceBase svxlinkService,
+        public ApplyRadioProfilCommandHandler(RadioProfilService radioProfilService,
                                               ILogger<ApplyRadioProfilCommandHandler> logger)
         {
-            this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
-            this.sa818Service = sa818Service;
-            this.svxlinkService = svxlinkService;
+            this.radioProfilService = radioProfilService;
             this.logger = logger;
         }
 
@@ -40,25 +37,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Commands
         {
             logger.LogInformation("Application du profil radio.");
 
-            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigId)
-                         from radioProfile in config.GetRadioProfil(request.RadioProfilId)
-                         from _ in WriteRadioProfil(radioProfile)
-                         from __ in config.SetActiveRadioProfile(radioProfile.Id)
-                         from ___ in svxlinkManagerConfigRepository.UpdateAsync(config)
-                         select config.Id;
+            var result = radioProfilService.ApplyRadioProfil(request.ConfigId, request.RadioProfilId);
 
             logger.LogInformation("Le profil radio a été appliqué avec succès.");
 
-            return Task.FromResult(result);
+            return Task.FromResult(result); 
 
-        }
-
-        private Validation<Error, LanguageExt.Unit> WriteRadioProfil(RadioProfil radioProfil)
-        {
-            if (radioProfil.HasSa818)
-                return sa818Service.WriteRadioProfile(radioProfil);
-
-            return LanguageExt.Unit.Default;
         }
     }
 }

@@ -278,6 +278,9 @@ namespace SvxlinkManager.Domain.Aggregates
             if(radioProfils.Any(rp => rp.Name == radioProfil.Name))
                 return Error.New("Un profil radio avec le même nom existe déjà.");
 
+            if(radioProfils.Any(rp => rp.Id == radioProfil.Id))
+                return Error.New("Un profil radio avec le même identifiant existe déjà.");
+
             radioProfils.Add(radioProfil);
 
             return Unit.Default;
