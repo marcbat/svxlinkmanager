@@ -6,10 +6,6 @@ using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-using SvxlinkManager.Application.Interfaces;
-using SvxlinkManager.Domain.Aggregates;
-using SvxlinkManager.Domain.Entities;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;

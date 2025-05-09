@@ -18,12 +18,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Queries
 
     internal class GetRadioProfilByIdQueryHandler : IRequestHandler<GetRadioProfilByIdQuery, Validation<Error, RadioProfil>>
     {
-        private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
+        private readonly RadioProfilService radioProfilService;
         private readonly ILogger<GetRadioProfilByIdQueryHandler> logger;
 
-        public GetRadioProfilByIdQueryHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<GetRadioProfilByIdQueryHandler> logger)
+        public GetRadioProfilByIdQueryHandler(RadioProfilService radioProfilService, ILogger<GetRadioProfilByIdQueryHandler> logger)
         {
-            this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
+            this.radioProfilService = radioProfilService;
             this.logger = logger;
         }
 
@@ -32,9 +32,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.RadioProfils.Queries
 
             logger.LogInformation("Récupération du profil radio.");
 
-            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
-                         from radioProfil in config.GetRadioProfil(request.ProfilGuid)
-                         select radioProfil;
+            var result = radioProfilService.GetRadioProfilById(request.ConfigGuid, request.ProfilGuid);
 
             logger.LogInformation("Profil radio trouvé.");
 

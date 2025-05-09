@@ -86,6 +86,12 @@ namespace SvxlinkManager.Domain.Aggregates
             if (svxlinkChannel is null)
                 return Error.New("Canal Svxlink introuvable");
 
+            if(svxlinkChannel.IsDefault)
+                return Error.New("Impossible de supprimer le canal par défaut.");
+
+            if(svxlinkChannel.IsActive)
+                return Error.New("Impossible de supprimer le canal actif.");
+
             svxlinkChannels.Remove(svxlinkChannel);
 
             return Unit.Default;
@@ -114,6 +120,24 @@ namespace SvxlinkManager.Domain.Aggregates
             svxlinkChannel.AuthKey = authKey;
             svxlinkChannel.Port = port;
             svxlinkChannel.SetReportCallSign(reportCallSign);
+
+            return Unit.Default;
+        }
+
+        public Validation<Error, Unit> UpdateEcholinkChannel(Guid channelId, string name, string host, string callSign, string password, string sysopName, string location, int maxQso, string description)
+        {
+            var echolinkChannel = echolinkChannels.FirstOrDefault(x => x.Id == channelId);
+            if (echolinkChannel is null)
+                return Error.New("Canal Echolink introuvable.");
+
+            echolinkChannel.SetName(name);
+            echolinkChannel.SetHost(host);
+            echolinkChannel.SetCallSign(callSign);
+            echolinkChannel.SetPassword(password);
+            echolinkChannel.SetSysopName(sysopName);
+            echolinkChannel.SetLocation(location);
+            echolinkChannel.SetMaxQso(maxQso);
+            echolinkChannel.Description = description;
 
             return Unit.Default;
         }
@@ -272,6 +296,9 @@ namespace SvxlinkManager.Domain.Aggregates
             if(radioProfils.Any(rp => rp.Name == radioProfil.Name))
                 return Error.New("Un profil radio avec le même nom existe déjà.");
 
+            if(radioProfils.Any(rp => rp.Id == radioProfil.Id))
+                return Error.New("Un profil radio avec le même identifiant existe déjà.");
+
             radioProfils.Add(radioProfil);
 
             return Unit.Default;
@@ -287,6 +314,9 @@ namespace SvxlinkManager.Domain.Aggregates
 
             if(radioProfil is null)
                 return Error.New("Profil radio introuvable.");
+
+            if(radioProfil.IsActive)
+                return Error.New("Impossible de supprimer le profil radio actif.");
 
             radioProfils.Remove(radioProfil);
 
@@ -363,21 +393,26 @@ namespace SvxlinkManager.Domain.Aggregates
             if (managedChannel is null)
                 return Error.New("Canal introuvable.");
 
-           
-                if (managedChannel is SvxlinkChannel)
-                {
-                    return DeleteSvxlinkChannel(managedChannel.Id);
-                }
-                else if (managedChannel is EcholinkChannel)
-                {
-                    return DeleteEcholinkChannel(managedChannel.Id);
-                }
-                else if (managedChannel is AdvanceSvxlinkChannel)
-                {
-                    return DeleteAdvanceSvxlinkChannel(managedChannel.Id);
-                }
-            
-                return Error.New("Type de canal non supporté.");
+            if(managedChannel.IsActive)
+                return Error.New("Impossible de supprimer le canal actif.");
+
+            if (managedChannel.IsDefault)
+                return Error.New("Impossible de supprimer le canal par défaut.");
+
+            if (managedChannel is SvxlinkChannel)
+            {
+                return DeleteSvxlinkChannel(managedChannel.Id);
+            }
+            else if (managedChannel is EcholinkChannel)
+            {
+                return DeleteEcholinkChannel(managedChannel.Id);
+            }
+            else if (managedChannel is AdvanceSvxlinkChannel)
+            {
+                return DeleteAdvanceSvxlinkChannel(managedChannel.Id);
+            }
+
+            return Error.New("Type de canal non supporté.");
         }
 
         /// <summary>

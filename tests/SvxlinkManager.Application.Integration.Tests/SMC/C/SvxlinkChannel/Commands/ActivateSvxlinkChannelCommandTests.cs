@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SvxlinkManager.Application.Integration.Tests
+namespace SvxlinkManager.Application.Integration.Tests.SMC.Channles.SvxlinkChannel.Commands
 {
     public class ActivateSvxlinkChannelCommandTests : BaseTest
     {
@@ -26,11 +26,12 @@ namespace SvxlinkManager.Application.Integration.Tests
             try
             {
                 // Arrange
-                var install = await CreateDefaultConfigAsync();
+                var install = CreateDefaultConfig();
+                ClearReceivedCalls();
 
-                var toto = svxlinkManagerConfigRepository.GetConfig(configGuid)
-                    .Map(config => new ApplyRadioProfilCommand(configGuid, config.RadioProfiles.First().Id))
-                    .Map(async x => await mediatr.Send(x));
+                _ = svxlinkManagerConfigRepository.GetConfig(configGuid)
+                     .Map(config => new ApplyRadioProfilCommand(configGuid, config.RadioProfiles.First().Id))
+                     .Map(async x => await mediatr.Send(x));
 
                 // Act
                 var command = new ActivateSvxlinkChannelCommand(configGuid, Guid.Parse("235a4521-15a1-4e02-a540-91ee600452ac"));
@@ -38,11 +39,15 @@ namespace SvxlinkManager.Application.Integration.Tests
 
                 // Assert
                 var config = svxlinkManagerConfigRepository.GetConfig(configGuid);
+
+                var calls = GetReceivedCalls();
+
                 await Verify(new
                 {
                     result,
-                    config
-                });
+                    config,
+                    calls
+                }, settings);
             }
             catch (Exception ex)
             {
@@ -61,9 +66,9 @@ namespace SvxlinkManager.Application.Integration.Tests
             try
             {
                 // Arrange
-                var install = await CreateDefaultConfigAsync();
+                var install = CreateDefaultConfig();
 
-                var toto = svxlinkManagerConfigRepository.GetConfig(configGuid)
+                _ = svxlinkManagerConfigRepository.GetConfig(configGuid)
                     .Map(config => new ApplyRadioProfilCommand(configGuid, config.RadioProfiles.First().Id))
                     .Map(async x => await mediatr.Send(x));
 

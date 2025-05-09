@@ -18,12 +18,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
 
     internal class DeleteEcholinkChannelCommandHandler : IRequestHandler<DeleteEcholinkChannelCommand, Validation<Error, Guid>>
     {
-        private readonly ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository;
+        private readonly ChannelService echolinkService;
         private readonly ILogger<DeleteEcholinkChannelCommandHandler> logger;
 
-        public DeleteEcholinkChannelCommandHandler(ISvxlinkManagerConfigRepository svxlinkManagerConfigRepository, ILogger<DeleteEcholinkChannelCommandHandler> logger)
+        public DeleteEcholinkChannelCommandHandler(ChannelService channelService, ILogger<DeleteEcholinkChannelCommandHandler> logger)
         {
-            this.svxlinkManagerConfigRepository = svxlinkManagerConfigRepository;
+            this.echolinkService = channelService;
             this.logger = logger;
         }
 
@@ -32,11 +32,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
 
             logger.LogInformation("Suppression du echolink channel.");
 
-            var result = from config in svxlinkManagerConfigRepository.GetConfig(request.ConfigGuid)
-                         from channel in config.GetEcholinkChannel(request.ChannelGuid)
-                         from _ in config.DeleteEcholinkChannel(request.ChannelGuid)
-                         from __ in svxlinkManagerConfigRepository.UpdateAsync(config)
-                         select config.Id;
+            var result = echolinkService.DeleteEcholink(request.ConfigGuid, request.ChannelGuid);
 
             logger.LogInformation("Echolink channel supprimé.");
 

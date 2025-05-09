@@ -19,7 +19,7 @@ using System.Xml.Linq;
 
 namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer
 {
-    internal class InstallerService
+    public class InstallerService
     {
         private readonly ChannelService channelService;
         private readonly IAuthentificationService authentificationService;
@@ -59,7 +59,7 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Installer
         /// <param name="lowPass">Le filtre passe-bas.</param>
         /// <param name="squelchDetection">La détection de squelch.</param>
         /// <returns>Un objet Validation contenant l'identifiant de la configuration ou une erreur.</returns>
-        public Validation<Error, Guid> InstallSvxlinkManager(
+        internal Validation<Error, Guid> InstallSvxlinkManager(
                                  string userName,
                                  string password,
                                  Guid configId,

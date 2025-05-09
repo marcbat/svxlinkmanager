@@ -14,7 +14,7 @@ namespace SvxlinkManager.Application.Integration.Tests
         public async Task StartDefaultChannelCommand_WhenIsValid_StartDefaultChannel()
         {
             // arrange
-            var install = await CreateDefaultConfigAsync();
+            var install = CreateDefaultConfig();
 
             // act
             var result = svxlinkManagerConfigRepository.GetConfig(configGuid)

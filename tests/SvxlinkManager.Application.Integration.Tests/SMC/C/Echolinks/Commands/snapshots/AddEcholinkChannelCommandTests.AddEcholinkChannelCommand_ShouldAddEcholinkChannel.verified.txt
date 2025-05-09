@@ -1,0 +1,163 @@
+﻿{
+  result: [
+    {
+      State: Success,
+      Success: Guid_1,
+      Fail: null
+    }
+  ],
+  config: [
+    {
+      State: Success,
+      Success: {
+        SvxlinkChannels: [
+          {
+            AuthKey: Magnifique123456789!,
+            Port: 5300,
+            ReportCallSign: Fake AnnonceCallSign,
+            Host: rrf2.f5nlg.ovh,
+            CallSign: Fake CallSign,
+            IsDefault: true,
+            IsTemporized: false,
+            TimerDelay: 180,
+            IsActive: false,
+            Name: Réseau des Répéteurs Francophones,
+            Id: Guid_2
+          },
+          {
+            AuthKey: xD9wW5gO7yD9hN5o,
+            Port: 5300,
+            ReportCallSign: Fake AnnonceCallSign,
+            Host: salonsuisseromand.hbspot.ch,
+            CallSign: Fake CallSign,
+            IsDefault: false,
+            IsTemporized: false,
+            TimerDelay: 180,
+            IsActive: false,
+            Name: Salon Suisse Romand,
+            Id: Guid_3
+          },
+          {
+            AuthKey: FON-F1TZO,
+            Port: 5300,
+            ReportCallSign: Fake AnnonceCallSign,
+            Host: serveur.f1tzo.com,
+            CallSign: Fake CallSign,
+            IsDefault: false,
+            IsTemporized: false,
+            TimerDelay: 180,
+            IsActive: false,
+            Name: French Open Network,
+            Id: Guid_4
+          },
+          {
+            AuthKey: Magnifique123456789!,
+            Port: 5301,
+            ReportCallSign: Fake AnnonceCallSign,
+            Host: rrf3.f5nlg.ovh,
+            CallSign: Fake CallSign,
+            IsDefault: false,
+            IsTemporized: false,
+            TimerDelay: 180,
+            IsActive: false,
+            Name: Salon Technique,
+            Id: Guid_5
+          },
+          {
+            AuthKey: Magnifique123456789!,
+            Port: 5302,
+            ReportCallSign: Fake AnnonceCallSign,
+            Host: rrf3.f5nlg.ovh,
+            CallSign: Fake CallSign,
+            IsDefault: false,
+            IsTemporized: false,
+            TimerDelay: 180,
+            IsActive: false,
+            Name: Salon International,
+            Id: Guid_6
+          },
+          {
+            AuthKey: FON-F1TZO,
+            Port: 5301,
+            ReportCallSign: Fake AnnonceCallSign,
+            Host: serveur.f1tzo.com,
+            CallSign: Fake CallSign,
+            IsDefault: false,
+            IsTemporized: false,
+            TimerDelay: 180,
+            IsActive: false,
+            Name: Salon Bavardage,
+            Id: Guid_7
+          },
+          {
+            AuthKey: FON-F1TZO,
+            Port: 5302,
+            ReportCallSign: Fake AnnonceCallSign,
+            Host: serveur.f1tzo.com,
+            CallSign: Fake CallSign,
+            IsDefault: false,
+            IsTemporized: false,
+            TimerDelay: 180,
+            IsActive: false,
+            Name: Salon Local,
+            Id: Guid_8
+          },
+          {
+            AuthKey: Magnifique123456789!,
+            Port: 5303,
+            ReportCallSign: Fake AnnonceCallSign,
+            Host: rrf3.f5nlg.ovh,
+            CallSign: Fake CallSign,
+            IsDefault: false,
+            IsTemporized: false,
+            TimerDelay: 180,
+            IsActive: false,
+            Name: Salon Expérimental,
+            Id: Guid_9
+          }
+        ],
+        EcholinkChannels: [
+          {
+            Password: 1,
+            SysopName: My name,
+            Location: My location,
+            MaxQso: 1,
+            Description: my description,
+            Host: localhost,
+            CallSign: EcholinkCallSign,
+            IsDefault: false,
+            IsTemporized: false,
+            TimerDelay: 180,
+            IsActive: false,
+            Name: EcholinkChannel,
+            Id: Guid_10
+          }
+        ],
+        RadioProfiles: [
+          {
+            HasSa818: true,
+            Name: Fake Name,
+            RxFequency: 123.450,
+            TxFrequency: 543.210,
+            Squelch: 5,
+            TxCtcss: 67,
+            InternalTxCtcss: 0001,
+            RxCtCss: 88.5,
+            InternalRxCtCss: 0008,
+            Volume: 10,
+            PreEmph: 0.5,
+            HightPass: 100,
+            LowPass: 10000,
+            SquelchDetection: true,
+            Enable: true,
+            IsActive: true,
+            Id: Guid_11
+          }
+        ],
+        Id: Guid_1
+      },
+      Fail: null
+    }
+  ],
+  calls: []
+}

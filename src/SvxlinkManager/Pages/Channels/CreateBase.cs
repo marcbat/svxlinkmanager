@@ -33,7 +33,7 @@ namespace SvxlinkManager.Pages.Channels
                     break;
 
                 case EcholinkChannel echolinkChannel:
-                    await Mediatr.Send(new AddEcholinkChannelCommand(Options.Value.ConfigId, echolinkChannel.Name, echolinkChannel.Host, echolinkChannel.CallSign, echolinkChannel.Password, echolinkChannel.SysopName, echolinkChannel.Location, echolinkChannel.MaxQso, echolinkChannel.Description, echolinkChannel.Sound.SoundName, echolinkChannel.Sound.SoundFile), CancellationToken.None);
+                    await Mediatr.Send(new AddEcholinkChannelCommand(Options.Value.ConfigId, echolinkChannel.Name, echolinkChannel.Host, echolinkChannel.CallSign, echolinkChannel.Password, echolinkChannel.SysopName, echolinkChannel.Location, echolinkChannel.MaxQso, echolinkChannel.Description), CancellationToken.None);
 
                     break;
 
