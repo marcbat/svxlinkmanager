@@ -15,7 +15,6 @@ namespace SvxlinkManager.Application
             services.AddSingleton<ChannelService>();
             services.AddScoped<InstallerService>();
             services.AddScoped<RadioProfilService>();
-            services.AddScoped<EcholinkService>();
 
             return services;
         }

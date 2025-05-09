@@ -18,12 +18,12 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
 
     internal class DeleteEcholinkChannelCommandHandler : IRequestHandler<DeleteEcholinkChannelCommand, Validation<Error, Guid>>
     {
-        private readonly EcholinkService echolinkService;
+        private readonly ChannelService echolinkService;
         private readonly ILogger<DeleteEcholinkChannelCommandHandler> logger;
 
-        public DeleteEcholinkChannelCommandHandler(EcholinkService echolinkService, ILogger<DeleteEcholinkChannelCommandHandler> logger)
+        public DeleteEcholinkChannelCommandHandler(ChannelService channelService, ILogger<DeleteEcholinkChannelCommandHandler> logger)
         {
-            this.echolinkService = echolinkService;
+            this.echolinkService = channelService;
             this.logger = logger;
         }
 

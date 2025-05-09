@@ -22,14 +22,14 @@ namespace SvxlinkManager.Application.SvxlinkManagerConfigs.Channels.Echolinks.Co
 
     internal class AddEcholinkChannelCommandHandler : IRequestHandler<AddEcholinkChannelCommand, Validation<Error, Guid>>
     {
-        private readonly EcholinkService echolinkService;
+        private readonly ChannelService echolinkService;
         private readonly ILogger<AddEcholinkChannelCommandHandler> logger;
 
-        public AddEcholinkChannelCommandHandler(EcholinkService echolinkService,
+        public AddEcholinkChannelCommandHandler(ChannelService channelService,
                                                 ILogger<AddEcholinkChannelCommandHandler> logger)
         {
            
-            this.echolinkService = echolinkService;
+            this.echolinkService = channelService;
             this.logger = logger;
         }
 
